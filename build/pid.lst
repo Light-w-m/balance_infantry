@@ -1,0 +1,528 @@
+ARM GAS  D:\temp\TMP\cc9y7Byb.s 			page 1
+
+
+   1              		.cpu cortex-m7
+   2              		.arch armv7e-m
+   3              		.fpu fpv5-d16
+   4              		.eabi_attribute 28, 1
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 1
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.file	"pid.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.PID_init,"ax",%progbits
+  19              		.align	1
+  20              		.global	PID_init
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  25              	PID_init:
+  26              	.LVL0:
+  27              	.LFB0:
+  28              		.file 1 "Robot/Controller/pid.c"
+   1:Robot/Controller/pid.c **** #include "pid.h"
+   2:Robot/Controller/pid.c **** 
+   3:Robot/Controller/pid.c **** #define LimitMax(input, max)   \
+   4:Robot/Controller/pid.c ****     {                          \
+   5:Robot/Controller/pid.c ****         if (input > max)       \
+   6:Robot/Controller/pid.c ****         {                      \
+   7:Robot/Controller/pid.c ****             input = max;       \
+   8:Robot/Controller/pid.c ****         }                      \
+   9:Robot/Controller/pid.c ****         else if (input < -max) \
+  10:Robot/Controller/pid.c ****         {                      \
+  11:Robot/Controller/pid.c ****             input = -max;      \
+  12:Robot/Controller/pid.c ****         }                      \
+  13:Robot/Controller/pid.c ****     }
+  14:Robot/Controller/pid.c **** 
+  15:Robot/Controller/pid.c **** void PID_init(PidTypeDef *pid, uint8_t mode, const float PID[3], float max_out, float max_iout)
+  16:Robot/Controller/pid.c **** {
+  29              		.loc 1 16 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  17:Robot/Controller/pid.c ****     if (pid == NULL || PID == NULL)
+  34              		.loc 1 17 5 view .LVU1
+  35              		.loc 1 17 28 is_stmt 0 view .LVU2
+  36 0000 9446     		mov	ip, r2
+  37              		.loc 1 17 8 view .LVU3
+  38 0002 002A     		cmp	r2, #0
+  39 0004 18BF     		it	ne
+  40 0006 0028     		cmpne	r0, #0
+  41 0008 17D0     		beq	.L1
+ARM GAS  D:\temp\TMP\cc9y7Byb.s 			page 2
+
+
+  18:Robot/Controller/pid.c ****     {
+  19:Robot/Controller/pid.c ****         return;
+  20:Robot/Controller/pid.c ****     }
+  21:Robot/Controller/pid.c ****     pid->mode = mode;
+  42              		.loc 1 21 5 is_stmt 1 view .LVU4
+  43              		.loc 1 21 15 is_stmt 0 view .LVU5
+  44 000a 0170     		strb	r1, [r0]
+  22:Robot/Controller/pid.c ****     pid->Kp = PID[0];
+  45              		.loc 1 22 5 is_stmt 1 view .LVU6
+  46              		.loc 1 22 18 is_stmt 0 view .LVU7
+  47 000c 1268     		ldr	r2, [r2]	@ float
+  48              	.LVL1:
+  49              		.loc 1 22 13 view .LVU8
+  50 000e 4260     		str	r2, [r0, #4]	@ float
+  23:Robot/Controller/pid.c ****     pid->Ki = PID[1];
+  51              		.loc 1 23 5 is_stmt 1 view .LVU9
+  52              		.loc 1 23 13 is_stmt 0 view .LVU10
+  53 0010 DCF80420 		ldr	r2, [ip, #4]	@ float
+  54 0014 8260     		str	r2, [r0, #8]	@ float
+  24:Robot/Controller/pid.c ****     pid->Kd = PID[2];
+  55              		.loc 1 24 5 is_stmt 1 view .LVU11
+  56              		.loc 1 24 13 is_stmt 0 view .LVU12
+  57 0016 DCF80820 		ldr	r2, [ip, #8]	@ float
+  58 001a C260     		str	r2, [r0, #12]	@ float
+  25:Robot/Controller/pid.c ****     pid->max_out = max_out;
+  59              		.loc 1 25 5 is_stmt 1 view .LVU13
+  60              		.loc 1 25 18 is_stmt 0 view .LVU14
+  61 001c 80ED040A 		vstr.32	s0, [r0, #16]
+  26:Robot/Controller/pid.c ****     pid->max_iout = max_iout;
+  62              		.loc 1 26 5 is_stmt 1 view .LVU15
+  63              		.loc 1 26 19 is_stmt 0 view .LVU16
+  64 0020 C0ED050A 		vstr.32	s1, [r0, #20]
+  27:Robot/Controller/pid.c ****     pid->Dbuf[0] = pid->Dbuf[1] = pid->Dbuf[2] = 0.0f;
+  65              		.loc 1 27 5 is_stmt 1 view .LVU17
+  66              		.loc 1 27 48 is_stmt 0 view .LVU18
+  67 0024 0022     		movs	r2, #0
+  68 0026 8263     		str	r2, [r0, #56]	@ float
+  69              		.loc 1 27 33 view .LVU19
+  70 0028 4263     		str	r2, [r0, #52]	@ float
+  71              		.loc 1 27 18 view .LVU20
+  72 002a 0263     		str	r2, [r0, #48]	@ float
+  28:Robot/Controller/pid.c ****     pid->error[0] = pid->error[1] = pid->error[2] = pid->Pout = pid->Iout = pid->Dout = pid->out = 
+  73              		.loc 1 28 5 is_stmt 1 view .LVU21
+  74              		.loc 1 28 98 is_stmt 0 view .LVU22
+  75 002c 0262     		str	r2, [r0, #32]	@ float
+  76              		.loc 1 28 87 view .LVU23
+  77 002e C262     		str	r2, [r0, #44]	@ float
+  78              		.loc 1 28 75 view .LVU24
+  79 0030 8262     		str	r2, [r0, #40]	@ float
+  80              		.loc 1 28 63 view .LVU25
+  81 0032 4262     		str	r2, [r0, #36]	@ float
+  82              		.loc 1 28 51 view .LVU26
+  83 0034 4264     		str	r2, [r0, #68]	@ float
+  84              		.loc 1 28 35 view .LVU27
+  85 0036 0264     		str	r2, [r0, #64]	@ float
+  86              		.loc 1 28 19 view .LVU28
+  87 0038 C263     		str	r2, [r0, #60]	@ float
+ARM GAS  D:\temp\TMP\cc9y7Byb.s 			page 3
+
+
+  88              	.L1:
+  29:Robot/Controller/pid.c **** }
+  89              		.loc 1 29 1 view .LVU29
+  90 003a 7047     		bx	lr
+  91              		.cfi_endproc
+  92              	.LFE0:
+  94              		.section	.text.PID_Calc,"ax",%progbits
+  95              		.align	1
+  96              		.global	PID_Calc
+  97              		.syntax unified
+  98              		.thumb
+  99              		.thumb_func
+ 101              	PID_Calc:
+ 102              	.LVL2:
+ 103              	.LFB1:
+  30:Robot/Controller/pid.c **** 
+  31:Robot/Controller/pid.c **** float PID_Calc(PidTypeDef *pid, float ref, float set)
+  32:Robot/Controller/pid.c **** {
+ 104              		.loc 1 32 1 is_stmt 1 view -0
+ 105              		.cfi_startproc
+ 106              		@ args = 0, pretend = 0, frame = 0
+ 107              		@ frame_needed = 0, uses_anonymous_args = 0
+ 108              		@ link register save eliminated.
+  33:Robot/Controller/pid.c ****     if (pid == NULL)
+ 109              		.loc 1 33 5 view .LVU31
+ 110              		.loc 1 33 8 is_stmt 0 view .LVU32
+ 111 0000 0346     		mov	r3, r0
+ 112 0002 0028     		cmp	r0, #0
+ 113 0004 00F0A380 		beq	.L17
+  34:Robot/Controller/pid.c ****     {
+  35:Robot/Controller/pid.c ****         return 0.0f;
+  36:Robot/Controller/pid.c ****     }
+  37:Robot/Controller/pid.c **** 
+  38:Robot/Controller/pid.c ****     pid->error[2] = pid->error[1];
+ 114              		.loc 1 38 5 is_stmt 1 view .LVU33
+ 115              		.loc 1 38 31 is_stmt 0 view .LVU34
+ 116 0008 D0ED107A 		vldr.32	s15, [r0, #64]
+ 117              		.loc 1 38 19 view .LVU35
+ 118 000c C0ED117A 		vstr.32	s15, [r0, #68]
+  39:Robot/Controller/pid.c ****     pid->error[1] = pid->error[0];
+ 119              		.loc 1 39 5 is_stmt 1 view .LVU36
+ 120              		.loc 1 39 31 is_stmt 0 view .LVU37
+ 121 0010 D0ED0F6A 		vldr.32	s13, [r0, #60]
+ 122              		.loc 1 39 19 view .LVU38
+ 123 0014 C0ED106A 		vstr.32	s13, [r0, #64]
+  40:Robot/Controller/pid.c ****     pid->set = set;
+ 124              		.loc 1 40 5 is_stmt 1 view .LVU39
+ 125              		.loc 1 40 14 is_stmt 0 view .LVU40
+ 126 0018 C0ED060A 		vstr.32	s1, [r0, #24]
+  41:Robot/Controller/pid.c ****     pid->fdb = ref;
+ 127              		.loc 1 41 5 is_stmt 1 view .LVU41
+ 128              		.loc 1 41 14 is_stmt 0 view .LVU42
+ 129 001c 80ED070A 		vstr.32	s0, [r0, #28]
+  42:Robot/Controller/pid.c ****     pid->error[0] = set - ref;
+ 130              		.loc 1 42 5 is_stmt 1 view .LVU43
+ 131              		.loc 1 42 25 is_stmt 0 view .LVU44
+ 132 0020 70EEC00A 		vsub.f32	s1, s1, s0
+ARM GAS  D:\temp\TMP\cc9y7Byb.s 			page 4
+
+
+ 133              	.LVL3:
+ 134              		.loc 1 42 19 view .LVU45
+ 135 0024 C0ED0F0A 		vstr.32	s1, [r0, #60]
+  43:Robot/Controller/pid.c ****     if (pid->mode == PID_POSITION)
+ 136              		.loc 1 43 5 is_stmt 1 view .LVU46
+ 137              		.loc 1 43 12 is_stmt 0 view .LVU47
+ 138 0028 0278     		ldrb	r2, [r0]	@ zero_extendqisi2
+ 139              		.loc 1 43 8 view .LVU48
+ 140 002a 002A     		cmp	r2, #0
+ 141 002c 4CD1     		bne	.L5
+  44:Robot/Controller/pid.c ****     {
+  45:Robot/Controller/pid.c ****         pid->Pout = pid->Kp * pid->error[0];
+ 142              		.loc 1 45 9 is_stmt 1 view .LVU49
+ 143              		.loc 1 45 24 is_stmt 0 view .LVU50
+ 144 002e 90ED017A 		vldr.32	s14, [r0, #4]
+ 145              		.loc 1 45 29 view .LVU51
+ 146 0032 20EE877A 		vmul.f32	s14, s1, s14
+ 147              		.loc 1 45 19 view .LVU52
+ 148 0036 80ED097A 		vstr.32	s14, [r0, #36]
+  46:Robot/Controller/pid.c ****         pid->Iout += pid->Ki * pid->error[0];
+ 149              		.loc 1 46 9 is_stmt 1 view .LVU53
+ 150              		.loc 1 46 25 is_stmt 0 view .LVU54
+ 151 003a D0ED027A 		vldr.32	s15, [r0, #8]
+ 152              		.loc 1 46 30 view .LVU55
+ 153 003e 60EEA77A 		vmul.f32	s15, s1, s15
+ 154              		.loc 1 46 19 view .LVU56
+ 155 0042 90ED0A6A 		vldr.32	s12, [r0, #40]
+ 156 0046 77EE867A 		vadd.f32	s15, s15, s12
+ 157 004a C0ED0A7A 		vstr.32	s15, [r0, #40]
+  47:Robot/Controller/pid.c ****         pid->Dbuf[2] = pid->Dbuf[1];
+ 158              		.loc 1 47 9 is_stmt 1 view .LVU57
+ 159              		.loc 1 47 33 is_stmt 0 view .LVU58
+ 160 004e 426B     		ldr	r2, [r0, #52]	@ float
+ 161              		.loc 1 47 22 view .LVU59
+ 162 0050 8263     		str	r2, [r0, #56]	@ float
+  48:Robot/Controller/pid.c ****         pid->Dbuf[1] = pid->Dbuf[0];
+ 163              		.loc 1 48 9 is_stmt 1 view .LVU60
+ 164              		.loc 1 48 33 is_stmt 0 view .LVU61
+ 165 0052 026B     		ldr	r2, [r0, #48]	@ float
+ 166              		.loc 1 48 22 view .LVU62
+ 167 0054 4263     		str	r2, [r0, #52]	@ float
+  49:Robot/Controller/pid.c ****         pid->Dbuf[0] = (pid->error[0] - pid->error[1]);
+ 168              		.loc 1 49 9 is_stmt 1 view .LVU63
+ 169              		.loc 1 49 39 is_stmt 0 view .LVU64
+ 170 0056 70EEE60A 		vsub.f32	s1, s1, s13
+ 171              		.loc 1 49 22 view .LVU65
+ 172 005a C0ED0C0A 		vstr.32	s1, [r0, #48]
+  50:Robot/Controller/pid.c ****         pid->Dout = pid->Kd * pid->Dbuf[0];
+ 173              		.loc 1 50 9 is_stmt 1 view .LVU66
+ 174              		.loc 1 50 24 is_stmt 0 view .LVU67
+ 175 005e D0ED036A 		vldr.32	s13, [r0, #12]
+ 176              		.loc 1 50 29 view .LVU68
+ 177 0062 60EEA60A 		vmul.f32	s1, s1, s13
+ 178              		.loc 1 50 19 view .LVU69
+ 179 0066 C0ED0B0A 		vstr.32	s1, [r0, #44]
+  51:Robot/Controller/pid.c ****         LimitMax(pid->Iout, pid->max_iout);
+ 180              		.loc 1 51 9 is_stmt 1 view .LVU70
+ARM GAS  D:\temp\TMP\cc9y7Byb.s 			page 5
+
+
+ 181 006a D0ED056A 		vldr.32	s13, [r0, #20]
+ 182 006e F4EEE67A 		vcmpe.f32	s15, s13
+ 183 0072 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 184 0076 13DD     		ble	.L24
+ 185              		.loc 1 51 9 discriminator 1 view .LVU71
+ 186 0078 C0ED0A6A 		vstr.32	s13, [r0, #40]
+ 187              	.L8:
+ 188              		.loc 1 51 43 discriminator 6 view .LVU72
+  52:Robot/Controller/pid.c ****         pid->out = pid->Pout + pid->Iout + pid->Dout;
+ 189              		.loc 1 52 9 discriminator 6 view .LVU73
+ 190              		.loc 1 52 35 is_stmt 0 discriminator 6 view .LVU74
+ 191 007c D3ED0A7A 		vldr.32	s15, [r3, #40]
+ 192              		.loc 1 52 30 discriminator 6 view .LVU75
+ 193 0080 37EE277A 		vadd.f32	s14, s14, s15
+ 194              		.loc 1 52 42 discriminator 6 view .LVU76
+ 195 0084 70EE870A 		vadd.f32	s1, s1, s14
+ 196              		.loc 1 52 18 discriminator 6 view .LVU77
+ 197 0088 C3ED080A 		vstr.32	s1, [r3, #32]
+  53:Robot/Controller/pid.c ****         LimitMax(pid->out, pid->max_out);
+ 198              		.loc 1 53 9 is_stmt 1 discriminator 6 view .LVU78
+ 199 008c D3ED047A 		vldr.32	s15, [r3, #16]
+ 200 0090 F4EEE70A 		vcmpe.f32	s1, s15
+ 201 0094 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 202 0098 0CDD     		ble	.L25
+ 203              		.loc 1 53 9 discriminator 1 view .LVU79
+ 204 009a C3ED087A 		vstr.32	s15, [r3, #32]
+ 205 009e 15E0     		b	.L12
+ 206              	.L24:
+  51:Robot/Controller/pid.c ****         LimitMax(pid->Iout, pid->max_iout);
+ 207              		.loc 1 51 9 discriminator 2 view .LVU80
+ 208 00a0 F1EE666A 		vneg.f32	s13, s13
+ 209 00a4 F4EEE67A 		vcmpe.f32	s15, s13
+ 210 00a8 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 211 00ac E6D5     		bpl	.L8
+  51:Robot/Controller/pid.c ****         LimitMax(pid->Iout, pid->max_iout);
+ 212              		.loc 1 51 9 discriminator 4 view .LVU81
+ 213 00ae C0ED0A6A 		vstr.32	s13, [r0, #40]
+ 214 00b2 E3E7     		b	.L8
+ 215              	.L25:
+ 216              		.loc 1 53 9 discriminator 2 view .LVU82
+ 217 00b4 F1EE677A 		vneg.f32	s15, s15
+ 218 00b8 F4EEE70A 		vcmpe.f32	s1, s15
+ 219 00bc F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 220 00c0 04D5     		bpl	.L12
+ 221              		.loc 1 53 9 discriminator 4 view .LVU83
+ 222 00c2 C3ED087A 		vstr.32	s15, [r3, #32]
+ 223 00c6 01E0     		b	.L12
+ 224              	.L5:
+  54:Robot/Controller/pid.c ****     }
+  55:Robot/Controller/pid.c ****     else if (pid->mode == PID_DELTA)
+ 225              		.loc 1 55 10 view .LVU84
+ 226              		.loc 1 55 13 is_stmt 0 view .LVU85
+ 227 00c8 012A     		cmp	r2, #1
+ 228 00ca 02D0     		beq	.L27
+ 229              	.L12:
+  56:Robot/Controller/pid.c ****     {
+  57:Robot/Controller/pid.c ****         pid->Pout = pid->Kp * (pid->error[0] - pid->error[1]);
+ARM GAS  D:\temp\TMP\cc9y7Byb.s 			page 6
+
+
+  58:Robot/Controller/pid.c ****         pid->Iout = pid->Ki * pid->error[0];
+  59:Robot/Controller/pid.c ****         pid->Dbuf[2] = pid->Dbuf[1];
+  60:Robot/Controller/pid.c ****         pid->Dbuf[1] = pid->Dbuf[0];
+  61:Robot/Controller/pid.c ****         pid->Dbuf[0] = (pid->error[0] - 2.0f * pid->error[1] + pid->error[2]);
+  62:Robot/Controller/pid.c ****         pid->Dout = pid->Kd * pid->Dbuf[0];
+  63:Robot/Controller/pid.c ****         pid->out += pid->Pout + pid->Iout + pid->Dout;
+  64:Robot/Controller/pid.c ****         LimitMax(pid->out, pid->max_out);
+ 230              		.loc 1 64 41 is_stmt 1 discriminator 6 view .LVU86
+  65:Robot/Controller/pid.c ****     }
+  66:Robot/Controller/pid.c ****     return pid->out;
+ 231              		.loc 1 66 5 discriminator 6 view .LVU87
+ 232              		.loc 1 66 15 is_stmt 0 discriminator 6 view .LVU88
+ 233 00cc 93ED080A 		vldr.32	s0, [r3, #32]
+ 234              	.LVL4:
+ 235              		.loc 1 66 15 discriminator 6 view .LVU89
+ 236 00d0 7047     		bx	lr
+ 237              	.LVL5:
+ 238              	.L27:
+  57:Robot/Controller/pid.c ****         pid->Iout = pid->Ki * pid->error[0];
+ 239              		.loc 1 57 9 is_stmt 1 view .LVU90
+  57:Robot/Controller/pid.c ****         pid->Iout = pid->Ki * pid->error[0];
+ 240              		.loc 1 57 24 is_stmt 0 view .LVU91
+ 241 00d2 90ED017A 		vldr.32	s14, [r0, #4]
+  57:Robot/Controller/pid.c ****         pid->Iout = pid->Ki * pid->error[0];
+ 242              		.loc 1 57 46 view .LVU92
+ 243 00d6 30EEE66A 		vsub.f32	s12, s1, s13
+  57:Robot/Controller/pid.c ****         pid->Iout = pid->Ki * pid->error[0];
+ 244              		.loc 1 57 29 view .LVU93
+ 245 00da 27EE067A 		vmul.f32	s14, s14, s12
+  57:Robot/Controller/pid.c ****         pid->Iout = pid->Ki * pid->error[0];
+ 246              		.loc 1 57 19 view .LVU94
+ 247 00de 80ED097A 		vstr.32	s14, [r0, #36]
+  58:Robot/Controller/pid.c ****         pid->Dbuf[2] = pid->Dbuf[1];
+ 248              		.loc 1 58 9 is_stmt 1 view .LVU95
+  58:Robot/Controller/pid.c ****         pid->Dbuf[2] = pid->Dbuf[1];
+ 249              		.loc 1 58 24 is_stmt 0 view .LVU96
+ 250 00e2 90ED026A 		vldr.32	s12, [r0, #8]
+  58:Robot/Controller/pid.c ****         pid->Dbuf[2] = pid->Dbuf[1];
+ 251              		.loc 1 58 29 view .LVU97
+ 252 00e6 20EE866A 		vmul.f32	s12, s1, s12
+  58:Robot/Controller/pid.c ****         pid->Dbuf[2] = pid->Dbuf[1];
+ 253              		.loc 1 58 19 view .LVU98
+ 254 00ea 80ED0A6A 		vstr.32	s12, [r0, #40]
+  59:Robot/Controller/pid.c ****         pid->Dbuf[1] = pid->Dbuf[0];
+ 255              		.loc 1 59 9 is_stmt 1 view .LVU99
+  59:Robot/Controller/pid.c ****         pid->Dbuf[1] = pid->Dbuf[0];
+ 256              		.loc 1 59 33 is_stmt 0 view .LVU100
+ 257 00ee 426B     		ldr	r2, [r0, #52]	@ float
+  59:Robot/Controller/pid.c ****         pid->Dbuf[1] = pid->Dbuf[0];
+ 258              		.loc 1 59 22 view .LVU101
+ 259 00f0 8263     		str	r2, [r0, #56]	@ float
+  60:Robot/Controller/pid.c ****         pid->Dbuf[0] = (pid->error[0] - 2.0f * pid->error[1] + pid->error[2]);
+ 260              		.loc 1 60 9 is_stmt 1 view .LVU102
+  60:Robot/Controller/pid.c ****         pid->Dbuf[0] = (pid->error[0] - 2.0f * pid->error[1] + pid->error[2]);
+ 261              		.loc 1 60 33 is_stmt 0 view .LVU103
+ 262 00f2 026B     		ldr	r2, [r0, #48]	@ float
+  60:Robot/Controller/pid.c ****         pid->Dbuf[0] = (pid->error[0] - 2.0f * pid->error[1] + pid->error[2]);
+ARM GAS  D:\temp\TMP\cc9y7Byb.s 			page 7
+
+
+ 263              		.loc 1 60 22 view .LVU104
+ 264 00f4 4263     		str	r2, [r0, #52]	@ float
+  61:Robot/Controller/pid.c ****         pid->Dout = pid->Kd * pid->Dbuf[0];
+ 265              		.loc 1 61 9 is_stmt 1 view .LVU105
+  61:Robot/Controller/pid.c ****         pid->Dout = pid->Kd * pid->Dbuf[0];
+ 266              		.loc 1 61 46 is_stmt 0 view .LVU106
+ 267 00f6 76EEA66A 		vadd.f32	s13, s13, s13
+  61:Robot/Controller/pid.c ****         pid->Dout = pid->Kd * pid->Dbuf[0];
+ 268              		.loc 1 61 39 view .LVU107
+ 269 00fa 70EEE60A 		vsub.f32	s1, s1, s13
+  61:Robot/Controller/pid.c ****         pid->Dout = pid->Kd * pid->Dbuf[0];
+ 270              		.loc 1 61 62 view .LVU108
+ 271 00fe 77EEA00A 		vadd.f32	s1, s15, s1
+  61:Robot/Controller/pid.c ****         pid->Dout = pid->Kd * pid->Dbuf[0];
+ 272              		.loc 1 61 22 view .LVU109
+ 273 0102 C0ED0C0A 		vstr.32	s1, [r0, #48]
+  62:Robot/Controller/pid.c ****         pid->out += pid->Pout + pid->Iout + pid->Dout;
+ 274              		.loc 1 62 9 is_stmt 1 view .LVU110
+  62:Robot/Controller/pid.c ****         pid->out += pid->Pout + pid->Iout + pid->Dout;
+ 275              		.loc 1 62 24 is_stmt 0 view .LVU111
+ 276 0106 D0ED037A 		vldr.32	s15, [r0, #12]
+  62:Robot/Controller/pid.c ****         pid->out += pid->Pout + pid->Iout + pid->Dout;
+ 277              		.loc 1 62 29 view .LVU112
+ 278 010a 60EEA77A 		vmul.f32	s15, s1, s15
+  62:Robot/Controller/pid.c ****         pid->out += pid->Pout + pid->Iout + pid->Dout;
+ 279              		.loc 1 62 19 view .LVU113
+ 280 010e C0ED0B7A 		vstr.32	s15, [r0, #44]
+  63:Robot/Controller/pid.c ****         LimitMax(pid->out, pid->max_out);
+ 281              		.loc 1 63 9 is_stmt 1 view .LVU114
+  63:Robot/Controller/pid.c ****         LimitMax(pid->out, pid->max_out);
+ 282              		.loc 1 63 31 is_stmt 0 view .LVU115
+ 283 0112 37EE067A 		vadd.f32	s14, s14, s12
+  63:Robot/Controller/pid.c ****         LimitMax(pid->out, pid->max_out);
+ 284              		.loc 1 63 43 view .LVU116
+ 285 0116 77EE877A 		vadd.f32	s15, s15, s14
+  63:Robot/Controller/pid.c ****         LimitMax(pid->out, pid->max_out);
+ 286              		.loc 1 63 18 view .LVU117
+ 287 011a 90ED087A 		vldr.32	s14, [r0, #32]
+ 288 011e 77EE877A 		vadd.f32	s15, s15, s14
+ 289 0122 C0ED087A 		vstr.32	s15, [r0, #32]
+  64:Robot/Controller/pid.c ****     }
+ 290              		.loc 1 64 9 is_stmt 1 view .LVU118
+ 291 0126 90ED047A 		vldr.32	s14, [r0, #16]
+ 292 012a F4EEC77A 		vcmpe.f32	s15, s14
+ 293 012e F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 294 0132 02DD     		ble	.L26
+  64:Robot/Controller/pid.c ****     }
+ 295              		.loc 1 64 9 discriminator 1 view .LVU119
+ 296 0134 80ED087A 		vstr.32	s14, [r0, #32]
+ 297 0138 C8E7     		b	.L12
+ 298              	.L26:
+  64:Robot/Controller/pid.c ****     }
+ 299              		.loc 1 64 9 discriminator 2 view .LVU120
+ 300 013a B1EE477A 		vneg.f32	s14, s14
+ 301 013e F4EEC77A 		vcmpe.f32	s15, s14
+ 302 0142 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 303 0146 C1D5     		bpl	.L12
+ARM GAS  D:\temp\TMP\cc9y7Byb.s 			page 8
+
+
+  64:Robot/Controller/pid.c ****     }
+ 304              		.loc 1 64 9 discriminator 4 view .LVU121
+ 305 0148 80ED087A 		vstr.32	s14, [r0, #32]
+ 306 014c BEE7     		b	.L12
+ 307              	.LVL6:
+ 308              	.L17:
+  35:Robot/Controller/pid.c ****     }
+ 309              		.loc 1 35 16 is_stmt 0 view .LVU122
+ 310 014e 9FED010A 		vldr.32	s0, .L28
+ 311              	.LVL7:
+  67:Robot/Controller/pid.c **** }
+ 312              		.loc 1 67 1 view .LVU123
+ 313 0152 7047     		bx	lr
+ 314              	.L29:
+ 315              		.align	2
+ 316              	.L28:
+ 317 0154 00000000 		.word	0
+ 318              		.cfi_endproc
+ 319              	.LFE1:
+ 321              		.section	.text.PID_clear,"ax",%progbits
+ 322              		.align	1
+ 323              		.global	PID_clear
+ 324              		.syntax unified
+ 325              		.thumb
+ 326              		.thumb_func
+ 328              	PID_clear:
+ 329              	.LVL8:
+ 330              	.LFB2:
+  68:Robot/Controller/pid.c **** 
+  69:Robot/Controller/pid.c **** void PID_clear(PidTypeDef *pid)
+  70:Robot/Controller/pid.c **** {
+ 331              		.loc 1 70 1 is_stmt 1 view -0
+ 332              		.cfi_startproc
+ 333              		@ args = 0, pretend = 0, frame = 0
+ 334              		@ frame_needed = 0, uses_anonymous_args = 0
+ 335              		@ link register save eliminated.
+  71:Robot/Controller/pid.c ****     if (pid == NULL)
+ 336              		.loc 1 71 5 view .LVU125
+ 337              		.loc 1 71 8 is_stmt 0 view .LVU126
+ 338 0000 60B1     		cbz	r0, .L30
+  72:Robot/Controller/pid.c ****     {
+  73:Robot/Controller/pid.c ****         return;
+  74:Robot/Controller/pid.c ****     }
+  75:Robot/Controller/pid.c **** 
+  76:Robot/Controller/pid.c ****     pid->error[0] = pid->error[1] = pid->error[2] = 0.0f;
+ 339              		.loc 1 76 5 is_stmt 1 view .LVU127
+ 340              		.loc 1 76 51 is_stmt 0 view .LVU128
+ 341 0002 0022     		movs	r2, #0
+ 342 0004 4264     		str	r2, [r0, #68]	@ float
+ 343              		.loc 1 76 35 view .LVU129
+ 344 0006 0264     		str	r2, [r0, #64]	@ float
+ 345              		.loc 1 76 19 view .LVU130
+ 346 0008 C263     		str	r2, [r0, #60]	@ float
+  77:Robot/Controller/pid.c ****     pid->Dbuf[0] = pid->Dbuf[1] = pid->Dbuf[2] = 0.0f;
+ 347              		.loc 1 77 5 is_stmt 1 view .LVU131
+ 348              		.loc 1 77 48 is_stmt 0 view .LVU132
+ 349 000a 8263     		str	r2, [r0, #56]	@ float
+ARM GAS  D:\temp\TMP\cc9y7Byb.s 			page 9
+
+
+ 350              		.loc 1 77 33 view .LVU133
+ 351 000c 4263     		str	r2, [r0, #52]	@ float
+ 352              		.loc 1 77 18 view .LVU134
+ 353 000e 0263     		str	r2, [r0, #48]	@ float
+  78:Robot/Controller/pid.c ****     pid->out = pid->Pout = pid->Iout = pid->Dout = 0.0f;
+ 354              		.loc 1 78 5 is_stmt 1 view .LVU135
+ 355              		.loc 1 78 50 is_stmt 0 view .LVU136
+ 356 0010 C262     		str	r2, [r0, #44]	@ float
+ 357              		.loc 1 78 38 view .LVU137
+ 358 0012 8262     		str	r2, [r0, #40]	@ float
+ 359              		.loc 1 78 26 view .LVU138
+ 360 0014 4262     		str	r2, [r0, #36]	@ float
+ 361              		.loc 1 78 14 view .LVU139
+ 362 0016 0262     		str	r2, [r0, #32]	@ float
+  79:Robot/Controller/pid.c ****     pid->fdb = pid->set = 0.0f;
+ 363              		.loc 1 79 5 is_stmt 1 view .LVU140
+ 364              		.loc 1 79 25 is_stmt 0 view .LVU141
+ 365 0018 8261     		str	r2, [r0, #24]	@ float
+ 366              		.loc 1 79 14 view .LVU142
+ 367 001a C261     		str	r2, [r0, #28]	@ float
+ 368              	.L30:
+  80:Robot/Controller/pid.c **** }
+ 369              		.loc 1 80 1 view .LVU143
+ 370 001c 7047     		bx	lr
+ 371              		.cfi_endproc
+ 372              	.LFE2:
+ 374              		.text
+ 375              	.Letext0:
+ 376              		.file 2 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 377              		.file 3 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
+ 378              		.file 4 "Robot/Controller/pid.h"
+ARM GAS  D:\temp\TMP\cc9y7Byb.s 			page 10
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 pid.c
+D:\temp\TMP\cc9y7Byb.s:19     .text.PID_init:00000000 $t
+D:\temp\TMP\cc9y7Byb.s:25     .text.PID_init:00000000 PID_init
+D:\temp\TMP\cc9y7Byb.s:95     .text.PID_Calc:00000000 $t
+D:\temp\TMP\cc9y7Byb.s:101    .text.PID_Calc:00000000 PID_Calc
+D:\temp\TMP\cc9y7Byb.s:317    .text.PID_Calc:00000154 $d
+D:\temp\TMP\cc9y7Byb.s:322    .text.PID_clear:00000000 $t
+D:\temp\TMP\cc9y7Byb.s:328    .text.PID_clear:00000000 PID_clear
+
+NO UNDEFINED SYMBOLS

@@ -1,0 +1,160 @@
+ARM GAS  D:\temp\TMP\cc8gw7Da.s 			page 1
+
+
+   1              		.cpu cortex-m7
+   2              		.arch armv7e-m
+   3              		.fpu fpv5-d16
+   4              		.eabi_attribute 28, 1
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 1
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.file	"bsp_pwm.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.TIM_Set_PWM,"ax",%progbits
+  19              		.align	1
+  20              		.global	TIM_Set_PWM
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  25              	TIM_Set_PWM:
+  26              	.LVL0:
+  27              	.LFB144:
+  28              		.file 1 "BSP/bsp_pwm.c"
+   1:BSP/bsp_pwm.c **** /**
+   2:BSP/bsp_pwm.c ****   ******************************************************************************
+   3:BSP/bsp_pwm.c ****   * @file	 bsp_PWM.c
+   4:BSP/bsp_pwm.c ****   * @author  Wang Hongxi
+   5:BSP/bsp_pwm.c ****   * @version V1.0.0
+   6:BSP/bsp_pwm.c ****   * @date    2020/3/1
+   7:BSP/bsp_pwm.c ****   * @brief   
+   8:BSP/bsp_pwm.c ****   ******************************************************************************
+   9:BSP/bsp_pwm.c ****   * @attention
+  10:BSP/bsp_pwm.c ****   *
+  11:BSP/bsp_pwm.c ****   ******************************************************************************
+  12:BSP/bsp_pwm.c ****   */
+  13:BSP/bsp_pwm.c **** #include "bsp_PWM.h"
+  14:BSP/bsp_pwm.c **** 
+  15:BSP/bsp_pwm.c **** void TIM_Set_PWM(TIM_HandleTypeDef *tim_pwmHandle, uint8_t Channel, uint16_t value)
+  16:BSP/bsp_pwm.c **** {
+  29              		.loc 1 16 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  17:BSP/bsp_pwm.c ****     if (value > tim_pwmHandle->Instance->ARR)
+  34              		.loc 1 17 5 view .LVU1
+  35              		.loc 1 17 30 is_stmt 0 view .LVU2
+  36 0000 0368     		ldr	r3, [r0]
+  37              		.loc 1 17 40 view .LVU3
+  38 0002 D86A     		ldr	r0, [r3, #44]
+  39              	.LVL1:
+  40              		.loc 1 17 8 view .LVU4
+  41 0004 8242     		cmp	r2, r0
+ARM GAS  D:\temp\TMP\cc8gw7Da.s 			page 2
+
+
+  42 0006 01D9     		bls	.L2
+  18:BSP/bsp_pwm.c ****         value = tim_pwmHandle->Instance->ARR;
+  43              		.loc 1 18 9 is_stmt 1 view .LVU5
+  44              		.loc 1 18 40 is_stmt 0 view .LVU6
+  45 0008 DA6A     		ldr	r2, [r3, #44]
+  46              	.LVL2:
+  47              		.loc 1 18 15 view .LVU7
+  48 000a 92B2     		uxth	r2, r2
+  49              	.LVL3:
+  50              	.L2:
+  19:BSP/bsp_pwm.c **** 
+  20:BSP/bsp_pwm.c ****     switch (Channel)
+  51              		.loc 1 20 5 is_stmt 1 view .LVU8
+  52 000c 0C29     		cmp	r1, #12
+  53 000e 0FD8     		bhi	.L1
+  54 0010 DFE801F0 		tbb	[pc, r1]
+  55              	.L5:
+  56 0014 07       		.byte	(.L8-.L5)/2
+  57 0015 0E       		.byte	(.L1-.L5)/2
+  58 0016 0E       		.byte	(.L1-.L5)/2
+  59 0017 0E       		.byte	(.L1-.L5)/2
+  60 0018 09       		.byte	(.L7-.L5)/2
+  61 0019 0E       		.byte	(.L1-.L5)/2
+  62 001a 0E       		.byte	(.L1-.L5)/2
+  63 001b 0E       		.byte	(.L1-.L5)/2
+  64 001c 0B       		.byte	(.L6-.L5)/2
+  65 001d 0E       		.byte	(.L1-.L5)/2
+  66 001e 0E       		.byte	(.L1-.L5)/2
+  67 001f 0E       		.byte	(.L1-.L5)/2
+  68 0020 0D       		.byte	(.L4-.L5)/2
+  69 0021 00       		.p2align 1
+  70              	.L8:
+  21:BSP/bsp_pwm.c ****     {
+  22:BSP/bsp_pwm.c ****     case TIM_CHANNEL_1:
+  23:BSP/bsp_pwm.c ****         tim_pwmHandle->Instance->CCR1 = value;
+  71              		.loc 1 23 9 view .LVU9
+  72              		.loc 1 23 39 is_stmt 0 view .LVU10
+  73 0022 5A63     		str	r2, [r3, #52]
+  24:BSP/bsp_pwm.c ****         break;
+  74              		.loc 1 24 9 is_stmt 1 view .LVU11
+  75 0024 7047     		bx	lr
+  76              	.L7:
+  25:BSP/bsp_pwm.c ****     case TIM_CHANNEL_2:
+  26:BSP/bsp_pwm.c ****         tim_pwmHandle->Instance->CCR2 = value;
+  77              		.loc 1 26 9 view .LVU12
+  78              		.loc 1 26 39 is_stmt 0 view .LVU13
+  79 0026 9A63     		str	r2, [r3, #56]
+  27:BSP/bsp_pwm.c ****         break;
+  80              		.loc 1 27 9 is_stmt 1 view .LVU14
+  81 0028 7047     		bx	lr
+  82              	.L6:
+  28:BSP/bsp_pwm.c ****     case TIM_CHANNEL_3:
+  29:BSP/bsp_pwm.c ****         tim_pwmHandle->Instance->CCR3 = value;
+  83              		.loc 1 29 9 view .LVU15
+  84              		.loc 1 29 39 is_stmt 0 view .LVU16
+  85 002a DA63     		str	r2, [r3, #60]
+  30:BSP/bsp_pwm.c ****         break;
+ARM GAS  D:\temp\TMP\cc8gw7Da.s 			page 3
+
+
+  86              		.loc 1 30 9 is_stmt 1 view .LVU17
+  87 002c 7047     		bx	lr
+  88              	.L4:
+  31:BSP/bsp_pwm.c ****     case TIM_CHANNEL_4:
+  32:BSP/bsp_pwm.c ****         tim_pwmHandle->Instance->CCR4 = value;
+  89              		.loc 1 32 9 view .LVU18
+  90              		.loc 1 32 39 is_stmt 0 view .LVU19
+  91 002e 1A64     		str	r2, [r3, #64]
+  33:BSP/bsp_pwm.c ****         break;
+  92              		.loc 1 33 9 is_stmt 1 view .LVU20
+  93              	.L1:
+  34:BSP/bsp_pwm.c ****     }
+  35:BSP/bsp_pwm.c **** }
+  94              		.loc 1 35 1 is_stmt 0 view .LVU21
+  95 0030 7047     		bx	lr
+  96              		.cfi_endproc
+  97              	.LFE144:
+  99              		.text
+ 100              	.Letext0:
+ 101              		.file 2 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 102              		.file 3 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
+ 103              		.file 4 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h723xx.h"
+ 104              		.file 5 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h"
+ 105              		.file 6 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_dma.h"
+ 106              		.file 7 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h"
+ARM GAS  D:\temp\TMP\cc8gw7Da.s 			page 4
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 bsp_pwm.c
+D:\temp\TMP\cc8gw7Da.s:19     .text.TIM_Set_PWM:00000000 $t
+D:\temp\TMP\cc8gw7Da.s:25     .text.TIM_Set_PWM:00000000 TIM_Set_PWM
+D:\temp\TMP\cc8gw7Da.s:56     .text.TIM_Set_PWM:00000014 $d
+D:\temp\TMP\cc8gw7Da.s:69     .text.TIM_Set_PWM:00000021 $d
+D:\temp\TMP\cc8gw7Da.s:69     .text.TIM_Set_PWM:00000022 $t
+
+NO UNDEFINED SYMBOLS

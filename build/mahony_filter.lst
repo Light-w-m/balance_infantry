@@ -1,0 +1,829 @@
+ARM GAS  D:\temp\TMP\cc4uVkmV.s 			page 1
+
+
+   1              		.cpu cortex-m7
+   2              		.arch armv7e-m
+   3              		.fpu fpv5-d16
+   4              		.eabi_attribute 28, 1
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 1
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.file	"mahony_filter.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.RotationMatrix_update,"ax",%progbits
+  19              		.align	1
+  20              		.global	RotationMatrix_update
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  25              	RotationMatrix_update:
+  26              	.LVL0:
+  27              	.LFB188:
+  28              		.file 1 "Robot/Algorithm/mahony/mahony_filter.c"
+   1:Robot/Algorithm/mahony/mahony_filter.c **** #include "mahony_filter.h"
+   2:Robot/Algorithm/mahony/mahony_filter.c **** 
+   3:Robot/Algorithm/mahony/mahony_filter.c **** /*************************************
+   4:Robot/Algorithm/mahony/mahony_filter.c **** 完成时间：2023年09月02日 
+   5:Robot/Algorithm/mahony/mahony_filter.c **** 功能介绍：实现mahony姿态角解算算法的模块封装
+   6:Robot/Algorithm/mahony/mahony_filter.c **** 知乎账号：龙胆也
+   7:Robot/Algorithm/mahony/mahony_filter.c **** B站账号：华南小虎队
+   8:Robot/Algorithm/mahony/mahony_filter.c **** ***************************************/
+   9:Robot/Algorithm/mahony/mahony_filter.c **** 
+  10:Robot/Algorithm/mahony/mahony_filter.c **** struct MAHONY_FILTER_t mahony_filter;
+  11:Robot/Algorithm/mahony/mahony_filter.c **** 
+  12:Robot/Algorithm/mahony/mahony_filter.c **** /*计算旋转矩阵*///大地坐标系 R 转换到机体坐标系 b 的坐标转换矩阵
+  13:Robot/Algorithm/mahony/mahony_filter.c **** void RotationMatrix_update(struct MAHONY_FILTER_t *mahony_filter)
+  14:Robot/Algorithm/mahony/mahony_filter.c **** {
+  29              		.loc 1 14 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  15:Robot/Algorithm/mahony/mahony_filter.c ****     float q1q1 = mahony_filter->q1 * mahony_filter->q1;
+  34              		.loc 1 15 5 view .LVU1
+  35              		.loc 1 15 31 is_stmt 0 view .LVU2
+  36 0000 D0ED0D7A 		vldr.32	s15, [r0, #52]
+  37              		.loc 1 15 11 view .LVU3
+  38 0004 27EEA74A 		vmul.f32	s8, s15, s15
+  39              	.LVL1:
+  16:Robot/Algorithm/mahony/mahony_filter.c ****     float q2q2 = mahony_filter->q2 * mahony_filter->q2;
+  40              		.loc 1 16 5 is_stmt 1 view .LVU4
+  41              		.loc 1 16 31 is_stmt 0 view .LVU5
+  42 0008 D0ED0E6A 		vldr.32	s13, [r0, #56]
+ARM GAS  D:\temp\TMP\cc4uVkmV.s 			page 2
+
+
+  43              		.loc 1 16 11 view .LVU6
+  44 000c 66EEA64A 		vmul.f32	s9, s13, s13
+  45              	.LVL2:
+  17:Robot/Algorithm/mahony/mahony_filter.c ****     float q3q3 = mahony_filter->q3 * mahony_filter->q3;
+  46              		.loc 1 17 5 is_stmt 1 view .LVU7
+  47              		.loc 1 17 31 is_stmt 0 view .LVU8
+  48 0010 90ED0F6A 		vldr.32	s12, [r0, #60]
+  49              		.loc 1 17 11 view .LVU9
+  50 0014 26EE065A 		vmul.f32	s10, s12, s12
+  51              	.LVL3:
+  18:Robot/Algorithm/mahony/mahony_filter.c **** 
+  19:Robot/Algorithm/mahony/mahony_filter.c ****     float q0q1 = mahony_filter->q0 * mahony_filter->q1;
+  52              		.loc 1 19 5 is_stmt 1 view .LVU10
+  53              		.loc 1 19 31 is_stmt 0 view .LVU11
+  54 0018 90ED0C7A 		vldr.32	s14, [r0, #48]
+  55              		.loc 1 19 11 view .LVU12
+  56 001c 67EE875A 		vmul.f32	s11, s15, s14
+  57              	.LVL4:
+  20:Robot/Algorithm/mahony/mahony_filter.c ****     float q0q2 = mahony_filter->q0 * mahony_filter->q2;
+  58              		.loc 1 20 5 is_stmt 1 view .LVU13
+  59              		.loc 1 20 11 is_stmt 0 view .LVU14
+  60 0020 26EE873A 		vmul.f32	s6, s13, s14
+  61              	.LVL5:
+  21:Robot/Algorithm/mahony/mahony_filter.c ****     float q0q3 = mahony_filter->q0 * mahony_filter->q3;
+  62              		.loc 1 21 5 is_stmt 1 view .LVU15
+  63              		.loc 1 21 11 is_stmt 0 view .LVU16
+  64 0024 26EE077A 		vmul.f32	s14, s12, s14
+  65              	.LVL6:
+  22:Robot/Algorithm/mahony/mahony_filter.c ****     float q1q2 = mahony_filter->q1 * mahony_filter->q2;
+  66              		.loc 1 22 5 is_stmt 1 view .LVU17
+  67              		.loc 1 22 11 is_stmt 0 view .LVU18
+  68 0028 67EEA62A 		vmul.f32	s5, s15, s13
+  69              	.LVL7:
+  23:Robot/Algorithm/mahony/mahony_filter.c ****     float q1q3 = mahony_filter->q1 * mahony_filter->q3;
+  70              		.loc 1 23 5 is_stmt 1 view .LVU19
+  71              		.loc 1 23 11 is_stmt 0 view .LVU20
+  72 002c 67EE867A 		vmul.f32	s15, s15, s12
+  73              	.LVL8:
+  24:Robot/Algorithm/mahony/mahony_filter.c ****     float q2q3 = mahony_filter->q2 * mahony_filter->q3;
+  74              		.loc 1 24 5 is_stmt 1 view .LVU21
+  75              		.loc 1 24 11 is_stmt 0 view .LVU22
+  76 0030 66EE866A 		vmul.f32	s13, s13, s12
+  77              	.LVL9:
+  25:Robot/Algorithm/mahony/mahony_filter.c **** 
+  26:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->rMat[0][0] = 1.0f - 2.0f * q2q2 - 2.0f * q3q3;
+  78              		.loc 1 26 5 is_stmt 1 view .LVU23
+  79              		.loc 1 26 45 is_stmt 0 view .LVU24
+  80 0034 74EEA44A 		vadd.f32	s9, s9, s9
+  81              	.LVL10:
+  82              		.loc 1 26 38 view .LVU25
+  83 0038 B7EE006A 		vmov.f32	s12, #1.0e+0
+  84 003c 76EE643A 		vsub.f32	s7, s12, s9
+  85              		.loc 1 26 59 view .LVU26
+  86 0040 35EE055A 		vadd.f32	s10, s10, s10
+  87              	.LVL11:
+  88              		.loc 1 26 52 view .LVU27
+  89 0044 73EEC53A 		vsub.f32	s7, s7, s10
+ARM GAS  D:\temp\TMP\cc4uVkmV.s 			page 3
+
+
+  90              		.loc 1 26 31 view .LVU28
+  91 0048 C0ED103A 		vstr.32	s7, [r0, #64]
+  27:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->rMat[0][1] = 2.0f * (q1q2  -q0q3);
+  92              		.loc 1 27 5 is_stmt 1 view .LVU29
+  93              		.loc 1 27 47 is_stmt 0 view .LVU30
+  94 004c 72EEC73A 		vsub.f32	s7, s5, s14
+  95              		.loc 1 27 38 view .LVU31
+  96 0050 73EEA33A 		vadd.f32	s7, s7, s7
+  97              		.loc 1 27 31 view .LVU32
+  98 0054 C0ED113A 		vstr.32	s7, [r0, #68]
+  28:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->rMat[0][2] = 2.0f * (q1q3 +q0q2);
+  99              		.loc 1 28 5 is_stmt 1 view .LVU33
+ 100              		.loc 1 28 46 is_stmt 0 view .LVU34
+ 101 0058 73EE273A 		vadd.f32	s7, s6, s15
+ 102              		.loc 1 28 38 view .LVU35
+ 103 005c 73EEA33A 		vadd.f32	s7, s7, s7
+ 104              		.loc 1 28 31 view .LVU36
+ 105 0060 C0ED123A 		vstr.32	s7, [r0, #72]
+  29:Robot/Algorithm/mahony/mahony_filter.c **** 
+  30:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->rMat[1][0] = 2.0f * (q1q2 +q0q3);
+ 106              		.loc 1 30 5 is_stmt 1 view .LVU37
+ 107              		.loc 1 30 46 is_stmt 0 view .LVU38
+ 108 0064 37EE227A 		vadd.f32	s14, s14, s5
+ 109              	.LVL12:
+ 110              		.loc 1 30 38 view .LVU39
+ 111 0068 37EE077A 		vadd.f32	s14, s14, s14
+ 112              		.loc 1 30 31 view .LVU40
+ 113 006c 80ED137A 		vstr.32	s14, [r0, #76]
+  31:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->rMat[1][1] = 1.0f - 2.0f * q1q1 - 2.0f * q3q3;
+ 114              		.loc 1 31 5 is_stmt 1 view .LVU41
+ 115              		.loc 1 31 45 is_stmt 0 view .LVU42
+ 116 0070 34EE044A 		vadd.f32	s8, s8, s8
+ 117              	.LVL13:
+ 118              		.loc 1 31 38 view .LVU43
+ 119 0074 36EE447A 		vsub.f32	s14, s12, s8
+ 120              		.loc 1 31 52 view .LVU44
+ 121 0078 37EE455A 		vsub.f32	s10, s14, s10
+ 122              		.loc 1 31 31 view .LVU45
+ 123 007c 80ED145A 		vstr.32	s10, [r0, #80]
+  32:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->rMat[1][2] = 2.0f * (q2q3  -q0q1);
+ 124              		.loc 1 32 5 is_stmt 1 view .LVU46
+ 125              		.loc 1 32 47 is_stmt 0 view .LVU47
+ 126 0080 36EEE56A 		vsub.f32	s12, s13, s11
+ 127              		.loc 1 32 38 view .LVU48
+ 128 0084 36EE066A 		vadd.f32	s12, s12, s12
+ 129              		.loc 1 32 31 view .LVU49
+ 130 0088 80ED156A 		vstr.32	s12, [r0, #84]
+  33:Robot/Algorithm/mahony/mahony_filter.c **** 
+  34:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->rMat[2][0] = 2.0f * (q1q3  -q0q2);
+ 131              		.loc 1 34 5 is_stmt 1 view .LVU50
+ 132              		.loc 1 34 47 is_stmt 0 view .LVU51
+ 133 008c 77EEC37A 		vsub.f32	s15, s15, s6
+ 134              	.LVL14:
+ 135              		.loc 1 34 38 view .LVU52
+ 136 0090 77EEA77A 		vadd.f32	s15, s15, s15
+ 137              		.loc 1 34 31 view .LVU53
+ 138 0094 C0ED167A 		vstr.32	s15, [r0, #88]
+ARM GAS  D:\temp\TMP\cc4uVkmV.s 			page 4
+
+
+  35:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->rMat[2][1] = 2.0f * (q2q3  +q0q1);
+ 139              		.loc 1 35 5 is_stmt 1 view .LVU54
+ 140              		.loc 1 35 47 is_stmt 0 view .LVU55
+ 141 0098 75EEA66A 		vadd.f32	s13, s11, s13
+ 142              	.LVL15:
+ 143              		.loc 1 35 38 view .LVU56
+ 144 009c 76EEA66A 		vadd.f32	s13, s13, s13
+ 145              		.loc 1 35 31 view .LVU57
+ 146 00a0 C0ED176A 		vstr.32	s13, [r0, #92]
+  36:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->rMat[2][2] = 1.0f - 2.0f * q1q1 - 2.0f * q2q2;
+ 147              		.loc 1 36 5 is_stmt 1 view .LVU58
+ 148              		.loc 1 36 52 is_stmt 0 view .LVU59
+ 149 00a4 37EE647A 		vsub.f32	s14, s14, s9
+ 150              		.loc 1 36 31 view .LVU60
+ 151 00a8 80ED187A 		vstr.32	s14, [r0, #96]
+  37:Robot/Algorithm/mahony/mahony_filter.c **** }
+ 152              		.loc 1 37 1 view .LVU61
+ 153 00ac 7047     		bx	lr
+ 154              		.cfi_endproc
+ 155              	.LFE188:
+ 157              		.section	.text.mahony_input,"ax",%progbits
+ 158              		.align	1
+ 159              		.global	mahony_input
+ 160              		.syntax unified
+ 161              		.thumb
+ 162              		.thumb_func
+ 164              	mahony_input:
+ 165              	.LVL16:
+ 166              	.LFB189:
+  38:Robot/Algorithm/mahony/mahony_filter.c **** 
+  39:Robot/Algorithm/mahony/mahony_filter.c **** // 将陀螺仪和加速度计的输入值赋予滤波器结构体
+  40:Robot/Algorithm/mahony/mahony_filter.c **** void mahony_input(struct MAHONY_FILTER_t *mahony_filter,Axis3f gyro,Axis3f acc)
+  41:Robot/Algorithm/mahony/mahony_filter.c **** {
+ 167              		.loc 1 41 1 is_stmt 1 view -0
+ 168              		.cfi_startproc
+ 169              		@ args = 0, pretend = 0, frame = 24
+ 170              		@ frame_needed = 0, uses_anonymous_args = 0
+ 171              		@ link register save eliminated.
+ 172              		.loc 1 41 1 is_stmt 0 view .LVU63
+ 173 0000 86B0     		sub	sp, sp, #24
+ 174              	.LCFI0:
+ 175              		.cfi_def_cfa_offset 24
+ 176 0002 0346     		mov	r3, r0
+ 177 0004 8DED030A 		vstr.32	s0, [sp, #12]
+ 178 0008 CDED040A 		vstr.32	s1, [sp, #16]
+ 179 000c 8DED051A 		vstr.32	s2, [sp, #20]
+ 180 0010 CDED001A 		vstr.32	s3, [sp]
+ 181 0014 8DED012A 		vstr.32	s4, [sp, #4]
+ 182 0018 CDED022A 		vstr.32	s5, [sp, #8]
+  42:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->gyro = gyro;
+ 183              		.loc 1 42 5 is_stmt 1 view .LVU64
+ 184              		.loc 1 42 25 is_stmt 0 view .LVU65
+ 185 001c 00F10C0C 		add	ip, r0, #12
+ 186 0020 06AA     		add	r2, sp, #24
+ 187 0022 12E90700 		ldmdb	r2, {r0, r1, r2}
+ 188              	.LVL17:
+ 189              		.loc 1 42 25 view .LVU66
+ARM GAS  D:\temp\TMP\cc4uVkmV.s 			page 5
+
+
+ 190 0026 8CE80700 		stm	ip, {r0, r1, r2}
+  43:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->acc = acc;
+ 191              		.loc 1 43 5 is_stmt 1 view .LVU67
+ 192              		.loc 1 43 24 is_stmt 0 view .LVU68
+ 193 002a 1833     		adds	r3, r3, #24
+ 194              	.LVL18:
+ 195              		.loc 1 43 24 view .LVU69
+ 196 002c 6A46     		mov	r2, sp
+ 197 002e 07CA     		ldm	r2, {r0, r1, r2}
+ 198 0030 83E80700 		stm	r3, {r0, r1, r2}
+  44:Robot/Algorithm/mahony/mahony_filter.c **** }
+ 199              		.loc 1 44 1 view .LVU70
+ 200 0034 06B0     		add	sp, sp, #24
+ 201              	.LCFI1:
+ 202              		.cfi_def_cfa_offset 0
+ 203              		@ sp needed
+ 204 0036 7047     		bx	lr
+ 205              		.cfi_endproc
+ 206              	.LFE189:
+ 208              		.section	.text.mahony_update,"ax",%progbits
+ 209              		.align	1
+ 210              		.global	mahony_update
+ 211              		.syntax unified
+ 212              		.thumb
+ 213              		.thumb_func
+ 215              	mahony_update:
+ 216              	.LVL19:
+ 217              	.LFB190:
+  45:Robot/Algorithm/mahony/mahony_filter.c **** 
+  46:Robot/Algorithm/mahony/mahony_filter.c **** // 使用Mahony算法更新滤波器状态
+  47:Robot/Algorithm/mahony/mahony_filter.c **** void mahony_update(struct MAHONY_FILTER_t *mahony_filter)
+  48:Robot/Algorithm/mahony/mahony_filter.c **** {
+ 218              		.loc 1 48 1 is_stmt 1 view -0
+ 219              		.cfi_startproc
+ 220              		@ args = 0, pretend = 0, frame = 0
+ 221              		@ frame_needed = 0, uses_anonymous_args = 0
+ 222              		.loc 1 48 1 is_stmt 0 view .LVU72
+ 223 0000 10B5     		push	{r4, lr}
+ 224              	.LCFI2:
+ 225              		.cfi_def_cfa_offset 8
+ 226              		.cfi_offset 4, -8
+ 227              		.cfi_offset 14, -4
+ 228 0002 0446     		mov	r4, r0
+  49:Robot/Algorithm/mahony/mahony_filter.c ****     float normalise;
+ 229              		.loc 1 49 5 is_stmt 1 view .LVU73
+  50:Robot/Algorithm/mahony/mahony_filter.c ****     float ex,ey,ez;
+ 230              		.loc 1 50 5 view .LVU74
+  51:Robot/Algorithm/mahony/mahony_filter.c ****     
+  52:Robot/Algorithm/mahony/mahony_filter.c ****     /*角速度，度转弧度*/
+  53:Robot/Algorithm/mahony/mahony_filter.c **** //    mahony_filter->gyro.x *= DEG2RAD;        /* 度转弧度 */
+  54:Robot/Algorithm/mahony/mahony_filter.c **** //    mahony_filter->gyro.y *= DEG2RAD;
+  55:Robot/Algorithm/mahony/mahony_filter.c **** //    mahony_filter->gyro.z *= DEG2RAD;;
+  56:Robot/Algorithm/mahony/mahony_filter.c ****        
+  57:Robot/Algorithm/mahony/mahony_filter.c ****     /*单位化加速计测量值*/
+  58:Robot/Algorithm/mahony/mahony_filter.c ****     normalise =sqrt(mahony_filter->acc.x * mahony_filter->acc.x 
+ 231              		.loc 1 58 5 view .LVU75
+ 232              		.loc 1 58 39 is_stmt 0 view .LVU76
+ARM GAS  D:\temp\TMP\cc4uVkmV.s 			page 6
+
+
+ 233 0004 90ED060A 		vldr.32	s0, [r0, #24]
+ 234              		.loc 1 58 42 view .LVU77
+ 235 0008 20EE000A 		vmul.f32	s0, s0, s0
+  59:Robot/Algorithm/mahony/mahony_filter.c **** 										+mahony_filter->acc.y * mahony_filter->acc.y 
+ 236              		.loc 1 59 30 view .LVU78
+ 237 000c D0ED077A 		vldr.32	s15, [r0, #28]
+ 238              		.loc 1 59 33 view .LVU79
+ 239 0010 67EEA77A 		vmul.f32	s15, s15, s15
+ 240              		.loc 1 59 11 view .LVU80
+ 241 0014 30EE270A 		vadd.f32	s0, s0, s15
+  60:Robot/Algorithm/mahony/mahony_filter.c **** 										+mahony_filter->acc.z * mahony_filter->acc.z);
+ 242              		.loc 1 60 30 view .LVU81
+ 243 0018 D0ED087A 		vldr.32	s15, [r0, #32]
+ 244              		.loc 1 60 33 view .LVU82
+ 245 001c 67EEA77A 		vmul.f32	s15, s15, s15
+ 246              		.loc 1 60 11 view .LVU83
+ 247 0020 30EE270A 		vadd.f32	s0, s0, s15
+  58:Robot/Algorithm/mahony/mahony_filter.c **** 										+mahony_filter->acc.y * mahony_filter->acc.y 
+ 248              		.loc 1 58 16 view .LVU84
+ 249 0024 B7EEC00A 		vcvt.f64.f32	d0, s0
+ 250 0028 FFF7FEFF 		bl	sqrt
+ 251              	.LVL20:
+  58:Robot/Algorithm/mahony/mahony_filter.c **** 										+mahony_filter->acc.y * mahony_filter->acc.y 
+ 252              		.loc 1 58 15 view .LVU85
+ 253 002c B7EEC00B 		vcvt.f32.f64	s0, d0
+ 254              	.LVL21:
+  61:Robot/Algorithm/mahony/mahony_filter.c **** 	
+  62:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->acc.x =mahony_filter->acc.x/ normalise;
+ 255              		.loc 1 62 5 is_stmt 1 view .LVU86
+ 256              		.loc 1 62 45 is_stmt 0 view .LVU87
+ 257 0030 94ED067A 		vldr.32	s14, [r4, #24]
+ 258              		.loc 1 62 47 view .LVU88
+ 259 0034 C7EE007A 		vdiv.f32	s15, s14, s0
+ 260              		.loc 1 62 26 view .LVU89
+ 261 0038 C4ED067A 		vstr.32	s15, [r4, #24]
+  63:Robot/Algorithm/mahony/mahony_filter.c **** 	  mahony_filter->acc.y =mahony_filter->acc.y/normalise;   
+ 262              		.loc 1 63 4 is_stmt 1 view .LVU90
+ 263              		.loc 1 63 44 is_stmt 0 view .LVU91
+ 264 003c 94ED077A 		vldr.32	s14, [r4, #28]
+ 265              		.loc 1 63 46 view .LVU92
+ 266 0040 C7EE004A 		vdiv.f32	s9, s14, s0
+ 267              		.loc 1 63 25 view .LVU93
+ 268 0044 C4ED074A 		vstr.32	s9, [r4, #28]
+  64:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->acc.z =mahony_filter->acc.z/normalise;
+ 269              		.loc 1 64 5 is_stmt 1 view .LVU94
+ 270              		.loc 1 64 45 is_stmt 0 view .LVU95
+ 271 0048 D4ED086A 		vldr.32	s13, [r4, #32]
+ 272              		.loc 1 64 47 view .LVU96
+ 273 004c 86EE807A 		vdiv.f32	s14, s13, s0
+ 274              		.loc 1 64 26 view .LVU97
+ 275 0050 84ED087A 		vstr.32	s14, [r4, #32]
+  65:Robot/Algorithm/mahony/mahony_filter.c **** 
+  66:Robot/Algorithm/mahony/mahony_filter.c ****     /*加速计读取的方向与重力加速计方向的差值，用向量叉乘计算*/
+  67:Robot/Algorithm/mahony/mahony_filter.c **** 	//vx=mahony_filter->rMat[2][0]=2.0f * (q1q3 + -q0q2)
+  68:Robot/Algorithm/mahony/mahony_filter.c **** 	//vy=mahony_filter->rMat[2][1]=2.0f * (q2q3 - -q0q1)
+  69:Robot/Algorithm/mahony/mahony_filter.c **** 	//vz=mahony_filter->rMat[2][2]=1.0f - 2.0f * q1q1 - 2.0f * q2q2
+  70:Robot/Algorithm/mahony/mahony_filter.c ****     ex = (mahony_filter->acc.y * mahony_filter->rMat[2][2] - mahony_filter->acc.z * mahony_filter->
+ARM GAS  D:\temp\TMP\cc4uVkmV.s 			page 7
+
+
+ 276              		.loc 1 70 5 is_stmt 1 view .LVU98
+ 277              		.loc 1 70 56 is_stmt 0 view .LVU99
+ 278 0054 D4ED185A 		vldr.32	s11, [r4, #96]
+ 279              		.loc 1 70 32 view .LVU100
+ 280 0058 24EEA54A 		vmul.f32	s8, s9, s11
+ 281              		.loc 1 70 107 view .LVU101
+ 282 005c 94ED176A 		vldr.32	s12, [r4, #92]
+ 283              		.loc 1 70 83 view .LVU102
+ 284 0060 67EE066A 		vmul.f32	s13, s14, s12
+ 285              		.loc 1 70 8 view .LVU103
+ 286 0064 34EE664A 		vsub.f32	s8, s8, s13
+ 287              	.LVL22:
+  71:Robot/Algorithm/mahony/mahony_filter.c ****     ey = (mahony_filter->acc.z * mahony_filter->rMat[2][0] - mahony_filter->acc.x * mahony_filter->
+ 288              		.loc 1 71 5 is_stmt 1 view .LVU104
+ 289              		.loc 1 71 56 is_stmt 0 view .LVU105
+ 290 0068 94ED165A 		vldr.32	s10, [r4, #88]
+ 291              		.loc 1 71 32 view .LVU106
+ 292 006c 27EE057A 		vmul.f32	s14, s14, s10
+ 293              		.loc 1 71 83 view .LVU107
+ 294 0070 67EEA55A 		vmul.f32	s11, s15, s11
+ 295              		.loc 1 71 8 view .LVU108
+ 296 0074 77EE655A 		vsub.f32	s11, s14, s11
+ 297              	.LVL23:
+  72:Robot/Algorithm/mahony/mahony_filter.c ****     ez = (mahony_filter->acc.x * mahony_filter->rMat[2][1] - mahony_filter->acc.y * mahony_filter->
+ 298              		.loc 1 72 5 is_stmt 1 view .LVU109
+ 299              		.loc 1 72 32 is_stmt 0 view .LVU110
+ 300 0078 67EE867A 		vmul.f32	s15, s15, s12
+ 301              		.loc 1 72 83 view .LVU111
+ 302 007c 24EE855A 		vmul.f32	s10, s9, s10
+ 303              		.loc 1 72 8 view .LVU112
+ 304 0080 37EEC55A 		vsub.f32	s10, s15, s10
+ 305              	.LVL24:
+  73:Robot/Algorithm/mahony/mahony_filter.c ****     
+  74:Robot/Algorithm/mahony/mahony_filter.c ****     /*误差累计，与积分常数相乘*/
+  75:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->exInt += mahony_filter->Ki * ex * mahony_filter->dt ;  
+ 306              		.loc 1 75 5 is_stmt 1 view .LVU113
+ 307              		.loc 1 75 42 is_stmt 0 view .LVU114
+ 308 0084 94ED017A 		vldr.32	s14, [r4, #4]
+ 309              		.loc 1 75 47 view .LVU115
+ 310 0088 67EE046A 		vmul.f32	s13, s14, s8
+ 311              		.loc 1 75 67 view .LVU116
+ 312 008c 94ED020A 		vldr.32	s0, [r4, #8]
+ 313              	.LVL25:
+ 314              		.loc 1 75 52 view .LVU117
+ 315 0090 66EE806A 		vmul.f32	s13, s13, s0
+ 316              		.loc 1 75 26 view .LVU118
+ 317 0094 D4ED097A 		vldr.32	s15, [r4, #36]
+ 318 0098 76EEA76A 		vadd.f32	s13, s13, s15
+ 319 009c C4ED096A 		vstr.32	s13, [r4, #36]
+  76:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->eyInt += mahony_filter->Ki * ey * mahony_filter->dt ;
+ 320              		.loc 1 76 5 is_stmt 1 view .LVU119
+ 321              		.loc 1 76 47 is_stmt 0 view .LVU120
+ 322 00a0 27EE256A 		vmul.f32	s12, s14, s11
+ 323              		.loc 1 76 52 view .LVU121
+ 324 00a4 20EE066A 		vmul.f32	s12, s0, s12
+ 325              		.loc 1 76 26 view .LVU122
+ 326 00a8 D4ED0A7A 		vldr.32	s15, [r4, #40]
+ARM GAS  D:\temp\TMP\cc4uVkmV.s 			page 8
+
+
+ 327 00ac 36EE276A 		vadd.f32	s12, s12, s15
+ 328 00b0 84ED0A6A 		vstr.32	s12, [r4, #40]
+  77:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->ezInt += mahony_filter->Ki * ez * mahony_filter->dt ;
+ 329              		.loc 1 77 5 is_stmt 1 view .LVU123
+ 330              		.loc 1 77 47 is_stmt 0 view .LVU124
+ 331 00b4 67EE057A 		vmul.f32	s15, s14, s10
+ 332              		.loc 1 77 52 view .LVU125
+ 333 00b8 60EE277A 		vmul.f32	s15, s0, s15
+ 334              		.loc 1 77 26 view .LVU126
+ 335 00bc 94ED0B7A 		vldr.32	s14, [r4, #44]
+ 336 00c0 77EE877A 		vadd.f32	s15, s15, s14
+ 337 00c4 C4ED0B7A 		vstr.32	s15, [r4, #44]
+  78:Robot/Algorithm/mahony/mahony_filter.c ****     
+  79:Robot/Algorithm/mahony/mahony_filter.c ****     /*用叉积误差来做PI修正陀螺零偏，即抵消陀螺读数中的偏移量*/
+  80:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->gyro.x += mahony_filter->Kp * ex + mahony_filter->exInt;
+ 338              		.loc 1 80 5 is_stmt 1 view .LVU127
+ 339              		.loc 1 80 43 is_stmt 0 view .LVU128
+ 340 00c8 94ED007A 		vldr.32	s14, [r4]
+ 341              		.loc 1 80 48 view .LVU129
+ 342 00cc 27EE044A 		vmul.f32	s8, s14, s8
+ 343              	.LVL26:
+ 344              		.loc 1 80 53 view .LVU130
+ 345 00d0 76EE846A 		vadd.f32	s13, s13, s8
+ 346              		.loc 1 80 27 view .LVU131
+ 347 00d4 D4ED034A 		vldr.32	s9, [r4, #12]
+ 348              	.LVL27:
+ 349              		.loc 1 80 27 view .LVU132
+ 350 00d8 76EEA46A 		vadd.f32	s13, s13, s9
+ 351 00dc C4ED036A 		vstr.32	s13, [r4, #12]
+  81:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->gyro.y += mahony_filter->Kp * ey + mahony_filter->eyInt;
+ 352              		.loc 1 81 5 is_stmt 1 view .LVU133
+ 353              		.loc 1 81 48 is_stmt 0 view .LVU134
+ 354 00e0 67EE255A 		vmul.f32	s11, s14, s11
+ 355              	.LVL28:
+ 356              		.loc 1 81 53 view .LVU135
+ 357 00e4 36EE256A 		vadd.f32	s12, s12, s11
+ 358              		.loc 1 81 27 view .LVU136
+ 359 00e8 D4ED045A 		vldr.32	s11, [r4, #16]
+ 360 00ec 36EE256A 		vadd.f32	s12, s12, s11
+ 361 00f0 84ED046A 		vstr.32	s12, [r4, #16]
+  82:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->gyro.z += mahony_filter->Kp * ez + mahony_filter->ezInt;
+ 362              		.loc 1 82 5 is_stmt 1 view .LVU137
+ 363              		.loc 1 82 48 is_stmt 0 view .LVU138
+ 364 00f4 27EE057A 		vmul.f32	s14, s14, s10
+ 365              		.loc 1 82 53 view .LVU139
+ 366 00f8 77EE877A 		vadd.f32	s15, s15, s14
+ 367              		.loc 1 82 27 view .LVU140
+ 368 00fc 94ED057A 		vldr.32	s14, [r4, #20]
+ 369 0100 77EE877A 		vadd.f32	s15, s15, s14
+ 370 0104 C4ED057A 		vstr.32	s15, [r4, #20]
+  83:Robot/Algorithm/mahony/mahony_filter.c ****     
+  84:Robot/Algorithm/mahony/mahony_filter.c ****     /* 一阶近似算法，四元数运动学方程的离散化形式和积分 */
+  85:Robot/Algorithm/mahony/mahony_filter.c ****     float q0Last = mahony_filter->q0;
+ 371              		.loc 1 85 5 is_stmt 1 view .LVU141
+ 372              		.loc 1 85 11 is_stmt 0 view .LVU142
+ 373 0108 94ED0C3A 		vldr.32	s6, [r4, #48]
+ 374              	.LVL29:
+ARM GAS  D:\temp\TMP\cc4uVkmV.s 			page 9
+
+
+  86:Robot/Algorithm/mahony/mahony_filter.c ****     float q1Last = mahony_filter->q1;
+ 375              		.loc 1 86 5 is_stmt 1 view .LVU143
+ 376              		.loc 1 86 11 is_stmt 0 view .LVU144
+ 377 010c D4ED0D3A 		vldr.32	s7, [r4, #52]
+ 378              	.LVL30:
+  87:Robot/Algorithm/mahony/mahony_filter.c ****     float q2Last = mahony_filter->q2;
+ 379              		.loc 1 87 5 is_stmt 1 view .LVU145
+ 380              		.loc 1 87 11 is_stmt 0 view .LVU146
+ 381 0110 94ED0E4A 		vldr.32	s8, [r4, #56]
+ 382              	.LVL31:
+  88:Robot/Algorithm/mahony/mahony_filter.c ****     float q3Last = mahony_filter->q3;
+ 383              		.loc 1 88 5 is_stmt 1 view .LVU147
+ 384              		.loc 1 88 11 is_stmt 0 view .LVU148
+ 385 0114 D4ED0F2A 		vldr.32	s5, [r4, #60]
+ 386              	.LVL32:
+  89:Robot/Algorithm/mahony/mahony_filter.c ****     float halfT = mahony_filter->dt * 0.5f;
+ 387              		.loc 1 89 5 is_stmt 1 view .LVU149
+ 388              		.loc 1 89 11 is_stmt 0 view .LVU150
+ 389 0118 F6EE004A 		vmov.f32	s9, #5.0e-1
+ 390 011c 60EE244A 		vmul.f32	s9, s0, s9
+ 391              	.LVL33:
+  90:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->q0 += (-q1Last * mahony_filter->gyro.x - q2Last * mahony_filter->gyro.y - q3Last
+ 392              		.loc 1 90 5 is_stmt 1 view .LVU151
+ 393              		.loc 1 90 35 is_stmt 0 view .LVU152
+ 394 0120 23EEE67A 		vnmul.f32	s14, s7, s13
+ 395              		.loc 1 90 68 view .LVU153
+ 396 0124 66EE045A 		vmul.f32	s11, s12, s8
+ 397              		.loc 1 90 59 view .LVU154
+ 398 0128 37EE657A 		vsub.f32	s14, s14, s11
+ 399              		.loc 1 90 101 view .LVU155
+ 400 012c 67EEA25A 		vmul.f32	s11, s15, s5
+ 401              		.loc 1 90 92 view .LVU156
+ 402 0130 37EE657A 		vsub.f32	s14, s14, s11
+ 403              		.loc 1 90 126 view .LVU157
+ 404 0134 27EE247A 		vmul.f32	s14, s14, s9
+ 405              		.loc 1 90 23 view .LVU158
+ 406 0138 37EE037A 		vadd.f32	s14, s14, s6
+ 407 013c 84ED0C7A 		vstr.32	s14, [r4, #48]
+  91:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->q1 += ( q0Last * mahony_filter->gyro.x + q2Last * mahony_filter->gyro.z - q3Last
+ 408              		.loc 1 91 5 is_stmt 1 view .LVU159
+ 409              		.loc 1 91 35 is_stmt 0 view .LVU160
+ 410 0140 26EE835A 		vmul.f32	s10, s13, s6
+ 411              	.LVL34:
+ 412              		.loc 1 91 68 view .LVU161
+ 413 0144 67EE845A 		vmul.f32	s11, s15, s8
+ 414              		.loc 1 91 59 view .LVU162
+ 415 0148 35EE255A 		vadd.f32	s10, s10, s11
+ 416              		.loc 1 91 101 view .LVU163
+ 417 014c 66EE225A 		vmul.f32	s11, s12, s5
+ 418              		.loc 1 91 92 view .LVU164
+ 419 0150 35EE655A 		vsub.f32	s10, s10, s11
+ 420              		.loc 1 91 126 view .LVU165
+ 421 0154 25EE245A 		vmul.f32	s10, s10, s9
+ 422              		.loc 1 91 23 view .LVU166
+ 423 0158 35EE235A 		vadd.f32	s10, s10, s7
+ 424 015c 84ED0D5A 		vstr.32	s10, [r4, #52]
+  92:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->q2 += ( q0Last * mahony_filter->gyro.y - q1Last * mahony_filter->gyro.z + q3Last
+ARM GAS  D:\temp\TMP\cc4uVkmV.s 			page 10
+
+
+ 425              		.loc 1 92 5 is_stmt 1 view .LVU167
+ 426              		.loc 1 92 35 is_stmt 0 view .LVU168
+ 427 0160 66EE035A 		vmul.f32	s11, s12, s6
+ 428              		.loc 1 92 68 view .LVU169
+ 429 0164 27EEA32A 		vmul.f32	s4, s15, s7
+ 430              		.loc 1 92 59 view .LVU170
+ 431 0168 75EEC25A 		vsub.f32	s11, s11, s4
+ 432              		.loc 1 92 101 view .LVU171
+ 433 016c 26EEA22A 		vmul.f32	s4, s13, s5
+ 434              		.loc 1 92 92 view .LVU172
+ 435 0170 75EE825A 		vadd.f32	s11, s11, s4
+ 436              		.loc 1 92 126 view .LVU173
+ 437 0174 65EEA45A 		vmul.f32	s11, s11, s9
+ 438              		.loc 1 92 23 view .LVU174
+ 439 0178 75EE845A 		vadd.f32	s11, s11, s8
+ 440 017c C4ED0E5A 		vstr.32	s11, [r4, #56]
+  93:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->q3 += ( q0Last * mahony_filter->gyro.z + q1Last * mahony_filter->gyro.y - q2Last
+ 441              		.loc 1 93 5 is_stmt 1 view .LVU175
+ 442              		.loc 1 93 35 is_stmt 0 view .LVU176
+ 443 0180 67EE837A 		vmul.f32	s15, s15, s6
+ 444              		.loc 1 93 68 view .LVU177
+ 445 0184 26EE230A 		vmul.f32	s0, s12, s7
+ 446              		.loc 1 93 59 view .LVU178
+ 447 0188 37EE800A 		vadd.f32	s0, s15, s0
+ 448              		.loc 1 93 101 view .LVU179
+ 449 018c 66EE846A 		vmul.f32	s13, s13, s8
+ 450              		.loc 1 93 92 view .LVU180
+ 451 0190 30EE660A 		vsub.f32	s0, s0, s13
+ 452              		.loc 1 93 126 view .LVU181
+ 453 0194 20EE240A 		vmul.f32	s0, s0, s9
+ 454              		.loc 1 93 23 view .LVU182
+ 455 0198 30EE220A 		vadd.f32	s0, s0, s5
+ 456 019c 84ED0F0A 		vstr.32	s0, [r4, #60]
+  94:Robot/Algorithm/mahony/mahony_filter.c ****     
+  95:Robot/Algorithm/mahony/mahony_filter.c ****     /*单位化四元数*/
+  96:Robot/Algorithm/mahony/mahony_filter.c ****     normalise = sqrt(mahony_filter->q0 * mahony_filter->q0 
+ 457              		.loc 1 96 5 is_stmt 1 view .LVU183
+ 458              		.loc 1 96 40 is_stmt 0 view .LVU184
+ 459 01a0 27EE077A 		vmul.f32	s14, s14, s14
+  97:Robot/Algorithm/mahony/mahony_filter.c **** 										+mahony_filter->q1 * mahony_filter->q1 
+ 460              		.loc 1 97 30 view .LVU185
+ 461 01a4 25EE055A 		vmul.f32	s10, s10, s10
+ 462              		.loc 1 97 11 view .LVU186
+ 463 01a8 37EE057A 		vadd.f32	s14, s14, s10
+  98:Robot/Algorithm/mahony/mahony_filter.c **** 										+mahony_filter->q2 * mahony_filter->q2 
+ 464              		.loc 1 98 30 view .LVU187
+ 465 01ac 65EEA55A 		vmul.f32	s11, s11, s11
+ 466              		.loc 1 98 11 view .LVU188
+ 467 01b0 37EE257A 		vadd.f32	s14, s14, s11
+  99:Robot/Algorithm/mahony/mahony_filter.c **** 										+mahony_filter->q3 * mahony_filter->q3);
+ 468              		.loc 1 99 30 view .LVU189
+ 469 01b4 20EE000A 		vmul.f32	s0, s0, s0
+ 470              		.loc 1 99 11 view .LVU190
+ 471 01b8 37EE000A 		vadd.f32	s0, s14, s0
+  96:Robot/Algorithm/mahony/mahony_filter.c **** 										+mahony_filter->q1 * mahony_filter->q1 
+ 472              		.loc 1 96 17 view .LVU191
+ 473 01bc B7EEC00A 		vcvt.f64.f32	d0, s0
+ARM GAS  D:\temp\TMP\cc4uVkmV.s 			page 11
+
+
+ 474 01c0 FFF7FEFF 		bl	sqrt
+ 475              	.LVL35:
+  96:Robot/Algorithm/mahony/mahony_filter.c **** 										+mahony_filter->q1 * mahony_filter->q1 
+ 476              		.loc 1 96 15 view .LVU192
+ 477 01c4 B7EEC00B 		vcvt.f32.f64	s0, d0
+ 478              	.LVL36:
+ 100:Robot/Algorithm/mahony/mahony_filter.c **** 												
+ 101:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->q0 = mahony_filter->q0/normalise;
+ 479              		.loc 1 101 5 is_stmt 1 view .LVU193
+ 480              		.loc 1 101 38 is_stmt 0 view .LVU194
+ 481 01c8 94ED0C7A 		vldr.32	s14, [r4, #48]
+ 482              		.loc 1 101 42 view .LVU195
+ 483 01cc C7EE007A 		vdiv.f32	s15, s14, s0
+ 484              		.loc 1 101 23 view .LVU196
+ 485 01d0 C4ED0C7A 		vstr.32	s15, [r4, #48]
+ 102:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->q1 = mahony_filter->q1/normalise;
+ 486              		.loc 1 102 5 is_stmt 1 view .LVU197
+ 487              		.loc 1 102 38 is_stmt 0 view .LVU198
+ 488 01d4 94ED0D7A 		vldr.32	s14, [r4, #52]
+ 489              		.loc 1 102 42 view .LVU199
+ 490 01d8 C7EE007A 		vdiv.f32	s15, s14, s0
+ 491              		.loc 1 102 23 view .LVU200
+ 492 01dc C4ED0D7A 		vstr.32	s15, [r4, #52]
+ 103:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->q2 = mahony_filter->q2/normalise;
+ 493              		.loc 1 103 5 is_stmt 1 view .LVU201
+ 494              		.loc 1 103 38 is_stmt 0 view .LVU202
+ 495 01e0 94ED0E7A 		vldr.32	s14, [r4, #56]
+ 496              		.loc 1 103 42 view .LVU203
+ 497 01e4 C7EE007A 		vdiv.f32	s15, s14, s0
+ 498              		.loc 1 103 23 view .LVU204
+ 499 01e8 C4ED0E7A 		vstr.32	s15, [r4, #56]
+ 104:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->q3 = mahony_filter->q3/normalise;
+ 500              		.loc 1 104 5 is_stmt 1 view .LVU205
+ 501              		.loc 1 104 38 is_stmt 0 view .LVU206
+ 502 01ec 94ED0F7A 		vldr.32	s14, [r4, #60]
+ 503              		.loc 1 104 42 view .LVU207
+ 504 01f0 C7EE007A 		vdiv.f32	s15, s14, s0
+ 505              		.loc 1 104 23 view .LVU208
+ 506 01f4 C4ED0F7A 		vstr.32	s15, [r4, #60]
+ 105:Robot/Algorithm/mahony/mahony_filter.c ****     
+ 106:Robot/Algorithm/mahony/mahony_filter.c ****     /*计算旋转矩阵*/
+ 107:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->RotationMatrix_update(mahony_filter);
+ 507              		.loc 1 107 5 is_stmt 1 view .LVU209
+ 508              		.loc 1 107 18 is_stmt 0 view .LVU210
+ 509 01f8 D4F88030 		ldr	r3, [r4, #128]
+ 510              		.loc 1 107 5 view .LVU211
+ 511 01fc 2046     		mov	r0, r4
+ 512 01fe 9847     		blx	r3
+ 513              	.LVL37:
+ 108:Robot/Algorithm/mahony/mahony_filter.c **** }
+ 514              		.loc 1 108 1 view .LVU212
+ 515 0200 10BD     		pop	{r4, pc}
+ 516              		.loc 1 108 1 view .LVU213
+ 517              		.cfi_endproc
+ 518              	.LFE190:
+ 520              		.section	.text.mahony_output,"ax",%progbits
+ 521              		.align	1
+ARM GAS  D:\temp\TMP\cc4uVkmV.s 			page 12
+
+
+ 522              		.global	mahony_output
+ 523              		.syntax unified
+ 524              		.thumb
+ 525              		.thumb_func
+ 527              	mahony_output:
+ 528              	.LVL38:
+ 529              	.LFB191:
+ 109:Robot/Algorithm/mahony/mahony_filter.c **** 
+ 110:Robot/Algorithm/mahony/mahony_filter.c **** // 从旋转矩阵中提取姿态角
+ 111:Robot/Algorithm/mahony/mahony_filter.c **** void mahony_output(struct MAHONY_FILTER_t *mahony_filter)
+ 112:Robot/Algorithm/mahony/mahony_filter.c **** {
+ 530              		.loc 1 112 1 is_stmt 1 view -0
+ 531              		.cfi_startproc
+ 532              		@ args = 0, pretend = 0, frame = 0
+ 533              		@ frame_needed = 0, uses_anonymous_args = 0
+ 534              		.loc 1 112 1 is_stmt 0 view .LVU215
+ 535 0000 10B5     		push	{r4, lr}
+ 536              	.LCFI3:
+ 537              		.cfi_def_cfa_offset 8
+ 538              		.cfi_offset 4, -8
+ 539              		.cfi_offset 14, -4
+ 540 0002 0446     		mov	r4, r0
+ 113:Robot/Algorithm/mahony/mahony_filter.c ****     /*计算roll pitch yaw 欧拉角*/
+ 114:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->pitch = -asinf(mahony_filter->rMat[2][0]); 
+ 541              		.loc 1 114 5 is_stmt 1 view .LVU216
+ 542              		.loc 1 114 29 is_stmt 0 view .LVU217
+ 543 0004 90ED160A 		vldr.32	s0, [r0, #88]
+ 544 0008 FFF7FEFF 		bl	asinf
+ 545              	.LVL39:
+ 546              		.loc 1 114 28 view .LVU218
+ 547 000c B1EE400A 		vneg.f32	s0, s0
+ 548              		.loc 1 114 26 view .LVU219
+ 549 0010 84ED190A 		vstr.32	s0, [r4, #100]
+ 115:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->roll = atan2f(mahony_filter->rMat[2][1], mahony_filter->rMat[2][2]) ;
+ 550              		.loc 1 115 5 is_stmt 1 view .LVU220
+ 551              		.loc 1 115 27 is_stmt 0 view .LVU221
+ 552 0014 D4ED180A 		vldr.32	s1, [r4, #96]
+ 553 0018 94ED170A 		vldr.32	s0, [r4, #92]
+ 554 001c FFF7FEFF 		bl	atan2f
+ 555              	.LVL40:
+ 556              		.loc 1 115 25 view .LVU222
+ 557 0020 84ED1A0A 		vstr.32	s0, [r4, #104]
+ 116:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->yaw = atan2f(mahony_filter->rMat[1][0], mahony_filter->rMat[0][0]) ;
+ 558              		.loc 1 116 5 is_stmt 1 view .LVU223
+ 559              		.loc 1 116 26 is_stmt 0 view .LVU224
+ 560 0024 D4ED100A 		vldr.32	s1, [r4, #64]
+ 561 0028 94ED130A 		vldr.32	s0, [r4, #76]
+ 562 002c FFF7FEFF 		bl	atan2f
+ 563              	.LVL41:
+ 564              		.loc 1 116 24 view .LVU225
+ 565 0030 84ED1B0A 		vstr.32	s0, [r4, #108]
+ 117:Robot/Algorithm/mahony/mahony_filter.c **** }
+ 566              		.loc 1 117 1 view .LVU226
+ 567 0034 10BD     		pop	{r4, pc}
+ 568              		.loc 1 117 1 view .LVU227
+ 569              		.cfi_endproc
+ 570              	.LFE191:
+ARM GAS  D:\temp\TMP\cc4uVkmV.s 			page 13
+
+
+ 572              		.section	.text.mahony_init,"ax",%progbits
+ 573              		.align	1
+ 574              		.global	mahony_init
+ 575              		.syntax unified
+ 576              		.thumb
+ 577              		.thumb_func
+ 579              	mahony_init:
+ 580              	.LVL42:
+ 581              	.LFB192:
+ 118:Robot/Algorithm/mahony/mahony_filter.c **** 
+ 119:Robot/Algorithm/mahony/mahony_filter.c **** // 初始化Mahony滤波器的参数和函数指针
+ 120:Robot/Algorithm/mahony/mahony_filter.c **** void mahony_init(struct MAHONY_FILTER_t *mahony_filter,float Kp,float Ki,float dt)
+ 121:Robot/Algorithm/mahony/mahony_filter.c **** {
+ 582              		.loc 1 121 1 is_stmt 1 view -0
+ 583              		.cfi_startproc
+ 584              		@ args = 0, pretend = 0, frame = 0
+ 585              		@ frame_needed = 0, uses_anonymous_args = 0
+ 586              		@ link register save eliminated.
+ 122:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->Kp = Kp;
+ 587              		.loc 1 122 5 view .LVU229
+ 588              		.loc 1 122 23 is_stmt 0 view .LVU230
+ 589 0000 80ED000A 		vstr.32	s0, [r0]
+ 123:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->Ki = Ki;
+ 590              		.loc 1 123 5 is_stmt 1 view .LVU231
+ 591              		.loc 1 123 23 is_stmt 0 view .LVU232
+ 592 0004 C0ED010A 		vstr.32	s1, [r0, #4]
+ 124:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->dt = dt;
+ 593              		.loc 1 124 5 is_stmt 1 view .LVU233
+ 594              		.loc 1 124 23 is_stmt 0 view .LVU234
+ 595 0008 80ED021A 		vstr.32	s2, [r0, #8]
+ 125:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->q0 = 1;
+ 596              		.loc 1 125 5 is_stmt 1 view .LVU235
+ 597              		.loc 1 125 23 is_stmt 0 view .LVU236
+ 598 000c 4FF07E53 		mov	r3, #1065353216
+ 599 0010 0363     		str	r3, [r0, #48]	@ float
+ 126:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->mahony_input = mahony_input;
+ 600              		.loc 1 126 5 is_stmt 1 view .LVU237
+ 601              		.loc 1 126 33 is_stmt 0 view .LVU238
+ 602 0012 054B     		ldr	r3, .L9
+ 603 0014 4367     		str	r3, [r0, #116]
+ 127:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->mahony_update = mahony_update;
+ 604              		.loc 1 127 5 is_stmt 1 view .LVU239
+ 605              		.loc 1 127 34 is_stmt 0 view .LVU240
+ 606 0016 054B     		ldr	r3, .L9+4
+ 607 0018 8367     		str	r3, [r0, #120]
+ 128:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->mahony_output = mahony_output;    
+ 608              		.loc 1 128 5 is_stmt 1 view .LVU241
+ 609              		.loc 1 128 34 is_stmt 0 view .LVU242
+ 610 001a 054B     		ldr	r3, .L9+8
+ 611 001c C367     		str	r3, [r0, #124]
+ 129:Robot/Algorithm/mahony/mahony_filter.c ****     mahony_filter->RotationMatrix_update = RotationMatrix_update;
+ 612              		.loc 1 129 5 is_stmt 1 view .LVU243
+ 613              		.loc 1 129 42 is_stmt 0 view .LVU244
+ 614 001e 054B     		ldr	r3, .L9+12
+ 615 0020 C0F88030 		str	r3, [r0, #128]
+ 130:Robot/Algorithm/mahony/mahony_filter.c **** }
+ 616              		.loc 1 130 1 view .LVU245
+ARM GAS  D:\temp\TMP\cc4uVkmV.s 			page 14
+
+
+ 617 0024 7047     		bx	lr
+ 618              	.L10:
+ 619 0026 00BF     		.align	2
+ 620              	.L9:
+ 621 0028 00000000 		.word	mahony_input
+ 622 002c 00000000 		.word	mahony_update
+ 623 0030 00000000 		.word	mahony_output
+ 624 0034 00000000 		.word	RotationMatrix_update
+ 625              		.cfi_endproc
+ 626              	.LFE192:
+ 628              		.global	mahony_filter
+ 629              		.section	.bss.mahony_filter,"aw",%nobits
+ 630              		.align	2
+ 633              	mahony_filter:
+ 634 0000 00000000 		.space	132
+ 634      00000000 
+ 634      00000000 
+ 634      00000000 
+ 634      00000000 
+ 635              		.text
+ 636              	.Letext0:
+ 637              		.file 2 "Robot/Algorithm/mahony/mahony_filter.h"
+ 638              		.file 3 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\math.h"
+ARM GAS  D:\temp\TMP\cc4uVkmV.s 			page 15
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 mahony_filter.c
+D:\temp\TMP\cc4uVkmV.s:19     .text.RotationMatrix_update:00000000 $t
+D:\temp\TMP\cc4uVkmV.s:25     .text.RotationMatrix_update:00000000 RotationMatrix_update
+D:\temp\TMP\cc4uVkmV.s:158    .text.mahony_input:00000000 $t
+D:\temp\TMP\cc4uVkmV.s:164    .text.mahony_input:00000000 mahony_input
+D:\temp\TMP\cc4uVkmV.s:209    .text.mahony_update:00000000 $t
+D:\temp\TMP\cc4uVkmV.s:215    .text.mahony_update:00000000 mahony_update
+D:\temp\TMP\cc4uVkmV.s:521    .text.mahony_output:00000000 $t
+D:\temp\TMP\cc4uVkmV.s:527    .text.mahony_output:00000000 mahony_output
+D:\temp\TMP\cc4uVkmV.s:573    .text.mahony_init:00000000 $t
+D:\temp\TMP\cc4uVkmV.s:579    .text.mahony_init:00000000 mahony_init
+D:\temp\TMP\cc4uVkmV.s:621    .text.mahony_init:00000028 $d
+D:\temp\TMP\cc4uVkmV.s:633    .bss.mahony_filter:00000000 mahony_filter
+D:\temp\TMP\cc4uVkmV.s:630    .bss.mahony_filter:00000000 $d
+
+UNDEFINED SYMBOLS
+sqrt
+asinf
+atan2f

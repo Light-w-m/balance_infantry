@@ -1,0 +1,843 @@
+ARM GAS  D:\temp\TMP\cc7OZIjd.s 			page 1
+
+
+   1              		.cpu cortex-m7
+   2              		.arch armv7e-m
+   3              		.fpu fpv5-d16
+   4              		.eabi_attribute 28, 1
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 1
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.file	"observe_task.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.xvEstimateKF_Init,"ax",%progbits
+  19              		.align	1
+  20              		.global	xvEstimateKF_Init
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  25              	xvEstimateKF_Init:
+  26              	.LVL0:
+  27              	.LFB193:
+  28              		.file 1 "Robot/RoboTask/observe/observe_task.c"
+   1:Robot/RoboTask/observe/observe_task.c **** /**
+   2:Robot/RoboTask/observe/observe_task.c ****  * @file observe_task.c
+   3:Robot/RoboTask/observe/observe_task.c ****  * @author your name (you@domain.com)
+   4:Robot/RoboTask/observe/observe_task.c ****  * @brief 用于对机体速度估计
+   5:Robot/RoboTask/observe/observe_task.c ****  * @version 0.1
+   6:Robot/RoboTask/observe/observe_task.c ****  * @date 2025-12-11
+   7:Robot/RoboTask/observe/observe_task.c ****  * 
+   8:Robot/RoboTask/observe/observe_task.c ****  * @copyright Copyright (c) 2025
+   9:Robot/RoboTask/observe/observe_task.c ****  * 
+  10:Robot/RoboTask/observe/observe_task.c ****  */
+  11:Robot/RoboTask/observe/observe_task.c **** 
+  12:Robot/RoboTask/observe/observe_task.c **** #include "observe_task.h"
+  13:Robot/RoboTask/observe/observe_task.c **** #include "kalman_filter.h"
+  14:Robot/RoboTask/observe/observe_task.c **** #include "kinematics.h"
+  15:Robot/RoboTask/observe/observe_task.c **** #include "chassisR_task.h"
+  16:Robot/RoboTask/observe/observe_task.c **** #include "chassis_def.h"
+  17:Robot/RoboTask/observe/observe_task.c **** #include "user_lib.h"
+  18:Robot/RoboTask/observe/observe_task.c **** #include "cmsis_os.h"
+  19:Robot/RoboTask/observe/observe_task.c **** 
+  20:Robot/RoboTask/observe/observe_task.c **** KalmanFilter_t vaEstimateKF;	   // 卡尔曼滤波器结构体
+  21:Robot/RoboTask/observe/observe_task.c **** 
+  22:Robot/RoboTask/observe/observe_task.c **** float vaEstimateKF_F[4] = {1.0f, 0.003f, 
+  23:Robot/RoboTask/observe/observe_task.c ****                            0.0f, 1.0f};	   // 状态转移矩阵，控制周期为0.001s
+  24:Robot/RoboTask/observe/observe_task.c **** 
+  25:Robot/RoboTask/observe/observe_task.c **** float vaEstimateKF_P[4] = {1.0f, 0.0f,
+  26:Robot/RoboTask/observe/observe_task.c ****                            0.0f, 1.0f};    // 后验估计协方差初始值
+  27:Robot/RoboTask/observe/observe_task.c **** 
+  28:Robot/RoboTask/observe/observe_task.c **** float vaEstimateKF_Q[4] = {1.0f, 0.0f, 
+  29:Robot/RoboTask/observe/observe_task.c ****                            0.0f, 1.0f};    // Q矩阵初始值
+  30:Robot/RoboTask/observe/observe_task.c **** 
+ARM GAS  D:\temp\TMP\cc7OZIjd.s 			page 2
+
+
+  31:Robot/RoboTask/observe/observe_task.c **** float vaEstimateKF_R[4] = {200.0f, 0.0f, 
+  32:Robot/RoboTask/observe/observe_task.c ****                             0.0f,  200.0f}; 	
+  33:Robot/RoboTask/observe/observe_task.c **** 														
+  34:Robot/RoboTask/observe/observe_task.c **** float vaEstimateKF_K[4];
+  35:Robot/RoboTask/observe/observe_task.c **** 													 
+  36:Robot/RoboTask/observe/observe_task.c **** const float vaEstimateKF_H[4] = {1.0f, 0.0f,
+  37:Robot/RoboTask/observe/observe_task.c ****                                  0.0f, 1.0f};	// 设置矩阵H为常量
+  38:Robot/RoboTask/observe/observe_task.c **** 
+  39:Robot/RoboTask/observe/observe_task.c **** extern INS_t INS;
+  40:Robot/RoboTask/observe/observe_task.c **** extern chassis_t chassis_move;
+  41:Robot/RoboTask/observe/observe_task.c **** extern Leg_t legR;
+  42:Robot/RoboTask/observe/observe_task.c **** extern Leg_t legL;
+  43:Robot/RoboTask/observe/observe_task.c **** 
+  44:Robot/RoboTask/observe/observe_task.c **** Observe_Data_t observe_data;
+  45:Robot/RoboTask/observe/observe_task.c **** float vel_acc[2]; 
+  46:Robot/RoboTask/observe/observe_task.c **** uint32_t OBSERVE_TIME = 3;//任务周期是3ms	
+  47:Robot/RoboTask/observe/observe_task.c **** 
+  48:Robot/RoboTask/observe/observe_task.c **** 
+  49:Robot/RoboTask/observe/observe_task.c **** void xvEstimateKF_Init(KalmanFilter_t *EstimateKF)
+  50:Robot/RoboTask/observe/observe_task.c **** {
+  29              		.loc 1 50 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		.loc 1 50 1 is_stmt 0 view .LVU1
+  34 0000 70B5     		push	{r4, r5, r6, lr}
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 16
+  37              		.cfi_offset 4, -16
+  38              		.cfi_offset 5, -12
+  39              		.cfi_offset 6, -8
+  40              		.cfi_offset 14, -4
+  41 0002 0446     		mov	r4, r0
+  51:Robot/RoboTask/observe/observe_task.c ****     Kalman_Filter_Init(EstimateKF, 2, 0, 2);	// 状态向量2维 没有控制量 测量向量2维
+  42              		.loc 1 51 5 is_stmt 1 view .LVU2
+  43 0004 0223     		movs	r3, #2
+  44 0006 0022     		movs	r2, #0
+  45 0008 1946     		mov	r1, r3
+  46 000a FFF7FEFF 		bl	Kalman_Filter_Init
+  47              	.LVL1:
+  52:Robot/RoboTask/observe/observe_task.c **** 	
+  53:Robot/RoboTask/observe/observe_task.c **** 		memcpy(EstimateKF->F_data, vaEstimateKF_F, sizeof(vaEstimateKF_F));
+  48              		.loc 1 53 3 view .LVU3
+  49              		.loc 1 53 20 is_stmt 0 view .LVU4
+  50 000e D4F80861 		ldr	r6, [r4, #264]
+  51              		.loc 1 53 3 view .LVU5
+  52 0012 134D     		ldr	r5, .L3
+  53 0014 0FCD     		ldmia	r5!, {r0, r1, r2, r3}
+  54 0016 3060     		str	r0, [r6]	@ unaligned
+  55 0018 7160     		str	r1, [r6, #4]	@ unaligned
+  56 001a B260     		str	r2, [r6, #8]	@ unaligned
+  57 001c F360     		str	r3, [r6, #12]	@ unaligned
+  54:Robot/RoboTask/observe/observe_task.c ****     memcpy(EstimateKF->P_data, vaEstimateKF_P, sizeof(vaEstimateKF_P));
+  58              		.loc 1 54 5 is_stmt 1 view .LVU6
+  59              		.loc 1 54 22 is_stmt 0 view .LVU7
+  60 001e D4F80061 		ldr	r6, [r4, #256]
+  61              		.loc 1 54 5 view .LVU8
+ARM GAS  D:\temp\TMP\cc7OZIjd.s 			page 3
+
+
+  62 0022 104D     		ldr	r5, .L3+4
+  63 0024 0FCD     		ldmia	r5!, {r0, r1, r2, r3}
+  64 0026 3060     		str	r0, [r6]	@ unaligned
+  65 0028 7160     		str	r1, [r6, #4]	@ unaligned
+  66 002a B260     		str	r2, [r6, #8]	@ unaligned
+  67 002c F360     		str	r3, [r6, #12]	@ unaligned
+  55:Robot/RoboTask/observe/observe_task.c ****     memcpy(EstimateKF->Q_data, vaEstimateKF_Q, sizeof(vaEstimateKF_Q));
+  68              		.loc 1 55 5 is_stmt 1 view .LVU9
+  69              		.loc 1 55 22 is_stmt 0 view .LVU10
+  70 002e D4F82061 		ldr	r6, [r4, #288]
+  71              		.loc 1 55 5 view .LVU11
+  72 0032 0D4D     		ldr	r5, .L3+8
+  73 0034 0FCD     		ldmia	r5!, {r0, r1, r2, r3}
+  74 0036 3060     		str	r0, [r6]	@ unaligned
+  75 0038 7160     		str	r1, [r6, #4]	@ unaligned
+  76 003a B260     		str	r2, [r6, #8]	@ unaligned
+  77 003c F360     		str	r3, [r6, #12]	@ unaligned
+  56:Robot/RoboTask/observe/observe_task.c ****     memcpy(EstimateKF->R_data, vaEstimateKF_R, sizeof(vaEstimateKF_R));
+  78              		.loc 1 56 5 is_stmt 1 view .LVU12
+  79              		.loc 1 56 22 is_stmt 0 view .LVU13
+  80 003e D4F82461 		ldr	r6, [r4, #292]
+  81              		.loc 1 56 5 view .LVU14
+  82 0042 0A4D     		ldr	r5, .L3+12
+  83 0044 0FCD     		ldmia	r5!, {r0, r1, r2, r3}
+  84 0046 3060     		str	r0, [r6]	@ unaligned
+  85 0048 7160     		str	r1, [r6, #4]	@ unaligned
+  86 004a B260     		str	r2, [r6, #8]	@ unaligned
+  87 004c F360     		str	r3, [r6, #12]	@ unaligned
+  57:Robot/RoboTask/observe/observe_task.c ****     memcpy(EstimateKF->H_data, vaEstimateKF_H, sizeof(vaEstimateKF_H));
+  88              		.loc 1 57 5 is_stmt 1 view .LVU15
+  89              		.loc 1 57 22 is_stmt 0 view .LVU16
+  90 004e D4F81851 		ldr	r5, [r4, #280]
+  91              		.loc 1 57 5 view .LVU17
+  92 0052 074C     		ldr	r4, .L3+16
+  93              	.LVL2:
+  94              		.loc 1 57 5 view .LVU18
+  95 0054 0FCC     		ldmia	r4!, {r0, r1, r2, r3}
+  96 0056 2860     		str	r0, [r5]	@ unaligned
+  97 0058 6960     		str	r1, [r5, #4]	@ unaligned
+  98 005a AA60     		str	r2, [r5, #8]	@ unaligned
+  99 005c EB60     		str	r3, [r5, #12]	@ unaligned
+  58:Robot/RoboTask/observe/observe_task.c **** }
+ 100              		.loc 1 58 1 view .LVU19
+ 101 005e 70BD     		pop	{r4, r5, r6, pc}
+ 102              	.L4:
+ 103              		.align	2
+ 104              	.L3:
+ 105 0060 00000000 		.word	.LANCHOR0
+ 106 0064 00000000 		.word	.LANCHOR1
+ 107 0068 00000000 		.word	.LANCHOR2
+ 108 006c 00000000 		.word	.LANCHOR3
+ 109 0070 00000000 		.word	.LANCHOR4
+ 110              		.cfi_endproc
+ 111              	.LFE193:
+ 113              		.section	.text.xvEstimateKF_Update,"ax",%progbits
+ 114              		.align	1
+ 115              		.global	xvEstimateKF_Update
+ARM GAS  D:\temp\TMP\cc7OZIjd.s 			page 4
+
+
+ 116              		.syntax unified
+ 117              		.thumb
+ 118              		.thumb_func
+ 120              	xvEstimateKF_Update:
+ 121              	.LVL3:
+ 122              	.LFB194:
+  59:Robot/RoboTask/observe/observe_task.c **** 
+  60:Robot/RoboTask/observe/observe_task.c **** void xvEstimateKF_Update(KalmanFilter_t *EstimateKF ,float acc,float vel)
+  61:Robot/RoboTask/observe/observe_task.c **** {   	
+ 123              		.loc 1 61 1 is_stmt 1 view -0
+ 124              		.cfi_startproc
+ 125              		@ args = 0, pretend = 0, frame = 0
+ 126              		@ frame_needed = 0, uses_anonymous_args = 0
+ 127              		.loc 1 61 1 is_stmt 0 view .LVU21
+ 128 0000 70B5     		push	{r4, r5, r6, lr}
+ 129              	.LCFI1:
+ 130              		.cfi_def_cfa_offset 16
+ 131              		.cfi_offset 4, -16
+ 132              		.cfi_offset 5, -12
+ 133              		.cfi_offset 6, -8
+ 134              		.cfi_offset 14, -4
+ 135 0002 0446     		mov	r4, r0
+  62:Robot/RoboTask/observe/observe_task.c **** 	 memcpy(EstimateKF->Q_data, vaEstimateKF_Q, sizeof(vaEstimateKF_Q));
+ 136              		.loc 1 62 3 is_stmt 1 view .LVU22
+ 137              		.loc 1 62 20 is_stmt 0 view .LVU23
+ 138 0004 D0F82061 		ldr	r6, [r0, #288]
+ 139              		.loc 1 62 3 view .LVU24
+ 140 0008 124D     		ldr	r5, .L9
+ 141 000a 0FCD     		ldmia	r5!, {r0, r1, r2, r3}
+ 142              	.LVL4:
+ 143              		.loc 1 62 3 view .LVU25
+ 144 000c 3060     		str	r0, [r6]	@ unaligned
+ 145 000e 7160     		str	r1, [r6, #4]	@ unaligned
+ 146 0010 B260     		str	r2, [r6, #8]	@ unaligned
+ 147 0012 F360     		str	r3, [r6, #12]	@ unaligned
+  63:Robot/RoboTask/observe/observe_task.c ****    memcpy(EstimateKF->R_data, vaEstimateKF_R, sizeof(vaEstimateKF_R));
+ 148              		.loc 1 63 4 is_stmt 1 view .LVU26
+ 149              		.loc 1 63 21 is_stmt 0 view .LVU27
+ 150 0014 D4F82461 		ldr	r6, [r4, #292]
+ 151              		.loc 1 63 4 view .LVU28
+ 152 0018 0F4D     		ldr	r5, .L9+4
+ 153 001a 0FCD     		ldmia	r5!, {r0, r1, r2, r3}
+ 154 001c 3060     		str	r0, [r6]	@ unaligned
+ 155 001e 7160     		str	r1, [r6, #4]	@ unaligned
+ 156 0020 B260     		str	r2, [r6, #8]	@ unaligned
+ 157 0022 F360     		str	r3, [r6, #12]	@ unaligned
+  64:Robot/RoboTask/observe/observe_task.c **** 	
+  65:Robot/RoboTask/observe/observe_task.c ****     //卡尔曼滤波器测量值更新
+  66:Robot/RoboTask/observe/observe_task.c ****     EstimateKF->MeasuredVector[0] =	vel;//测量速度
+ 158              		.loc 1 66 5 is_stmt 1 view .LVU29
+ 159              		.loc 1 66 15 is_stmt 0 view .LVU30
+ 160 0024 6368     		ldr	r3, [r4, #4]
+ 161              		.loc 1 66 35 view .LVU31
+ 162 0026 C3ED000A 		vstr.32	s1, [r3]
+  67:Robot/RoboTask/observe/observe_task.c ****     EstimateKF->MeasuredVector[1] = acc;//测量加速度
+ 163              		.loc 1 67 5 is_stmt 1 view .LVU32
+ 164              		.loc 1 67 15 is_stmt 0 view .LVU33
+ARM GAS  D:\temp\TMP\cc7OZIjd.s 			page 5
+
+
+ 165 002a 6368     		ldr	r3, [r4, #4]
+ 166              		.loc 1 67 35 view .LVU34
+ 167 002c 83ED010A 		vstr.32	s0, [r3, #4]
+  68:Robot/RoboTask/observe/observe_task.c ****     		
+  69:Robot/RoboTask/observe/observe_task.c ****     //卡尔曼滤波器更新函数
+  70:Robot/RoboTask/observe/observe_task.c ****     Kalman_Filter_Update(EstimateKF);
+ 168              		.loc 1 70 5 is_stmt 1 view .LVU35
+ 169 0030 2046     		mov	r0, r4
+ 170 0032 FFF7FEFF 		bl	Kalman_Filter_Update
+ 171              	.LVL5:
+  71:Robot/RoboTask/observe/observe_task.c **** 
+  72:Robot/RoboTask/observe/observe_task.c ****     // 提取估计值
+  73:Robot/RoboTask/observe/observe_task.c ****     for (uint8_t i = 0; i < 2; i++)
+ 172              		.loc 1 73 5 view .LVU36
+ 173              	.LBB2:
+ 174              		.loc 1 73 10 view .LVU37
+ 175              		.loc 1 73 18 is_stmt 0 view .LVU38
+ 176 0036 0023     		movs	r3, #0
+ 177              		.loc 1 73 5 view .LVU39
+ 178 0038 09E0     		b	.L6
+ 179              	.LVL6:
+ 180              	.L7:
+  74:Robot/RoboTask/observe/observe_task.c ****     {
+  75:Robot/RoboTask/observe/observe_task.c ****       vel_acc[i] = EstimateKF->FilteredValue[i];
+ 181              		.loc 1 75 7 is_stmt 1 discriminator 3 view .LVU40
+ 182              		.loc 1 75 30 is_stmt 0 discriminator 3 view .LVU41
+ 183 003a 2268     		ldr	r2, [r4]
+ 184              		.loc 1 75 45 discriminator 3 view .LVU42
+ 185 003c 02EB8302 		add	r2, r2, r3, lsl #2
+ 186 0040 1168     		ldr	r1, [r2]	@ float
+ 187              		.loc 1 75 18 discriminator 3 view .LVU43
+ 188 0042 064A     		ldr	r2, .L9+8
+ 189 0044 02EB8302 		add	r2, r2, r3, lsl #2
+ 190 0048 1160     		str	r1, [r2]	@ float
+  73:Robot/RoboTask/observe/observe_task.c ****     {
+ 191              		.loc 1 73 32 is_stmt 1 discriminator 3 view .LVU44
+  73:Robot/RoboTask/observe/observe_task.c ****     {
+ 192              		.loc 1 73 33 is_stmt 0 discriminator 3 view .LVU45
+ 193 004a 0133     		adds	r3, r3, #1
+ 194              	.LVL7:
+  73:Robot/RoboTask/observe/observe_task.c ****     {
+ 195              		.loc 1 73 33 discriminator 3 view .LVU46
+ 196 004c DBB2     		uxtb	r3, r3
+ 197              	.LVL8:
+ 198              	.L6:
+  73:Robot/RoboTask/observe/observe_task.c ****     {
+ 199              		.loc 1 73 25 is_stmt 1 discriminator 1 view .LVU47
+  73:Robot/RoboTask/observe/observe_task.c ****     {
+ 200              		.loc 1 73 5 is_stmt 0 discriminator 1 view .LVU48
+ 201 004e 012B     		cmp	r3, #1
+ 202 0050 F3D9     		bls	.L7
+ 203              	.LBE2:
+  76:Robot/RoboTask/observe/observe_task.c ****     }
+  77:Robot/RoboTask/observe/observe_task.c **** }
+ 204              		.loc 1 77 1 view .LVU49
+ 205 0052 70BD     		pop	{r4, r5, r6, pc}
+ 206              	.LVL9:
+ARM GAS  D:\temp\TMP\cc7OZIjd.s 			page 6
+
+
+ 207              	.L10:
+ 208              		.loc 1 77 1 view .LVU50
+ 209              		.align	2
+ 210              	.L9:
+ 211 0054 00000000 		.word	.LANCHOR2
+ 212 0058 00000000 		.word	.LANCHOR3
+ 213 005c 00000000 		.word	.LANCHOR5
+ 214              		.cfi_endproc
+ 215              	.LFE194:
+ 217              		.section	.text.Observe_Task,"ax",%progbits
+ 218              		.align	1
+ 219              		.global	Observe_Task
+ 220              		.syntax unified
+ 221              		.thumb
+ 222              		.thumb_func
+ 224              	Observe_Task:
+ 225              	.LFB195:
+  78:Robot/RoboTask/observe/observe_task.c **** 
+  79:Robot/RoboTask/observe/observe_task.c **** void Observe_Task(void)
+  80:Robot/RoboTask/observe/observe_task.c **** {
+ 226              		.loc 1 80 1 is_stmt 1 view -0
+ 227              		.cfi_startproc
+ 228              		@ Volatile: function does not return.
+ 229              		@ args = 0, pretend = 0, frame = 0
+ 230              		@ frame_needed = 0, uses_anonymous_args = 0
+ 231 0000 80B5     		push	{r7, lr}
+ 232              	.LCFI2:
+ 233              		.cfi_def_cfa_offset 8
+ 234              		.cfi_offset 7, -8
+ 235              		.cfi_offset 14, -4
+  81:Robot/RoboTask/observe/observe_task.c ****   while (INS.ins_flag == 0)
+ 236              		.loc 1 81 3 view .LVU52
+ 237              		.loc 1 81 9 is_stmt 0 view .LVU53
+ 238 0002 02E0     		b	.L12
+ 239              	.L13:
+  82:Robot/RoboTask/observe/observe_task.c ****   {
+  83:Robot/RoboTask/observe/observe_task.c ****     /* code */
+  84:Robot/RoboTask/observe/observe_task.c ****     osDelay(1);
+ 240              		.loc 1 84 5 is_stmt 1 view .LVU54
+ 241 0004 0120     		movs	r0, #1
+ 242 0006 FFF7FEFF 		bl	osDelay
+ 243              	.LVL10:
+ 244              	.L12:
+  81:Robot/RoboTask/observe/observe_task.c ****   while (INS.ins_flag == 0)
+ 245              		.loc 1 81 9 view .LVU55
+  81:Robot/RoboTask/observe/observe_task.c ****   while (INS.ins_flag == 0)
+ 246              		.loc 1 81 13 is_stmt 0 view .LVU56
+ 247 000a 4C4B     		ldr	r3, .L16
+ 248 000c 93F89030 		ldrb	r3, [r3, #144]	@ zero_extendqisi2
+  81:Robot/RoboTask/observe/observe_task.c ****   while (INS.ins_flag == 0)
+ 249              		.loc 1 81 9 view .LVU57
+ 250 0010 002B     		cmp	r3, #0
+ 251 0012 F7D0     		beq	.L13
+  85:Robot/RoboTask/observe/observe_task.c ****   }
+  86:Robot/RoboTask/observe/observe_task.c ****   // static float wr,wl = 0.0f;    //驱动轮转子相对大地角速度，这里定义的是顺�
+  87:Robot/RoboTask/observe/observe_task.c ****   // static float vrb,vlb = 0.0f;  //机体b系的速度
+  88:Robot/RoboTask/observe/observe_task.c ****   // static float aver_v = 0.0f;
+ARM GAS  D:\temp\TMP\cc7OZIjd.s 			page 7
+
+
+  89:Robot/RoboTask/observe/observe_task.c ****     
+  90:Robot/RoboTask/observe/observe_task.c ****   xvEstimateKF_Init(&vaEstimateKF);
+ 252              		.loc 1 90 3 is_stmt 1 view .LVU58
+ 253 0014 4A48     		ldr	r0, .L16+4
+ 254 0016 FFF7FEFF 		bl	xvEstimateKF_Init
+ 255              	.LVL11:
+ 256              	.L14:
+  91:Robot/RoboTask/observe/observe_task.c **** 
+  92:Robot/RoboTask/observe/observe_task.c ****   while (1)
+ 257              		.loc 1 92 3 discriminator 1 view .LVU59
+  93:Robot/RoboTask/observe/observe_task.c ****   {
+  94:Robot/RoboTask/observe/observe_task.c ****     /* code */
+  95:Robot/RoboTask/observe/observe_task.c ****     observe_data.wr = -angle_to_radian(chassis_move.wheel_motor[0]->measure.speed_aps)-INS.Gyro[1]-
+ 258              		.loc 1 95 5 discriminator 1 view .LVU60
+ 259              		.loc 1 95 64 is_stmt 0 discriminator 1 view .LVU61
+ 260 001a 4A4E     		ldr	r6, .L16+8
+ 261 001c D6F80031 		ldr	r3, [r6, #256]
+ 262              		.loc 1 95 24 discriminator 1 view .LVU62
+ 263 0020 93ED020A 		vldr.32	s0, [r3, #8]
+ 264 0024 FFF7FEFF 		bl	angle_to_radian
+ 265              	.LVL12:
+ 266              		.loc 1 95 23 discriminator 1 view .LVU63
+ 267 0028 B1EE400A 		vneg.f32	s0, s0
+ 268              		.loc 1 95 96 discriminator 1 view .LVU64
+ 269 002c 434F     		ldr	r7, .L16
+ 270 002e 97ED058A 		vldr.32	s16, [r7, #20]
+ 271              		.loc 1 95 87 discriminator 1 view .LVU65
+ 272 0032 30EE480A 		vsub.f32	s0, s0, s16
+ 273              		.loc 1 95 108 discriminator 1 view .LVU66
+ 274 0036 444D     		ldr	r5, .L16+12
+ 275 0038 D5ED087A 		vldr.32	s15, [r5, #32]
+ 276              		.loc 1 95 99 discriminator 1 view .LVU67
+ 277 003c 30EE670A 		vsub.f32	s0, s0, s15
+ 278              		.loc 1 95 21 discriminator 1 view .LVU68
+ 279 0040 424C     		ldr	r4, .L16+16
+ 280 0042 84ED000A 		vstr.32	s0, [r4]
+  96:Robot/RoboTask/observe/observe_task.c ****     observe_data.wl = -angle_to_radian(chassis_move.wheel_motor[1]->measure.speed_aps)+INS.Gyro[1]-
+ 281              		.loc 1 96 5 is_stmt 1 discriminator 1 view .LVU69
+ 282              		.loc 1 96 64 is_stmt 0 discriminator 1 view .LVU70
+ 283 0046 D6F80431 		ldr	r3, [r6, #260]
+ 284              		.loc 1 96 24 discriminator 1 view .LVU71
+ 285 004a 93ED020A 		vldr.32	s0, [r3, #8]
+ 286 004e FFF7FEFF 		bl	angle_to_radian
+ 287              	.LVL13:
+ 288              		.loc 1 96 87 discriminator 1 view .LVU72
+ 289 0052 38EE408A 		vsub.f32	s16, s16, s0
+ 290              		.loc 1 96 108 discriminator 1 view .LVU73
+ 291 0056 95ED080A 		vldr.32	s0, [r5, #32]
+ 292              		.loc 1 96 99 discriminator 1 view .LVU74
+ 293 005a 38EE408A 		vsub.f32	s16, s16, s0
+ 294              		.loc 1 96 21 discriminator 1 view .LVU75
+ 295 005e 84ED018A 		vstr.32	s16, [r4, #4]
+  97:Robot/RoboTask/observe/observe_task.c **** 
+  98:Robot/RoboTask/observe/observe_task.c ****     // 公式意义：角速度 x 半径 + 角速度 x 长度 x cos(角度) + 长度变化量 x sin
+  99:Robot/RoboTask/observe/observe_task.c ****     observe_data.vrb = observe_data.wr*WHEEL_RADIUS + legR.rod.L0*legR.rod.d_theta*arm_cos_f32(legR
+ 296              		.loc 1 99 5 is_stmt 1 discriminator 1 view .LVU76
+ 297              		.loc 1 99 36 is_stmt 0 discriminator 1 view .LVU77
+ARM GAS  D:\temp\TMP\cc7OZIjd.s 			page 8
+
+
+ 298 0062 94ED008A 		vldr.32	s16, [r4]
+ 299              		.loc 1 99 39 discriminator 1 view .LVU78
+ 300 0066 9FED3A9A 		vldr.32	s18, .L16+20
+ 301 006a 28EE098A 		vmul.f32	s16, s16, s18
+ 302              		.loc 1 99 63 discriminator 1 view .LVU79
+ 303 006e D5ED028A 		vldr.32	s17, [r5, #8]
+ 304              		.loc 1 99 75 discriminator 1 view .LVU80
+ 305 0072 95ED0B0A 		vldr.32	s0, [r5, #44]
+ 306              		.loc 1 99 66 discriminator 1 view .LVU81
+ 307 0076 68EE808A 		vmul.f32	s17, s17, s0
+ 308              		.loc 1 99 84 discriminator 1 view .LVU82
+ 309 007a FFF7FEFF 		bl	arm_cos_f32
+ 310              	.LVL14:
+ 311              		.loc 1 99 83 discriminator 1 view .LVU83
+ 312 007e 68EE808A 		vmul.f32	s17, s17, s0
+ 313              		.loc 1 99 53 discriminator 1 view .LVU84
+ 314 0082 38EE288A 		vadd.f32	s16, s16, s17
+ 315              		.loc 1 99 124 discriminator 1 view .LVU85
+ 316 0086 D5ED038A 		vldr.32	s17, [r5, #12]
+ 317              		.loc 1 99 130 discriminator 1 view .LVU86
+ 318 008a 95ED0A0A 		vldr.32	s0, [r5, #40]
+ 319 008e FFF7FEFF 		bl	arm_sin_f32
+ 320              	.LVL15:
+ 321              		.loc 1 99 129 discriminator 1 view .LVU87
+ 322 0092 68EE808A 		vmul.f32	s17, s17, s0
+ 323              		.loc 1 99 114 discriminator 1 view .LVU88
+ 324 0096 38EE288A 		vadd.f32	s16, s16, s17
+ 325              		.loc 1 99 22 discriminator 1 view .LVU89
+ 326 009a 84ED028A 		vstr.32	s16, [r4, #8]
+ 100:Robot/RoboTask/observe/observe_task.c ****     observe_data.vlb = observe_data.wl*WHEEL_RADIUS + legL.rod.L0*legL.rod.d_theta*arm_cos_f32(legL
+ 327              		.loc 1 100 5 is_stmt 1 discriminator 1 view .LVU90
+ 328              		.loc 1 100 36 is_stmt 0 discriminator 1 view .LVU91
+ 329 009e 94ED018A 		vldr.32	s16, [r4, #4]
+ 330              		.loc 1 100 39 discriminator 1 view .LVU92
+ 331 00a2 28EE098A 		vmul.f32	s16, s16, s18
+ 332              		.loc 1 100 63 discriminator 1 view .LVU93
+ 333 00a6 2B4D     		ldr	r5, .L16+24
+ 334 00a8 D5ED028A 		vldr.32	s17, [r5, #8]
+ 335              		.loc 1 100 75 discriminator 1 view .LVU94
+ 336 00ac 95ED0B0A 		vldr.32	s0, [r5, #44]
+ 337              		.loc 1 100 66 discriminator 1 view .LVU95
+ 338 00b0 68EE808A 		vmul.f32	s17, s17, s0
+ 339              		.loc 1 100 84 discriminator 1 view .LVU96
+ 340 00b4 FFF7FEFF 		bl	arm_cos_f32
+ 341              	.LVL16:
+ 342              		.loc 1 100 83 discriminator 1 view .LVU97
+ 343 00b8 28EE800A 		vmul.f32	s0, s17, s0
+ 344              		.loc 1 100 53 discriminator 1 view .LVU98
+ 345 00bc 38EE008A 		vadd.f32	s16, s16, s0
+ 346              		.loc 1 100 124 discriminator 1 view .LVU99
+ 347 00c0 D5ED038A 		vldr.32	s17, [r5, #12]
+ 348              		.loc 1 100 130 discriminator 1 view .LVU100
+ 349 00c4 95ED0A0A 		vldr.32	s0, [r5, #40]
+ 350 00c8 FFF7FEFF 		bl	arm_sin_f32
+ 351              	.LVL17:
+ 352              		.loc 1 100 129 discriminator 1 view .LVU101
+ 353 00cc 28EE800A 		vmul.f32	s0, s17, s0
+ARM GAS  D:\temp\TMP\cc7OZIjd.s 			page 9
+
+
+ 354              		.loc 1 100 114 discriminator 1 view .LVU102
+ 355 00d0 38EE000A 		vadd.f32	s0, s16, s0
+ 356              		.loc 1 100 22 discriminator 1 view .LVU103
+ 357 00d4 84ED030A 		vstr.32	s0, [r4, #12]
+ 101:Robot/RoboTask/observe/observe_task.c **** 
+ 102:Robot/RoboTask/observe/observe_task.c ****     // 因规定顺时针为正，所以右轮为正，左轮为负，因此前进速度为差值�
+ 103:Robot/RoboTask/observe/observe_task.c ****     observe_data.forward_v = (observe_data.vrb - observe_data.vlb)/2.0f;
+ 358              		.loc 1 103 5 is_stmt 1 discriminator 1 view .LVU104
+ 359              		.loc 1 103 43 is_stmt 0 discriminator 1 view .LVU105
+ 360 00d8 D4ED027A 		vldr.32	s15, [r4, #8]
+ 361              		.loc 1 103 48 discriminator 1 view .LVU106
+ 362 00dc 77EEC00A 		vsub.f32	s1, s15, s0
+ 363              		.loc 1 103 67 discriminator 1 view .LVU107
+ 364 00e0 B6EE007A 		vmov.f32	s14, #5.0e-1
+ 365 00e4 60EE870A 		vmul.f32	s1, s1, s14
+ 366              		.loc 1 103 28 discriminator 1 view .LVU108
+ 367 00e8 C4ED040A 		vstr.32	s1, [r4, #16]
+ 104:Robot/RoboTask/observe/observe_task.c ****     observe_data.angular_v = (observe_data.vrb + observe_data.vlb)/WHEEL_DISTANCE;
+ 368              		.loc 1 104 5 is_stmt 1 discriminator 1 view .LVU109
+ 369              		.loc 1 104 48 is_stmt 0 discriminator 1 view .LVU110
+ 370 00ec 30EE270A 		vadd.f32	s0, s0, s15
+ 371              		.loc 1 104 67 discriminator 1 view .LVU111
+ 372 00f0 C0EE097A 		vdiv.f32	s15, s0, s18
+ 373              		.loc 1 104 28 discriminator 1 view .LVU112
+ 374 00f4 C4ED057A 		vstr.32	s15, [r4, #20]
+ 105:Robot/RoboTask/observe/observe_task.c ****     
+ 106:Robot/RoboTask/observe/observe_task.c ****     xvEstimateKF_Update(&vaEstimateKF, -INS.MotionAccel_b[0], observe_data.forward_v);
+ 375              		.loc 1 106 5 is_stmt 1 discriminator 1 view .LVU113
+ 376              		.loc 1 106 58 is_stmt 0 discriminator 1 view .LVU114
+ 377 00f8 97ED0A0A 		vldr.32	s0, [r7, #40]
+ 378              		.loc 1 106 5 discriminator 1 view .LVU115
+ 379 00fc B1EE400A 		vneg.f32	s0, s0
+ 380 0100 0F48     		ldr	r0, .L16+4
+ 381 0102 FFF7FEFF 		bl	xvEstimateKF_Update
+ 382              	.LVL18:
+ 107:Robot/RoboTask/observe/observe_task.c **** 
+ 108:Robot/RoboTask/observe/observe_task.c ****     // 原地自转时，v_filter和x_filter应该都为0
+ 109:Robot/RoboTask/observe/observe_task.c ****     chassis_move.state.v_filter = vel_acc[0];
+ 383              		.loc 1 109 5 is_stmt 1 discriminator 1 view .LVU116
+ 384              		.loc 1 109 42 is_stmt 0 discriminator 1 view .LVU117
+ 385 0106 144B     		ldr	r3, .L16+28
+ 386 0108 D3ED007A 		vldr.32	s15, [r3]
+ 387              		.loc 1 109 33 discriminator 1 view .LVU118
+ 388 010c C6ED457A 		vstr.32	s15, [r6, #276]
+ 110:Robot/RoboTask/observe/observe_task.c ****     chassis_move.state.x_filter = chassis_move.state.x_filter + chassis_move.state.v_filter*((float
+ 389              		.loc 1 110 5 is_stmt 1 discriminator 1 view .LVU119
+ 390              		.loc 1 110 53 is_stmt 0 discriminator 1 view .LVU120
+ 391 0110 96ED467A 		vldr.32	s14, [r6, #280]
+ 392              		.loc 1 110 94 discriminator 1 view .LVU121
+ 393 0114 114B     		ldr	r3, .L16+32
+ 394 0116 1868     		ldr	r0, [r3]
+ 395 0118 06EE900A 		vmov	s13, r0	@ int
+ 396 011c F8EE665A 		vcvt.f32.u32	s11, s13
+ 397              		.loc 1 110 113 discriminator 1 view .LVU122
+ 398 0120 9FED0F6A 		vldr.32	s12, .L16+36
+ 399 0124 C5EE866A 		vdiv.f32	s13, s11, s12
+ 400              		.loc 1 110 92 discriminator 1 view .LVU123
+ARM GAS  D:\temp\TMP\cc7OZIjd.s 			page 10
+
+
+ 401 0128 67EEA67A 		vmul.f32	s15, s15, s13
+ 402              		.loc 1 110 63 discriminator 1 view .LVU124
+ 403 012c 77EE277A 		vadd.f32	s15, s14, s15
+ 404              		.loc 1 110 33 discriminator 1 view .LVU125
+ 405 0130 C6ED467A 		vstr.32	s15, [r6, #280]
+ 111:Robot/RoboTask/observe/observe_task.c ****     
+ 112:Robot/RoboTask/observe/observe_task.c ****     osDelay(OBSERVE_TIME);
+ 406              		.loc 1 112 5 is_stmt 1 discriminator 1 view .LVU126
+ 407 0134 FFF7FEFF 		bl	osDelay
+ 408              	.LVL19:
+  92:Robot/RoboTask/observe/observe_task.c ****   {
+ 409              		.loc 1 92 9 discriminator 1 view .LVU127
+ 410 0138 6FE7     		b	.L14
+ 411              	.L17:
+ 412 013a 00BF     		.align	2
+ 413              	.L16:
+ 414 013c 00000000 		.word	INS
+ 415 0140 00000000 		.word	.LANCHOR6
+ 416 0144 00000000 		.word	chassis_move
+ 417 0148 00000000 		.word	legR
+ 418 014c 00000000 		.word	.LANCHOR7
+ 419 0150 00000000 		.word	0
+ 420 0154 00000000 		.word	legL
+ 421 0158 00000000 		.word	.LANCHOR5
+ 422 015c 00000000 		.word	.LANCHOR8
+ 423 0160 00007A44 		.word	1148846080
+ 424              		.cfi_endproc
+ 425              	.LFE195:
+ 427              		.section	.text.RAMP_float,"ax",%progbits
+ 428              		.align	1
+ 429              		.global	RAMP_float
+ 430              		.syntax unified
+ 431              		.thumb
+ 432              		.thumb_func
+ 434              	RAMP_float:
+ 435              	.LVL20:
+ 436              	.LFB196:
+ 113:Robot/RoboTask/observe/observe_task.c ****   }
+ 114:Robot/RoboTask/observe/observe_task.c ****   
+ 115:Robot/RoboTask/observe/observe_task.c **** }
+ 116:Robot/RoboTask/observe/observe_task.c **** 
+ 117:Robot/RoboTask/observe/observe_task.c **** float  RAMP_float( float  final, float  now, float  ramp )
+ 118:Robot/RoboTask/observe/observe_task.c **** {
+ 437              		.loc 1 118 1 view -0
+ 438              		.cfi_startproc
+ 439              		@ args = 0, pretend = 0, frame = 0
+ 440              		@ frame_needed = 0, uses_anonymous_args = 0
+ 441              		@ link register save eliminated.
+ 119:Robot/RoboTask/observe/observe_task.c **** 	  float  buffer = 0;
+ 442              		.loc 1 119 4 view .LVU129
+ 120:Robot/RoboTask/observe/observe_task.c **** 		
+ 121:Robot/RoboTask/observe/observe_task.c **** 	  buffer = final - now;
+ 443              		.loc 1 121 4 view .LVU130
+ 444              		.loc 1 121 11 is_stmt 0 view .LVU131
+ 445 0000 30EE600A 		vsub.f32	s0, s0, s1
+ 446              	.LVL21:
+ 122:Robot/RoboTask/observe/observe_task.c **** 	
+ARM GAS  D:\temp\TMP\cc7OZIjd.s 			page 11
+
+
+ 123:Robot/RoboTask/observe/observe_task.c **** 		if (buffer > 0)
+ 447              		.loc 1 123 3 is_stmt 1 view .LVU132
+ 448              		.loc 1 123 6 is_stmt 0 view .LVU133
+ 449 0004 B5EEC00A 		vcmpe.f32	s0, #0
+ 450 0008 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 451 000c 0ADD     		ble	.L29
+ 124:Robot/RoboTask/observe/observe_task.c **** 		{
+ 125:Robot/RoboTask/observe/observe_task.c **** 				if (buffer > ramp)
+ 452              		.loc 1 125 5 is_stmt 1 view .LVU134
+ 453              		.loc 1 125 8 is_stmt 0 view .LVU135
+ 454 000e B4EEC10A 		vcmpe.f32	s0, s2
+ 455 0012 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 456 0016 02DD     		ble	.L30
+ 126:Robot/RoboTask/observe/observe_task.c **** 				{  
+ 127:Robot/RoboTask/observe/observe_task.c **** 						now += ramp;
+ 457              		.loc 1 127 7 is_stmt 1 view .LVU136
+ 458              		.loc 1 127 11 is_stmt 0 view .LVU137
+ 459 0018 30EE810A 		vadd.f32	s0, s1, s2
+ 460              	.LVL22:
+ 461              		.loc 1 127 11 view .LVU138
+ 462 001c 7047     		bx	lr
+ 463              	.LVL23:
+ 464              	.L30:
+ 128:Robot/RoboTask/observe/observe_task.c **** 				}   
+ 129:Robot/RoboTask/observe/observe_task.c **** 				else
+ 130:Robot/RoboTask/observe/observe_task.c **** 				{
+ 131:Robot/RoboTask/observe/observe_task.c **** 						now += buffer;
+ 465              		.loc 1 131 7 is_stmt 1 view .LVU139
+ 466              		.loc 1 131 11 is_stmt 0 view .LVU140
+ 467 001e 30EE800A 		vadd.f32	s0, s1, s0
+ 468              	.LVL24:
+ 469              		.loc 1 131 11 view .LVU141
+ 470 0022 7047     		bx	lr
+ 471              	.LVL25:
+ 472              	.L29:
+ 132:Robot/RoboTask/observe/observe_task.c **** 				}
+ 133:Robot/RoboTask/observe/observe_task.c **** 		}
+ 134:Robot/RoboTask/observe/observe_task.c **** 		else
+ 135:Robot/RoboTask/observe/observe_task.c **** 		{
+ 136:Robot/RoboTask/observe/observe_task.c **** 				if (buffer < -ramp)
+ 473              		.loc 1 136 5 is_stmt 1 view .LVU142
+ 474              		.loc 1 136 18 is_stmt 0 view .LVU143
+ 475 0024 F1EE417A 		vneg.f32	s15, s2
+ 476              		.loc 1 136 8 view .LVU144
+ 477 0028 F4EEC07A 		vcmpe.f32	s15, s0
+ 478 002c F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 479 0030 02DD     		ble	.L31
+ 137:Robot/RoboTask/observe/observe_task.c **** 				{
+ 138:Robot/RoboTask/observe/observe_task.c **** 						now += -ramp;
+ 480              		.loc 1 138 7 is_stmt 1 view .LVU145
+ 481              		.loc 1 138 11 is_stmt 0 view .LVU146
+ 482 0032 30EEC10A 		vsub.f32	s0, s1, s2
+ 483              	.LVL26:
+ 484              		.loc 1 138 11 view .LVU147
+ 485 0036 7047     		bx	lr
+ 486              	.LVL27:
+ 487              	.L31:
+ARM GAS  D:\temp\TMP\cc7OZIjd.s 			page 12
+
+
+ 139:Robot/RoboTask/observe/observe_task.c **** 				}
+ 140:Robot/RoboTask/observe/observe_task.c **** 				else
+ 141:Robot/RoboTask/observe/observe_task.c **** 				{
+ 142:Robot/RoboTask/observe/observe_task.c **** 						now += buffer;
+ 488              		.loc 1 142 7 is_stmt 1 view .LVU148
+ 489              		.loc 1 142 11 is_stmt 0 view .LVU149
+ 490 0038 30EE800A 		vadd.f32	s0, s1, s0
+ 491              	.LVL28:
+ 143:Robot/RoboTask/observe/observe_task.c **** 				}
+ 144:Robot/RoboTask/observe/observe_task.c **** 		}
+ 145:Robot/RoboTask/observe/observe_task.c **** 		
+ 146:Robot/RoboTask/observe/observe_task.c **** 		return now;
+ 492              		.loc 1 146 3 is_stmt 1 view .LVU150
+ 147:Robot/RoboTask/observe/observe_task.c **** }...
+ 493              		.loc 1 147 1 is_stmt 0 view .LVU151
+ 494 003c 7047     		bx	lr
+ 495              		.cfi_endproc
+ 496              	.LFE196:
+ 498              		.global	OBSERVE_TIME
+ 499              		.global	vel_acc
+ 500              		.global	observe_data
+ 501              		.global	vaEstimateKF_H
+ 502              		.global	vaEstimateKF_K
+ 503              		.global	vaEstimateKF_R
+ 504              		.global	vaEstimateKF_Q
+ 505              		.global	vaEstimateKF_P
+ 506              		.global	vaEstimateKF_F
+ 507              		.global	vaEstimateKF
+ 508              		.section	.bss.observe_data,"aw",%nobits
+ 509              		.align	2
+ 510              		.set	.LANCHOR7,. + 0
+ 513              	observe_data:
+ 514 0000 00000000 		.space	24
+ 514      00000000 
+ 514      00000000 
+ 514      00000000 
+ 514      00000000 
+ 515              		.section	.bss.vaEstimateKF,"aw",%nobits
+ 516              		.align	2
+ 517              		.set	.LANCHOR6,. + 0
+ 520              	vaEstimateKF:
+ 521 0000 00000000 		.space	320
+ 521      00000000 
+ 521      00000000 
+ 521      00000000 
+ 521      00000000 
+ 522              		.section	.bss.vaEstimateKF_K,"aw",%nobits
+ 523              		.align	2
+ 526              	vaEstimateKF_K:
+ 527 0000 00000000 		.space	16
+ 527      00000000 
+ 527      00000000 
+ 527      00000000 
+ 528              		.section	.bss.vel_acc,"aw",%nobits
+ 529              		.align	2
+ 530              		.set	.LANCHOR5,. + 0
+ 533              	vel_acc:
+ARM GAS  D:\temp\TMP\cc7OZIjd.s 			page 13
+
+
+ 534 0000 00000000 		.space	8
+ 534      00000000 
+ 535              		.section	.data.OBSERVE_TIME,"aw"
+ 536              		.align	2
+ 537              		.set	.LANCHOR8,. + 0
+ 540              	OBSERVE_TIME:
+ 541 0000 03000000 		.word	3
+ 542              		.section	.data.vaEstimateKF_F,"aw"
+ 543              		.align	2
+ 544              		.set	.LANCHOR0,. + 0
+ 547              	vaEstimateKF_F:
+ 548 0000 0000803F 		.word	1065353216
+ 549 0004 A69B443B 		.word	994352038
+ 550 0008 00000000 		.word	0
+ 551 000c 0000803F 		.word	1065353216
+ 552              		.section	.data.vaEstimateKF_P,"aw"
+ 553              		.align	2
+ 554              		.set	.LANCHOR1,. + 0
+ 557              	vaEstimateKF_P:
+ 558 0000 0000803F 		.word	1065353216
+ 559 0004 00000000 		.word	0
+ 560 0008 00000000 		.word	0
+ 561 000c 0000803F 		.word	1065353216
+ 562              		.section	.data.vaEstimateKF_Q,"aw"
+ 563              		.align	2
+ 564              		.set	.LANCHOR2,. + 0
+ 567              	vaEstimateKF_Q:
+ 568 0000 0000803F 		.word	1065353216
+ 569 0004 00000000 		.word	0
+ 570 0008 00000000 		.word	0
+ 571 000c 0000803F 		.word	1065353216
+ 572              		.section	.data.vaEstimateKF_R,"aw"
+ 573              		.align	2
+ 574              		.set	.LANCHOR3,. + 0
+ 577              	vaEstimateKF_R:
+ 578 0000 00004843 		.word	1128792064
+ 579 0004 00000000 		.word	0
+ 580 0008 00000000 		.word	0
+ 581 000c 00004843 		.word	1128792064
+ 582              		.section	.rodata.vaEstimateKF_H,"a"
+ 583              		.align	2
+ 584              		.set	.LANCHOR4,. + 0
+ 587              	vaEstimateKF_H:
+ 588 0000 0000803F 		.word	1065353216
+ 589 0004 00000000 		.word	0
+ 590 0008 00000000 		.word	0
+ 591 000c 0000803F 		.word	1065353216
+ 592              		.text
+ 593              	.Letext0:
+ 594              		.file 2 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 595              		.file 3 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
+ 596              		.file 4 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h723xx.h"
+ 597              		.file 5 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h"
+ 598              		.file 6 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h"
+ 599              		.file 7 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_fdcan.h"
+ 600              		.file 8 "Robot/RoboTask/ins/INS_task.h"
+ 601              		.file 9 "Robot/RoboTask/observe/observe_task.h"
+ARM GAS  D:\temp\TMP\cc7OZIjd.s 			page 14
+
+
+ 602              		.file 10 "Middlewares/ST/ARM/DSP/Inc/arm_math.h"
+ 603              		.file 11 "Robot/Algorithm/kalman/kalman_filter.h"
+ 604              		.file 12 "Bsp/bsp_can.h"
+ 605              		.file 13 "Robot/Controller/controller.h"
+ 606              		.file 14 "Robot/Devices/motor_def.h"
+ 607              		.file 15 "Robot/daemon/daemon.h"
+ 608              		.file 16 "Robot/Devices/Motor/DJI3508.h"
+ 609              		.file 17 "Robot/Devices/Motor/DM8009.h"
+ 610              		.file 18 "Robot/RoboTask/chassis/chassis_def.h"
+ 611              		.file 19 "Robot/Controller/kinematics.h"
+ 612              		.file 20 "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h"
+ 613              		.file 21 "Robot/Lib/user_lib.h"
+ARM GAS  D:\temp\TMP\cc7OZIjd.s 			page 15
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 observe_task.c
+D:\temp\TMP\cc7OZIjd.s:19     .text.xvEstimateKF_Init:00000000 $t
+D:\temp\TMP\cc7OZIjd.s:25     .text.xvEstimateKF_Init:00000000 xvEstimateKF_Init
+D:\temp\TMP\cc7OZIjd.s:105    .text.xvEstimateKF_Init:00000060 $d
+D:\temp\TMP\cc7OZIjd.s:114    .text.xvEstimateKF_Update:00000000 $t
+D:\temp\TMP\cc7OZIjd.s:120    .text.xvEstimateKF_Update:00000000 xvEstimateKF_Update
+D:\temp\TMP\cc7OZIjd.s:211    .text.xvEstimateKF_Update:00000054 $d
+D:\temp\TMP\cc7OZIjd.s:218    .text.Observe_Task:00000000 $t
+D:\temp\TMP\cc7OZIjd.s:224    .text.Observe_Task:00000000 Observe_Task
+D:\temp\TMP\cc7OZIjd.s:414    .text.Observe_Task:0000013c $d
+D:\temp\TMP\cc7OZIjd.s:428    .text.RAMP_float:00000000 $t
+D:\temp\TMP\cc7OZIjd.s:434    .text.RAMP_float:00000000 RAMP_float
+D:\temp\TMP\cc7OZIjd.s:540    .data.OBSERVE_TIME:00000000 OBSERVE_TIME
+D:\temp\TMP\cc7OZIjd.s:533    .bss.vel_acc:00000000 vel_acc
+D:\temp\TMP\cc7OZIjd.s:513    .bss.observe_data:00000000 observe_data
+D:\temp\TMP\cc7OZIjd.s:587    .rodata.vaEstimateKF_H:00000000 vaEstimateKF_H
+D:\temp\TMP\cc7OZIjd.s:526    .bss.vaEstimateKF_K:00000000 vaEstimateKF_K
+D:\temp\TMP\cc7OZIjd.s:577    .data.vaEstimateKF_R:00000000 vaEstimateKF_R
+D:\temp\TMP\cc7OZIjd.s:567    .data.vaEstimateKF_Q:00000000 vaEstimateKF_Q
+D:\temp\TMP\cc7OZIjd.s:557    .data.vaEstimateKF_P:00000000 vaEstimateKF_P
+D:\temp\TMP\cc7OZIjd.s:547    .data.vaEstimateKF_F:00000000 vaEstimateKF_F
+D:\temp\TMP\cc7OZIjd.s:520    .bss.vaEstimateKF:00000000 vaEstimateKF
+D:\temp\TMP\cc7OZIjd.s:509    .bss.observe_data:00000000 $d
+D:\temp\TMP\cc7OZIjd.s:516    .bss.vaEstimateKF:00000000 $d
+D:\temp\TMP\cc7OZIjd.s:523    .bss.vaEstimateKF_K:00000000 $d
+D:\temp\TMP\cc7OZIjd.s:529    .bss.vel_acc:00000000 $d
+D:\temp\TMP\cc7OZIjd.s:536    .data.OBSERVE_TIME:00000000 $d
+D:\temp\TMP\cc7OZIjd.s:543    .data.vaEstimateKF_F:00000000 $d
+D:\temp\TMP\cc7OZIjd.s:553    .data.vaEstimateKF_P:00000000 $d
+D:\temp\TMP\cc7OZIjd.s:563    .data.vaEstimateKF_Q:00000000 $d
+D:\temp\TMP\cc7OZIjd.s:573    .data.vaEstimateKF_R:00000000 $d
+D:\temp\TMP\cc7OZIjd.s:583    .rodata.vaEstimateKF_H:00000000 $d
+
+UNDEFINED SYMBOLS
+Kalman_Filter_Init
+Kalman_Filter_Update
+osDelay
+angle_to_radian
+arm_cos_f32
+arm_sin_f32
+INS
+chassis_move
+legR
+legL

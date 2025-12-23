@@ -1,0 +1,1138 @@
+ARM GAS  D:\temp\TMP\cceqVsld.s 			page 1
+
+
+   1              		.cpu cortex-m7
+   2              		.arch armv7e-m
+   3              		.fpu fpv5-d16
+   4              		.eabi_attribute 28, 1
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 1
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.file	"controller.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.f_Trapezoid_Intergral,"ax",%progbits
+  19              		.align	1
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  24              	f_Trapezoid_Intergral:
+  25              	.LVL0:
+  26              	.LFB188:
+  27              		.file 1 "Robot/Controller/controller.c"
+   1:Robot/Controller/controller.c **** /**
+   2:Robot/Controller/controller.c ****  * @file controller.c
+   3:Robot/Controller/controller.c ****  * @author wanghongxi
+   4:Robot/Controller/controller.c ****  * @author modified by neozng
+   5:Robot/Controller/controller.c ****  * @brief  PID控制器定义
+   6:Robot/Controller/controller.c ****  * @version beta
+   7:Robot/Controller/controller.c ****  * @date 2022-11-01
+   8:Robot/Controller/controller.c ****  *
+   9:Robot/Controller/controller.c ****  * @copyrightCopyright (c) 2022 HNU YueLu EC all rights reserved
+  10:Robot/Controller/controller.c ****  */
+  11:Robot/Controller/controller.c **** #include "controller.h"
+  12:Robot/Controller/controller.c **** #include "memory.h"
+  13:Robot/Controller/controller.c **** 
+  14:Robot/Controller/controller.c **** /* ----------------------------下面是pid优化环节的实现---------------------------- */
+  15:Robot/Controller/controller.c **** 
+  16:Robot/Controller/controller.c **** // 梯形积分
+  17:Robot/Controller/controller.c **** static void f_Trapezoid_Intergral(PIDInstance *pid)
+  18:Robot/Controller/controller.c **** {
+  28              		.loc 1 18 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+  19:Robot/Controller/controller.c ****     // 计算梯形的面积,(上底+下底)*高/2
+  20:Robot/Controller/controller.c ****     pid->ITerm = pid->Ki * ((pid->Err + pid->Last_Err) / 2) * pid->dt;
+  33              		.loc 1 20 5 view .LVU1
+  34              		.loc 1 20 21 is_stmt 0 view .LVU2
+  35 0000 D0ED017A 		vldr.32	s15, [r0, #4]
+  36              		.loc 1 20 33 view .LVU3
+  37 0004 90ED0D7A 		vldr.32	s14, [r0, #52]
+  38              		.loc 1 20 44 view .LVU4
+ARM GAS  D:\temp\TMP\cceqVsld.s 			page 2
+
+
+  39 0008 D0ED0E6A 		vldr.32	s13, [r0, #56]
+  40              		.loc 1 20 39 view .LVU5
+  41 000c 37EE267A 		vadd.f32	s14, s14, s13
+  42              		.loc 1 20 56 view .LVU6
+  43 0010 F6EE006A 		vmov.f32	s13, #5.0e-1
+  44 0014 27EE267A 		vmul.f32	s14, s14, s13
+  45              		.loc 1 20 26 view .LVU7
+  46 0018 67EE877A 		vmul.f32	s15, s15, s14
+  47              		.loc 1 20 66 view .LVU8
+  48 001c 90ED197A 		vldr.32	s14, [r0, #100]
+  49              		.loc 1 20 61 view .LVU9
+  50 0020 67EE877A 		vmul.f32	s15, s15, s14
+  51              		.loc 1 20 16 view .LVU10
+  52 0024 C0ED137A 		vstr.32	s15, [r0, #76]
+  21:Robot/Controller/controller.c **** }
+  53              		.loc 1 21 1 view .LVU11
+  54 0028 7047     		bx	lr
+  55              		.cfi_endproc
+  56              	.LFE188:
+  58              		.section	.text.f_Changing_Integration_Rate,"ax",%progbits
+  59              		.align	1
+  60              		.syntax unified
+  61              		.thumb
+  62              		.thumb_func
+  64              	f_Changing_Integration_Rate:
+  65              	.LVL1:
+  66              	.LFB189:
+  22:Robot/Controller/controller.c **** 
+  23:Robot/Controller/controller.c **** // 变速积分(误差小时积分作用更强)
+  24:Robot/Controller/controller.c **** static void f_Changing_Integration_Rate(PIDInstance *pid)
+  25:Robot/Controller/controller.c **** {
+  67              		.loc 1 25 1 is_stmt 1 view -0
+  68              		.cfi_startproc
+  69              		@ args = 0, pretend = 0, frame = 0
+  70              		@ frame_needed = 0, uses_anonymous_args = 0
+  71              		@ link register save eliminated.
+  26:Robot/Controller/controller.c ****     if (pid->Err * pid->Iout > 0)
+  72              		.loc 1 26 5 view .LVU13
+  73              		.loc 1 26 12 is_stmt 0 view .LVU14
+  74 0000 D0ED0D7A 		vldr.32	s15, [r0, #52]
+  75              		.loc 1 26 23 view .LVU15
+  76 0004 90ED117A 		vldr.32	s14, [r0, #68]
+  77              		.loc 1 26 18 view .LVU16
+  78 0008 27EE877A 		vmul.f32	s14, s15, s14
+  79              		.loc 1 26 8 view .LVU17
+  80 000c B5EEC07A 		vcmpe.f32	s14, #0
+  81 0010 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+  82 0014 26DD     		ble	.L2
+  27:Robot/Controller/controller.c ****     {
+  28:Robot/Controller/controller.c ****         // 积分呈累积趋势
+  29:Robot/Controller/controller.c ****         if (abs(pid->Err) <= pid->CoefB)
+  83              		.loc 1 29 9 is_stmt 1 view .LVU18
+  84              		.loc 1 29 13 is_stmt 0 view .LVU19
+  85 0016 F5EEC07A 		vcmpe.f32	s15, #0
+  86 001a F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+  87 001e 1CDD     		ble	.L11
+  88              	.L5:
+ARM GAS  D:\temp\TMP\cceqVsld.s 			page 3
+
+
+  89              		.loc 1 29 33 discriminator 4 view .LVU20
+  90 0020 90ED087A 		vldr.32	s14, [r0, #32]
+  91              		.loc 1 29 12 discriminator 4 view .LVU21
+  92 0024 B4EEE77A 		vcmpe.f32	s14, s15
+  93 0028 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+  94 002c 1ADA     		bge	.L2
+  30:Robot/Controller/controller.c ****             return; // Full integral
+  31:Robot/Controller/controller.c ****         if (abs(pid->Err) <= (pid->CoefA + pid->CoefB))
+  95              		.loc 1 31 9 is_stmt 1 discriminator 4 view .LVU22
+  96              		.loc 1 31 34 is_stmt 0 discriminator 4 view .LVU23
+  97 002e D0ED076A 		vldr.32	s13, [r0, #28]
+  98              		.loc 1 31 42 discriminator 4 view .LVU24
+  99 0032 37EE266A 		vadd.f32	s12, s14, s13
+ 100              		.loc 1 31 12 discriminator 4 view .LVU25
+ 101 0036 B4EEE76A 		vcmpe.f32	s12, s15
+ 102 003a F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 103 003e 0FDB     		blt	.L10
+  32:Robot/Controller/controller.c ****             pid->ITerm *= (pid->CoefA - abs(pid->Err) + pid->CoefB) / pid->CoefA;
+ 104              		.loc 1 32 13 is_stmt 1 view .LVU26
+ 105              		.loc 1 32 39 is_stmt 0 view .LVU27
+ 106 0040 76EEE77A 		vsub.f32	s15, s13, s15
+ 107              		.loc 1 32 55 view .LVU28
+ 108 0044 77EE277A 		vadd.f32	s15, s14, s15
+ 109              		.loc 1 32 69 view .LVU29
+ 110 0048 87EEA67A 		vdiv.f32	s14, s15, s13
+ 111              		.loc 1 32 24 view .LVU30
+ 112 004c D0ED137A 		vldr.32	s15, [r0, #76]
+ 113 0050 67EE877A 		vmul.f32	s15, s15, s14
+ 114 0054 C0ED137A 		vstr.32	s15, [r0, #76]
+ 115 0058 7047     		bx	lr
+ 116              	.L11:
+  29:Robot/Controller/controller.c ****             return; // Full integral
+ 117              		.loc 1 29 13 discriminator 2 view .LVU31
+ 118 005a F1EE677A 		vneg.f32	s15, s15
+ 119 005e DFE7     		b	.L5
+ 120              	.L10:
+  33:Robot/Controller/controller.c ****         else // 最大阈值,不使用积分
+  34:Robot/Controller/controller.c ****             pid->ITerm = 0;
+ 121              		.loc 1 34 13 is_stmt 1 view .LVU32
+ 122              		.loc 1 34 24 is_stmt 0 view .LVU33
+ 123 0060 0023     		movs	r3, #0
+ 124 0062 C364     		str	r3, [r0, #76]	@ float
+ 125              	.L2:
+  35:Robot/Controller/controller.c ****     }
+  36:Robot/Controller/controller.c **** }
+ 126              		.loc 1 36 1 view .LVU34
+ 127 0064 7047     		bx	lr
+ 128              		.cfi_endproc
+ 129              	.LFE189:
+ 131              		.section	.text.f_Integral_Limit,"ax",%progbits
+ 132              		.align	1
+ 133              		.syntax unified
+ 134              		.thumb
+ 135              		.thumb_func
+ 137              	f_Integral_Limit:
+ 138              	.LVL2:
+ 139              	.LFB190:
+ARM GAS  D:\temp\TMP\cceqVsld.s 			page 4
+
+
+  37:Robot/Controller/controller.c **** 
+  38:Robot/Controller/controller.c **** static void f_Integral_Limit(PIDInstance *pid)
+  39:Robot/Controller/controller.c **** {
+ 140              		.loc 1 39 1 is_stmt 1 view -0
+ 141              		.cfi_startproc
+ 142              		@ args = 0, pretend = 0, frame = 0
+ 143              		@ frame_needed = 0, uses_anonymous_args = 0
+ 144              		@ link register save eliminated.
+  40:Robot/Controller/controller.c ****     static float temp_Output, temp_Iout;
+ 145              		.loc 1 40 5 view .LVU36
+  41:Robot/Controller/controller.c ****     temp_Iout = pid->Iout + pid->ITerm;
+ 146              		.loc 1 41 5 view .LVU37
+ 147              		.loc 1 41 20 is_stmt 0 view .LVU38
+ 148 0000 D0ED116A 		vldr.32	s13, [r0, #68]
+ 149              		.loc 1 41 32 view .LVU39
+ 150 0004 90ED137A 		vldr.32	s14, [r0, #76]
+ 151              		.loc 1 41 27 view .LVU40
+ 152 0008 36EE877A 		vadd.f32	s14, s13, s14
+ 153              		.loc 1 41 15 view .LVU41
+ 154 000c 1F4B     		ldr	r3, .L26
+ 155 000e 83ED007A 		vstr.32	s14, [r3]
+  42:Robot/Controller/controller.c ****     temp_Output = pid->Pout + pid->Iout + pid->Dout;
+ 156              		.loc 1 42 5 is_stmt 1 view .LVU42
+ 157              		.loc 1 42 22 is_stmt 0 view .LVU43
+ 158 0012 D0ED107A 		vldr.32	s15, [r0, #64]
+ 159              		.loc 1 42 29 view .LVU44
+ 160 0016 76EEA77A 		vadd.f32	s15, s13, s15
+ 161              		.loc 1 42 46 view .LVU45
+ 162 001a 90ED126A 		vldr.32	s12, [r0, #72]
+ 163              		.loc 1 42 41 view .LVU46
+ 164 001e 77EE867A 		vadd.f32	s15, s15, s12
+ 165              		.loc 1 42 17 view .LVU47
+ 166 0022 1B4B     		ldr	r3, .L26+4
+ 167 0024 C3ED007A 		vstr.32	s15, [r3]
+  43:Robot/Controller/controller.c ****     if (abs(temp_Output) > pid->MaxOut)
+ 168              		.loc 1 43 5 is_stmt 1 view .LVU48
+ 169              		.loc 1 43 9 is_stmt 0 view .LVU49
+ 170 0028 F5EEC07A 		vcmpe.f32	s15, #0
+ 171 002c F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 172 0030 28DD     		ble	.L25
+ 173              	.L13:
+ 174              		.loc 1 43 31 discriminator 4 view .LVU50
+ 175 0032 90ED036A 		vldr.32	s12, [r0, #12]
+ 176              		.loc 1 43 8 discriminator 4 view .LVU51
+ 177 0036 B4EEE76A 		vcmpe.f32	s12, s15
+ 178 003a F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 179 003e 0AD5     		bpl	.L14
+  44:Robot/Controller/controller.c ****     {
+  45:Robot/Controller/controller.c ****         if (pid->Err * pid->Iout > 0) // 积分却还在累积
+ 180              		.loc 1 45 9 is_stmt 1 view .LVU52
+ 181              		.loc 1 45 16 is_stmt 0 view .LVU53
+ 182 0040 D0ED0D7A 		vldr.32	s15, [r0, #52]
+ 183              		.loc 1 45 22 view .LVU54
+ 184 0044 66EEA76A 		vmul.f32	s13, s13, s15
+ 185              		.loc 1 45 12 view .LVU55
+ 186 0048 F5EEC06A 		vcmpe.f32	s13, #0
+ 187 004c F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ARM GAS  D:\temp\TMP\cceqVsld.s 			page 5
+
+
+ 188 0050 01DD     		ble	.L14
+  46:Robot/Controller/controller.c ****         {
+  47:Robot/Controller/controller.c ****             pid->ITerm = 0; // 当前积分项置零
+ 189              		.loc 1 47 13 is_stmt 1 view .LVU56
+ 190              		.loc 1 47 24 is_stmt 0 view .LVU57
+ 191 0052 0023     		movs	r3, #0
+ 192 0054 C364     		str	r3, [r0, #76]	@ float
+ 193              	.L14:
+  48:Robot/Controller/controller.c ****         }
+  49:Robot/Controller/controller.c ****     }
+  50:Robot/Controller/controller.c **** 
+  51:Robot/Controller/controller.c ****     if (temp_Iout > pid->IntegralLimit)
+ 194              		.loc 1 51 5 is_stmt 1 view .LVU58
+ 195              		.loc 1 51 24 is_stmt 0 view .LVU59
+ 196 0056 D0ED067A 		vldr.32	s15, [r0, #24]
+ 197              		.loc 1 51 8 view .LVU60
+ 198 005a B4EEE77A 		vcmpe.f32	s14, s15
+ 199 005e F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 200 0062 03DD     		ble	.L17
+  52:Robot/Controller/controller.c ****     {
+  53:Robot/Controller/controller.c ****         pid->ITerm = 0;
+ 201              		.loc 1 53 9 is_stmt 1 view .LVU61
+ 202              		.loc 1 53 20 is_stmt 0 view .LVU62
+ 203 0064 0023     		movs	r3, #0
+ 204 0066 C364     		str	r3, [r0, #76]	@ float
+  54:Robot/Controller/controller.c ****         pid->Iout = pid->IntegralLimit;
+ 205              		.loc 1 54 9 is_stmt 1 view .LVU63
+ 206              		.loc 1 54 19 is_stmt 0 view .LVU64
+ 207 0068 C0ED117A 		vstr.32	s15, [r0, #68]
+ 208              	.L17:
+  55:Robot/Controller/controller.c ****     }
+  56:Robot/Controller/controller.c ****     if (temp_Iout < -pid->IntegralLimit)
+ 209              		.loc 1 56 5 is_stmt 1 view .LVU65
+ 210              		.loc 1 56 21 is_stmt 0 view .LVU66
+ 211 006c F1EE677A 		vneg.f32	s15, s15
+ 212              		.loc 1 56 8 view .LVU67
+ 213 0070 B4EEE77A 		vcmpe.f32	s14, s15
+ 214 0074 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 215 0078 03D5     		bpl	.L12
+  57:Robot/Controller/controller.c ****     {
+  58:Robot/Controller/controller.c ****         pid->ITerm = 0;
+ 216              		.loc 1 58 9 is_stmt 1 view .LVU68
+ 217              		.loc 1 58 20 is_stmt 0 view .LVU69
+ 218 007a 0023     		movs	r3, #0
+ 219 007c C364     		str	r3, [r0, #76]	@ float
+  59:Robot/Controller/controller.c ****         pid->Iout = -pid->IntegralLimit;
+ 220              		.loc 1 59 9 is_stmt 1 view .LVU70
+ 221              		.loc 1 59 19 is_stmt 0 view .LVU71
+ 222 007e C0ED117A 		vstr.32	s15, [r0, #68]
+ 223              	.L12:
+  60:Robot/Controller/controller.c ****     }
+  61:Robot/Controller/controller.c **** }
+ 224              		.loc 1 61 1 view .LVU72
+ 225 0082 7047     		bx	lr
+ 226              	.L25:
+  43:Robot/Controller/controller.c ****     {
+ 227              		.loc 1 43 9 discriminator 2 view .LVU73
+ARM GAS  D:\temp\TMP\cceqVsld.s 			page 6
+
+
+ 228 0084 F1EE677A 		vneg.f32	s15, s15
+ 229 0088 D3E7     		b	.L13
+ 230              	.L27:
+ 231 008a 00BF     		.align	2
+ 232              	.L26:
+ 233 008c 00000000 		.word	.LANCHOR0
+ 234 0090 00000000 		.word	.LANCHOR1
+ 235              		.cfi_endproc
+ 236              	.LFE190:
+ 238              		.section	.text.f_Derivative_On_Measurement,"ax",%progbits
+ 239              		.align	1
+ 240              		.syntax unified
+ 241              		.thumb
+ 242              		.thumb_func
+ 244              	f_Derivative_On_Measurement:
+ 245              	.LVL3:
+ 246              	.LFB191:
+  62:Robot/Controller/controller.c **** 
+  63:Robot/Controller/controller.c **** // 微分先行(仅使用反馈值而不计参考输入的微分)
+  64:Robot/Controller/controller.c **** static void f_Derivative_On_Measurement(PIDInstance *pid)
+  65:Robot/Controller/controller.c **** {
+ 247              		.loc 1 65 1 is_stmt 1 view -0
+ 248              		.cfi_startproc
+ 249              		@ args = 0, pretend = 0, frame = 0
+ 250              		@ frame_needed = 0, uses_anonymous_args = 0
+ 251              		@ link register save eliminated.
+  66:Robot/Controller/controller.c ****     pid->Dout = pid->Kd * (pid->Last_Measure - pid->Measure) / pid->dt;
+ 252              		.loc 1 66 5 view .LVU75
+ 253              		.loc 1 66 20 is_stmt 0 view .LVU76
+ 254 0000 D0ED027A 		vldr.32	s15, [r0, #8]
+ 255              		.loc 1 66 31 view .LVU77
+ 256 0004 90ED0C7A 		vldr.32	s14, [r0, #48]
+ 257              		.loc 1 66 51 view .LVU78
+ 258 0008 D0ED0B6A 		vldr.32	s13, [r0, #44]
+ 259              		.loc 1 66 46 view .LVU79
+ 260 000c 37EE667A 		vsub.f32	s14, s14, s13
+ 261              		.loc 1 66 25 view .LVU80
+ 262 0010 67EE877A 		vmul.f32	s15, s15, s14
+ 263              		.loc 1 66 67 view .LVU81
+ 264 0014 D0ED196A 		vldr.32	s13, [r0, #100]
+ 265              		.loc 1 66 62 view .LVU82
+ 266 0018 87EEA67A 		vdiv.f32	s14, s15, s13
+ 267              		.loc 1 66 15 view .LVU83
+ 268 001c 80ED127A 		vstr.32	s14, [r0, #72]
+  67:Robot/Controller/controller.c **** }
+ 269              		.loc 1 67 1 view .LVU84
+ 270 0020 7047     		bx	lr
+ 271              		.cfi_endproc
+ 272              	.LFE191:
+ 274              		.section	.text.f_Derivative_Filter,"ax",%progbits
+ 275              		.align	1
+ 276              		.syntax unified
+ 277              		.thumb
+ 278              		.thumb_func
+ 280              	f_Derivative_Filter:
+ 281              	.LVL4:
+ 282              	.LFB192:
+ARM GAS  D:\temp\TMP\cceqVsld.s 			page 7
+
+
+  68:Robot/Controller/controller.c **** 
+  69:Robot/Controller/controller.c **** // 微分滤波(采集微分时,滤除高频噪声)
+  70:Robot/Controller/controller.c **** static void f_Derivative_Filter(PIDInstance *pid)
+  71:Robot/Controller/controller.c **** {
+ 283              		.loc 1 71 1 is_stmt 1 view -0
+ 284              		.cfi_startproc
+ 285              		@ args = 0, pretend = 0, frame = 0
+ 286              		@ frame_needed = 0, uses_anonymous_args = 0
+ 287              		@ link register save eliminated.
+  72:Robot/Controller/controller.c ****     pid->Dout = pid->Dout * pid->dt / (pid->Derivative_LPF_RC + pid->dt) +
+ 288              		.loc 1 72 5 view .LVU86
+ 289              		.loc 1 72 20 is_stmt 0 view .LVU87
+ 290 0000 90ED126A 		vldr.32	s12, [r0, #72]
+ 291              		.loc 1 72 32 view .LVU88
+ 292 0004 D0ED197A 		vldr.32	s15, [r0, #100]
+ 293              		.loc 1 72 27 view .LVU89
+ 294 0008 26EE276A 		vmul.f32	s12, s12, s15
+ 295              		.loc 1 72 43 view .LVU90
+ 296 000c 90ED0A7A 		vldr.32	s14, [r0, #40]
+ 297              		.loc 1 72 63 view .LVU91
+ 298 0010 77EE877A 		vadd.f32	s15, s15, s14
+ 299              		.loc 1 72 37 view .LVU92
+ 300 0014 C6EE276A 		vdiv.f32	s13, s12, s15
+  73:Robot/Controller/controller.c ****                 pid->Last_Dout * pid->Derivative_LPF_RC / (pid->Derivative_LPF_RC + pid->dt);
+ 301              		.loc 1 73 20 view .LVU93
+ 302 0018 90ED166A 		vldr.32	s12, [r0, #88]
+ 303              		.loc 1 73 32 view .LVU94
+ 304 001c 27EE067A 		vmul.f32	s14, s14, s12
+ 305              		.loc 1 73 57 view .LVU95
+ 306 0020 87EE276A 		vdiv.f32	s12, s14, s15
+  72:Robot/Controller/controller.c ****     pid->Dout = pid->Dout * pid->dt / (pid->Derivative_LPF_RC + pid->dt) +
+ 307              		.loc 1 72 74 view .LVU96
+ 308 0024 76EE867A 		vadd.f32	s15, s13, s12
+  72:Robot/Controller/controller.c ****     pid->Dout = pid->Dout * pid->dt / (pid->Derivative_LPF_RC + pid->dt) +
+ 309              		.loc 1 72 15 view .LVU97
+ 310 0028 C0ED127A 		vstr.32	s15, [r0, #72]
+  74:Robot/Controller/controller.c **** }
+ 311              		.loc 1 74 1 view .LVU98
+ 312 002c 7047     		bx	lr
+ 313              		.cfi_endproc
+ 314              	.LFE192:
+ 316              		.section	.text.f_Output_Filter,"ax",%progbits
+ 317              		.align	1
+ 318              		.syntax unified
+ 319              		.thumb
+ 320              		.thumb_func
+ 322              	f_Output_Filter:
+ 323              	.LVL5:
+ 324              	.LFB193:
+  75:Robot/Controller/controller.c **** 
+  76:Robot/Controller/controller.c **** // 输出滤波
+  77:Robot/Controller/controller.c **** static void f_Output_Filter(PIDInstance *pid)
+  78:Robot/Controller/controller.c **** {
+ 325              		.loc 1 78 1 is_stmt 1 view -0
+ 326              		.cfi_startproc
+ 327              		@ args = 0, pretend = 0, frame = 0
+ 328              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  D:\temp\TMP\cceqVsld.s 			page 8
+
+
+ 329              		@ link register save eliminated.
+  79:Robot/Controller/controller.c ****     pid->Output = pid->Output * pid->dt / (pid->Output_LPF_RC + pid->dt) +
+ 330              		.loc 1 79 5 view .LVU100
+ 331              		.loc 1 79 22 is_stmt 0 view .LVU101
+ 332 0000 90ED146A 		vldr.32	s12, [r0, #80]
+ 333              		.loc 1 79 36 view .LVU102
+ 334 0004 D0ED197A 		vldr.32	s15, [r0, #100]
+ 335              		.loc 1 79 31 view .LVU103
+ 336 0008 26EE276A 		vmul.f32	s12, s12, s15
+ 337              		.loc 1 79 47 view .LVU104
+ 338 000c 90ED097A 		vldr.32	s14, [r0, #36]
+ 339              		.loc 1 79 63 view .LVU105
+ 340 0010 77EE877A 		vadd.f32	s15, s15, s14
+ 341              		.loc 1 79 41 view .LVU106
+ 342 0014 C6EE276A 		vdiv.f32	s13, s12, s15
+  80:Robot/Controller/controller.c ****                   pid->Last_Output * pid->Output_LPF_RC / (pid->Output_LPF_RC + pid->dt);
+ 343              		.loc 1 80 22 view .LVU107
+ 344 0018 90ED156A 		vldr.32	s12, [r0, #84]
+ 345              		.loc 1 80 36 view .LVU108
+ 346 001c 27EE067A 		vmul.f32	s14, s14, s12
+ 347              		.loc 1 80 57 view .LVU109
+ 348 0020 87EE276A 		vdiv.f32	s12, s14, s15
+  79:Robot/Controller/controller.c ****     pid->Output = pid->Output * pid->dt / (pid->Output_LPF_RC + pid->dt) +
+ 349              		.loc 1 79 74 view .LVU110
+ 350 0024 76EE867A 		vadd.f32	s15, s13, s12
+  79:Robot/Controller/controller.c ****     pid->Output = pid->Output * pid->dt / (pid->Output_LPF_RC + pid->dt) +
+ 351              		.loc 1 79 17 view .LVU111
+ 352 0028 C0ED147A 		vstr.32	s15, [r0, #80]
+  81:Robot/Controller/controller.c **** }
+ 353              		.loc 1 81 1 view .LVU112
+ 354 002c 7047     		bx	lr
+ 355              		.cfi_endproc
+ 356              	.LFE193:
+ 358              		.section	.text.f_Output_Limit,"ax",%progbits
+ 359              		.align	1
+ 360              		.syntax unified
+ 361              		.thumb
+ 362              		.thumb_func
+ 364              	f_Output_Limit:
+ 365              	.LVL6:
+ 366              	.LFB194:
+  82:Robot/Controller/controller.c **** 
+  83:Robot/Controller/controller.c **** // 输出限幅
+  84:Robot/Controller/controller.c **** static void f_Output_Limit(PIDInstance *pid)
+  85:Robot/Controller/controller.c **** {
+ 367              		.loc 1 85 1 is_stmt 1 view -0
+ 368              		.cfi_startproc
+ 369              		@ args = 0, pretend = 0, frame = 0
+ 370              		@ frame_needed = 0, uses_anonymous_args = 0
+ 371              		@ link register save eliminated.
+  86:Robot/Controller/controller.c ****     if (pid->Output > pid->MaxOut)
+ 372              		.loc 1 86 5 view .LVU114
+ 373              		.loc 1 86 12 is_stmt 0 view .LVU115
+ 374 0000 90ED147A 		vldr.32	s14, [r0, #80]
+ 375              		.loc 1 86 26 view .LVU116
+ 376 0004 D0ED037A 		vldr.32	s15, [r0, #12]
+ 377              		.loc 1 86 8 view .LVU117
+ARM GAS  D:\temp\TMP\cceqVsld.s 			page 9
+
+
+ 378 0008 B4EEE77A 		vcmpe.f32	s14, s15
+ 379 000c F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 380 0010 01DD     		ble	.L32
+  87:Robot/Controller/controller.c ****     {
+  88:Robot/Controller/controller.c ****         pid->Output = pid->MaxOut;
+ 381              		.loc 1 88 9 is_stmt 1 view .LVU118
+ 382              		.loc 1 88 21 is_stmt 0 view .LVU119
+ 383 0012 C0ED147A 		vstr.32	s15, [r0, #80]
+ 384              	.L32:
+  89:Robot/Controller/controller.c ****     }
+  90:Robot/Controller/controller.c ****     if (pid->Output < -(pid->MaxOut))
+ 385              		.loc 1 90 5 is_stmt 1 view .LVU120
+ 386              		.loc 1 90 12 is_stmt 0 view .LVU121
+ 387 0016 90ED147A 		vldr.32	s14, [r0, #80]
+ 388              		.loc 1 90 23 view .LVU122
+ 389 001a F1EE677A 		vneg.f32	s15, s15
+ 390              		.loc 1 90 8 view .LVU123
+ 391 001e B4EEE77A 		vcmpe.f32	s14, s15
+ 392 0022 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 393 0026 01D5     		bpl	.L31
+  91:Robot/Controller/controller.c ****     {
+  92:Robot/Controller/controller.c ****         pid->Output = -(pid->MaxOut);
+ 394              		.loc 1 92 9 is_stmt 1 view .LVU124
+ 395              		.loc 1 92 21 is_stmt 0 view .LVU125
+ 396 0028 C0ED147A 		vstr.32	s15, [r0, #80]
+ 397              	.L31:
+  93:Robot/Controller/controller.c ****     }
+  94:Robot/Controller/controller.c **** }
+ 398              		.loc 1 94 1 view .LVU126
+ 399 002c 7047     		bx	lr
+ 400              		.cfi_endproc
+ 401              	.LFE194:
+ 403              		.section	.text.f_PID_ErrorHandle,"ax",%progbits
+ 404              		.align	1
+ 405              		.syntax unified
+ 406              		.thumb
+ 407              		.thumb_func
+ 409              	f_PID_ErrorHandle:
+ 410              	.LVL7:
+ 411              	.LFB195:
+  95:Robot/Controller/controller.c **** 
+  96:Robot/Controller/controller.c **** // 电机堵转检测
+  97:Robot/Controller/controller.c **** static void f_PID_ErrorHandle(PIDInstance *pid)
+  98:Robot/Controller/controller.c **** {
+ 412              		.loc 1 98 1 is_stmt 1 view -0
+ 413              		.cfi_startproc
+ 414              		@ args = 0, pretend = 0, frame = 0
+ 415              		@ frame_needed = 0, uses_anonymous_args = 0
+ 416              		@ link register save eliminated.
+  99:Robot/Controller/controller.c ****     /*Motor Blocked Handle*/
+ 100:Robot/Controller/controller.c ****     if (fabsf(pid->Output) < pid->MaxOut * 0.001f || fabsf(pid->Ref) < 0.0001f)
+ 417              		.loc 1 100 5 view .LVU128
+ 418              		.loc 1 100 18 is_stmt 0 view .LVU129
+ 419 0000 90ED147A 		vldr.32	s14, [r0, #80]
+ 420              		.loc 1 100 9 view .LVU130
+ 421 0004 B0EEC77A 		vabs.f32	s14, s14
+ 422              		.loc 1 100 33 view .LVU131
+ARM GAS  D:\temp\TMP\cceqVsld.s 			page 10
+
+
+ 423 0008 D0ED037A 		vldr.32	s15, [r0, #12]
+ 424              		.loc 1 100 42 view .LVU132
+ 425 000c DFED1D6A 		vldr.32	s13, .L45
+ 426 0010 67EEA67A 		vmul.f32	s15, s15, s13
+ 427              		.loc 1 100 8 view .LVU133
+ 428 0014 B4EEE77A 		vcmpe.f32	s14, s15
+ 429 0018 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 430 001c 2BD4     		bmi	.L38
+ 431              		.loc 1 100 63 discriminator 1 view .LVU134
+ 432 001e D0ED177A 		vldr.32	s15, [r0, #92]
+ 433              		.loc 1 100 54 discriminator 1 view .LVU135
+ 434 0022 B0EEE77A 		vabs.f32	s14, s15
+ 435              		.loc 1 100 51 discriminator 1 view .LVU136
+ 436 0026 DFED186A 		vldr.32	s13, .L45+4
+ 437 002a B4EEE67A 		vcmpe.f32	s14, s13
+ 438 002e F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 439 0032 20D4     		bmi	.L38
+ 101:Robot/Controller/controller.c ****         return;
+ 102:Robot/Controller/controller.c **** 
+ 103:Robot/Controller/controller.c ****     if ((fabsf(pid->Ref - pid->Measure) / fabsf(pid->Ref)) > 0.95f)
+ 440              		.loc 1 103 5 is_stmt 1 view .LVU137
+ 441              		.loc 1 103 30 is_stmt 0 view .LVU138
+ 442 0034 D0ED0B6A 		vldr.32	s13, [r0, #44]
+ 443              		.loc 1 103 25 view .LVU139
+ 444 0038 77EEE67A 		vsub.f32	s15, s15, s13
+ 445              		.loc 1 103 10 view .LVU140
+ 446 003c F0EEE77A 		vabs.f32	s15, s15
+ 447              		.loc 1 103 41 view .LVU141
+ 448 0040 C7EE876A 		vdiv.f32	s13, s15, s14
+ 449              		.loc 1 103 8 view .LVU142
+ 450 0044 DFED117A 		vldr.32	s15, .L45+8
+ 451 0048 F4EEE76A 		vcmpe.f32	s13, s15
+ 452 004c F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 453 0050 12DD     		ble	.L44
+ 104:Robot/Controller/controller.c ****     {
+ 105:Robot/Controller/controller.c ****         // Motor blocked counting
+ 106:Robot/Controller/controller.c ****         pid->ERRORHandler.ERRORCount++;
+ 454              		.loc 1 106 9 is_stmt 1 view .LVU143
+ 455              		.loc 1 106 26 is_stmt 0 view .LVU144
+ 456 0052 836E     		ldr	r3, [r0, #104]
+ 457 0054 C26E     		ldr	r2, [r0, #108]
+ 458              		.loc 1 106 37 view .LVU145
+ 459 0056 0133     		adds	r3, r3, #1
+ 460 0058 42F10002 		adc	r2, r2, #0
+ 461 005c 8366     		str	r3, [r0, #104]
+ 462 005e C266     		str	r2, [r0, #108]
+ 463              	.L42:
+ 107:Robot/Controller/controller.c ****     }
+ 108:Robot/Controller/controller.c ****     else
+ 109:Robot/Controller/controller.c ****     {
+ 110:Robot/Controller/controller.c ****         pid->ERRORHandler.ERRORCount = 0;
+ 111:Robot/Controller/controller.c ****     }
+ 112:Robot/Controller/controller.c **** 
+ 113:Robot/Controller/controller.c ****     if (pid->ERRORHandler.ERRORCount > 500)
+ 464              		.loc 1 113 5 is_stmt 1 view .LVU146
+ 465              		.loc 1 113 26 is_stmt 0 view .LVU147
+ 466 0060 816E     		ldr	r1, [r0, #104]
+ARM GAS  D:\temp\TMP\cceqVsld.s 			page 11
+
+
+ 467 0062 C36E     		ldr	r3, [r0, #108]
+ 468              		.loc 1 113 8 view .LVU148
+ 469 0064 40F2F512 		movw	r2, #501
+ 470 0068 9142     		cmp	r1, r2
+ 471 006a 73F10003 		sbcs	r3, r3, #0
+ 472 006e 02D3     		bcc	.L38
+ 114:Robot/Controller/controller.c ****     {
+ 115:Robot/Controller/controller.c ****         // Motor blocked over 1000times
+ 116:Robot/Controller/controller.c ****         pid->ERRORHandler.ERRORType = PID_MOTOR_BLOCKED_ERROR;
+ 473              		.loc 1 116 9 is_stmt 1 view .LVU149
+ 474              		.loc 1 116 37 is_stmt 0 view .LVU150
+ 475 0070 0123     		movs	r3, #1
+ 476 0072 80F87030 		strb	r3, [r0, #112]
+ 477              	.L38:
+ 117:Robot/Controller/controller.c ****     }
+ 118:Robot/Controller/controller.c **** }
+ 478              		.loc 1 118 1 view .LVU151
+ 479 0076 7047     		bx	lr
+ 480              	.L44:
+ 110:Robot/Controller/controller.c ****     }
+ 481              		.loc 1 110 9 is_stmt 1 view .LVU152
+ 110:Robot/Controller/controller.c ****     }
+ 482              		.loc 1 110 38 is_stmt 0 view .LVU153
+ 483 0078 0022     		movs	r2, #0
+ 484 007a 0023     		movs	r3, #0
+ 485 007c C0E91A23 		strd	r2, [r0, #104]
+ 486 0080 EEE7     		b	.L42
+ 487              	.L46:
+ 488 0082 00BF     		.align	2
+ 489              	.L45:
+ 490 0084 6F12833A 		.word	981668463
+ 491 0088 17B7D138 		.word	953267991
+ 492 008c 3333733F 		.word	1064514355
+ 493              		.cfi_endproc
+ 494              	.LFE195:
+ 496              		.section	.text.PIDInit,"ax",%progbits
+ 497              		.align	1
+ 498              		.global	PIDInit
+ 499              		.syntax unified
+ 500              		.thumb
+ 501              		.thumb_func
+ 503              	PIDInit:
+ 504              	.LVL8:
+ 505              	.LFB196:
+ 119:Robot/Controller/controller.c **** 
+ 120:Robot/Controller/controller.c **** /* ---------------------------下面是PID的外部算法接口--------------------------- */
+ 121:Robot/Controller/controller.c **** 
+ 122:Robot/Controller/controller.c **** /**
+ 123:Robot/Controller/controller.c ****  * @brief 初始化PID,设置参数和启用的优化环节,将其他数据置零
+ 124:Robot/Controller/controller.c ****  *
+ 125:Robot/Controller/controller.c ****  * @param pid    PID实例
+ 126:Robot/Controller/controller.c ****  * @param config PID初始化设置
+ 127:Robot/Controller/controller.c ****  */
+ 128:Robot/Controller/controller.c **** void PIDInit(PIDInstance *pid, PID_Init_Config_s *config)
+ 129:Robot/Controller/controller.c **** {
+ 506              		.loc 1 129 1 is_stmt 1 view -0
+ 507              		.cfi_startproc
+ARM GAS  D:\temp\TMP\cceqVsld.s 			page 12
+
+
+ 508              		@ args = 0, pretend = 0, frame = 0
+ 509              		@ frame_needed = 0, uses_anonymous_args = 0
+ 510              		.loc 1 129 1 is_stmt 0 view .LVU155
+ 511 0000 38B5     		push	{r3, r4, r5, lr}
+ 512              	.LCFI0:
+ 513              		.cfi_def_cfa_offset 16
+ 514              		.cfi_offset 3, -16
+ 515              		.cfi_offset 4, -12
+ 516              		.cfi_offset 5, -8
+ 517              		.cfi_offset 14, -4
+ 518 0002 0546     		mov	r5, r0
+ 519 0004 0C46     		mov	r4, r1
+ 130:Robot/Controller/controller.c ****     // config的数据和pid的部分数据是连续且相同的的,所以可以直接用memcpy
+ 131:Robot/Controller/controller.c ****     // @todo: 不建议这样做,可扩展性差,不知道的开发者可能会误以为pid和confi
+ 132:Robot/Controller/controller.c ****     // 后续修改为逐个赋值
+ 133:Robot/Controller/controller.c ****     memset(pid, 0, sizeof(PIDInstance));
+ 520              		.loc 1 133 5 is_stmt 1 view .LVU156
+ 521 0006 7822     		movs	r2, #120
+ 522 0008 0021     		movs	r1, #0
+ 523              	.LVL9:
+ 524              		.loc 1 133 5 is_stmt 0 view .LVU157
+ 525 000a FFF7FEFF 		bl	memset
+ 526              	.LVL10:
+ 134:Robot/Controller/controller.c ****     // utilize the quality of struct that its memeory is continuous
+ 135:Robot/Controller/controller.c ****     memcpy(pid, config, sizeof(PID_Init_Config_s));
+ 527              		.loc 1 135 5 is_stmt 1 view .LVU158
+ 528 000e 2346     		mov	r3, r4
+ 529 0010 2A46     		mov	r2, r5
+ 530 0012 2034     		adds	r4, r4, #32
+ 531              	.LVL11:
+ 532              	.L48:
+ 533              		.loc 1 135 5 is_stmt 0 view .LVU159
+ 534 0014 D3F800E0 		ldr	lr, [r3]	@ unaligned
+ 535 0018 D3F804C0 		ldr	ip, [r3, #4]	@ unaligned
+ 536 001c 9868     		ldr	r0, [r3, #8]	@ unaligned
+ 537 001e D968     		ldr	r1, [r3, #12]	@ unaligned
+ 538 0020 C2F800E0 		str	lr, [r2]	@ unaligned
+ 539 0024 C2F804C0 		str	ip, [r2, #4]	@ unaligned
+ 540 0028 9060     		str	r0, [r2, #8]	@ unaligned
+ 541 002a D160     		str	r1, [r2, #12]	@ unaligned
+ 542 002c 1033     		adds	r3, r3, #16
+ 543 002e 1032     		adds	r2, r2, #16
+ 544 0030 A342     		cmp	r3, r4
+ 545 0032 EFD1     		bne	.L48
+ 546 0034 1868     		ldr	r0, [r3]	@ unaligned
+ 547 0036 5968     		ldr	r1, [r3, #4]	@ unaligned
+ 548 0038 9B68     		ldr	r3, [r3, #8]	@ unaligned
+ 549 003a 1060     		str	r0, [r2]	@ unaligned
+ 550 003c 5160     		str	r1, [r2, #4]	@ unaligned
+ 551 003e 9360     		str	r3, [r2, #8]	@ unaligned
+ 136:Robot/Controller/controller.c ****     // set rest of memory to 0
+ 137:Robot/Controller/controller.c ****     DWT_GetDeltaT(&pid->DWT_CNT);
+ 552              		.loc 1 137 5 is_stmt 1 view .LVU160
+ 553 0040 05F16000 		add	r0, r5, #96
+ 554 0044 FFF7FEFF 		bl	DWT_GetDeltaT
+ 555              	.LVL12:
+ 138:Robot/Controller/controller.c **** }
+ARM GAS  D:\temp\TMP\cceqVsld.s 			page 13
+
+
+ 556              		.loc 1 138 1 is_stmt 0 view .LVU161
+ 557 0048 38BD     		pop	{r3, r4, r5, pc}
+ 558              		.loc 1 138 1 view .LVU162
+ 559              		.cfi_endproc
+ 560              	.LFE196:
+ 562              		.section	.text.PIDCalculate,"ax",%progbits
+ 563              		.align	1
+ 564              		.global	PIDCalculate
+ 565              		.syntax unified
+ 566              		.thumb
+ 567              		.thumb_func
+ 569              	PIDCalculate:
+ 570              	.LVL13:
+ 571              	.LFB197:
+ 139:Robot/Controller/controller.c **** 
+ 140:Robot/Controller/controller.c **** /**
+ 141:Robot/Controller/controller.c ****  * @brief          PID计算
+ 142:Robot/Controller/controller.c ****  * @param[in]      PID结构体
+ 143:Robot/Controller/controller.c ****  * @param[in]      测量值
+ 144:Robot/Controller/controller.c ****  * @param[in]      期望值
+ 145:Robot/Controller/controller.c ****  * @retval         返回空
+ 146:Robot/Controller/controller.c ****  */
+ 147:Robot/Controller/controller.c **** float PIDCalculate(PIDInstance *pid, float measure, float ref)
+ 148:Robot/Controller/controller.c **** {
+ 572              		.loc 1 148 1 is_stmt 1 view -0
+ 573              		.cfi_startproc
+ 574              		@ args = 0, pretend = 0, frame = 0
+ 575              		@ frame_needed = 0, uses_anonymous_args = 0
+ 576              		.loc 1 148 1 is_stmt 0 view .LVU164
+ 577 0000 10B5     		push	{r4, lr}
+ 578              	.LCFI1:
+ 579              		.cfi_def_cfa_offset 8
+ 580              		.cfi_offset 4, -8
+ 581              		.cfi_offset 14, -4
+ 582 0002 2DED028B 		vpush.64	{d8}
+ 583              	.LCFI2:
+ 584              		.cfi_def_cfa_offset 16
+ 585              		.cfi_offset 80, -16
+ 586              		.cfi_offset 81, -12
+ 587 0006 0446     		mov	r4, r0
+ 588 0008 F0EE408A 		vmov.f32	s17, s0
+ 589 000c B0EE608A 		vmov.f32	s16, s1
+ 149:Robot/Controller/controller.c ****     // 堵转检测
+ 150:Robot/Controller/controller.c ****     if (pid->Improve & PID_ErrorHandle)
+ 590              		.loc 1 150 5 is_stmt 1 view .LVU165
+ 591              		.loc 1 150 9 is_stmt 0 view .LVU166
+ 592 0010 90F91430 		ldrsb	r3, [r0, #20]
+ 593              		.loc 1 150 8 view .LVU167
+ 594 0014 002B     		cmp	r3, #0
+ 595 0016 71DB     		blt	.L66
+ 596              	.LVL14:
+ 597              	.L51:
+ 151:Robot/Controller/controller.c ****         f_PID_ErrorHandle(pid);
+ 152:Robot/Controller/controller.c **** 
+ 153:Robot/Controller/controller.c ****     pid->dt = DWT_GetDeltaT(&pid->DWT_CNT); // 获取两次pid计算的时间间隔,用于积分和
+ 598              		.loc 1 153 5 is_stmt 1 view .LVU168
+ 599              		.loc 1 153 15 is_stmt 0 view .LVU169
+ARM GAS  D:\temp\TMP\cceqVsld.s 			page 14
+
+
+ 600 0018 04F16000 		add	r0, r4, #96
+ 601 001c FFF7FEFF 		bl	DWT_GetDeltaT
+ 602              	.LVL15:
+ 603              		.loc 1 153 13 view .LVU170
+ 604 0020 84ED190A 		vstr.32	s0, [r4, #100]
+ 154:Robot/Controller/controller.c **** 
+ 155:Robot/Controller/controller.c ****     // 保存上次的测量值和误差,计算当前error
+ 156:Robot/Controller/controller.c ****     pid->Measure = measure;
+ 605              		.loc 1 156 5 is_stmt 1 view .LVU171
+ 606              		.loc 1 156 18 is_stmt 0 view .LVU172
+ 607 0024 C4ED0B8A 		vstr.32	s17, [r4, #44]
+ 157:Robot/Controller/controller.c ****     pid->Ref = ref;
+ 608              		.loc 1 157 5 is_stmt 1 view .LVU173
+ 609              		.loc 1 157 14 is_stmt 0 view .LVU174
+ 610 0028 84ED178A 		vstr.32	s16, [r4, #92]
+ 158:Robot/Controller/controller.c ****     pid->Err = pid->Ref - pid->Measure;
+ 611              		.loc 1 158 5 is_stmt 1 view .LVU175
+ 612              		.loc 1 158 25 is_stmt 0 view .LVU176
+ 613 002c 78EE680A 		vsub.f32	s1, s16, s17
+ 614              		.loc 1 158 14 view .LVU177
+ 615 0030 C4ED0D0A 		vstr.32	s1, [r4, #52]
+ 159:Robot/Controller/controller.c **** 
+ 160:Robot/Controller/controller.c ****     // 如果在死区外,则计算PID
+ 161:Robot/Controller/controller.c ****     if (abs(pid->Err) > pid->DeadBand)
+ 616              		.loc 1 161 5 is_stmt 1 view .LVU178
+ 617              		.loc 1 161 9 is_stmt 0 view .LVU179
+ 618 0034 F5EEC00A 		vcmpe.f32	s1, #0
+ 619 0038 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 620 003c 61DD     		ble	.L67
+ 621              		.loc 1 161 9 view .LVU180
+ 622 003e F0EE607A 		vmov.f32	s15, s1
+ 623              	.L52:
+ 624              		.loc 1 161 28 discriminator 4 view .LVU181
+ 625 0042 94ED047A 		vldr.32	s14, [r4, #16]
+ 626              		.loc 1 161 8 discriminator 4 view .LVU182
+ 627 0046 B4EEE77A 		vcmpe.f32	s14, s15
+ 628 004a F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 629 004e 73D5     		bpl	.L64
+ 162:Robot/Controller/controller.c ****     {
+ 163:Robot/Controller/controller.c ****         // 基本的pid计算,使用位置式
+ 164:Robot/Controller/controller.c ****         pid->Pout = pid->Kp * pid->Err;
+ 630              		.loc 1 164 9 is_stmt 1 view .LVU183
+ 631              		.loc 1 164 24 is_stmt 0 view .LVU184
+ 632 0050 D4ED007A 		vldr.32	s15, [r4]
+ 633              		.loc 1 164 29 view .LVU185
+ 634 0054 60EEA77A 		vmul.f32	s15, s1, s15
+ 635              		.loc 1 164 19 view .LVU186
+ 636 0058 C4ED107A 		vstr.32	s15, [r4, #64]
+ 165:Robot/Controller/controller.c ****         pid->ITerm = pid->Ki * pid->Err * pid->dt;
+ 637              		.loc 1 165 9 is_stmt 1 view .LVU187
+ 638              		.loc 1 165 25 is_stmt 0 view .LVU188
+ 639 005c D4ED017A 		vldr.32	s15, [r4, #4]
+ 640              		.loc 1 165 30 view .LVU189
+ 641 0060 60EEA77A 		vmul.f32	s15, s1, s15
+ 642              		.loc 1 165 41 view .LVU190
+ 643 0064 60EE277A 		vmul.f32	s15, s0, s15
+ 644              		.loc 1 165 20 view .LVU191
+ARM GAS  D:\temp\TMP\cceqVsld.s 			page 15
+
+
+ 645 0068 C4ED137A 		vstr.32	s15, [r4, #76]
+ 166:Robot/Controller/controller.c ****         pid->Dout = pid->Kd * (pid->Err - pid->Last_Err) / pid->dt;
+ 646              		.loc 1 166 9 is_stmt 1 view .LVU192
+ 647              		.loc 1 166 24 is_stmt 0 view .LVU193
+ 648 006c D4ED027A 		vldr.32	s15, [r4, #8]
+ 649              		.loc 1 166 46 view .LVU194
+ 650 0070 94ED0E7A 		vldr.32	s14, [r4, #56]
+ 651              		.loc 1 166 41 view .LVU195
+ 652 0074 70EEC70A 		vsub.f32	s1, s1, s14
+ 653              		.loc 1 166 29 view .LVU196
+ 654 0078 67EEA00A 		vmul.f32	s1, s15, s1
+ 655              		.loc 1 166 58 view .LVU197
+ 656 007c C0EE807A 		vdiv.f32	s15, s1, s0
+ 657              		.loc 1 166 19 view .LVU198
+ 658 0080 C4ED127A 		vstr.32	s15, [r4, #72]
+ 167:Robot/Controller/controller.c **** 
+ 168:Robot/Controller/controller.c ****         // 梯形积分
+ 169:Robot/Controller/controller.c ****         if (pid->Improve & PID_Trapezoid_Intergral)
+ 659              		.loc 1 169 9 is_stmt 1 view .LVU199
+ 660              		.loc 1 169 16 is_stmt 0 view .LVU200
+ 661 0084 237D     		ldrb	r3, [r4, #20]	@ zero_extendqisi2
+ 662              		.loc 1 169 12 view .LVU201
+ 663 0086 13F0040F 		tst	r3, #4
+ 664 008a 3DD1     		bne	.L68
+ 665              	.L55:
+ 170:Robot/Controller/controller.c ****             f_Trapezoid_Intergral(pid);
+ 171:Robot/Controller/controller.c ****         // 变速积分
+ 172:Robot/Controller/controller.c ****         if (pid->Improve & PID_ChangingIntegrationRate)
+ 666              		.loc 1 172 9 is_stmt 1 view .LVU202
+ 667              		.loc 1 172 16 is_stmt 0 view .LVU203
+ 668 008c 237D     		ldrb	r3, [r4, #20]	@ zero_extendqisi2
+ 669              		.loc 1 172 12 view .LVU204
+ 670 008e 13F0200F 		tst	r3, #32
+ 671 0092 3DD1     		bne	.L69
+ 672              	.L56:
+ 173:Robot/Controller/controller.c ****             f_Changing_Integration_Rate(pid);
+ 174:Robot/Controller/controller.c ****         // 微分先行
+ 175:Robot/Controller/controller.c ****         if (pid->Improve & PID_Derivative_On_Measurement)
+ 673              		.loc 1 175 9 is_stmt 1 view .LVU205
+ 674              		.loc 1 175 16 is_stmt 0 view .LVU206
+ 675 0094 237D     		ldrb	r3, [r4, #20]	@ zero_extendqisi2
+ 676              		.loc 1 175 12 view .LVU207
+ 677 0096 13F0020F 		tst	r3, #2
+ 678 009a 3DD1     		bne	.L70
+ 679              	.L57:
+ 176:Robot/Controller/controller.c ****             f_Derivative_On_Measurement(pid);
+ 177:Robot/Controller/controller.c ****         // 微分滤波器
+ 178:Robot/Controller/controller.c ****         if (pid->Improve & PID_DerivativeFilter)
+ 680              		.loc 1 178 9 is_stmt 1 view .LVU208
+ 681              		.loc 1 178 16 is_stmt 0 view .LVU209
+ 682 009c 237D     		ldrb	r3, [r4, #20]	@ zero_extendqisi2
+ 683              		.loc 1 178 12 view .LVU210
+ 684 009e 13F0400F 		tst	r3, #64
+ 685 00a2 3DD1     		bne	.L71
+ 686              	.L58:
+ 179:Robot/Controller/controller.c ****             f_Derivative_Filter(pid);
+ 180:Robot/Controller/controller.c ****         // 积分限幅
+ARM GAS  D:\temp\TMP\cceqVsld.s 			page 16
+
+
+ 181:Robot/Controller/controller.c ****         if (pid->Improve & PID_Integral_Limit)
+ 687              		.loc 1 181 9 is_stmt 1 view .LVU211
+ 688              		.loc 1 181 16 is_stmt 0 view .LVU212
+ 689 00a4 237D     		ldrb	r3, [r4, #20]	@ zero_extendqisi2
+ 690              		.loc 1 181 12 view .LVU213
+ 691 00a6 13F0010F 		tst	r3, #1
+ 692 00aa 3DD1     		bne	.L72
+ 693              	.L59:
+ 182:Robot/Controller/controller.c ****             f_Integral_Limit(pid);
+ 183:Robot/Controller/controller.c **** 
+ 184:Robot/Controller/controller.c ****         pid->Iout += pid->ITerm;                         // 累加积分
+ 694              		.loc 1 184 9 is_stmt 1 view .LVU214
+ 695              		.loc 1 184 25 is_stmt 0 view .LVU215
+ 696 00ac D4ED137A 		vldr.32	s15, [r4, #76]
+ 697              		.loc 1 184 19 view .LVU216
+ 698 00b0 94ED117A 		vldr.32	s14, [r4, #68]
+ 699 00b4 77EE877A 		vadd.f32	s15, s15, s14
+ 700 00b8 C4ED117A 		vstr.32	s15, [r4, #68]
+ 185:Robot/Controller/controller.c ****         pid->Output = pid->Pout + pid->Iout + pid->Dout; // 计算输出
+ 701              		.loc 1 185 9 is_stmt 1 view .LVU217
+ 702              		.loc 1 185 26 is_stmt 0 view .LVU218
+ 703 00bc 94ED107A 		vldr.32	s14, [r4, #64]
+ 704              		.loc 1 185 33 view .LVU219
+ 705 00c0 77EE877A 		vadd.f32	s15, s15, s14
+ 706              		.loc 1 185 50 view .LVU220
+ 707 00c4 94ED127A 		vldr.32	s14, [r4, #72]
+ 708              		.loc 1 185 45 view .LVU221
+ 709 00c8 77EE877A 		vadd.f32	s15, s15, s14
+ 710              		.loc 1 185 21 view .LVU222
+ 711 00cc C4ED147A 		vstr.32	s15, [r4, #80]
+ 186:Robot/Controller/controller.c **** 
+ 187:Robot/Controller/controller.c ****         // 输出滤波
+ 188:Robot/Controller/controller.c ****         if (pid->Improve & PID_OutputFilter)
+ 712              		.loc 1 188 9 is_stmt 1 view .LVU223
+ 713              		.loc 1 188 16 is_stmt 0 view .LVU224
+ 714 00d0 237D     		ldrb	r3, [r4, #20]	@ zero_extendqisi2
+ 715              		.loc 1 188 12 view .LVU225
+ 716 00d2 13F0100F 		tst	r3, #16
+ 717 00d6 2BD1     		bne	.L73
+ 718              	.L60:
+ 189:Robot/Controller/controller.c ****             f_Output_Filter(pid);
+ 190:Robot/Controller/controller.c **** 
+ 191:Robot/Controller/controller.c ****         // 输出限幅
+ 192:Robot/Controller/controller.c ****         f_Output_Limit(pid);
+ 719              		.loc 1 192 9 is_stmt 1 view .LVU226
+ 720 00d8 2046     		mov	r0, r4
+ 721 00da FFF7FEFF 		bl	f_Output_Limit
+ 722              	.LVL16:
+ 723              	.L61:
+ 193:Robot/Controller/controller.c ****     }
+ 194:Robot/Controller/controller.c ****     else // 进入死区, 则清空积分和输出
+ 195:Robot/Controller/controller.c ****     {
+ 196:Robot/Controller/controller.c ****         pid->Output = 0;
+ 197:Robot/Controller/controller.c ****         pid->ITerm = 0;
+ 198:Robot/Controller/controller.c ****     }
+ 199:Robot/Controller/controller.c **** 
+ 200:Robot/Controller/controller.c ****     // 保存当前数据,用于下次计算
+ARM GAS  D:\temp\TMP\cceqVsld.s 			page 17
+
+
+ 201:Robot/Controller/controller.c ****     pid->Last_Measure = pid->Measure;
+ 724              		.loc 1 201 5 view .LVU227
+ 725              		.loc 1 201 28 is_stmt 0 view .LVU228
+ 726 00de E36A     		ldr	r3, [r4, #44]	@ float
+ 727              		.loc 1 201 23 view .LVU229
+ 728 00e0 2363     		str	r3, [r4, #48]	@ float
+ 202:Robot/Controller/controller.c ****     pid->Last_Output = pid->Output;
+ 729              		.loc 1 202 5 is_stmt 1 view .LVU230
+ 730              		.loc 1 202 27 is_stmt 0 view .LVU231
+ 731 00e2 94ED140A 		vldr.32	s0, [r4, #80]
+ 732              		.loc 1 202 22 view .LVU232
+ 733 00e6 84ED150A 		vstr.32	s0, [r4, #84]
+ 203:Robot/Controller/controller.c ****     pid->Last_Dout = pid->Dout;
+ 734              		.loc 1 203 5 is_stmt 1 view .LVU233
+ 735              		.loc 1 203 25 is_stmt 0 view .LVU234
+ 736 00ea A36C     		ldr	r3, [r4, #72]	@ float
+ 737              		.loc 1 203 20 view .LVU235
+ 738 00ec A365     		str	r3, [r4, #88]	@ float
+ 204:Robot/Controller/controller.c ****     pid->Last_Err = pid->Err;
+ 739              		.loc 1 204 5 is_stmt 1 view .LVU236
+ 740              		.loc 1 204 24 is_stmt 0 view .LVU237
+ 741 00ee 636B     		ldr	r3, [r4, #52]	@ float
+ 742              		.loc 1 204 19 view .LVU238
+ 743 00f0 A363     		str	r3, [r4, #56]	@ float
+ 205:Robot/Controller/controller.c ****     pid->Last_ITerm = pid->ITerm;
+ 744              		.loc 1 205 5 is_stmt 1 view .LVU239
+ 745              		.loc 1 205 26 is_stmt 0 view .LVU240
+ 746 00f2 E36C     		ldr	r3, [r4, #76]	@ float
+ 747              		.loc 1 205 21 view .LVU241
+ 748 00f4 E363     		str	r3, [r4, #60]	@ float
+ 206:Robot/Controller/controller.c **** 
+ 207:Robot/Controller/controller.c ****     return pid->Output;
+ 749              		.loc 1 207 5 is_stmt 1 view .LVU242
+ 208:Robot/Controller/controller.c **** }...
+ 750              		.loc 1 208 1 is_stmt 0 view .LVU243
+ 751 00f6 BDEC028B 		vldm	sp!, {d8}
+ 752              	.LCFI3:
+ 753              		.cfi_remember_state
+ 754              		.cfi_restore 80
+ 755              		.cfi_restore 81
+ 756              		.cfi_def_cfa_offset 8
+ 757              	.LVL17:
+ 758              		.loc 1 208 1 view .LVU244
+ 759 00fa 10BD     		pop	{r4, pc}
+ 760              	.LVL18:
+ 761              	.L66:
+ 762              	.LCFI4:
+ 763              		.cfi_restore_state
+ 151:Robot/Controller/controller.c ****         f_PID_ErrorHandle(pid);
+ 764              		.loc 1 151 9 is_stmt 1 view .LVU245
+ 765 00fc FFF7FEFF 		bl	f_PID_ErrorHandle
+ 766              	.LVL19:
+ 151:Robot/Controller/controller.c ****         f_PID_ErrorHandle(pid);
+ 767              		.loc 1 151 9 is_stmt 0 view .LVU246
+ 768 0100 8AE7     		b	.L51
+ 769              	.L67:
+ 161:Robot/Controller/controller.c ****     if (abs(pid->Err) > pid->DeadBand)
+ARM GAS  D:\temp\TMP\cceqVsld.s 			page 18
+
+
+ 770              		.loc 1 161 9 discriminator 2 view .LVU247
+ 771 0102 F1EE607A 		vneg.f32	s15, s1
+ 772 0106 9CE7     		b	.L52
+ 773              	.L68:
+ 170:Robot/Controller/controller.c ****             f_Trapezoid_Intergral(pid);
+ 774              		.loc 1 170 13 is_stmt 1 view .LVU248
+ 775 0108 2046     		mov	r0, r4
+ 776 010a FFF7FEFF 		bl	f_Trapezoid_Intergral
+ 777              	.LVL20:
+ 778 010e BDE7     		b	.L55
+ 779              	.L69:
+ 173:Robot/Controller/controller.c ****             f_Changing_Integration_Rate(pid);
+ 780              		.loc 1 173 13 view .LVU249
+ 781 0110 2046     		mov	r0, r4
+ 782 0112 FFF7FEFF 		bl	f_Changing_Integration_Rate
+ 783              	.LVL21:
+ 784 0116 BDE7     		b	.L56
+ 785              	.L70:
+ 176:Robot/Controller/controller.c ****             f_Derivative_On_Measurement(pid);
+ 786              		.loc 1 176 13 view .LVU250
+ 787 0118 2046     		mov	r0, r4
+ 788 011a FFF7FEFF 		bl	f_Derivative_On_Measurement
+ 789              	.LVL22:
+ 790 011e BDE7     		b	.L57
+ 791              	.L71:
+ 179:Robot/Controller/controller.c ****             f_Derivative_Filter(pid);
+ 792              		.loc 1 179 13 view .LVU251
+ 793 0120 2046     		mov	r0, r4
+ 794 0122 FFF7FEFF 		bl	f_Derivative_Filter
+ 795              	.LVL23:
+ 796 0126 BDE7     		b	.L58
+ 797              	.L72:
+ 182:Robot/Controller/controller.c ****             f_Integral_Limit(pid);
+ 798              		.loc 1 182 13 view .LVU252
+ 799 0128 2046     		mov	r0, r4
+ 800 012a FFF7FEFF 		bl	f_Integral_Limit
+ 801              	.LVL24:
+ 802 012e BDE7     		b	.L59
+ 803              	.L73:
+ 189:Robot/Controller/controller.c ****             f_Output_Filter(pid);
+ 804              		.loc 1 189 13 view .LVU253
+ 805 0130 2046     		mov	r0, r4
+ 806 0132 FFF7FEFF 		bl	f_Output_Filter
+ 807              	.LVL25:
+ 808 0136 CFE7     		b	.L60
+ 809              	.L64:
+ 196:Robot/Controller/controller.c ****         pid->Output = 0;
+ 810              		.loc 1 196 9 view .LVU254
+ 196:Robot/Controller/controller.c ****         pid->Output = 0;
+ 811              		.loc 1 196 21 is_stmt 0 view .LVU255
+ 812 0138 0023     		movs	r3, #0
+ 813 013a 2365     		str	r3, [r4, #80]	@ float
+ 197:Robot/Controller/controller.c ****         pid->ITerm = 0;
+ 814              		.loc 1 197 9 is_stmt 1 view .LVU256
+ 197:Robot/Controller/controller.c ****         pid->ITerm = 0;
+ 815              		.loc 1 197 20 is_stmt 0 view .LVU257
+ 816 013c E364     		str	r3, [r4, #76]	@ float
+ARM GAS  D:\temp\TMP\cceqVsld.s 			page 19
+
+
+ 817 013e CEE7     		b	.L61
+ 818              		.cfi_endproc
+ 819              	.LFE197:
+ 821              		.section	.bss.temp_Iout.1,"aw",%nobits
+ 822              		.align	2
+ 823              		.set	.LANCHOR0,. + 0
+ 826              	temp_Iout.1:
+ 827 0000 00000000 		.space	4
+ 828              		.section	.bss.temp_Output.0,"aw",%nobits
+ 829              		.align	2
+ 830              		.set	.LANCHOR1,. + 0
+ 833              	temp_Output.0:
+ 834 0000 00000000 		.space	4
+ 835              		.text
+ 836              	.Letext0:
+ 837              		.file 2 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 838              		.file 3 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
+ 839              		.file 4 "Robot/Controller/controller.h"
+ 840              		.file 5 "Bsp/bsp_dwt.h"
+ 841              		.file 6 "<built-in>"
+ARM GAS  D:\temp\TMP\cceqVsld.s 			page 20
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 controller.c
+D:\temp\TMP\cceqVsld.s:19     .text.f_Trapezoid_Intergral:00000000 $t
+D:\temp\TMP\cceqVsld.s:24     .text.f_Trapezoid_Intergral:00000000 f_Trapezoid_Intergral
+D:\temp\TMP\cceqVsld.s:59     .text.f_Changing_Integration_Rate:00000000 $t
+D:\temp\TMP\cceqVsld.s:64     .text.f_Changing_Integration_Rate:00000000 f_Changing_Integration_Rate
+D:\temp\TMP\cceqVsld.s:132    .text.f_Integral_Limit:00000000 $t
+D:\temp\TMP\cceqVsld.s:137    .text.f_Integral_Limit:00000000 f_Integral_Limit
+D:\temp\TMP\cceqVsld.s:233    .text.f_Integral_Limit:0000008c $d
+D:\temp\TMP\cceqVsld.s:239    .text.f_Derivative_On_Measurement:00000000 $t
+D:\temp\TMP\cceqVsld.s:244    .text.f_Derivative_On_Measurement:00000000 f_Derivative_On_Measurement
+D:\temp\TMP\cceqVsld.s:275    .text.f_Derivative_Filter:00000000 $t
+D:\temp\TMP\cceqVsld.s:280    .text.f_Derivative_Filter:00000000 f_Derivative_Filter
+D:\temp\TMP\cceqVsld.s:317    .text.f_Output_Filter:00000000 $t
+D:\temp\TMP\cceqVsld.s:322    .text.f_Output_Filter:00000000 f_Output_Filter
+D:\temp\TMP\cceqVsld.s:359    .text.f_Output_Limit:00000000 $t
+D:\temp\TMP\cceqVsld.s:364    .text.f_Output_Limit:00000000 f_Output_Limit
+D:\temp\TMP\cceqVsld.s:404    .text.f_PID_ErrorHandle:00000000 $t
+D:\temp\TMP\cceqVsld.s:409    .text.f_PID_ErrorHandle:00000000 f_PID_ErrorHandle
+D:\temp\TMP\cceqVsld.s:490    .text.f_PID_ErrorHandle:00000084 $d
+D:\temp\TMP\cceqVsld.s:497    .text.PIDInit:00000000 $t
+D:\temp\TMP\cceqVsld.s:503    .text.PIDInit:00000000 PIDInit
+D:\temp\TMP\cceqVsld.s:563    .text.PIDCalculate:00000000 $t
+D:\temp\TMP\cceqVsld.s:569    .text.PIDCalculate:00000000 PIDCalculate
+D:\temp\TMP\cceqVsld.s:822    .bss.temp_Iout.1:00000000 $d
+D:\temp\TMP\cceqVsld.s:826    .bss.temp_Iout.1:00000000 temp_Iout.1
+D:\temp\TMP\cceqVsld.s:829    .bss.temp_Output.0:00000000 $d
+D:\temp\TMP\cceqVsld.s:833    .bss.temp_Output.0:00000000 temp_Output.0
+
+UNDEFINED SYMBOLS
+memset
+DWT_GetDeltaT
