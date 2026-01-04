@@ -11,6 +11,7 @@
  *     1
  *  ———————
  *  as + 1
+ * 
  ******************************************************************************
  */
 #include "QuaternionEKF.h"
@@ -23,12 +24,12 @@ const float IMU_QuaternionEKF_F[36] = {1, 0, 0, 0, 0, 0,
                                        0, 0, 0, 1, 0, 0,
                                        0, 0, 0, 0, 1, 0,
                                        0, 0, 0, 0, 0, 1};
-float IMU_QuaternionEKF_P[36] = {1, 0.1, 0.1, 0.1, 0.1, 0.1,
-                                 0.1, 1, 0.1, 0.1, 0.1, 0.1,
-                                 0.1, 0.1, 1, 0.1, 0.1, 0.1,
-                                 0.1, 0.1, 0.1, 1, 0.1, 0.1,
-                                 0.1, 0.1, 0.1, 0.1, 1, 0.1,
-                                 0.1, 0.1, 0.1, 0.1, 0.1, 1};
+float IMU_QuaternionEKF_P[36] = {100000, 0.1, 0.1, 0.1, 0.1, 0.1,
+                                 0.1, 100000, 0.1, 0.1, 0.1, 0.1,
+                                 0.1, 0.1, 100000, 0.1, 0.1, 0.1,
+                                 0.1, 0.1, 0.1, 100000, 0.1, 0.1,
+                                 0.1, 0.1, 0.1, 0.1, 100, 0.1,
+                                 0.1, 0.1, 0.1, 0.1, 0.1, 100};
 float IMU_QuaternionEKF_K[18];
 float IMU_QuaternionEKF_H[18];
 
@@ -46,7 +47,7 @@ static void IMU_QuaternionEKF_xhatUpdate(KalmanFilter_t *kf);
  * @param[in] lambda         fading coefficient          0.9996
  * @param[in] lpf            lowpass filter coefficient  0
  */
-void IMU_QuaternionEKF_Init(float process_noise1, float process_noise2, float measure_noise, float lambda, float lpf)
+void IMU_QuaternionEKF_Init(float* init_quaternion,float process_noise1, float process_noise2, float measure_noise, float lambda, float lpf)
 {
     QEKF_INS.Initialized = 1;
     QEKF_INS.Q1 = process_noise1;
@@ -68,10 +69,10 @@ void IMU_QuaternionEKF_Init(float process_noise1, float process_noise2, float me
     Matrix_Init(&QEKF_INS.ChiSquare, 1, 1, (float *)QEKF_INS.ChiSquare_Data);
 
     // 姿态初始化
-    QEKF_INS.IMU_QuaternionEKF.xhat_data[0] = 1;
-    QEKF_INS.IMU_QuaternionEKF.xhat_data[1] = 0;
-    QEKF_INS.IMU_QuaternionEKF.xhat_data[2] = 0;
-    QEKF_INS.IMU_QuaternionEKF.xhat_data[3] = 0;
+    for(int i = 0; i < 4; i++)
+    {
+        QEKF_INS.IMU_QuaternionEKF.xhat_data[i] = init_quaternion[i];
+    }
 
     // 自定义函数初始化,用于扩展或增加kf的基础功能
     QEKF_INS.IMU_QuaternionEKF.User_Func0_f = IMU_QuaternionEKF_Observe;
@@ -98,10 +99,6 @@ void IMU_QuaternionEKF_Update(float gx, float gy, float gz, float ax, float ay, 
     // 0.5(Ohm-Ohm^bias)*deltaT,用于更新工作点处的状态转移F矩阵
     static float halfgxdt, halfgydt, halfgzdt;
     static float accelInvNorm;
-    if (!QEKF_INS.Initialized)
-    {
-        IMU_QuaternionEKF_Init(10, 0.001, 1000000 * 10, 0.9996 * 0 + 1, 0);
-    }
 
     /*   F, number with * represent vals to be set
      0      1*     2*     3*     4     5
@@ -155,7 +152,7 @@ void IMU_QuaternionEKF_Update(float gx, float gy, float gz, float ax, float ay, 
 
     // set z,单位化重力加速度向量
     accelInvNorm = invSqrt(QEKF_INS.Accel[0] * QEKF_INS.Accel[0] + QEKF_INS.Accel[1] * QEKF_INS.Accel[1] + QEKF_INS.Accel[2] * QEKF_INS.Accel[2]);
-    for (uint8_t i = 0; i < 3; i++)
+    for (uint8_t i = 0; i < 3; ++i)
     {
         QEKF_INS.IMU_QuaternionEKF.MeasuredVector[i] = QEKF_INS.Accel[i] * accelInvNorm; // 用加速度向量更新量测值
     }
@@ -237,7 +234,7 @@ static void IMU_QuaternionEKF_F_Linearization_P_Fading(KalmanFilter_t *kf)
 
     // quaternion normalize
     qInvNorm = invSqrt(q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3);
-    for (uint8_t i = 0; i < 4; i++)
+    for (uint8_t i = 0; i < 4; ++i)
     {
         kf->xhatminus_data[i] *= qInvNorm;
     }
@@ -351,7 +348,7 @@ static void IMU_QuaternionEKF_xhatUpdate(KalmanFilter_t *kf)
     kf->temp_vector_data[2] = q0 * q0 - q1 * q1 - q2 * q2 + q3 * q3; // temp_vector = h(xhat'(k))
 
     // 计算预测值和各个轴的方向余弦
-    for (uint8_t i = 0; i < 3; i++)
+    for (uint8_t i = 0; i < 3; ++i)
     {
         QEKF_INS.OrientationCosine[i] = acosf(fabsf(kf->temp_vector_data[i]));
     }
@@ -425,13 +422,13 @@ static void IMU_QuaternionEKF_xhatUpdate(KalmanFilter_t *kf)
     kf->MatStatus = Matrix_Multiply(&kf->temp_matrix, &kf->temp_matrix1, &kf->K);
 
     // implement adaptive
-    for (uint8_t i = 0; i < kf->K.numRows * kf->K.numCols; i++)
+    for (uint8_t i = 0; i < kf->K.numRows * kf->K.numCols; ++i)
     {
         kf->K_data[i] *= QEKF_INS.AdaptiveGainScale;
     }
-    for (uint8_t i = 4; i < 6; i++)
+    for (uint8_t i = 4; i < 6; ++i)
     {
-        for (uint8_t j = 0; j < 3; j++)
+        for (uint8_t j = 0; j < 3; ++j)
         {
             kf->K_data[i * 3 + j] *= QEKF_INS.OrientationCosine[i - 4] / 1.5707963f; // 1 rad
         }
@@ -444,7 +441,7 @@ static void IMU_QuaternionEKF_xhatUpdate(KalmanFilter_t *kf)
     // 零漂修正限幅,一般不会有过大的漂移
     if (QEKF_INS.ConvergeFlag)
     {
-        for (uint8_t i = 4; i < 6; i++)
+        for (uint8_t i = 4; i < 6; ++i)
         {
             if (kf->temp_vector.pData[i] > 1e-2f * QEKF_INS.dt)
             {

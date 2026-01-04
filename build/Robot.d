@@ -34,7 +34,7 @@ build/Robot.o: Robot/RoboTask/Robot.c Robot/RoboTask/Robot.h \
  Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h \
  Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h \
  Robot/RoboTask/ins/INS_task.h Robot/Devices/BMI088/BMI088driver.h \
- Core/Inc/main.h Bsp/bsp_dwt.h
+ Core/Inc/main.h Bsp/bsp_can.h Core/Inc/fdcan.h Bsp/bsp_dwt.h
 Robot/RoboTask/Robot.h:
 Core/Inc/spi.h:
 Core/Inc/main.h:
@@ -76,4 +76,6 @@ Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h:
 Robot/RoboTask/ins/INS_task.h:
 Robot/Devices/BMI088/BMI088driver.h:
 Core/Inc/main.h:
+Bsp/bsp_can.h:
+Core/Inc/fdcan.h:
 Bsp/bsp_dwt.h:

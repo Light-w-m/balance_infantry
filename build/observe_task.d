@@ -59,7 +59,6 @@ build/observe_task.o: Robot/RoboTask/observe/observe_task.c \
  Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
- Robot/RoboTask/chassis/chassis_def.h Robot/Controller/pid.h \
  Robot/Lib/user_lib.h
 Robot/RoboTask/observe/observe_task.h:
 Robot/RoboTask/ins/INS_task.h:
@@ -132,6 +131,4 @@ Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h:
 Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:
 Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h:
 Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
-Robot/RoboTask/chassis/chassis_def.h:
-Robot/Controller/pid.h:
 Robot/Lib/user_lib.h:

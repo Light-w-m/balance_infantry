@@ -51,13 +51,6 @@ build/freertos.o: Core/Src/freertos.c \
  Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
  Robot/RoboTask/ins/INS_task.h Robot/Devices/BMI088/BMI088driver.h \
  Robot/RoboTask/chassis/chassisR_task.h Core/Inc/fdcan.h Core/Inc/main.h \
- Robot/RoboTask/chassis/chassis_def.h Robot/Devices/Motor/DJI3508.h \
- Bsp/bsp_can.h Robot/Controller/controller.h Bsp/bsp_dwt.h \
- Middlewares/ST/ARM/DSP/Inc/arm_math.h \
- Drivers/CMSIS/Include/cmsis_compiler.h Robot/Devices/motor_def.h \
- Robot/daemon/daemon.h Robot/Devices/Motor/DM8009.h \
- Robot/Controller/kinematics.h Robot/RoboTask/chassis/chassis_def.h \
- Robot/Algorithm/kalman/kalman_filter.h Robot/Controller/pid.h \
  Robot/RoboTask/emulator/uartReceive_task.h Core/Inc/usart.h
 Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
 Core/Inc/FreeRTOSConfig.h:
@@ -117,19 +110,5 @@ Robot/Devices/BMI088/BMI088driver.h:
 Robot/RoboTask/chassis/chassisR_task.h:
 Core/Inc/fdcan.h:
 Core/Inc/main.h:
-Robot/RoboTask/chassis/chassis_def.h:
-Robot/Devices/Motor/DJI3508.h:
-Bsp/bsp_can.h:
-Robot/Controller/controller.h:
-Bsp/bsp_dwt.h:
-Middlewares/ST/ARM/DSP/Inc/arm_math.h:
-Drivers/CMSIS/Include/cmsis_compiler.h:
-Robot/Devices/motor_def.h:
-Robot/daemon/daemon.h:
-Robot/Devices/Motor/DM8009.h:
-Robot/Controller/kinematics.h:
-Robot/RoboTask/chassis/chassis_def.h:
-Robot/Algorithm/kalman/kalman_filter.h:
-Robot/Controller/pid.h:
 Robot/RoboTask/emulator/uartReceive_task.h:
 Core/Inc/usart.h:

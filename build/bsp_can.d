@@ -32,32 +32,7 @@ build/bsp_can.o: BSP/bsp_can.c BSP/bsp_can.h Core/Inc/fdcan.h \
  Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h \
  Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h \
  Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h BSP/bsp_dwt.h \
- Core/Inc/main.h Robot/RoboTask/chassis/chassisR_task.h \
- Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h \
- Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h \
- Core/Inc/FreeRTOSConfig.h \
- Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h \
- Middlewares/Third_Party/FreeRTOS/Source/include/portable.h \
- Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h \
- Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h \
- Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h \
- Middlewares/Third_Party/FreeRTOS/Source/include/task.h \
- Middlewares/Third_Party/FreeRTOS/Source/include/list.h \
- Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
- Middlewares/Third_Party/FreeRTOS/Source/include/task.h \
- Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
- Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h \
- Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
- Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
- Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
- Robot/RoboTask/chassis/chassis_def.h Robot/Devices/Motor/DJI3508.h \
- Bsp/bsp_can.h Robot/Controller/controller.h Bsp/bsp_dwt.h \
- Middlewares/ST/ARM/DSP/Inc/arm_math.h \
- Drivers/CMSIS/Include/cmsis_compiler.h Robot/Devices/motor_def.h \
- Robot/daemon/daemon.h Robot/Devices/Motor/DM8009.h \
- Robot/Controller/kinematics.h Robot/RoboTask/ins/INS_task.h \
- Robot/Devices/BMI088/BMI088driver.h Robot/RoboTask/chassis/chassis_def.h \
- Robot/Algorithm/kalman/kalman_filter.h Robot/Controller/pid.h
+ Core/Inc/main.h
 BSP/bsp_can.h:
 Core/Inc/fdcan.h:
 Core/Inc/main.h:
@@ -98,37 +73,3 @@ Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h:
 Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h:
 BSP/bsp_dwt.h:
 Core/Inc/main.h:
-Robot/RoboTask/chassis/chassisR_task.h:
-Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h:
-Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
-Core/Inc/FreeRTOSConfig.h:
-Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h:
-Middlewares/Third_Party/FreeRTOS/Source/include/portable.h:
-Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h:
-Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h:
-Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h:
-Middlewares/Third_Party/FreeRTOS/Source/include/task.h:
-Middlewares/Third_Party/FreeRTOS/Source/include/list.h:
-Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
-Middlewares/Third_Party/FreeRTOS/Source/include/task.h:
-Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:
-Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h:
-Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:
-Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h:
-Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
-Robot/RoboTask/chassis/chassis_def.h:
-Robot/Devices/Motor/DJI3508.h:
-Bsp/bsp_can.h:
-Robot/Controller/controller.h:
-Bsp/bsp_dwt.h:
-Middlewares/ST/ARM/DSP/Inc/arm_math.h:
-Drivers/CMSIS/Include/cmsis_compiler.h:
-Robot/Devices/motor_def.h:
-Robot/daemon/daemon.h:
-Robot/Devices/Motor/DM8009.h:
-Robot/Controller/kinematics.h:
-Robot/RoboTask/ins/INS_task.h:
-Robot/Devices/BMI088/BMI088driver.h:
-Robot/RoboTask/chassis/chassis_def.h:
-Robot/Algorithm/kalman/kalman_filter.h:
-Robot/Controller/pid.h:

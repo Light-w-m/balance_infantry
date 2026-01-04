@@ -12,18 +12,21 @@
     #error "Both FDCAN and BXCAN are defined. Please define only one."
 #endif
 
+#include <stdint.h>
 #include "fdcan.h"
-#include "stdint.h"
-// #include "DM8009.h"
-
+#ifdef FDCAN
+#include "fdcan.h"
 #define hcan1  hfdcan1
 #define hcan2  hfdcan2
-
-typedef FDCAN_HandleTypeDef hcan_t;
+// #define hcan3  hfdcan3
 
 #define CAN_MX_REGISTER_CNT 16     // 这个数量取决于CAN总线的负载
 #define MX_CAN_FILTER_CNT (3 * 14) // 最多可以使用的CAN过滤器数量,目前远不会用到这么多
 #define DEVICE_CAN_CNT 3           //H723VG有3个FDCAN
+
+#endif
+
+typedef FDCAN_HandleTypeDef hcan_t;
 
 /* can instance typedef, every module registered to CAN should have this variable */
 #pragma pack(1)
@@ -50,6 +53,8 @@ typedef struct
 {
 #ifdef FDCAN
     FDCAN_HandleTypeDef  *can_handle;           // can句柄
+#else
+    CAN_HandleTypeDef *can_handle;              // can句柄
 #endif
     uint32_t tx_id;                             // 发送id
     uint32_t rx_id;                             // 接收id
@@ -57,13 +62,35 @@ typedef struct
     void *id;                                   // 拥有can实例的模块地址,用于区分不同的模块(如果有需要的话),如果不需要可以不传入
 } CAN_Init_Config_s;
 
+/**
+ * @brief Register a module to CAN service,remember to call this before using a CAN device
+ *        注册(初始化)一个can实例,需要传入初始化配置的指针.
+ * @param config init config
+ * @return CANInstance* can instance owned by module
+ */
+CANInstance *CANRegister(CAN_Init_Config_s *config);
+
+/**
+ * @brief 修改CAN发送报文的数据帧长度;注意最大长度为8,在没有进行修改的时候,默认长度为8
+ *
+ * @param _instance 要修改长度的can实例
+ * @param length    设定长度
+ */
+void CANSetDLC(CANInstance *_instance, uint8_t length);
+
+/**
+ * @brief transmit mesg through CAN device,通过can实例发送消息
+ *        发送前需要向CAN实例的tx_buff写入发送数据
+ * 
+ * @attention 超时时间不应该超过调用此函数的任务的周期,否则会导致任务阻塞
+ * 
+ * @param timeout 超时时间,单位为ms;后续改为us,获得更精确的控制
+ * @param _instance* can instance owned by module
+ */
+uint8_t CANTransmit(CANInstance *_instance,float timeout);
 
 
 void FDCAN1_Config(void);
-uint8_t canx_send_data(hcan_t* hcan, uint16_t id, uint8_t *data, uint32_t len);
+uint8_t canx_send_data(FDCAN_HandleTypeDef *hcan, uint16_t id, uint8_t *data, uint32_t len);
 
-CANInstance *CANRegister(CAN_Init_Config_s *config);
-uint8_t CANTransmit(CANInstance *_instance, float timeout);
-void CANSetDLC(CANInstance *_instance, uint8_t length);
-
-#endif  
+#endif  /* BSP_CAN_H */

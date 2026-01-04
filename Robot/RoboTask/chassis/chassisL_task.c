@@ -1,4 +1,11 @@
 #include "chassisL_task.h"
+#include "chassis_def.h"
+#include "kinematics.h"
+#include "kalman_filter.h"
+#include "pid.h"
+#include "DJI3508.h"
+#include "DM8009.h"
+#include "INS_task.h"
 
 Leg_t legL;
 LegState_t legL_state;
@@ -8,7 +15,6 @@ extern chassis_t chassis_move;
 extern INS_t INS;
 
 PidTypeDef LegL_pid;    //腿长PID
-uint32_t CHASSISL_TIME = 1;  //延迟时间
 
 extern float LQR_K[2][6];
 
@@ -18,7 +24,7 @@ extern float LQR_K[2][6];
  * @param chassis 
  * @param pid 
  */
-void ChassisL_Init(chassis_t* chassis, PidTypeDef* pid)
+static void ChassisL_Init(chassis_t* chassis, PidTypeDef* pid)
 {
     // 两个轮电机的参数一样,改tx_id和反转标志位即可
     Motor_Init_Config_s chassis_motor_config = {
@@ -81,7 +87,7 @@ void ChassisL_Init(chassis_t* chassis, PidTypeDef* pid)
  * @param ins 
  * @param  
  */
-void ChassisL_Feedback_Update(chassis_t* chassis,Leg_t* leg, INS_t* ins, Excessive_t* excessive)
+static void ChassisL_Feedback_Update(chassis_t* chassis,Leg_t* leg, INS_t* ins)
 {
     leg->joint.Phi1 = PI/2.0f + chassis->joint_motor[2].para.pos;
     leg->joint.Phi4 = PI/2.0f + chassis->joint_motor[3].para.pos;
@@ -99,50 +105,14 @@ void ChassisL_Feedback_Update(chassis_t* chassis,Leg_t* leg, INS_t* ins, Excessi
     }
 }
 
-
 /**
- * @brief 底盘任务
+ * @brief 跳跃控制
  * 
  */
-void ChassisL_Task(void)
+static void JumpL_Loop(void)
 {
-    while(INS.ins_flag == 0) //等待INS初始化完成
-    {
-        osDelay(1);
-    }
-
-    ChassisL_Init(&chassis_move, &LegL_pid);
-
-    while (1)
-    {
-        DJIMotorControl();
-        /* code */
-        ChassisL_Feedback_Update(&chassis_move, &legL,&INS, &excessiveL);
-        ChasssisL_Control(&chassis_move, &legL, &excessiveL, &INS, &LegL_pid, LQR_K);
-
-        if (chassis_move.flag.start_flag == 1)
-        {
-            /* code */
-            Mit_Ctrl(&hfdcan1, 0x03, 0.0f, 0.0f, 0.0f, 0.0f, legL.joint.T1);
-            osDelay(CHASSISL_TIME);
-            Mit_Ctrl(&hfdcan1, 0x04, 0.0f, 0.0f, 0.0f, 0.0f, legL.joint.T1);
-            osDelay(CHASSISL_TIME);
-            // 3508控制
-            DJIMotorSetRef(chassis_move.wheel_motor[1], legL.rod.T);
-        }
-        else if (chassis_move.flag.start_flag == 0)
-        {
-            Mit_Ctrl(&hfdcan1, 0x03, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-            osDelay(CHASSISL_TIME);
-            Mit_Ctrl(&hfdcan1, 0x04, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-            osDelay(CHASSISL_TIME);
-            // 3508控制
-            DJIMotorSetRef(chassis_move.wheel_motor[1], 0.0f);
-        }
-        
-    }
+    
 }
-
 
 /**
  * @brief 底盘控制
@@ -151,12 +121,12 @@ void ChassisL_Task(void)
  * @param ins 
  * @param pid 
  */
-void ChasssisL_Control(
+static void ChasssisL_Control(
     chassis_t* chassis, Leg_t* leg, Excessive_t* excessive, INS_t* ins, PidTypeDef* length_pid, float lqr_k[2][6])
 {
-    ForwardKinematics(leg, excessive, ins, ((float)CHASSISL_TIME)*3.0f/1000); //该任务控制周期是3*0.001秒
+    ForwardKinematics(leg, excessive, ins, ((float)CHASSIS_TIME)*3.0f/1000); //该任务控制周期是3*0.001秒
 
-    Calc_LQR_K(lqr_k, leg->rod.L0);
+    Calc_LQR_K(lqr_k, leg->rod.L0, chassis->flag.is_take_off);
 
 
     // 状态向量更新--方便调试查看
@@ -182,7 +152,7 @@ void ChasssisL_Control(
                     + lqr_k[1][5] * legL_state.phi_dot);
 
     leg->rod.Tp = leg->rod.Tp + chassis->leg_tp;        //髋关节输出力矩
-    leg->rod.T = leg->rod.T - chassis->turn_T;          //轮毂关节输出力矩
+    // leg->rod.T = leg->rod.T - chassis->turn_T;          //轮毂关节输出力矩
 
     //输出限幅
     SATURATE(&leg->rod.T, -3.0f, 3.0f);
@@ -194,3 +164,48 @@ void ChasssisL_Control(
 
     JacobianMatrix(leg, excessive);
 }
+
+
+/**
+ * @brief 底盘任务
+ * 
+ */
+void ChassisL_Task(void)
+{
+    while(INS.ins_flag == 0) //等待INS初始化完成
+    {
+        osDelay(1);
+    }
+
+    ChassisL_Init(&chassis_move, &LegL_pid);
+
+    while (1)
+    {
+        DJIMotorControl();
+        /* code */
+        ChassisL_Feedback_Update(&chassis_move, &legL,&INS);
+        ChasssisL_Control(&chassis_move, &legL, &excessiveL, &INS, &LegL_pid, LQR_K);
+
+        if (chassis_move.flag.start_flag == 1)
+        {
+            /* code */
+            Mit_Ctrl(&hfdcan1, 0x03, 0.0f, 0.0f, 0.0f, 0.0f, legL.joint.T1);
+            osDelay(CHASSIS_TIME);
+            Mit_Ctrl(&hfdcan1, 0x04, 0.0f, 0.0f, 0.0f, 0.0f, legL.joint.T1);
+            osDelay(CHASSIS_TIME);
+            // 3508控制
+            DJIMotorSetRef(chassis_move.wheel_motor[1], legL.rod.T);
+        }
+        else if (chassis_move.flag.start_flag == 0)
+        {
+            Mit_Ctrl(&hfdcan1, 0x03, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+            osDelay(CHASSIS_TIME);
+            Mit_Ctrl(&hfdcan1, 0x04, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+            osDelay(CHASSIS_TIME);
+            // 3508控制
+            DJIMotorSetRef(chassis_move.wheel_motor[1], 0.0f);
+        }
+        
+    }
+}
+

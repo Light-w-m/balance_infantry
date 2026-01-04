@@ -28,12 +28,12 @@ float a25[4];
 float a26[4];
 
 /**
- * @brief 线性化处理K矩阵
+ * @brief 线性化处理K矩
  * 
  * @param k 反馈矩阵K
  * @param length 腿长
  */
-void Calc_LQR_K(float k[2][6], float length)
+void Calc_LQR_K(float k[2][6], float length, bool flag)
 {
     float t1 = length;
     float t2 = length*length;
@@ -53,9 +53,21 @@ void Calc_LQR_K(float k[2][6], float length)
     k[1][5] = a26[0]*t3 + a26[1]*t2 + a26[2]*t1 + a26[3];
 
     //离地判断
-    if (1)
+    if (flag)
     {
         /* code */
+        k[0][0] = 0;
+        k[0][1] = 0;
+        k[0][2] = 0;
+        k[0][3] = 0;
+        k[0][4] = 0;
+        k[0][5] = 0;
+        k[1][0] = 0;
+        k[1][1] = 0;
+        k[1][2] = 0;
+        k[1][3] = 0;
+        k[1][4] = 0;
+        k[1][5] = 0;
     }
     
 }
@@ -74,29 +86,28 @@ float safe_div(float num, float denom);
  */
 void ForwardKinematics(Leg_t* leg,Excessive_t* excessive, INS_t* ins, float dt)
 {
-    // float XD, YD, XB, YB;
-    // float lBD;
-    // float A0, B0, C0;
+    float XD, YD, XB, YB;
+    float lBD;
+    float A0, B0, C0;
 
     static float PitchR = 0.0f;
     static float PitchGyroR = 0.0f;
     PitchR = ins->Pitch;
     PitchGyroR = ins->Gyro[0];
 
-    excessive->XD = LEG4*arm_cos_f32(leg->joint.Phi4);
-    excessive->YD = LEG4*arm_sin_f32(leg->joint.Phi4);
-    excessive->XB = LEG1*arm_cos_f32(leg->joint.Phi1);
-    excessive->YB = LEG1*arm_sin_f32(leg->joint.Phi1);
+    XD = LEG4*arm_cos_f32(leg->joint.Phi4);
+    YD = LEG4*arm_sin_f32(leg->joint.Phi4);
+    XB = LEG1*arm_cos_f32(leg->joint.Phi1);
+    YB = LEG1*arm_sin_f32(leg->joint.Phi1);
 
-    excessive->lBD = safe_sqrt((excessive->XD - excessive->XB)*(excessive->XD - excessive->XB)
-                                 + (excessive->YD - excessive->YB)*(excessive->YD - excessive->YB));
+    lBD = safe_sqrt((XD - XB)*(XD - XB) + (YD -YB)*(YD - YB));
 
-    excessive->A0 = 2*LEG2*(excessive->XD-excessive->XB);
-    excessive->B0 = 2*LEG2*(excessive->YD-excessive->YB);
-    excessive->C0 = LEG2*LEG2 + excessive->lBD*excessive->lBD - LEG3*LEG3;
+    A0 = 2*LEG2*(XD - XB);
+    B0 = 2*LEG2*(YD - YB);
+    C0 = LEG2*LEG2 + lBD * lBD - LEG3*LEG3;
 
-    excessive->Phi2 = 2*atan2f(excessive->B0+safe_sqrt(excessive->A0*excessive->A0+excessive->B0*excessive->B0-excessive->C0*excessive->C0), excessive->A0+excessive->C0);
-    excessive->Phi3 = atan2f(excessive->YB - excessive->YD + LEG2*arm_sin_f32(excessive->Phi2), excessive->XB - excessive->XD + LEG2*arm_cos_f32(excessive->Phi2));
+    excessive->Phi2 = 2*atan2f(B0 + safe_sqrt(A0*A0 + B0*B0 - C0*C0), A0 + C0);
+    excessive->Phi3 = atan2f(YB - YD + LEG2*arm_sin_f32(excessive->Phi2), XB - XD + LEG2*arm_cos_f32(excessive->Phi2));
 
     leg->rod.xC = LEG1*arm_cos_f32(leg->joint.Phi1) + LEG2*arm_cos_f32(excessive->Phi2);
     leg->rod.yC = LEG1*arm_sin_f32(leg->joint.Phi1) + LEG2*arm_sin_f32(excessive->Phi2);
@@ -132,21 +143,23 @@ void ForwardKinematics(Leg_t* leg,Excessive_t* excessive, INS_t* ins, float dt)
  */
 void InverseKinematics(Leg_t* leg,Excessive_t* excessive)
 {
+    float A1, B1, C1, D1;
+    float A4, B4, C4, D4, E4, F4;
     //限幅
     // Leg->rod.yC = constrainValue(Leg->rod.yC, 0.05, 0.35);
 
     //过度变量
-    float A1 = LEG1+leg->rod.xC;
-    float B1 = LEG1*LEG1 - leg->rod.xC*leg->rod.xC;
-    float C1 = LEG2*LEG2 - leg->rod.yC*leg->rod.yC;
-    float D1 = LEG2*LEG2 + leg->rod.yC*leg->rod.yC;
+    A1 = LEG1+leg->rod.xC;
+    B1 = LEG1*LEG1 - leg->rod.xC*leg->rod.xC;
+    C1 = LEG2*LEG2 - leg->rod.yC*leg->rod.yC;
+    D1 = LEG2*LEG2 + leg->rod.yC*leg->rod.yC;
 
-    float A4 = LEG3 + LEG4;
-    float B4 = -leg->rod.xC;
-    float C4 = LEG3 - LEG4;
-    float D4 = leg->rod.xC + LEG4;
-    float E4 = A4*A4 - B4*B4 - leg->rod.yC*leg->rod.yC;
-    float F4 = B4*B4 - C4*C4 + leg->rod.yC*leg->rod.yC;
+    A4 = LEG3 + LEG4;
+    B4 = -leg->rod.xC;
+    C4 = LEG3 - LEG4;
+    D4 = leg->rod.xC + LEG4;
+    E4 = A4*A4 - B4*B4 - leg->rod.yC*leg->rod.yC;
+    F4 = B4*B4 - C4*C4 + leg->rod.yC*leg->rod.yC;
 
     leg->joint.Phi1 = 2*atan2f(2*LEG1*leg->rod.yC+sqrt(2*LEG1*LEG1*D1+2*leg->rod.xC*leg->rod.xC*C1-B1*B1-C1*C1),A1*A1-C1);
     leg->joint.Phi4 = 2*atan2f(2*LEG4*leg->rod.yC-sqrt(E4*F4),D4*D4+leg->rod.yC*leg->rod.yC-LEG3*LEG3);

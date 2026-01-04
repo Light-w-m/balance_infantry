@@ -14,7 +14,7 @@ void UartReceive_Task(void)
     {
         /* code */
         len = snprintf(tx_buff,sizeof(tx_buff), "%.4f, %.4f, %.4f\r\n",
-                 INS.Pitch * 180.0f/PI, INS.Roll * 180.0f/PI, INS.Yaw * 180.0f/PI);
+                 INS.Pitch, INS.Roll, INS.Yaw);
 
         // len = snprintf(tx_buff,sizeof(tx_buff), "%.4f, %.4f, %.4f, %.4f, %.4f, %.4f\r\n",
         //          INS.Gyro[0], INS.Gyro[1], INS.Gyro[2],

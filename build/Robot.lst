@@ -1,4 +1,4 @@
-ARM GAS  D:\temp\TMP\ccxmxC4H.s 			page 1
+ARM GAS  D:\temp\TMP\ccx33ZZy.s 			page 1
 
 
    1              		.cpu cortex-m7
@@ -39,7 +39,7 @@ ARM GAS  D:\temp\TMP\ccxmxC4H.s 			page 1
   10:Robot/RoboTask/Robot.c **** 
   11:Robot/RoboTask/Robot.c **** #include "Robot.h"
   12:Robot/RoboTask/Robot.c **** #include "INS_task.h"
-  13:Robot/RoboTask/Robot.c **** // #include "uartReceive_task.h"
+  13:Robot/RoboTask/Robot.c **** #include "bsp_can.h"
   14:Robot/RoboTask/Robot.c **** #include "BMI088driver.h"
   15:Robot/RoboTask/Robot.c **** #include "bsp_dwt.h"
   16:Robot/RoboTask/Robot.c **** 
@@ -58,60 +58,37 @@ ARM GAS  D:\temp\TMP\ccxmxC4H.s 			page 1
   20:Robot/RoboTask/Robot.c ****     DWT_Init(480); 
   37              		.loc 1 20 5 view .LVU1
   38 0002 4FF4F070 		mov	r0, #480
-ARM GAS  D:\temp\TMP\ccxmxC4H.s 			page 2
+ARM GAS  D:\temp\TMP\ccx33ZZy.s 			page 2
 
 
   39 0006 FFF7FEFF 		bl	DWT_Init
   40              	.LVL0:
-  21:Robot/RoboTask/Robot.c ****     while (BMI088_init(&hspi2,2) != BMI088_NO_ERROR)
-  41              		.loc 1 21 5 view .LVU2
-  42              	.L2:
-  22:Robot/RoboTask/Robot.c ****     {
-  23:Robot/RoboTask/Robot.c ****         /* code */
-  24:Robot/RoboTask/Robot.c ****     }
-  43              		.loc 1 24 5 discriminator 1 view .LVU3
-  21:Robot/RoboTask/Robot.c ****     while (BMI088_init(&hspi2,2) != BMI088_NO_ERROR)
-  44              		.loc 1 21 11 discriminator 1 view .LVU4
-  21:Robot/RoboTask/Robot.c ****     while (BMI088_init(&hspi2,2) != BMI088_NO_ERROR)
-  45              		.loc 1 21 12 is_stmt 0 discriminator 1 view .LVU5
-  46 000a 0221     		movs	r1, #2
-  47 000c 0248     		ldr	r0, .L4
-  48 000e FFF7FEFF 		bl	BMI088_init
-  49              	.LVL1:
-  21:Robot/RoboTask/Robot.c ****     while (BMI088_init(&hspi2,2) != BMI088_NO_ERROR)
-  50              		.loc 1 21 11 discriminator 1 view .LVU6
-  51 0012 0028     		cmp	r0, #0
-  52 0014 F9D1     		bne	.L2
-  25:Robot/RoboTask/Robot.c **** }...
-  53              		.loc 1 25 1 view .LVU7
-  54 0016 08BD     		pop	{r3, pc}
-  55              	.L5:
-  56              		.align	2
-  57              	.L4:
-  58 0018 00000000 		.word	hspi2
-  59              		.cfi_endproc
-  60              	.LFE144:
-  62              		.text
-  63              	.Letext0:
-  64              		.file 2 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\machine\\_default_types.h"
-  65              		.file 3 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
-  66              		.file 4 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h723xx.h"
-  67              		.file 5 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h"
-  68              		.file 6 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_dma.h"
-  69              		.file 7 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_spi.h"
-  70              		.file 8 "Robot/Devices/BMI088/BMI088driver.h"
-  71              		.file 9 "Bsp/bsp_dwt.h"
-  72              		.file 10 "Core/Inc/spi.h"
-ARM GAS  D:\temp\TMP\ccxmxC4H.s 			page 3
+  21:Robot/RoboTask/Robot.c ****     // while (BMI088_init(&hspi2,2) != BMI088_NO_ERROR)
+  22:Robot/RoboTask/Robot.c ****     // {
+  23:Robot/RoboTask/Robot.c ****     //     /* code */
+  24:Robot/RoboTask/Robot.c ****     // }
+  25:Robot/RoboTask/Robot.c **** 
+  26:Robot/RoboTask/Robot.c ****     FDCAN1_Config();
+  41              		.loc 1 26 5 view .LVU2
+  42 000a FFF7FEFF 		bl	FDCAN1_Config
+  43              	.LVL1:
+  27:Robot/RoboTask/Robot.c **** }...
+  44              		.loc 1 27 1 is_stmt 0 view .LVU3
+  45 000e 08BD     		pop	{r3, pc}
+  46              		.cfi_endproc
+  47              	.LFE144:
+  49              		.text
+  50              	.Letext0:
+  51              		.file 2 "Bsp/bsp_dwt.h"
+  52              		.file 3 "Bsp/bsp_can.h"
+ARM GAS  D:\temp\TMP\ccx33ZZy.s 			page 3
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 Robot.c
-D:\temp\TMP\ccxmxC4H.s:19     .text.Robot_Init:00000000 $t
-D:\temp\TMP\ccxmxC4H.s:25     .text.Robot_Init:00000000 Robot_Init
-D:\temp\TMP\ccxmxC4H.s:58     .text.Robot_Init:00000018 $d
+D:\temp\TMP\ccx33ZZy.s:19     .text.Robot_Init:00000000 $t
+D:\temp\TMP\ccx33ZZy.s:25     .text.Robot_Init:00000000 Robot_Init
 
 UNDEFINED SYMBOLS
 DWT_Init
-BMI088_init
-hspi2
+FDCAN1_Config

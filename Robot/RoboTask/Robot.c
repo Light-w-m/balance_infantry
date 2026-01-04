@@ -10,7 +10,7 @@
 
 #include "Robot.h"
 #include "INS_task.h"
-// #include "uartReceive_task.h"
+#include "bsp_can.h"
 #include "BMI088driver.h"
 #include "bsp_dwt.h"
 
@@ -18,8 +18,10 @@ void Robot_Init(void)
 {
     
     DWT_Init(480); 
-    while (BMI088_init(&hspi2,2) != BMI088_NO_ERROR)
-    {
-        /* code */
-    }
+    // while (BMI088_init(&hspi2,2) != BMI088_NO_ERROR)
+    // {
+    //     /* code */
+    // }
+
+    FDCAN1_Config();
 }

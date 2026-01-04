@@ -1,0 +1,873 @@
+ARM GAS  D:\temp\TMP\cckn12u8.s 			page 1
+
+
+   1              		.cpu cortex-m7
+   2              		.arch armv7e-m
+   3              		.fpu fpv5-d16
+   4              		.eabi_attribute 28, 1
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 1
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.file	"remote_control.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.section	.text.RectifyRCjoystick,"ax",%progbits
+  19              		.align	1
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  24              	RectifyRCjoystick:
+  25              	.LFB144:
+  26              		.file 1 "Robot/Remote/remote_control.c"
+   1:Robot/Remote/remote_control.c **** #include "remote_control.h"
+   2:Robot/Remote/remote_control.c **** #include "string.h"
+   3:Robot/Remote/remote_control.c **** #include "bsp_usart.h"
+   4:Robot/Remote/remote_control.c **** #include "memory.h"
+   5:Robot/Remote/remote_control.c **** #include "stdlib.h"
+   6:Robot/Remote/remote_control.c **** #include "daemon.h"
+   7:Robot/Remote/remote_control.c **** // #include "bsp_log.h"
+   8:Robot/Remote/remote_control.c **** 
+   9:Robot/Remote/remote_control.c **** #define REMOTE_CONTROL_FRAME_SIZE 18u // 遥控器接收的buffer大小
+  10:Robot/Remote/remote_control.c **** 
+  11:Robot/Remote/remote_control.c **** // 遥控器数据
+  12:Robot/Remote/remote_control.c **** static RC_ctrl_t rc_ctrl[2];     //[0]:当前数据TEMP,[1]:上一次的数据LAST.用于按键持�
+  13:Robot/Remote/remote_control.c **** static uint8_t rc_init_flag = 0; // 遥控器初始化标志位
+  14:Robot/Remote/remote_control.c **** 
+  15:Robot/Remote/remote_control.c **** // 遥控器拥有的串口实例,因为遥控器是单例,所以这里只有一个,就不封装了
+  16:Robot/Remote/remote_control.c **** static USARTInstance *rc_usart_instance;
+  17:Robot/Remote/remote_control.c **** static DaemonInstance *rc_daemon_instance;
+  18:Robot/Remote/remote_control.c **** 
+  19:Robot/Remote/remote_control.c **** /**
+  20:Robot/Remote/remote_control.c ****  * @brief 矫正遥控器摇杆的值,超过660或者小于-660的值都认为是无效值,置0
+  21:Robot/Remote/remote_control.c ****  *
+  22:Robot/Remote/remote_control.c ****  */
+  23:Robot/Remote/remote_control.c **** static void RectifyRCjoystick()
+  24:Robot/Remote/remote_control.c **** {
+  27              		.loc 1 24 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  25:Robot/Remote/remote_control.c ****     for (uint8_t i = 0; i < 5; ++i)
+  32              		.loc 1 25 5 view .LVU1
+  33              	.LBB2:
+ARM GAS  D:\temp\TMP\cckn12u8.s 			page 2
+
+
+  34              		.loc 1 25 10 view .LVU2
+  35              	.LVL0:
+  36              		.loc 1 25 18 is_stmt 0 view .LVU3
+  37 0000 0023     		movs	r3, #0
+  38              		.loc 1 25 5 view .LVU4
+  39 0002 01E0     		b	.L2
+  40              	.LVL1:
+  41              	.L3:
+  42              		.loc 1 25 32 is_stmt 1 discriminator 2 view .LVU5
+  43 0004 0133     		adds	r3, r3, #1
+  44              	.LVL2:
+  45              		.loc 1 25 32 is_stmt 0 discriminator 2 view .LVU6
+  46 0006 DBB2     		uxtb	r3, r3
+  47              	.LVL3:
+  48              	.L2:
+  49              		.loc 1 25 25 is_stmt 1 discriminator 1 view .LVU7
+  50              		.loc 1 25 5 is_stmt 0 discriminator 1 view .LVU8
+  51 0008 042B     		cmp	r3, #4
+  52 000a 0DD8     		bhi	.L5
+  26:Robot/Remote/remote_control.c ****         if (abs(*(&rc_ctrl[TEMP].rc.rocker_l_ + i)) > 660)
+  53              		.loc 1 26 9 is_stmt 1 view .LVU9
+  54              		.loc 1 26 47 is_stmt 0 view .LVU10
+  55 000c 0749     		ldr	r1, .L6
+  56              		.loc 1 26 17 view .LVU11
+  57 000e 31F91320 		ldrsh	r2, [r1, r3, lsl #1]
+  58              		.loc 1 26 13 view .LVU12
+  59 0012 002A     		cmp	r2, #0
+  60 0014 B8BF     		it	lt
+  61 0016 5242     		rsblt	r2, r2, #0
+  62 0018 92B2     		uxth	r2, r2
+  63              		.loc 1 26 12 view .LVU13
+  64 001a B2F5257F 		cmp	r2, #660
+  65 001e F1D9     		bls	.L3
+  27:Robot/Remote/remote_control.c ****             *(&rc_ctrl[TEMP].rc.rocker_l_ + i) = 0;
+  66              		.loc 1 27 13 is_stmt 1 view .LVU14
+  67              		.loc 1 27 48 is_stmt 0 view .LVU15
+  68 0020 0022     		movs	r2, #0
+  69 0022 21F81320 		strh	r2, [r1, r3, lsl #1]	@ movhi
+  70 0026 EDE7     		b	.L3
+  71              	.L5:
+  72              	.LBE2:
+  28:Robot/Remote/remote_control.c **** }
+  73              		.loc 1 28 1 view .LVU16
+  74 0028 7047     		bx	lr
+  75              	.L7:
+  76 002a 00BF     		.align	2
+  77              	.L6:
+  78 002c 00000000 		.word	.LANCHOR0
+  79              		.cfi_endproc
+  80              	.LFE144:
+  82              		.section	.text.sbus_to_rc,"ax",%progbits
+  83              		.align	1
+  84              		.syntax unified
+  85              		.thumb
+  86              		.thumb_func
+  88              	sbus_to_rc:
+  89              	.LVL4:
+ARM GAS  D:\temp\TMP\cckn12u8.s 			page 3
+
+
+  90              	.LFB145:
+  29:Robot/Remote/remote_control.c **** 
+  30:Robot/Remote/remote_control.c **** /**
+  31:Robot/Remote/remote_control.c ****  * @brief 遥控器数据解析
+  32:Robot/Remote/remote_control.c ****  *
+  33:Robot/Remote/remote_control.c ****  * @param sbus_buf 接收buffer
+  34:Robot/Remote/remote_control.c ****  */
+  35:Robot/Remote/remote_control.c **** static void sbus_to_rc(const uint8_t *sbus_buf)
+  36:Robot/Remote/remote_control.c **** {
+  91              		.loc 1 36 1 is_stmt 1 view -0
+  92              		.cfi_startproc
+  93              		@ args = 0, pretend = 0, frame = 0
+  94              		@ frame_needed = 0, uses_anonymous_args = 0
+  95              		.loc 1 36 1 is_stmt 0 view .LVU18
+  96 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+  97              	.LCFI0:
+  98              		.cfi_def_cfa_offset 24
+  99              		.cfi_offset 3, -24
+ 100              		.cfi_offset 4, -20
+ 101              		.cfi_offset 5, -16
+ 102              		.cfi_offset 6, -12
+ 103              		.cfi_offset 7, -8
+ 104              		.cfi_offset 14, -4
+ 105 0002 0446     		mov	r4, r0
+  37:Robot/Remote/remote_control.c ****     // 摇杆,直接解算时减去偏置
+  38:Robot/Remote/remote_control.c ****     rc_ctrl[TEMP].rc.rocker_r_ = ((sbus_buf[0] | (sbus_buf[1] << 8)) & 0x07ff) - RC_CH_VALUE_OFFSET
+ 106              		.loc 1 38 5 is_stmt 1 view .LVU19
+ 107              		.loc 1 38 44 is_stmt 0 view .LVU20
+ 108 0004 0378     		ldrb	r3, [r0]	@ zero_extendqisi2
+ 109              		.loc 1 38 59 view .LVU21
+ 110 0006 4278     		ldrb	r2, [r0, #1]	@ zero_extendqisi2
+ 111              		.loc 1 38 48 view .LVU22
+ 112 0008 43EA0223 		orr	r3, r3, r2, lsl #8
+ 113              		.loc 1 38 70 view .LVU23
+ 114 000c C3F30A03 		ubfx	r3, r3, #0, #11
+ 115              		.loc 1 38 80 view .LVU24
+ 116 0010 A3F58063 		sub	r3, r3, #1024
+ 117              		.loc 1 38 32 view .LVU25
+ 118 0014 4F4D     		ldr	r5, .L20
+ 119 0016 AB80     		strh	r3, [r5, #4]	@ movhi
+  39:Robot/Remote/remote_control.c ****     rc_ctrl[TEMP].rc.rocker_r1 = (((sbus_buf[1] >> 3) | (sbus_buf[2] << 5)) & 0x07ff) - RC_CH_VALUE
+ 120              		.loc 1 39 5 is_stmt 1 view .LVU26
+ 121              		.loc 1 39 45 is_stmt 0 view .LVU27
+ 122 0018 4378     		ldrb	r3, [r0, #1]	@ zero_extendqisi2
+ 123              		.loc 1 39 66 view .LVU28
+ 124 001a 8278     		ldrb	r2, [r0, #2]	@ zero_extendqisi2
+ 125              		.loc 1 39 55 view .LVU29
+ 126 001c DB08     		lsrs	r3, r3, #3
+ 127 001e 43EA4213 		orr	r3, r3, r2, lsl #5
+ 128              		.loc 1 39 77 view .LVU30
+ 129 0022 C3F30A03 		ubfx	r3, r3, #0, #11
+ 130              		.loc 1 39 87 view .LVU31
+ 131 0026 A3F58063 		sub	r3, r3, #1024
+ 132              		.loc 1 39 32 view .LVU32
+ 133 002a EB80     		strh	r3, [r5, #6]	@ movhi
+  40:Robot/Remote/remote_control.c ****     rc_ctrl[TEMP].rc.rocker_l_ = (((sbus_buf[2] >> 6) | (sbus_buf[3] << 2) | (sbus_buf[4] << 10)) &
+ 134              		.loc 1 40 5 is_stmt 1 view .LVU33
+ARM GAS  D:\temp\TMP\cckn12u8.s 			page 4
+
+
+ 135              		.loc 1 40 45 is_stmt 0 view .LVU34
+ 136 002c 8378     		ldrb	r3, [r0, #2]	@ zero_extendqisi2
+ 137              		.loc 1 40 66 view .LVU35
+ 138 002e C278     		ldrb	r2, [r0, #3]	@ zero_extendqisi2
+ 139              		.loc 1 40 55 view .LVU36
+ 140 0030 9B09     		lsrs	r3, r3, #6
+ 141 0032 43EA8203 		orr	r3, r3, r2, lsl #2
+ 142              		.loc 1 40 87 view .LVU37
+ 143 0036 0279     		ldrb	r2, [r0, #4]	@ zero_extendqisi2
+ 144              		.loc 1 40 76 view .LVU38
+ 145 0038 43EA8223 		orr	r3, r3, r2, lsl #10
+ 146              		.loc 1 40 99 view .LVU39
+ 147 003c C3F30A03 		ubfx	r3, r3, #0, #11
+ 148              		.loc 1 40 109 view .LVU40
+ 149 0040 A3F58063 		sub	r3, r3, #1024
+ 150              		.loc 1 40 32 view .LVU41
+ 151 0044 2B80     		strh	r3, [r5]	@ movhi
+  41:Robot/Remote/remote_control.c ****     rc_ctrl[TEMP].rc.rocker_l1 = (((sbus_buf[4] >> 1) | (sbus_buf[5] << 7)) & 0x07ff) - RC_CH_VALUE
+ 152              		.loc 1 41 5 is_stmt 1 view .LVU42
+ 153              		.loc 1 41 66 is_stmt 0 view .LVU43
+ 154 0046 4179     		ldrb	r1, [r0, #5]	@ zero_extendqisi2
+ 155              		.loc 1 41 55 view .LVU44
+ 156 0048 5308     		lsrs	r3, r2, #1
+ 157 004a 43EAC113 		orr	r3, r3, r1, lsl #7
+ 158              		.loc 1 41 77 view .LVU45
+ 159 004e C3F30A03 		ubfx	r3, r3, #0, #11
+ 160              		.loc 1 41 87 view .LVU46
+ 161 0052 A3F58063 		sub	r3, r3, #1024
+ 162              		.loc 1 41 32 view .LVU47
+ 163 0056 6B80     		strh	r3, [r5, #2]	@ movhi
+  42:Robot/Remote/remote_control.c ****     rc_ctrl[TEMP].rc.dial = ((sbus_buf[16] | (sbus_buf[17] << 8)) & 0x07FF) - RC_CH_VALUE_OFFSET;  
+ 164              		.loc 1 42 5 is_stmt 1 view .LVU48
+ 165              		.loc 1 42 39 is_stmt 0 view .LVU49
+ 166 0058 037C     		ldrb	r3, [r0, #16]	@ zero_extendqisi2
+ 167              		.loc 1 42 55 view .LVU50
+ 168 005a 427C     		ldrb	r2, [r0, #17]	@ zero_extendqisi2
+ 169              		.loc 1 42 44 view .LVU51
+ 170 005c 43EA0223 		orr	r3, r3, r2, lsl #8
+ 171              		.loc 1 42 67 view .LVU52
+ 172 0060 C3F30A03 		ubfx	r3, r3, #0, #11
+ 173              		.loc 1 42 77 view .LVU53
+ 174 0064 A3F58063 		sub	r3, r3, #1024
+ 175              		.loc 1 42 27 view .LVU54
+ 176 0068 2B81     		strh	r3, [r5, #8]	@ movhi
+  43:Robot/Remote/remote_control.c ****     RectifyRCjoystick();
+ 177              		.loc 1 43 5 is_stmt 1 view .LVU55
+ 178 006a FFF7FEFF 		bl	RectifyRCjoystick
+ 179              	.LVL5:
+  44:Robot/Remote/remote_control.c ****     // 开关,0左1右
+  45:Robot/Remote/remote_control.c ****     rc_ctrl[TEMP].rc.switch_right = ((sbus_buf[5] >> 4) & 0x0003);     //!< Switch right
+ 180              		.loc 1 45 5 view .LVU56
+ 181              		.loc 1 45 47 is_stmt 0 view .LVU57
+ 182 006e 6379     		ldrb	r3, [r4, #5]	@ zero_extendqisi2
+ 183              		.loc 1 45 57 view .LVU58
+ 184 0070 C3F30113 		ubfx	r3, r3, #4, #2
+ 185              		.loc 1 45 35 view .LVU59
+ 186 0074 EB72     		strb	r3, [r5, #11]
+ARM GAS  D:\temp\TMP\cckn12u8.s 			page 5
+
+
+  46:Robot/Remote/remote_control.c ****     rc_ctrl[TEMP].rc.switch_left = ((sbus_buf[5] >> 4) & 0x000C) >> 2; //!< Switch left
+ 187              		.loc 1 46 5 is_stmt 1 view .LVU60
+ 188              		.loc 1 46 46 is_stmt 0 view .LVU61
+ 189 0076 6379     		ldrb	r3, [r4, #5]	@ zero_extendqisi2
+ 190              		.loc 1 46 66 view .LVU62
+ 191 0078 9B09     		lsrs	r3, r3, #6
+ 192              		.loc 1 46 34 view .LVU63
+ 193 007a AB72     		strb	r3, [r5, #10]
+  47:Robot/Remote/remote_control.c **** 
+  48:Robot/Remote/remote_control.c ****     // 鼠标解析
+  49:Robot/Remote/remote_control.c ****     rc_ctrl[TEMP].mouse.x = (sbus_buf[6] | (sbus_buf[7] << 8)); //!< Mouse X axis
+ 194              		.loc 1 49 5 is_stmt 1 view .LVU64
+ 195              		.loc 1 49 38 is_stmt 0 view .LVU65
+ 196 007c A379     		ldrb	r3, [r4, #6]	@ zero_extendqisi2
+ 197              		.loc 1 49 53 view .LVU66
+ 198 007e E279     		ldrb	r2, [r4, #7]	@ zero_extendqisi2
+ 199              		.loc 1 49 42 view .LVU67
+ 200 0080 43EA0223 		orr	r3, r3, r2, lsl #8
+ 201              		.loc 1 49 27 view .LVU68
+ 202 0084 AB81     		strh	r3, [r5, #12]	@ movhi
+  50:Robot/Remote/remote_control.c ****     rc_ctrl[TEMP].mouse.y = (sbus_buf[8] | (sbus_buf[9] << 8)); //!< Mouse Y axis
+ 203              		.loc 1 50 5 is_stmt 1 view .LVU69
+ 204              		.loc 1 50 38 is_stmt 0 view .LVU70
+ 205 0086 237A     		ldrb	r3, [r4, #8]	@ zero_extendqisi2
+ 206              		.loc 1 50 53 view .LVU71
+ 207 0088 627A     		ldrb	r2, [r4, #9]	@ zero_extendqisi2
+ 208              		.loc 1 50 42 view .LVU72
+ 209 008a 43EA0223 		orr	r3, r3, r2, lsl #8
+ 210              		.loc 1 50 27 view .LVU73
+ 211 008e EB81     		strh	r3, [r5, #14]	@ movhi
+  51:Robot/Remote/remote_control.c ****     rc_ctrl[TEMP].mouse.press_l = sbus_buf[12];                 //!< Mouse Left Is Press ?
+ 212              		.loc 1 51 5 is_stmt 1 view .LVU74
+ 213              		.loc 1 51 33 is_stmt 0 view .LVU75
+ 214 0090 237B     		ldrb	r3, [r4, #12]	@ zero_extendqisi2
+ 215 0092 2B74     		strb	r3, [r5, #16]
+  52:Robot/Remote/remote_control.c ****     rc_ctrl[TEMP].mouse.press_r = sbus_buf[13];                 //!< Mouse Right Is Press ?
+ 216              		.loc 1 52 5 is_stmt 1 view .LVU76
+ 217              		.loc 1 52 33 is_stmt 0 view .LVU77
+ 218 0094 637B     		ldrb	r3, [r4, #13]	@ zero_extendqisi2
+ 219 0096 6B74     		strb	r3, [r5, #17]
+  53:Robot/Remote/remote_control.c **** 
+  54:Robot/Remote/remote_control.c ****     //  位域的按键值解算,直接memcpy即可,注意小端低字节在前,即lsb在第一位,
+  55:Robot/Remote/remote_control.c ****     *(uint16_t *)&rc_ctrl[TEMP].key[KEY_PRESS] = (uint16_t)(sbus_buf[14] | (sbus_buf[15] << 8));
+ 220              		.loc 1 55 5 is_stmt 1 view .LVU78
+ 221              		.loc 1 55 69 is_stmt 0 view .LVU79
+ 222 0098 A37B     		ldrb	r3, [r4, #14]	@ zero_extendqisi2
+ 223              		.loc 1 55 85 view .LVU80
+ 224 009a E27B     		ldrb	r2, [r4, #15]	@ zero_extendqisi2
+ 225              		.loc 1 55 74 view .LVU81
+ 226 009c 43EA0223 		orr	r3, r3, r2, lsl #8
+ 227              		.loc 1 55 50 view .LVU82
+ 228 00a0 9C46     		mov	ip, r3
+ 229              		.loc 1 55 48 view .LVU83
+ 230 00a2 6B82     		strh	r3, [r5, #18]	@ movhi
+  56:Robot/Remote/remote_control.c ****     if (rc_ctrl[TEMP].key[KEY_PRESS].ctrl) // ctrl键按下
+ 231              		.loc 1 56 5 is_stmt 1 view .LVU84
+ 232 00a4 DAB2     		uxtb	r2, r3
+ARM GAS  D:\temp\TMP\cckn12u8.s 			page 6
+
+
+ 233              		.loc 1 56 8 is_stmt 0 view .LVU85
+ 234 00a6 13F0200F 		tst	r3, #32
+ 235 00aa 14D0     		beq	.L9
+  57:Robot/Remote/remote_control.c ****         rc_ctrl[TEMP].key[KEY_PRESS_WITH_CTRL] = rc_ctrl[TEMP].key[KEY_PRESS];
+ 236              		.loc 1 57 9 is_stmt 1 view .LVU86
+ 237              		.loc 1 57 48 is_stmt 0 view .LVU87
+ 238 00ac 1FFA8CF1 		uxth	r1, ip
+ 239 00b0 A982     		strh	r1, [r5, #20]	@ movhi
+ 240              	.L10:
+  58:Robot/Remote/remote_control.c ****     else
+  59:Robot/Remote/remote_control.c ****         memset(&rc_ctrl[TEMP].key[KEY_PRESS_WITH_CTRL], 0, sizeof(Key_t));
+  60:Robot/Remote/remote_control.c ****     if (rc_ctrl[TEMP].key[KEY_PRESS].shift) // shift键按下
+ 241              		.loc 1 60 5 is_stmt 1 view .LVU88
+ 242              		.loc 1 60 8 is_stmt 0 view .LVU89
+ 243 00b2 12F0100F 		tst	r2, #16
+ 244 00b6 12D0     		beq	.L11
+  61:Robot/Remote/remote_control.c ****         rc_ctrl[TEMP].key[KEY_PRESS_WITH_SHIFT] = rc_ctrl[TEMP].key[KEY_PRESS];
+ 245              		.loc 1 61 9 is_stmt 1 view .LVU90
+ 246              		.loc 1 61 49 is_stmt 0 view .LVU91
+ 247 00b8 264B     		ldr	r3, .L20
+ 248 00ba 5A8A     		ldrh	r2, [r3, #18]
+ 249 00bc DA82     		strh	r2, [r3, #22]	@ movhi
+ 250              	.L12:
+  62:Robot/Remote/remote_control.c ****     else
+  63:Robot/Remote/remote_control.c ****         memset(&rc_ctrl[TEMP].key[KEY_PRESS_WITH_SHIFT], 0, sizeof(Key_t));
+  64:Robot/Remote/remote_control.c **** 
+  65:Robot/Remote/remote_control.c ****     uint16_t key_now = rc_ctrl[TEMP].key[KEY_PRESS].keys,                   // 当前按键是否�
+ 251              		.loc 1 65 5 is_stmt 1 view .LVU92
+ 252              	.LVL6:
+  66:Robot/Remote/remote_control.c ****         key_last = rc_ctrl[LAST].key[KEY_PRESS].keys,                       // 上一次按键是�
+ 253              		.loc 1 66 9 is_stmt 0 view .LVU93
+ 254 00be 254B     		ldr	r3, .L20
+ 255 00c0 B3F85A60 		ldrh	r6, [r3, #90]
+ 256              	.LVL7:
+  67:Robot/Remote/remote_control.c ****         key_with_ctrl = rc_ctrl[TEMP].key[KEY_PRESS_WITH_CTRL].keys,        // 当前ctrl组合键�
+ 257              		.loc 1 67 9 view .LVU94
+ 258 00c4 988A     		ldrh	r0, [r3, #20]
+ 259              	.LVL8:
+  68:Robot/Remote/remote_control.c ****         key_with_shift = rc_ctrl[TEMP].key[KEY_PRESS_WITH_SHIFT].keys,      //  当前shift组合�
+ 260              		.loc 1 68 9 view .LVU95
+ 261 00c6 DC8A     		ldrh	r4, [r3, #22]
+ 262              	.LVL9:
+  69:Robot/Remote/remote_control.c ****         key_last_with_ctrl = rc_ctrl[LAST].key[KEY_PRESS_WITH_CTRL].keys,   // 上一次ctrl组合�
+ 263              		.loc 1 69 9 view .LVU96
+ 264 00c8 B3F85C50 		ldrh	r5, [r3, #92]
+ 265              	.LVL10:
+  70:Robot/Remote/remote_control.c ****         key_last_with_shift = rc_ctrl[LAST].key[KEY_PRESS_WITH_SHIFT].keys; // 上一次shift组合
+ 266              		.loc 1 70 9 view .LVU97
+ 267 00cc B3F85EE0 		ldrh	lr, [r3, #94]
+ 268              	.LVL11:
+  71:Robot/Remote/remote_control.c **** 
+  72:Robot/Remote/remote_control.c ****     for (uint16_t i = 0, j = 0x1; i < 16; j <<= 1, i++)
+ 269              		.loc 1 72 5 is_stmt 1 view .LVU98
+ 270              	.LBB3:
+ 271              		.loc 1 72 10 view .LVU99
+ 272              		.loc 1 72 26 is_stmt 0 view .LVU100
+ 273 00d0 0123     		movs	r3, #1
+ARM GAS  D:\temp\TMP\cckn12u8.s 			page 7
+
+
+ 274              		.loc 1 72 19 view .LVU101
+ 275 00d2 0022     		movs	r2, #0
+ 276              		.loc 1 72 5 view .LVU102
+ 277 00d4 22E0     		b	.L13
+ 278              	.LVL12:
+ 279              	.L9:
+ 280              		.loc 1 72 5 view .LVU103
+ 281              	.LBE3:
+  59:Robot/Remote/remote_control.c ****     if (rc_ctrl[TEMP].key[KEY_PRESS].shift) // shift键按下
+ 282              		.loc 1 59 9 is_stmt 1 view .LVU104
+ 283 00d6 1F4B     		ldr	r3, .L20
+ 284 00d8 0021     		movs	r1, #0
+ 285 00da 9982     		strh	r1, [r3, #20]	@ movhi
+ 286 00dc E9E7     		b	.L10
+ 287              	.L11:
+  63:Robot/Remote/remote_control.c **** 
+ 288              		.loc 1 63 9 view .LVU105
+ 289 00de 1D4B     		ldr	r3, .L20
+ 290 00e0 0022     		movs	r2, #0
+ 291 00e2 DA82     		strh	r2, [r3, #22]	@ movhi
+ 292 00e4 EBE7     		b	.L12
+ 293              	.LVL13:
+ 294              	.L15:
+ 295              	.LBB4:
+  73:Robot/Remote/remote_control.c ****     {
+  74:Robot/Remote/remote_control.c ****         if (i == 4 || i == 5) // 4,5位为ctrl和shift,直接跳过
+  75:Robot/Remote/remote_control.c ****             continue;
+  76:Robot/Remote/remote_control.c ****         // 如果当前按键按下,上一次按键没有按下,且ctrl和shift组合键没有按�
+  77:Robot/Remote/remote_control.c ****         if ((key_now & j) && !(key_last & j) && !(key_with_ctrl & j) && !(key_with_shift & j))
+  78:Robot/Remote/remote_control.c ****             rc_ctrl[TEMP].key_count[KEY_PRESS][i]++;
+  79:Robot/Remote/remote_control.c ****         // 当前ctrl组合键按下,上一次ctrl组合键没有按下,则ctrl组合键按下计�
+  80:Robot/Remote/remote_control.c ****         if ((key_with_ctrl & j) && !(key_last_with_ctrl & j))
+ 296              		.loc 1 80 9 view .LVU106
+ 297              		.loc 1 80 12 is_stmt 0 view .LVU107
+ 298 00e6 0342     		tst	r3, r0
+ 299 00e8 08D0     		beq	.L16
+ 300              		.loc 1 80 33 discriminator 1 view .LVU108
+ 301 00ea 2B42     		tst	r3, r5
+ 302 00ec 06D1     		bne	.L16
+  81:Robot/Remote/remote_control.c ****             rc_ctrl[TEMP].key_count[KEY_PRESS_WITH_CTRL][i]++;
+ 303              		.loc 1 81 13 is_stmt 1 view .LVU109
+ 304              		.loc 1 81 57 is_stmt 0 view .LVU110
+ 305 00ee 1949     		ldr	r1, .L20
+ 306 00f0 1144     		add	r1, r1, r2
+ 307 00f2 91F82870 		ldrb	r7, [r1, #40]	@ zero_extendqisi2
+ 308              		.loc 1 81 60 view .LVU111
+ 309 00f6 0137     		adds	r7, r7, #1
+ 310 00f8 81F82870 		strb	r7, [r1, #40]
+ 311              	.L16:
+  82:Robot/Remote/remote_control.c ****         // 当前shift组合键按下,上一次shift组合键没有按下,则shift组合键按下�
+  83:Robot/Remote/remote_control.c ****         if ((key_with_shift & j) && !(key_last_with_shift & j))
+ 312              		.loc 1 83 9 is_stmt 1 view .LVU112
+ 313              		.loc 1 83 12 is_stmt 0 view .LVU113
+ 314 00fc 2342     		tst	r3, r4
+ 315 00fe 09D0     		beq	.L14
+ 316              		.loc 1 83 34 discriminator 1 view .LVU114
+ 317 0100 13EA0E0F 		tst	r3, lr
+ARM GAS  D:\temp\TMP\cckn12u8.s 			page 8
+
+
+ 318 0104 06D1     		bne	.L14
+  84:Robot/Remote/remote_control.c ****             rc_ctrl[TEMP].key_count[KEY_PRESS_WITH_SHIFT][i]++;
+ 319              		.loc 1 84 13 is_stmt 1 view .LVU115
+ 320              		.loc 1 84 58 is_stmt 0 view .LVU116
+ 321 0106 1349     		ldr	r1, .L20
+ 322 0108 1144     		add	r1, r1, r2
+ 323 010a 91F83870 		ldrb	r7, [r1, #56]	@ zero_extendqisi2
+ 324              		.loc 1 84 61 view .LVU117
+ 325 010e 0137     		adds	r7, r7, #1
+ 326 0110 81F83870 		strb	r7, [r1, #56]
+ 327              	.L14:
+  72:Robot/Remote/remote_control.c ****     {
+ 328              		.loc 1 72 43 is_stmt 1 discriminator 2 view .LVU118
+  72:Robot/Remote/remote_control.c ****     {
+ 329              		.loc 1 72 45 is_stmt 0 discriminator 2 view .LVU119
+ 330 0114 5B00     		lsls	r3, r3, #1
+ 331              	.LVL14:
+  72:Robot/Remote/remote_control.c ****     {
+ 332              		.loc 1 72 45 discriminator 2 view .LVU120
+ 333 0116 9BB2     		uxth	r3, r3
+ 334              	.LVL15:
+  72:Robot/Remote/remote_control.c ****     {
+ 335              		.loc 1 72 53 discriminator 2 view .LVU121
+ 336 0118 0132     		adds	r2, r2, #1
+ 337              	.LVL16:
+  72:Robot/Remote/remote_control.c ****     {
+ 338              		.loc 1 72 53 discriminator 2 view .LVU122
+ 339 011a 92B2     		uxth	r2, r2
+ 340              	.LVL17:
+ 341              	.L13:
+  72:Robot/Remote/remote_control.c ****     {
+ 342              		.loc 1 72 35 is_stmt 1 discriminator 1 view .LVU123
+  72:Robot/Remote/remote_control.c ****     {
+ 343              		.loc 1 72 5 is_stmt 0 discriminator 1 view .LVU124
+ 344 011c 0F2A     		cmp	r2, #15
+ 345 011e 12D8     		bhi	.L19
+  74:Robot/Remote/remote_control.c ****             continue;
+ 346              		.loc 1 74 9 is_stmt 1 view .LVU125
+  74:Robot/Remote/remote_control.c ****             continue;
+ 347              		.loc 1 74 20 is_stmt 0 view .LVU126
+ 348 0120 111F     		subs	r1, r2, #4
+ 349 0122 89B2     		uxth	r1, r1
+  74:Robot/Remote/remote_control.c ****             continue;
+ 350              		.loc 1 74 12 view .LVU127
+ 351 0124 0129     		cmp	r1, #1
+ 352 0126 F5D9     		bls	.L14
+  77:Robot/Remote/remote_control.c ****             rc_ctrl[TEMP].key_count[KEY_PRESS][i]++;
+ 353              		.loc 1 77 9 is_stmt 1 view .LVU128
+  77:Robot/Remote/remote_control.c ****             rc_ctrl[TEMP].key_count[KEY_PRESS][i]++;
+ 354              		.loc 1 77 12 is_stmt 0 view .LVU129
+ 355 0128 1CEA030F 		tst	ip, r3
+ 356 012c DBD0     		beq	.L15
+  77:Robot/Remote/remote_control.c ****             rc_ctrl[TEMP].key_count[KEY_PRESS][i]++;
+ 357              		.loc 1 77 27 discriminator 1 view .LVU130
+ 358 012e 3342     		tst	r3, r6
+ 359 0130 D9D1     		bne	.L15
+  77:Robot/Remote/remote_control.c ****             rc_ctrl[TEMP].key_count[KEY_PRESS][i]++;
+ARM GAS  D:\temp\TMP\cckn12u8.s 			page 9
+
+
+ 360              		.loc 1 77 46 discriminator 2 view .LVU131
+ 361 0132 0342     		tst	r3, r0
+ 362 0134 D7D1     		bne	.L15
+  77:Robot/Remote/remote_control.c ****             rc_ctrl[TEMP].key_count[KEY_PRESS][i]++;
+ 363              		.loc 1 77 70 discriminator 3 view .LVU132
+ 364 0136 2342     		tst	r3, r4
+ 365 0138 D5D1     		bne	.L15
+  78:Robot/Remote/remote_control.c ****         // 当前ctrl组合键按下,上一次ctrl组合键没有按下,则ctrl组合键按下计�
+ 366              		.loc 1 78 13 is_stmt 1 view .LVU133
+  78:Robot/Remote/remote_control.c ****         // 当前ctrl组合键按下,上一次ctrl组合键没有按下,则ctrl组合键按下计�
+ 367              		.loc 1 78 47 is_stmt 0 view .LVU134
+ 368 013a 0649     		ldr	r1, .L20
+ 369 013c 1144     		add	r1, r1, r2
+ 370 013e 0F7E     		ldrb	r7, [r1, #24]	@ zero_extendqisi2
+  78:Robot/Remote/remote_control.c ****         // 当前ctrl组合键按下,上一次ctrl组合键没有按下,则ctrl组合键按下计�
+ 371              		.loc 1 78 50 view .LVU135
+ 372 0140 0137     		adds	r7, r7, #1
+ 373 0142 0F76     		strb	r7, [r1, #24]
+ 374 0144 CFE7     		b	.L15
+ 375              	.L19:
+ 376              	.LBE4:
+  85:Robot/Remote/remote_control.c ****     }
+  86:Robot/Remote/remote_control.c **** 
+  87:Robot/Remote/remote_control.c ****     memcpy(&rc_ctrl[LAST], &rc_ctrl[TEMP], sizeof(RC_ctrl_t)); // 保存上一次的数据,用于�
+ 377              		.loc 1 87 5 is_stmt 1 view .LVU136
+ 378 0146 0349     		ldr	r1, .L20
+ 379 0148 4822     		movs	r2, #72
+ 380              	.LVL18:
+ 381              		.loc 1 87 5 is_stmt 0 view .LVU137
+ 382 014a 8818     		adds	r0, r1, r2
+ 383              	.LVL19:
+ 384              		.loc 1 87 5 view .LVU138
+ 385 014c FFF7FEFF 		bl	memcpy
+ 386              	.LVL20:
+  88:Robot/Remote/remote_control.c **** }
+ 387              		.loc 1 88 1 view .LVU139
+ 388 0150 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 389              	.LVL21:
+ 390              	.L21:
+ 391              		.loc 1 88 1 view .LVU140
+ 392 0152 00BF     		.align	2
+ 393              	.L20:
+ 394 0154 00000000 		.word	.LANCHOR0
+ 395              		.cfi_endproc
+ 396              	.LFE145:
+ 398              		.section	.text.RCLostCallback,"ax",%progbits
+ 399              		.align	1
+ 400              		.syntax unified
+ 401              		.thumb
+ 402              		.thumb_func
+ 404              	RCLostCallback:
+ 405              	.LVL22:
+ 406              	.LFB147:
+  89:Robot/Remote/remote_control.c **** 
+  90:Robot/Remote/remote_control.c **** /**
+  91:Robot/Remote/remote_control.c ****  * @brief 对sbus_to_rc的简单封装,用于注册到bsp_usart的回调函数中
+  92:Robot/Remote/remote_control.c ****  *
+ARM GAS  D:\temp\TMP\cckn12u8.s 			page 10
+
+
+  93:Robot/Remote/remote_control.c ****  */
+  94:Robot/Remote/remote_control.c **** static void RemoteControlRxCallback()
+  95:Robot/Remote/remote_control.c **** {
+  96:Robot/Remote/remote_control.c ****     DaemonReload(rc_daemon_instance);         // 先喂狗
+  97:Robot/Remote/remote_control.c ****     sbus_to_rc(rc_usart_instance->recv_buff); // 进行协议解析
+  98:Robot/Remote/remote_control.c **** }
+  99:Robot/Remote/remote_control.c **** 
+ 100:Robot/Remote/remote_control.c **** /**
+ 101:Robot/Remote/remote_control.c ****  * @brief 遥控器离线的回调函数,注册到守护进程中,串口掉线时调用
+ 102:Robot/Remote/remote_control.c ****  *
+ 103:Robot/Remote/remote_control.c ****  */
+ 104:Robot/Remote/remote_control.c **** static void RCLostCallback(void *id)
+ 105:Robot/Remote/remote_control.c **** {
+ 407              		.loc 1 105 1 is_stmt 1 view -0
+ 408              		.cfi_startproc
+ 409              		@ args = 0, pretend = 0, frame = 0
+ 410              		@ frame_needed = 0, uses_anonymous_args = 0
+ 411              		.loc 1 105 1 is_stmt 0 view .LVU142
+ 412 0000 08B5     		push	{r3, lr}
+ 413              	.LCFI1:
+ 414              		.cfi_def_cfa_offset 8
+ 415              		.cfi_offset 3, -8
+ 416              		.cfi_offset 14, -4
+ 106:Robot/Remote/remote_control.c ****     memset(rc_ctrl, 0, sizeof(rc_ctrl)); // 清空遥控器数据
+ 417              		.loc 1 106 5 is_stmt 1 view .LVU143
+ 418 0002 9022     		movs	r2, #144
+ 419 0004 0021     		movs	r1, #0
+ 420 0006 0448     		ldr	r0, .L24
+ 421              	.LVL23:
+ 422              		.loc 1 106 5 is_stmt 0 view .LVU144
+ 423 0008 FFF7FEFF 		bl	memset
+ 424              	.LVL24:
+ 107:Robot/Remote/remote_control.c ****     USARTServiceInit(rc_usart_instance); // 尝试重新启动接收
+ 425              		.loc 1 107 5 is_stmt 1 view .LVU145
+ 426 000c 034B     		ldr	r3, .L24+4
+ 427 000e 1868     		ldr	r0, [r3]
+ 428 0010 FFF7FEFF 		bl	USARTServiceInit
+ 429              	.LVL25:
+ 108:Robot/Remote/remote_control.c ****     // LOGWARNING("[rc] remote control lost");
+ 109:Robot/Remote/remote_control.c **** }
+ 430              		.loc 1 109 1 is_stmt 0 view .LVU146
+ 431 0014 08BD     		pop	{r3, pc}
+ 432              	.L25:
+ 433 0016 00BF     		.align	2
+ 434              	.L24:
+ 435 0018 00000000 		.word	.LANCHOR0
+ 436 001c 00000000 		.word	.LANCHOR1
+ 437              		.cfi_endproc
+ 438              	.LFE147:
+ 440              		.section	.text.RemoteControlRxCallback,"ax",%progbits
+ 441              		.align	1
+ 442              		.syntax unified
+ 443              		.thumb
+ 444              		.thumb_func
+ 446              	RemoteControlRxCallback:
+ 447              	.LFB146:
+  95:Robot/Remote/remote_control.c ****     DaemonReload(rc_daemon_instance);         // 先喂狗
+ARM GAS  D:\temp\TMP\cckn12u8.s 			page 11
+
+
+ 448              		.loc 1 95 1 is_stmt 1 view -0
+ 449              		.cfi_startproc
+ 450              		@ args = 0, pretend = 0, frame = 0
+ 451              		@ frame_needed = 0, uses_anonymous_args = 0
+ 452 0000 08B5     		push	{r3, lr}
+ 453              	.LCFI2:
+ 454              		.cfi_def_cfa_offset 8
+ 455              		.cfi_offset 3, -8
+ 456              		.cfi_offset 14, -4
+  96:Robot/Remote/remote_control.c ****     sbus_to_rc(rc_usart_instance->recv_buff); // 进行协议解析
+ 457              		.loc 1 96 5 view .LVU148
+ 458 0002 044B     		ldr	r3, .L28
+ 459 0004 1868     		ldr	r0, [r3]
+ 460 0006 FFF7FEFF 		bl	DaemonReload
+ 461              	.LVL26:
+  97:Robot/Remote/remote_control.c **** }
+ 462              		.loc 1 97 5 view .LVU149
+ 463 000a 034B     		ldr	r3, .L28+4
+ 464 000c 1868     		ldr	r0, [r3]
+ 465 000e FFF7FEFF 		bl	sbus_to_rc
+ 466              	.LVL27:
+  98:Robot/Remote/remote_control.c **** 
+ 467              		.loc 1 98 1 is_stmt 0 view .LVU150
+ 468 0012 08BD     		pop	{r3, pc}
+ 469              	.L29:
+ 470              		.align	2
+ 471              	.L28:
+ 472 0014 00000000 		.word	.LANCHOR2
+ 473 0018 00000000 		.word	.LANCHOR1
+ 474              		.cfi_endproc
+ 475              	.LFE146:
+ 477              		.section	.text.RemoteControlInit,"ax",%progbits
+ 478              		.align	1
+ 479              		.global	RemoteControlInit
+ 480              		.syntax unified
+ 481              		.thumb
+ 482              		.thumb_func
+ 484              	RemoteControlInit:
+ 485              	.LVL28:
+ 486              	.LFB148:
+ 110:Robot/Remote/remote_control.c **** 
+ 111:Robot/Remote/remote_control.c **** RC_ctrl_t *RemoteControlInit(UART_HandleTypeDef *rc_usart_handle)
+ 112:Robot/Remote/remote_control.c **** {
+ 487              		.loc 1 112 1 is_stmt 1 view -0
+ 488              		.cfi_startproc
+ 489              		@ args = 0, pretend = 0, frame = 24
+ 490              		@ frame_needed = 0, uses_anonymous_args = 0
+ 491              		.loc 1 112 1 is_stmt 0 view .LVU152
+ 492 0000 00B5     		push	{lr}
+ 493              	.LCFI3:
+ 494              		.cfi_def_cfa_offset 4
+ 495              		.cfi_offset 14, -4
+ 496 0002 87B0     		sub	sp, sp, #28
+ 497              	.LCFI4:
+ 498              		.cfi_def_cfa_offset 32
+ 113:Robot/Remote/remote_control.c ****     USART_Init_Config_s conf;
+ 499              		.loc 1 113 5 is_stmt 1 view .LVU153
+ARM GAS  D:\temp\TMP\cckn12u8.s 			page 12
+
+
+ 114:Robot/Remote/remote_control.c ****     conf.module_callback = RemoteControlRxCallback;
+ 500              		.loc 1 114 5 view .LVU154
+ 501              		.loc 1 114 26 is_stmt 0 view .LVU155
+ 502 0004 0F4B     		ldr	r3, .L32
+ 503 0006 0593     		str	r3, [sp, #20]
+ 115:Robot/Remote/remote_control.c ****     conf.usart_handle = rc_usart_handle;
+ 504              		.loc 1 115 5 is_stmt 1 view .LVU156
+ 505              		.loc 1 115 23 is_stmt 0 view .LVU157
+ 506 0008 0490     		str	r0, [sp, #16]
+ 116:Robot/Remote/remote_control.c ****     conf.recv_buff_size = REMOTE_CONTROL_FRAME_SIZE;
+ 507              		.loc 1 116 5 is_stmt 1 view .LVU158
+ 508              		.loc 1 116 25 is_stmt 0 view .LVU159
+ 509 000a 1223     		movs	r3, #18
+ 510 000c 8DF80C30 		strb	r3, [sp, #12]
+ 117:Robot/Remote/remote_control.c ****     rc_usart_instance = USARTRegister(&conf);
+ 511              		.loc 1 117 5 is_stmt 1 view .LVU160
+ 512              		.loc 1 117 25 is_stmt 0 view .LVU161
+ 513 0010 03A8     		add	r0, sp, #12
+ 514              	.LVL29:
+ 515              		.loc 1 117 25 view .LVU162
+ 516 0012 FFF7FEFF 		bl	USARTRegister
+ 517              	.LVL30:
+ 518              		.loc 1 117 23 view .LVU163
+ 519 0016 0C4B     		ldr	r3, .L32+4
+ 520 0018 1860     		str	r0, [r3]
+ 118:Robot/Remote/remote_control.c **** 
+ 119:Robot/Remote/remote_control.c ****     // 进行守护进程的注册,用于定时检查遥控器是否正常工作
+ 120:Robot/Remote/remote_control.c ****     Daemon_Init_Config_s daemon_conf = {
+ 521              		.loc 1 120 5 is_stmt 1 view .LVU164
+ 522              		.loc 1 120 26 is_stmt 0 view .LVU165
+ 523 001a 0023     		movs	r3, #0
+ 524 001c 0093     		str	r3, [sp]
+ 525 001e 0193     		str	r3, [sp, #4]
+ 526 0020 0293     		str	r3, [sp, #8]
+ 527 0022 0A23     		movs	r3, #10
+ 528 0024 ADF80030 		strh	r3, [sp]	@ movhi
+ 529 0028 084B     		ldr	r3, .L32+8
+ 530 002a 0193     		str	r3, [sp, #4]
+ 121:Robot/Remote/remote_control.c ****         .reload_count = 10, // 100ms未收到数据视为离线,遥控器的接收频率实际上�
+ 122:Robot/Remote/remote_control.c ****         .callback = RCLostCallback,
+ 123:Robot/Remote/remote_control.c ****         .owner_id = NULL, // 只有1个遥控器,不需要owner_id
+ 124:Robot/Remote/remote_control.c ****     };
+ 125:Robot/Remote/remote_control.c ****     rc_daemon_instance = DaemonRegister(&daemon_conf);
+ 531              		.loc 1 125 5 is_stmt 1 view .LVU166
+ 532              		.loc 1 125 26 is_stmt 0 view .LVU167
+ 533 002c 6846     		mov	r0, sp
+ 534 002e FFF7FEFF 		bl	DaemonRegister
+ 535              	.LVL31:
+ 536              		.loc 1 125 24 view .LVU168
+ 537 0032 074B     		ldr	r3, .L32+12
+ 538 0034 1860     		str	r0, [r3]
+ 126:Robot/Remote/remote_control.c **** 
+ 127:Robot/Remote/remote_control.c ****     rc_init_flag = 1;
+ 539              		.loc 1 127 5 is_stmt 1 view .LVU169
+ 540              		.loc 1 127 18 is_stmt 0 view .LVU170
+ 541 0036 074B     		ldr	r3, .L32+16
+ 542 0038 0122     		movs	r2, #1
+ARM GAS  D:\temp\TMP\cckn12u8.s 			page 13
+
+
+ 543 003a 1A70     		strb	r2, [r3]
+ 128:Robot/Remote/remote_control.c ****     return rc_ctrl;
+ 544              		.loc 1 128 5 is_stmt 1 view .LVU171
+ 129:Robot/Remote/remote_control.c **** }
+ 545              		.loc 1 129 1 is_stmt 0 view .LVU172
+ 546 003c 0648     		ldr	r0, .L32+20
+ 547 003e 07B0     		add	sp, sp, #28
+ 548              	.LCFI5:
+ 549              		.cfi_def_cfa_offset 4
+ 550              		@ sp needed
+ 551 0040 5DF804FB 		ldr	pc, [sp], #4
+ 552              	.L33:
+ 553              		.align	2
+ 554              	.L32:
+ 555 0044 00000000 		.word	RemoteControlRxCallback
+ 556 0048 00000000 		.word	.LANCHOR1
+ 557 004c 00000000 		.word	RCLostCallback
+ 558 0050 00000000 		.word	.LANCHOR2
+ 559 0054 00000000 		.word	.LANCHOR3
+ 560 0058 00000000 		.word	.LANCHOR0
+ 561              		.cfi_endproc
+ 562              	.LFE148:
+ 564              		.section	.text.RemoteControlIsOnline,"ax",%progbits
+ 565              		.align	1
+ 566              		.global	RemoteControlIsOnline
+ 567              		.syntax unified
+ 568              		.thumb
+ 569              		.thumb_func
+ 571              	RemoteControlIsOnline:
+ 572              	.LFB149:
+ 130:Robot/Remote/remote_control.c **** 
+ 131:Robot/Remote/remote_control.c **** uint8_t RemoteControlIsOnline()
+ 132:Robot/Remote/remote_control.c **** {
+ 573              		.loc 1 132 1 is_stmt 1 view -0
+ 574              		.cfi_startproc
+ 575              		@ args = 0, pretend = 0, frame = 0
+ 576              		@ frame_needed = 0, uses_anonymous_args = 0
+ 577 0000 08B5     		push	{r3, lr}
+ 578              	.LCFI6:
+ 579              		.cfi_def_cfa_offset 8
+ 580              		.cfi_offset 3, -8
+ 581              		.cfi_offset 14, -4
+ 133:Robot/Remote/remote_control.c ****     if (rc_init_flag)
+ 582              		.loc 1 133 5 view .LVU174
+ 583              		.loc 1 133 9 is_stmt 0 view .LVU175
+ 584 0002 044B     		ldr	r3, .L38
+ 585 0004 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+ 586              		.loc 1 133 8 view .LVU176
+ 587 0006 00B9     		cbnz	r0, .L37
+ 588              	.L35:
+ 134:Robot/Remote/remote_control.c ****         return DaemonIsOnline(rc_daemon_instance);
+ 135:Robot/Remote/remote_control.c ****     return 0;
+ 136:Robot/Remote/remote_control.c **** }...
+ 589              		.loc 1 136 1 view .LVU177
+ 590 0008 08BD     		pop	{r3, pc}
+ 591              	.L37:
+ 134:Robot/Remote/remote_control.c ****         return DaemonIsOnline(rc_daemon_instance);
+ARM GAS  D:\temp\TMP\cckn12u8.s 			page 14
+
+
+ 592              		.loc 1 134 9 is_stmt 1 view .LVU178
+ 134:Robot/Remote/remote_control.c ****         return DaemonIsOnline(rc_daemon_instance);
+ 593              		.loc 1 134 16 is_stmt 0 view .LVU179
+ 594 000a 034B     		ldr	r3, .L38+4
+ 595 000c 1868     		ldr	r0, [r3]
+ 596 000e FFF7FEFF 		bl	DaemonIsOnline
+ 597              	.LVL32:
+ 598 0012 F9E7     		b	.L35
+ 599              	.L39:
+ 600              		.align	2
+ 601              	.L38:
+ 602 0014 00000000 		.word	.LANCHOR3
+ 603 0018 00000000 		.word	.LANCHOR2
+ 604              		.cfi_endproc
+ 605              	.LFE149:
+ 607              		.section	.bss.rc_ctrl,"aw",%nobits
+ 608              		.align	2
+ 609              		.set	.LANCHOR0,. + 0
+ 612              	rc_ctrl:
+ 613 0000 00000000 		.space	144
+ 613      00000000 
+ 613      00000000 
+ 613      00000000 
+ 613      00000000 
+ 614              		.section	.bss.rc_daemon_instance,"aw",%nobits
+ 615              		.align	2
+ 616              		.set	.LANCHOR2,. + 0
+ 619              	rc_daemon_instance:
+ 620 0000 00000000 		.space	4
+ 621              		.section	.bss.rc_init_flag,"aw",%nobits
+ 622              		.set	.LANCHOR3,. + 0
+ 625              	rc_init_flag:
+ 626 0000 00       		.space	1
+ 627              		.section	.bss.rc_usart_instance,"aw",%nobits
+ 628              		.align	2
+ 629              		.set	.LANCHOR1,. + 0
+ 632              	rc_usart_instance:
+ 633 0000 00000000 		.space	4
+ 634              		.text
+ 635              	.Letext0:
+ 636              		.file 2 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 637              		.file 3 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
+ 638              		.file 4 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h723xx.h"
+ 639              		.file 5 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h"
+ 640              		.file 6 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_dma.h"
+ 641              		.file 7 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h"
+ 642              		.file 8 "Robot/Remote/remote_control.h"
+ 643              		.file 9 "Bsp/bsp_usart.h"
+ 644              		.file 10 "Robot/daemon/daemon.h"
+ 645              		.file 11 "<built-in>"
+ARM GAS  D:\temp\TMP\cckn12u8.s 			page 15
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 remote_control.c
+D:\temp\TMP\cckn12u8.s:19     .text.RectifyRCjoystick:00000000 $t
+D:\temp\TMP\cckn12u8.s:24     .text.RectifyRCjoystick:00000000 RectifyRCjoystick
+D:\temp\TMP\cckn12u8.s:78     .text.RectifyRCjoystick:0000002c $d
+D:\temp\TMP\cckn12u8.s:83     .text.sbus_to_rc:00000000 $t
+D:\temp\TMP\cckn12u8.s:88     .text.sbus_to_rc:00000000 sbus_to_rc
+D:\temp\TMP\cckn12u8.s:394    .text.sbus_to_rc:00000154 $d
+D:\temp\TMP\cckn12u8.s:399    .text.RCLostCallback:00000000 $t
+D:\temp\TMP\cckn12u8.s:404    .text.RCLostCallback:00000000 RCLostCallback
+D:\temp\TMP\cckn12u8.s:435    .text.RCLostCallback:00000018 $d
+D:\temp\TMP\cckn12u8.s:441    .text.RemoteControlRxCallback:00000000 $t
+D:\temp\TMP\cckn12u8.s:446    .text.RemoteControlRxCallback:00000000 RemoteControlRxCallback
+D:\temp\TMP\cckn12u8.s:472    .text.RemoteControlRxCallback:00000014 $d
+D:\temp\TMP\cckn12u8.s:478    .text.RemoteControlInit:00000000 $t
+D:\temp\TMP\cckn12u8.s:484    .text.RemoteControlInit:00000000 RemoteControlInit
+D:\temp\TMP\cckn12u8.s:555    .text.RemoteControlInit:00000044 $d
+D:\temp\TMP\cckn12u8.s:565    .text.RemoteControlIsOnline:00000000 $t
+D:\temp\TMP\cckn12u8.s:571    .text.RemoteControlIsOnline:00000000 RemoteControlIsOnline
+D:\temp\TMP\cckn12u8.s:602    .text.RemoteControlIsOnline:00000014 $d
+D:\temp\TMP\cckn12u8.s:608    .bss.rc_ctrl:00000000 $d
+D:\temp\TMP\cckn12u8.s:612    .bss.rc_ctrl:00000000 rc_ctrl
+D:\temp\TMP\cckn12u8.s:615    .bss.rc_daemon_instance:00000000 $d
+D:\temp\TMP\cckn12u8.s:619    .bss.rc_daemon_instance:00000000 rc_daemon_instance
+D:\temp\TMP\cckn12u8.s:625    .bss.rc_init_flag:00000000 rc_init_flag
+D:\temp\TMP\cckn12u8.s:626    .bss.rc_init_flag:00000000 $d
+D:\temp\TMP\cckn12u8.s:628    .bss.rc_usart_instance:00000000 $d
+D:\temp\TMP\cckn12u8.s:632    .bss.rc_usart_instance:00000000 rc_usart_instance
+
+UNDEFINED SYMBOLS
+memcpy
+memset
+USARTServiceInit
+DaemonReload
+USARTRegister
+DaemonRegister
+DaemonIsOnline

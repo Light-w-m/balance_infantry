@@ -7,7 +7,9 @@
 #include "stdbool.h"
 #include "chassis_def.h"
 
-// #define PI 3.14159265358979323846f
+#ifndef PI
+#define PI 3.14159265358979323846f
+#endif
 
 #define LEG1 0.21f
 #define LEG2 0.25f
@@ -69,15 +71,18 @@ typedef struct
     float Phi2;
     float Phi3;
 
-    float XD, YD;
-    float XB, YB;
-    float lBD;
-    float A0, B0, C0;
+    // float XD, YD;
+    // float XB, YB;
+    // float lBD;
+    // float A0, B0, C0;
 
-} Excessive_t;      //中间过度参数--第二部分可删，用局部变量代替
+    // float A1, B1, C1, D1;
+    // float A4, B4, C4, D4, E4, F4;
+
+} Excessive_t;      //中间过度参数--可删，用局部变量代替
 
 
-void Calc_LQR_K(float k[2][6], float length);
+void Calc_LQR_K(float k[2][6], float length, bool flag);
 void ForwardKinematics(Leg_t* leg,Excessive_t* excessive, INS_t* ins, float dt);
 void InverseKinematics(Leg_t* leg,Excessive_t* excessive);
 void JacobianMatrix(Leg_t* leg,Excessive_t* excessive);

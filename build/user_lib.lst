@@ -1,4 +1,4 @@
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 1
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 1
 
 
    1              		.cpu cortex-m7
@@ -58,7 +58,7 @@ ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 1
   28:Robot/Lib/user_lib.c **** float Sqrt(float x)
   29:Robot/Lib/user_lib.c **** {
   29              		.loc 1 29 1 view -0
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 2
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 2
 
 
   30              		.cfi_startproc
@@ -118,7 +118,7 @@ ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 1
   65              		.loc 1 48 20 discriminator 3 view .LVU17
   66 002a 87EEA67A 		vdiv.f32	s14, s15, s13
   67              		.loc 1 48 11 discriminator 3 view .LVU18
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 3
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 3
 
 
   68 002e 30EE470A 		vsub.f32	s0, s0, s14
@@ -178,7 +178,7 @@ ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 1
   65:Robot/Lib/user_lib.c **** }*/
   66:Robot/Lib/user_lib.c **** 
   67:Robot/Lib/user_lib.c **** /**
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 4
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 4
 
 
   68:Robot/Lib/user_lib.c ****   * @brief          斜波函数初始化
@@ -238,7 +238,7 @@ ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 1
   88:Robot/Lib/user_lib.c ****   * @param[in]      斜波函数结构体
   89:Robot/Lib/user_lib.c ****   * @param[in]      输入值
   90:Robot/Lib/user_lib.c ****   * @retval         返回空
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 5
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 5
 
 
   91:Robot/Lib/user_lib.c ****   */
@@ -298,7 +298,7 @@ ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 1
  100:Robot/Lib/user_lib.c ****     {
  180              		.loc 1 100 13 view .LVU53
  181 0034 B4EEE70A 		vcmpe.f32	s0, s15
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 6
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 6
 
 
  182 0038 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
@@ -358,7 +358,7 @@ ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 1
  117:Robot/Lib/user_lib.c ****     }
  118:Robot/Lib/user_lib.c ****     return num;
  225              		.loc 1 118 5 is_stmt 1 view .LVU63
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 7
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 7
 
 
  119:Robot/Lib/user_lib.c **** }
@@ -418,7 +418,7 @@ ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 1
  269              		.syntax unified
  270              		.thumb
  271              		.thumb_func
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 8
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 8
 
 
  273              	float_deadband:
@@ -478,7 +478,7 @@ ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 1
  315              		.cfi_startproc
  316              		@ args = 0, pretend = 0, frame = 0
  317              		@ frame_needed = 0, uses_anonymous_args = 0
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 9
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 9
 
 
  318              		@ link register save eliminated.
@@ -538,7 +538,7 @@ ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 1
  159:Robot/Lib/user_lib.c ****     else if (Value > maxValue)
  362              		.loc 1 159 10 is_stmt 1 view .LVU90
  363              		.loc 1 159 13 is_stmt 0 view .LVU91
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 10
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 10
 
 
  364 000a B4EEC10A 		vcmpe.f32	s0, s2
@@ -564,1919 +564,2192 @@ ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 1
  379 001e 7047     		bx	lr
  380              		.cfi_endproc
  381              	.LFE156:
- 383              		.section	.text.int16_constrain,"ax",%progbits
+ 383              		.section	.text.Norm3d,"ax",%progbits
  384              		.align	1
- 385              		.global	int16_constrain
+ 385              		.global	Norm3d
  386              		.syntax unified
  387              		.thumb
  388              		.thumb_func
- 390              	int16_constrain:
+ 390              	Norm3d:
  391              	.LVL26:
  392              	.LFB157:
  164:Robot/Lib/user_lib.c **** 
- 165:Robot/Lib/user_lib.c **** //限幅函数
- 166:Robot/Lib/user_lib.c **** int16_t int16_constrain(int16_t Value, int16_t minValue, int16_t maxValue)
+ 165:Robot/Lib/user_lib.c **** // 三维向量归一化
+ 166:Robot/Lib/user_lib.c **** float *Norm3d(float *v)
  167:Robot/Lib/user_lib.c **** {
  393              		.loc 1 167 1 is_stmt 1 view -0
  394              		.cfi_startproc
  395              		@ args = 0, pretend = 0, frame = 0
  396              		@ frame_needed = 0, uses_anonymous_args = 0
- 397              		@ link register save eliminated.
- 168:Robot/Lib/user_lib.c ****     if (Value < minValue)
- 398              		.loc 1 168 5 view .LVU97
- 399              		.loc 1 168 8 is_stmt 0 view .LVU98
- 400 0000 8842     		cmp	r0, r1
- 401 0002 03DB     		blt	.L44
- 169:Robot/Lib/user_lib.c ****         return minValue;
- 170:Robot/Lib/user_lib.c ****     else if (Value > maxValue)
- 402              		.loc 1 170 10 is_stmt 1 view .LVU99
- 403              		.loc 1 170 13 is_stmt 0 view .LVU100
- 404 0004 9042     		cmp	r0, r2
- 405 0006 02DD     		ble	.L43
- 171:Robot/Lib/user_lib.c ****         return maxValue;
- 406              		.loc 1 171 16 view .LVU101
- 407 0008 1046     		mov	r0, r2
- 408              	.LVL27:
- 409              		.loc 1 171 16 view .LVU102
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 11
+ 397              		.loc 1 167 1 is_stmt 0 view .LVU97
+ 398 0000 10B5     		push	{r4, lr}
+ 399              	.LCFI0:
+ 400              		.cfi_def_cfa_offset 8
+ 401              		.cfi_offset 4, -8
+ 402              		.cfi_offset 14, -4
+ 403 0002 2DED048B 		vpush.64	{d8, d9}
+ 404              	.LCFI1:
+ 405              		.cfi_def_cfa_offset 24
+ 406              		.cfi_offset 80, -24
+ 407              		.cfi_offset 81, -20
+ 408              		.cfi_offset 82, -16
+ 409              		.cfi_offset 83, -12
+ 410 0006 0446     		mov	r4, r0
+ 168:Robot/Lib/user_lib.c ****     float len = Sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+ 411              		.loc 1 168 5 is_stmt 1 view .LVU98
+ 412              		.loc 1 168 23 is_stmt 0 view .LVU99
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 11
 
 
- 410 000a 7047     		bx	lr
- 411              	.LVL28:
- 412              	.L44:
- 169:Robot/Lib/user_lib.c ****         return minValue;
- 413              		.loc 1 169 16 view .LVU103
- 414 000c 0846     		mov	r0, r1
- 415              	.LVL29:
- 416              	.L43:
- 172:Robot/Lib/user_lib.c ****     else
- 173:Robot/Lib/user_lib.c ****         return Value;
- 174:Robot/Lib/user_lib.c **** }
- 417              		.loc 1 174 1 view .LVU104
- 418 000e 7047     		bx	lr
- 419              		.cfi_endproc
- 420              	.LFE157:
- 422              		.section	.text.loop_float_constrain,"ax",%progbits
- 423              		.align	1
- 424              		.global	loop_float_constrain
- 425              		.syntax unified
- 426              		.thumb
- 427              		.thumb_func
- 429              	loop_float_constrain:
- 430              	.LVL30:
- 431              	.LFB158:
- 175:Robot/Lib/user_lib.c **** 
- 176:Robot/Lib/user_lib.c **** //循环限幅函数
- 177:Robot/Lib/user_lib.c **** float loop_float_constrain(float Input, float minValue, float maxValue)
- 178:Robot/Lib/user_lib.c **** {
- 432              		.loc 1 178 1 is_stmt 1 view -0
- 433              		.cfi_startproc
- 434              		@ args = 0, pretend = 0, frame = 0
- 435              		@ frame_needed = 0, uses_anonymous_args = 0
- 436              		@ link register save eliminated.
- 179:Robot/Lib/user_lib.c ****     if (maxValue < minValue)
- 437              		.loc 1 179 5 view .LVU106
- 438              		.loc 1 179 8 is_stmt 0 view .LVU107
- 439 0000 B4EEE01A 		vcmpe.f32	s2, s1
- 440 0004 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
- 441 0008 1ED4     		bmi	.L47
- 180:Robot/Lib/user_lib.c ****     {
- 181:Robot/Lib/user_lib.c ****         return Input;
- 182:Robot/Lib/user_lib.c ****     }
- 183:Robot/Lib/user_lib.c **** 
- 184:Robot/Lib/user_lib.c ****     if (Input > maxValue)
- 442              		.loc 1 184 5 is_stmt 1 view .LVU108
- 443              		.loc 1 184 8 is_stmt 0 view .LVU109
- 444 000a B4EEC01A 		vcmpe.f32	s2, s0
- 445 000e F1EE10FA 		vmrs	APSR_nzcv, FPSCR
- 446 0012 0AD5     		bpl	.L57
- 447              	.LBB2:
- 185:Robot/Lib/user_lib.c ****     {
- 186:Robot/Lib/user_lib.c ****         float len = maxValue - minValue;
- 448              		.loc 1 186 9 is_stmt 1 view .LVU110
- 449              		.loc 1 186 15 is_stmt 0 view .LVU111
- 450 0014 71EE600A 		vsub.f32	s1, s2, s1
- 451              	.LVL31:
- 187:Robot/Lib/user_lib.c ****         while (Input > maxValue)
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 12
+ 413 0008 90ED009A 		vldr.32	s18, [r0]
+ 414              		.loc 1 168 27 view .LVU100
+ 415 000c 69EE097A 		vmul.f32	s15, s18, s18
+ 416              		.loc 1 168 37 view .LVU101
+ 417 0010 D0ED018A 		vldr.32	s17, [r0, #4]
+ 418              		.loc 1 168 41 view .LVU102
+ 419 0014 28EEA80A 		vmul.f32	s0, s17, s17
+ 420              		.loc 1 168 34 view .LVU103
+ 421 0018 77EE807A 		vadd.f32	s15, s15, s0
+ 422              		.loc 1 168 51 view .LVU104
+ 423 001c 90ED028A 		vldr.32	s16, [r0, #8]
+ 424              		.loc 1 168 55 view .LVU105
+ 425 0020 28EE080A 		vmul.f32	s0, s16, s16
+ 426              		.loc 1 168 17 view .LVU106
+ 427 0024 37EE800A 		vadd.f32	s0, s15, s0
+ 428 0028 FFF7FEFF 		bl	Sqrt
+ 429              	.LVL27:
+ 169:Robot/Lib/user_lib.c ****     v[0] /= len;
+ 430              		.loc 1 169 5 is_stmt 1 view .LVU107
+ 431              		.loc 1 169 10 is_stmt 0 view .LVU108
+ 432 002c C9EE007A 		vdiv.f32	s15, s18, s0
+ 433 0030 C4ED007A 		vstr.32	s15, [r4]
+ 170:Robot/Lib/user_lib.c ****     v[1] /= len;
+ 434              		.loc 1 170 5 is_stmt 1 view .LVU109
+ 435              		.loc 1 170 10 is_stmt 0 view .LVU110
+ 436 0034 C8EE807A 		vdiv.f32	s15, s17, s0
+ 437 0038 C4ED017A 		vstr.32	s15, [r4, #4]
+ 171:Robot/Lib/user_lib.c ****     v[2] /= len;
+ 438              		.loc 1 171 5 is_stmt 1 view .LVU111
+ 439              		.loc 1 171 10 is_stmt 0 view .LVU112
+ 440 003c C8EE007A 		vdiv.f32	s15, s16, s0
+ 441 0040 C4ED027A 		vstr.32	s15, [r4, #8]
+ 172:Robot/Lib/user_lib.c ****     return v;
+ 442              		.loc 1 172 5 is_stmt 1 view .LVU113
+ 173:Robot/Lib/user_lib.c **** }
+ 443              		.loc 1 173 1 is_stmt 0 view .LVU114
+ 444 0044 2046     		mov	r0, r4
+ 445 0046 BDEC048B 		vldm	sp!, {d8-d9}
+ 446              	.LCFI2:
+ 447              		.cfi_restore 82
+ 448              		.cfi_restore 83
+ 449              		.cfi_restore 80
+ 450              		.cfi_restore 81
+ 451              		.cfi_def_cfa_offset 8
+ 452 004a 10BD     		pop	{r4, pc}
+ 453              		.loc 1 173 1 view .LVU115
+ 454              		.cfi_endproc
+ 455              	.LFE157:
+ 457              		.section	.text.NormOf3d,"ax",%progbits
+ 458              		.align	1
+ 459              		.global	NormOf3d
+ 460              		.syntax unified
+ 461              		.thumb
+ 462              		.thumb_func
+ 464              	NormOf3d:
+ 465              	.LVL28:
+ 466              	.LFB158:
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 12
 
 
- 452              		.loc 1 187 9 is_stmt 1 view .LVU112
- 453              		.loc 1 187 15 is_stmt 0 view .LVU113
- 454 0018 01E0     		b	.L50
- 455              	.L51:
- 188:Robot/Lib/user_lib.c ****         {
- 189:Robot/Lib/user_lib.c ****             Input -= len;
- 456              		.loc 1 189 13 is_stmt 1 view .LVU114
- 457              		.loc 1 189 19 is_stmt 0 view .LVU115
- 458 001a 30EE600A 		vsub.f32	s0, s0, s1
- 459              	.LVL32:
- 460              	.L50:
- 187:Robot/Lib/user_lib.c ****         while (Input > maxValue)
- 461              		.loc 1 187 15 is_stmt 1 view .LVU116
- 462 001e B4EEC10A 		vcmpe.f32	s0, s2
- 463 0022 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
- 464 0026 F8DC     		bgt	.L51
- 187:Robot/Lib/user_lib.c ****         while (Input > maxValue)
- 465              		.loc 1 187 15 is_stmt 0 view .LVU117
- 466 0028 7047     		bx	lr
- 467              	.LVL33:
- 468              	.L57:
- 187:Robot/Lib/user_lib.c ****         while (Input > maxValue)
- 469              		.loc 1 187 15 view .LVU118
- 470              	.LBE2:
- 190:Robot/Lib/user_lib.c ****         }
- 191:Robot/Lib/user_lib.c ****     }
- 192:Robot/Lib/user_lib.c ****     else if (Input < minValue)
- 471              		.loc 1 192 10 is_stmt 1 view .LVU119
- 472              		.loc 1 192 13 is_stmt 0 view .LVU120
- 473 002a F4EEC00A 		vcmpe.f32	s1, s0
- 474 002e F1EE10FA 		vmrs	APSR_nzcv, FPSCR
- 475 0032 09DD     		ble	.L47
- 476              	.LBB3:
- 193:Robot/Lib/user_lib.c ****     {
- 194:Robot/Lib/user_lib.c ****         float len = maxValue - minValue;
- 477              		.loc 1 194 9 is_stmt 1 view .LVU121
- 478              		.loc 1 194 15 is_stmt 0 view .LVU122
- 479 0034 31EE601A 		vsub.f32	s2, s2, s1
- 480              	.LVL34:
- 195:Robot/Lib/user_lib.c ****         while (Input < minValue)
- 481              		.loc 1 195 9 is_stmt 1 view .LVU123
- 482              	.L53:
- 483              		.loc 1 195 15 view .LVU124
- 484 0038 B4EEE00A 		vcmpe.f32	s0, s1
- 485 003c F1EE10FA 		vmrs	APSR_nzcv, FPSCR
- 486 0040 02D5     		bpl	.L47
- 196:Robot/Lib/user_lib.c ****         {
- 197:Robot/Lib/user_lib.c ****             Input += len;
- 487              		.loc 1 197 13 view .LVU125
- 488              		.loc 1 197 19 is_stmt 0 view .LVU126
- 489 0042 30EE010A 		vadd.f32	s0, s0, s2
- 490              	.LVL35:
- 491              		.loc 1 197 19 view .LVU127
- 492 0046 F7E7     		b	.L53
- 493              	.LVL36:
- 494              	.L47:
- 495              		.loc 1 197 19 view .LVU128
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 13
+ 174:Robot/Lib/user_lib.c **** 
+ 175:Robot/Lib/user_lib.c **** // 计算模长
+ 176:Robot/Lib/user_lib.c **** float NormOf3d(float *v)
+ 177:Robot/Lib/user_lib.c **** {
+ 467              		.loc 1 177 1 is_stmt 1 view -0
+ 468              		.cfi_startproc
+ 469              		@ args = 0, pretend = 0, frame = 0
+ 470              		@ frame_needed = 0, uses_anonymous_args = 0
+ 471              		.loc 1 177 1 is_stmt 0 view .LVU117
+ 472 0000 08B5     		push	{r3, lr}
+ 473              	.LCFI3:
+ 474              		.cfi_def_cfa_offset 8
+ 475              		.cfi_offset 3, -8
+ 476              		.cfi_offset 14, -4
+ 178:Robot/Lib/user_lib.c ****     return Sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+ 477              		.loc 1 178 5 is_stmt 1 view .LVU118
+ 478              		.loc 1 178 18 is_stmt 0 view .LVU119
+ 479 0002 90ED000A 		vldr.32	s0, [r0]
+ 480              		.loc 1 178 22 view .LVU120
+ 481 0006 20EE000A 		vmul.f32	s0, s0, s0
+ 482              		.loc 1 178 32 view .LVU121
+ 483 000a D0ED017A 		vldr.32	s15, [r0, #4]
+ 484              		.loc 1 178 36 view .LVU122
+ 485 000e 67EEA77A 		vmul.f32	s15, s15, s15
+ 486              		.loc 1 178 29 view .LVU123
+ 487 0012 30EE270A 		vadd.f32	s0, s0, s15
+ 488              		.loc 1 178 46 view .LVU124
+ 489 0016 D0ED027A 		vldr.32	s15, [r0, #8]
+ 490              		.loc 1 178 50 view .LVU125
+ 491 001a 67EEA77A 		vmul.f32	s15, s15, s15
+ 492              		.loc 1 178 12 view .LVU126
+ 493 001e 30EE270A 		vadd.f32	s0, s0, s15
+ 494 0022 FFF7FEFF 		bl	Sqrt
+ 495              	.LVL29:
+ 179:Robot/Lib/user_lib.c **** }
+ 496              		.loc 1 179 1 view .LVU127
+ 497 0026 08BD     		pop	{r3, pc}
+ 498              		.cfi_endproc
+ 499              	.LFE158:
+ 501              		.section	.text.Cross3d,"ax",%progbits
+ 502              		.align	1
+ 503              		.global	Cross3d
+ 504              		.syntax unified
+ 505              		.thumb
+ 506              		.thumb_func
+ 508              	Cross3d:
+ 509              	.LVL30:
+ 510              	.LFB159:
+ 180:Robot/Lib/user_lib.c **** 
+ 181:Robot/Lib/user_lib.c **** // 三维向量叉乘v1 x v2
+ 182:Robot/Lib/user_lib.c **** void Cross3d(float *v1, float *v2, float *res)
+ 183:Robot/Lib/user_lib.c **** {
+ 511              		.loc 1 183 1 is_stmt 1 view -0
+ 512              		.cfi_startproc
+ 513              		@ args = 0, pretend = 0, frame = 0
+ 514              		@ frame_needed = 0, uses_anonymous_args = 0
+ 515              		@ link register save eliminated.
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 13
 
 
- 496              	.LBE3:
- 198:Robot/Lib/user_lib.c ****         }
- 199:Robot/Lib/user_lib.c ****     }
- 200:Robot/Lib/user_lib.c ****     return Input;
- 201:Robot/Lib/user_lib.c **** }
- 497              		.loc 1 201 1 view .LVU129
- 498 0048 7047     		bx	lr
- 499              		.cfi_endproc
- 500              	.LFE158:
- 502              		.section	.text.theta_format,"ax",%progbits
- 503              		.align	1
- 504              		.global	theta_format
- 505              		.syntax unified
- 506              		.thumb
- 507              		.thumb_func
- 509              	theta_format:
- 510              	.LVL37:
- 511              	.LFB159:
- 202:Robot/Lib/user_lib.c **** 
- 203:Robot/Lib/user_lib.c **** //弧度格式化为-PI~PI
- 204:Robot/Lib/user_lib.c **** 
- 205:Robot/Lib/user_lib.c **** //角度格式化为-180~180
- 206:Robot/Lib/user_lib.c **** float theta_format(float Ang)
- 207:Robot/Lib/user_lib.c **** {
- 512              		.loc 1 207 1 is_stmt 1 view -0
- 513              		.cfi_startproc
- 514              		@ args = 0, pretend = 0, frame = 0
- 515              		@ frame_needed = 0, uses_anonymous_args = 0
- 516              		.loc 1 207 1 is_stmt 0 view .LVU131
- 517 0000 08B5     		push	{r3, lr}
- 518              	.LCFI0:
- 519              		.cfi_def_cfa_offset 8
- 520              		.cfi_offset 3, -8
- 521              		.cfi_offset 14, -4
- 208:Robot/Lib/user_lib.c ****     return loop_float_constrain(Ang, -180.0f, 180.0f);
- 522              		.loc 1 208 5 is_stmt 1 view .LVU132
- 523              		.loc 1 208 12 is_stmt 0 view .LVU133
- 524 0002 9FED031A 		vldr.32	s2, .L60
- 525 0006 DFED030A 		vldr.32	s1, .L60+4
- 526 000a FFF7FEFF 		bl	loop_float_constrain
- 527              	.LVL38:
- 209:Robot/Lib/user_lib.c **** }
- 528              		.loc 1 209 1 view .LVU134
- 529 000e 08BD     		pop	{r3, pc}
- 530              	.L61:
- 531              		.align	2
- 532              	.L60:
- 533 0010 00003443 		.word	1127481344
- 534 0014 000034C3 		.word	-1020002304
- 535              		.cfi_endproc
- 536              	.LFE159:
- 538              		.section	.text.float_rounding,"ax",%progbits
- 539              		.align	1
- 540              		.global	float_rounding
- 541              		.syntax unified
- 542              		.thumb
- 543              		.thumb_func
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 14
+ 184:Robot/Lib/user_lib.c ****     res[0] = v1[1] * v2[2] - v1[2] * v2[1];
+ 516              		.loc 1 184 5 view .LVU129
+ 517              		.loc 1 184 16 is_stmt 0 view .LVU130
+ 518 0000 D0ED017A 		vldr.32	s15, [r0, #4]
+ 519              		.loc 1 184 24 view .LVU131
+ 520 0004 91ED027A 		vldr.32	s14, [r1, #8]
+ 521              		.loc 1 184 20 view .LVU132
+ 522 0008 67EE877A 		vmul.f32	s15, s15, s14
+ 523              		.loc 1 184 32 view .LVU133
+ 524 000c 90ED027A 		vldr.32	s14, [r0, #8]
+ 525              		.loc 1 184 40 view .LVU134
+ 526 0010 D1ED016A 		vldr.32	s13, [r1, #4]
+ 527              		.loc 1 184 36 view .LVU135
+ 528 0014 27EE267A 		vmul.f32	s14, s14, s13
+ 529              		.loc 1 184 28 view .LVU136
+ 530 0018 77EEC77A 		vsub.f32	s15, s15, s14
+ 531              		.loc 1 184 12 view .LVU137
+ 532 001c C2ED007A 		vstr.32	s15, [r2]
+ 185:Robot/Lib/user_lib.c ****     res[1] = v1[2] * v2[0] - v1[0] * v2[2];
+ 533              		.loc 1 185 5 is_stmt 1 view .LVU138
+ 534              		.loc 1 185 16 is_stmt 0 view .LVU139
+ 535 0020 D0ED027A 		vldr.32	s15, [r0, #8]
+ 536              		.loc 1 185 24 view .LVU140
+ 537 0024 91ED007A 		vldr.32	s14, [r1]
+ 538              		.loc 1 185 20 view .LVU141
+ 539 0028 67EE877A 		vmul.f32	s15, s15, s14
+ 540              		.loc 1 185 32 view .LVU142
+ 541 002c 90ED007A 		vldr.32	s14, [r0]
+ 542              		.loc 1 185 40 view .LVU143
+ 543 0030 D1ED026A 		vldr.32	s13, [r1, #8]
+ 544              		.loc 1 185 36 view .LVU144
+ 545 0034 27EE267A 		vmul.f32	s14, s14, s13
+ 546              		.loc 1 185 28 view .LVU145
+ 547 0038 77EEC77A 		vsub.f32	s15, s15, s14
+ 548              		.loc 1 185 12 view .LVU146
+ 549 003c C2ED017A 		vstr.32	s15, [r2, #4]
+ 186:Robot/Lib/user_lib.c ****     res[2] = v1[0] * v2[1] - v1[1] * v2[0];
+ 550              		.loc 1 186 5 is_stmt 1 view .LVU147
+ 551              		.loc 1 186 16 is_stmt 0 view .LVU148
+ 552 0040 D0ED007A 		vldr.32	s15, [r0]
+ 553              		.loc 1 186 24 view .LVU149
+ 554 0044 91ED017A 		vldr.32	s14, [r1, #4]
+ 555              		.loc 1 186 20 view .LVU150
+ 556 0048 67EE877A 		vmul.f32	s15, s15, s14
+ 557              		.loc 1 186 32 view .LVU151
+ 558 004c 90ED017A 		vldr.32	s14, [r0, #4]
+ 559              		.loc 1 186 40 view .LVU152
+ 560 0050 D1ED006A 		vldr.32	s13, [r1]
+ 561              		.loc 1 186 36 view .LVU153
+ 562 0054 27EE267A 		vmul.f32	s14, s14, s13
+ 563              		.loc 1 186 28 view .LVU154
+ 564 0058 77EEC77A 		vsub.f32	s15, s15, s14
+ 565              		.loc 1 186 12 view .LVU155
+ 566 005c C2ED027A 		vstr.32	s15, [r2, #8]
+ 187:Robot/Lib/user_lib.c **** }
+ 567              		.loc 1 187 1 view .LVU156
+ 568 0060 7047     		bx	lr
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 14
 
 
- 545              	float_rounding:
- 546              	.LVL39:
- 547              	.LFB160:
- 210:Robot/Lib/user_lib.c **** 
- 211:Robot/Lib/user_lib.c **** int float_rounding(float raw)
- 212:Robot/Lib/user_lib.c **** {
- 548              		.loc 1 212 1 is_stmt 1 view -0
- 549              		.cfi_startproc
- 550              		@ args = 0, pretend = 0, frame = 0
- 551              		@ frame_needed = 0, uses_anonymous_args = 0
- 552              		@ link register save eliminated.
- 213:Robot/Lib/user_lib.c ****     static int integer;
- 553              		.loc 1 213 5 view .LVU136
- 214:Robot/Lib/user_lib.c ****     static float decimal;
- 554              		.loc 1 214 5 view .LVU137
- 215:Robot/Lib/user_lib.c ****     integer = (int)raw;
- 555              		.loc 1 215 5 view .LVU138
- 556              		.loc 1 215 15 is_stmt 0 view .LVU139
- 557 0000 FDEEC07A 		vcvt.s32.f32	s15, s0
- 558              		.loc 1 215 13 view .LVU140
- 559 0004 0C4B     		ldr	r3, .L66
- 560 0006 C3ED007A 		vstr.32	s15, [r3]	@ int
- 216:Robot/Lib/user_lib.c ****     decimal = raw - integer;
- 561              		.loc 1 216 5 is_stmt 1 view .LVU141
- 562              		.loc 1 216 19 is_stmt 0 view .LVU142
- 563 000a B8EEE77A 		vcvt.f32.s32	s14, s15
- 564 000e 30EE470A 		vsub.f32	s0, s0, s14
- 565              	.LVL40:
- 566              		.loc 1 216 13 view .LVU143
- 567 0012 0A4B     		ldr	r3, .L66+4
- 568 0014 83ED000A 		vstr.32	s0, [r3]
- 217:Robot/Lib/user_lib.c ****     if (decimal > 0.5f)
- 569              		.loc 1 217 5 is_stmt 1 view .LVU144
- 570              		.loc 1 217 8 is_stmt 0 view .LVU145
- 571 0018 B6EE007A 		vmov.f32	s14, #5.0e-1
- 572 001c B4EEC70A 		vcmpe.f32	s0, s14
- 573 0020 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
- 574 0024 04DD     		ble	.L63
- 218:Robot/Lib/user_lib.c ****         integer++;
- 575              		.loc 1 218 9 is_stmt 1 view .LVU146
- 576              		.loc 1 218 16 is_stmt 0 view .LVU147
- 577 0026 17EE903A 		vmov	r3, s15	@ int
- 578 002a 0133     		adds	r3, r3, #1
- 579 002c 024A     		ldr	r2, .L66
- 580 002e 1360     		str	r3, [r2]
- 581              	.L63:
- 219:Robot/Lib/user_lib.c ****     return integer;
- 582              		.loc 1 219 5 is_stmt 1 view .LVU148
- 220:Robot/Lib/user_lib.c **** }
- 583              		.loc 1 220 1 is_stmt 0 view .LVU149
- 584 0030 014B     		ldr	r3, .L66
- 585 0032 1868     		ldr	r0, [r3]
- 586 0034 7047     		bx	lr
- 587              	.L67:
- 588 0036 00BF     		.align	2
- 589              	.L66:
- 590 0038 00000000 		.word	.LANCHOR0
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 15
+ 569              		.cfi_endproc
+ 570              	.LFE159:
+ 572              		.section	.text.Dot3d,"ax",%progbits
+ 573              		.align	1
+ 574              		.global	Dot3d
+ 575              		.syntax unified
+ 576              		.thumb
+ 577              		.thumb_func
+ 579              	Dot3d:
+ 580              	.LVL31:
+ 581              	.LFB160:
+ 188:Robot/Lib/user_lib.c **** 
+ 189:Robot/Lib/user_lib.c **** // 三维向量点乘
+ 190:Robot/Lib/user_lib.c **** float Dot3d(float *v1, float *v2)
+ 191:Robot/Lib/user_lib.c **** {
+ 582              		.loc 1 191 1 is_stmt 1 view -0
+ 583              		.cfi_startproc
+ 584              		@ args = 0, pretend = 0, frame = 0
+ 585              		@ frame_needed = 0, uses_anonymous_args = 0
+ 586              		@ link register save eliminated.
+ 192:Robot/Lib/user_lib.c ****     return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
+ 587              		.loc 1 192 5 view .LVU158
+ 588              		.loc 1 192 14 is_stmt 0 view .LVU159
+ 589 0000 D0ED007A 		vldr.32	s15, [r0]
+ 590              		.loc 1 192 22 view .LVU160
+ 591 0004 91ED000A 		vldr.32	s0, [r1]
+ 592              		.loc 1 192 18 view .LVU161
+ 593 0008 67EE807A 		vmul.f32	s15, s15, s0
+ 594              		.loc 1 192 30 view .LVU162
+ 595 000c 90ED010A 		vldr.32	s0, [r0, #4]
+ 596              		.loc 1 192 38 view .LVU163
+ 597 0010 91ED017A 		vldr.32	s14, [r1, #4]
+ 598              		.loc 1 192 34 view .LVU164
+ 599 0014 20EE070A 		vmul.f32	s0, s0, s14
+ 600              		.loc 1 192 26 view .LVU165
+ 601 0018 77EE807A 		vadd.f32	s15, s15, s0
+ 602              		.loc 1 192 46 view .LVU166
+ 603 001c 90ED020A 		vldr.32	s0, [r0, #8]
+ 604              		.loc 1 192 54 view .LVU167
+ 605 0020 91ED027A 		vldr.32	s14, [r1, #8]
+ 606              		.loc 1 192 50 view .LVU168
+ 607 0024 20EE070A 		vmul.f32	s0, s0, s14
+ 193:Robot/Lib/user_lib.c **** }
+ 608              		.loc 1 193 1 view .LVU169
+ 609 0028 37EE800A 		vadd.f32	s0, s15, s0
+ 610 002c 7047     		bx	lr
+ 611              		.cfi_endproc
+ 612              	.LFE160:
+ 614              		.section	.text.int16_constrain,"ax",%progbits
+ 615              		.align	1
+ 616              		.global	int16_constrain
+ 617              		.syntax unified
+ 618              		.thumb
+ 619              		.thumb_func
+ 621              	int16_constrain:
+ 622              	.LVL32:
+ 623              	.LFB161:
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 15
 
 
- 591 003c 00000000 		.word	.LANCHOR1
- 592              		.cfi_endproc
- 593              	.LFE160:
- 595              		.section	.text.OLS_Init,"ax",%progbits
- 596              		.align	1
- 597              		.global	OLS_Init
- 598              		.syntax unified
- 599              		.thumb
- 600              		.thumb_func
- 602              	OLS_Init:
- 603              	.LVL41:
- 604              	.LFB161:
- 221:Robot/Lib/user_lib.c **** 
- 222:Robot/Lib/user_lib.c **** /**
- 223:Robot/Lib/user_lib.c ****   * @brief          最小二乘法初始化
- 224:Robot/Lib/user_lib.c ****   * @param[in]      最小二乘法结构体
- 225:Robot/Lib/user_lib.c ****   * @param[in]      样本数
- 226:Robot/Lib/user_lib.c ****   * @retval         返回空
- 227:Robot/Lib/user_lib.c ****   */
- 228:Robot/Lib/user_lib.c **** void OLS_Init(Ordinary_Least_Squares_t *OLS, uint16_t order)
- 229:Robot/Lib/user_lib.c **** {
- 605              		.loc 1 229 1 is_stmt 1 view -0
- 606              		.cfi_startproc
- 607              		@ args = 0, pretend = 0, frame = 0
- 608              		@ frame_needed = 0, uses_anonymous_args = 0
- 609              		.loc 1 229 1 is_stmt 0 view .LVU151
- 610 0000 70B5     		push	{r4, r5, r6, lr}
- 611              	.LCFI1:
- 612              		.cfi_def_cfa_offset 16
- 613              		.cfi_offset 4, -16
- 614              		.cfi_offset 5, -12
- 615              		.cfi_offset 6, -8
- 616              		.cfi_offset 14, -4
- 617 0002 0446     		mov	r4, r0
- 230:Robot/Lib/user_lib.c ****     OLS->Order = order;
- 618              		.loc 1 230 5 is_stmt 1 view .LVU152
- 619              		.loc 1 230 16 is_stmt 0 view .LVU153
- 620 0004 0180     		strh	r1, [r0]	@ unaligned
- 231:Robot/Lib/user_lib.c ****     OLS->Count = 0;
- 621              		.loc 1 231 5 is_stmt 1 view .LVU154
- 622              		.loc 1 231 16 is_stmt 0 view .LVU155
- 623 0006 0025     		movs	r5, #0
- 624 0008 8570     		strb	r5, [r0, #2]
- 625 000a C570     		strb	r5, [r0, #3]
- 626 000c 0571     		strb	r5, [r0, #4]
- 627 000e 4571     		strb	r5, [r0, #5]
- 232:Robot/Lib/user_lib.c ****     OLS->x = (float *)user_malloc(sizeof(float) * order);
- 628              		.loc 1 232 5 is_stmt 1 view .LVU156
- 629              		.loc 1 232 23 is_stmt 0 view .LVU157
- 630 0010 8E00     		lsls	r6, r1, #2
- 631 0012 3046     		mov	r0, r6
- 632              	.LVL42:
- 633              		.loc 1 232 23 view .LVU158
- 634 0014 FFF7FEFF 		bl	pvPortMalloc
- 635              	.LVL43:
- 636              		.loc 1 232 12 view .LVU159
- 637 0018 C4F80600 		str	r0, [r4, #6]	@ unaligned
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 16
+ 194:Robot/Lib/user_lib.c **** 
+ 195:Robot/Lib/user_lib.c **** //限幅函数
+ 196:Robot/Lib/user_lib.c **** int16_t int16_constrain(int16_t Value, int16_t minValue, int16_t maxValue)
+ 197:Robot/Lib/user_lib.c **** {
+ 624              		.loc 1 197 1 is_stmt 1 view -0
+ 625              		.cfi_startproc
+ 626              		@ args = 0, pretend = 0, frame = 0
+ 627              		@ frame_needed = 0, uses_anonymous_args = 0
+ 628              		@ link register save eliminated.
+ 198:Robot/Lib/user_lib.c ****     if (Value < minValue)
+ 629              		.loc 1 198 5 view .LVU171
+ 630              		.loc 1 198 8 is_stmt 0 view .LVU172
+ 631 0000 8842     		cmp	r0, r1
+ 632 0002 03DB     		blt	.L50
+ 199:Robot/Lib/user_lib.c ****         return minValue;
+ 200:Robot/Lib/user_lib.c ****     else if (Value > maxValue)
+ 633              		.loc 1 200 10 is_stmt 1 view .LVU173
+ 634              		.loc 1 200 13 is_stmt 0 view .LVU174
+ 635 0004 9042     		cmp	r0, r2
+ 636 0006 02DD     		ble	.L49
+ 201:Robot/Lib/user_lib.c ****         return maxValue;
+ 637              		.loc 1 201 16 view .LVU175
+ 638 0008 1046     		mov	r0, r2
+ 639              	.LVL33:
+ 640              		.loc 1 201 16 view .LVU176
+ 641 000a 7047     		bx	lr
+ 642              	.LVL34:
+ 643              	.L50:
+ 199:Robot/Lib/user_lib.c ****         return minValue;
+ 644              		.loc 1 199 16 view .LVU177
+ 645 000c 0846     		mov	r0, r1
+ 646              	.LVL35:
+ 647              	.L49:
+ 202:Robot/Lib/user_lib.c ****     else
+ 203:Robot/Lib/user_lib.c ****         return Value;
+ 204:Robot/Lib/user_lib.c **** }
+ 648              		.loc 1 204 1 view .LVU178
+ 649 000e 7047     		bx	lr
+ 650              		.cfi_endproc
+ 651              	.LFE161:
+ 653              		.section	.text.loop_float_constrain,"ax",%progbits
+ 654              		.align	1
+ 655              		.global	loop_float_constrain
+ 656              		.syntax unified
+ 657              		.thumb
+ 658              		.thumb_func
+ 660              	loop_float_constrain:
+ 661              	.LVL36:
+ 662              	.LFB162:
+ 205:Robot/Lib/user_lib.c **** 
+ 206:Robot/Lib/user_lib.c **** //循环限幅函数
+ 207:Robot/Lib/user_lib.c **** float loop_float_constrain(float Input, float minValue, float maxValue)
+ 208:Robot/Lib/user_lib.c **** {
+ 663              		.loc 1 208 1 is_stmt 1 view -0
+ 664              		.cfi_startproc
+ 665              		@ args = 0, pretend = 0, frame = 0
+ 666              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 16
 
 
- 233:Robot/Lib/user_lib.c ****     OLS->y = (float *)user_malloc(sizeof(float) * order);
- 638              		.loc 1 233 5 is_stmt 1 view .LVU160
- 639              		.loc 1 233 23 is_stmt 0 view .LVU161
- 640 001c 3046     		mov	r0, r6
- 641 001e FFF7FEFF 		bl	pvPortMalloc
- 642              	.LVL44:
- 643              		.loc 1 233 12 view .LVU162
- 644 0022 C4F80A00 		str	r0, [r4, #10]	@ unaligned
- 234:Robot/Lib/user_lib.c ****     OLS->k = 0;
- 645              		.loc 1 234 5 is_stmt 1 view .LVU163
- 646              		.loc 1 234 12 is_stmt 0 view .LVU164
- 647 0026 0023     		movs	r3, #0
- 648 0028 C4F80E30 		str	r3, [r4, #14]	@ unaligned
- 235:Robot/Lib/user_lib.c ****     OLS->b = 0;
- 649              		.loc 1 235 5 is_stmt 1 view .LVU165
- 650              		.loc 1 235 12 is_stmt 0 view .LVU166
- 651 002c C4F81230 		str	r3, [r4, #18]	@ unaligned
- 236:Robot/Lib/user_lib.c ****     memset((void *)OLS->x, 0, sizeof(float) * order);
- 652              		.loc 1 236 5 is_stmt 1 view .LVU167
- 653 0030 3246     		mov	r2, r6
- 654 0032 2946     		mov	r1, r5
- 655 0034 D4F80600 		ldr	r0, [r4, #6]	@ unaligned
- 656 0038 FFF7FEFF 		bl	memset
- 657              	.LVL45:
- 237:Robot/Lib/user_lib.c ****     memset((void *)OLS->y, 0, sizeof(float) * order);
- 658              		.loc 1 237 5 view .LVU168
- 659 003c 3246     		mov	r2, r6
- 660 003e 2946     		mov	r1, r5
- 661 0040 D4F80A00 		ldr	r0, [r4, #10]	@ unaligned
- 662 0044 FFF7FEFF 		bl	memset
- 663              	.LVL46:
- 238:Robot/Lib/user_lib.c ****     memset((void *)OLS->t, 0, sizeof(float) * 4);
- 664              		.loc 1 238 5 view .LVU169
- 665 0048 C4F81A50 		str	r5, [r4, #26]	@ unaligned
- 666 004c C4F81E50 		str	r5, [r4, #30]	@ unaligned
- 667 0050 C4F82250 		str	r5, [r4, #34]	@ unaligned
- 668 0054 C4F82650 		str	r5, [r4, #38]	@ unaligned
+ 667              		@ link register save eliminated.
+ 209:Robot/Lib/user_lib.c ****     if (maxValue < minValue)
+ 668              		.loc 1 209 5 view .LVU180
+ 669              		.loc 1 209 8 is_stmt 0 view .LVU181
+ 670 0000 B4EEE01A 		vcmpe.f32	s2, s1
+ 671 0004 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 672 0008 1ED4     		bmi	.L53
+ 210:Robot/Lib/user_lib.c ****     {
+ 211:Robot/Lib/user_lib.c ****         return Input;
+ 212:Robot/Lib/user_lib.c ****     }
+ 213:Robot/Lib/user_lib.c **** 
+ 214:Robot/Lib/user_lib.c ****     if (Input > maxValue)
+ 673              		.loc 1 214 5 is_stmt 1 view .LVU182
+ 674              		.loc 1 214 8 is_stmt 0 view .LVU183
+ 675 000a B4EEC01A 		vcmpe.f32	s2, s0
+ 676 000e F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 677 0012 0AD5     		bpl	.L63
+ 678              	.LBB2:
+ 215:Robot/Lib/user_lib.c ****     {
+ 216:Robot/Lib/user_lib.c ****         float len = maxValue - minValue;
+ 679              		.loc 1 216 9 is_stmt 1 view .LVU184
+ 680              		.loc 1 216 15 is_stmt 0 view .LVU185
+ 681 0014 71EE600A 		vsub.f32	s1, s2, s1
+ 682              	.LVL37:
+ 217:Robot/Lib/user_lib.c ****         while (Input > maxValue)
+ 683              		.loc 1 217 9 is_stmt 1 view .LVU186
+ 684              		.loc 1 217 15 is_stmt 0 view .LVU187
+ 685 0018 01E0     		b	.L56
+ 686              	.L57:
+ 218:Robot/Lib/user_lib.c ****         {
+ 219:Robot/Lib/user_lib.c ****             Input -= len;
+ 687              		.loc 1 219 13 is_stmt 1 view .LVU188
+ 688              		.loc 1 219 19 is_stmt 0 view .LVU189
+ 689 001a 30EE600A 		vsub.f32	s0, s0, s1
+ 690              	.LVL38:
+ 691              	.L56:
+ 217:Robot/Lib/user_lib.c ****         while (Input > maxValue)
+ 692              		.loc 1 217 15 is_stmt 1 view .LVU190
+ 693 001e B4EEC10A 		vcmpe.f32	s0, s2
+ 694 0022 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 695 0026 F8DC     		bgt	.L57
+ 217:Robot/Lib/user_lib.c ****         while (Input > maxValue)
+ 696              		.loc 1 217 15 is_stmt 0 view .LVU191
+ 697 0028 7047     		bx	lr
+ 698              	.LVL39:
+ 699              	.L63:
+ 217:Robot/Lib/user_lib.c ****         while (Input > maxValue)
+ 700              		.loc 1 217 15 view .LVU192
+ 701              	.LBE2:
+ 220:Robot/Lib/user_lib.c ****         }
+ 221:Robot/Lib/user_lib.c ****     }
+ 222:Robot/Lib/user_lib.c ****     else if (Input < minValue)
+ 702              		.loc 1 222 10 is_stmt 1 view .LVU193
+ 703              		.loc 1 222 13 is_stmt 0 view .LVU194
+ 704 002a F4EEC00A 		vcmpe.f32	s1, s0
+ 705 002e F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 706 0032 09DD     		ble	.L53
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 17
+
+
+ 707              	.LBB3:
+ 223:Robot/Lib/user_lib.c ****     {
+ 224:Robot/Lib/user_lib.c ****         float len = maxValue - minValue;
+ 708              		.loc 1 224 9 is_stmt 1 view .LVU195
+ 709              		.loc 1 224 15 is_stmt 0 view .LVU196
+ 710 0034 31EE601A 		vsub.f32	s2, s2, s1
+ 711              	.LVL40:
+ 225:Robot/Lib/user_lib.c ****         while (Input < minValue)
+ 712              		.loc 1 225 9 is_stmt 1 view .LVU197
+ 713              	.L59:
+ 714              		.loc 1 225 15 view .LVU198
+ 715 0038 B4EEE00A 		vcmpe.f32	s0, s1
+ 716 003c F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 717 0040 02D5     		bpl	.L53
+ 226:Robot/Lib/user_lib.c ****         {
+ 227:Robot/Lib/user_lib.c ****             Input += len;
+ 718              		.loc 1 227 13 view .LVU199
+ 719              		.loc 1 227 19 is_stmt 0 view .LVU200
+ 720 0042 30EE010A 		vadd.f32	s0, s0, s2
+ 721              	.LVL41:
+ 722              		.loc 1 227 19 view .LVU201
+ 723 0046 F7E7     		b	.L59
+ 724              	.LVL42:
+ 725              	.L53:
+ 726              		.loc 1 227 19 view .LVU202
+ 727              	.LBE3:
+ 228:Robot/Lib/user_lib.c ****         }
+ 229:Robot/Lib/user_lib.c ****     }
+ 230:Robot/Lib/user_lib.c ****     return Input;
+ 231:Robot/Lib/user_lib.c **** }
+ 728              		.loc 1 231 1 view .LVU203
+ 729 0048 7047     		bx	lr
+ 730              		.cfi_endproc
+ 731              	.LFE162:
+ 733              		.section	.text.theta_format,"ax",%progbits
+ 734              		.align	1
+ 735              		.global	theta_format
+ 736              		.syntax unified
+ 737              		.thumb
+ 738              		.thumb_func
+ 740              	theta_format:
+ 741              	.LVL43:
+ 742              	.LFB163:
+ 232:Robot/Lib/user_lib.c **** 
+ 233:Robot/Lib/user_lib.c **** //弧度格式化为-PI~PI
+ 234:Robot/Lib/user_lib.c **** 
+ 235:Robot/Lib/user_lib.c **** //角度格式化为-180~180
+ 236:Robot/Lib/user_lib.c **** float theta_format(float Ang)
+ 237:Robot/Lib/user_lib.c **** {
+ 743              		.loc 1 237 1 is_stmt 1 view -0
+ 744              		.cfi_startproc
+ 745              		@ args = 0, pretend = 0, frame = 0
+ 746              		@ frame_needed = 0, uses_anonymous_args = 0
+ 747              		.loc 1 237 1 is_stmt 0 view .LVU205
+ 748 0000 08B5     		push	{r3, lr}
+ 749              	.LCFI4:
+ 750              		.cfi_def_cfa_offset 8
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 18
+
+
+ 751              		.cfi_offset 3, -8
+ 752              		.cfi_offset 14, -4
+ 238:Robot/Lib/user_lib.c ****     return loop_float_constrain(Ang, -180.0f, 180.0f);
+ 753              		.loc 1 238 5 is_stmt 1 view .LVU206
+ 754              		.loc 1 238 12 is_stmt 0 view .LVU207
+ 755 0002 9FED031A 		vldr.32	s2, .L66
+ 756 0006 DFED030A 		vldr.32	s1, .L66+4
+ 757 000a FFF7FEFF 		bl	loop_float_constrain
+ 758              	.LVL44:
  239:Robot/Lib/user_lib.c **** }
- 669              		.loc 1 239 1 is_stmt 0 view .LVU170
- 670 0058 70BD     		pop	{r4, r5, r6, pc}
- 671              		.loc 1 239 1 view .LVU171
- 672              		.cfi_endproc
- 673              	.LFE161:
- 675              		.section	.text.OLS_Update,"ax",%progbits
- 676              		.align	1
- 677              		.global	OLS_Update
- 678              		.syntax unified
- 679              		.thumb
- 680              		.thumb_func
- 682              	OLS_Update:
- 683              	.LVL47:
- 684              	.LFB162:
+ 759              		.loc 1 239 1 view .LVU208
+ 760 000e 08BD     		pop	{r3, pc}
+ 761              	.L67:
+ 762              		.align	2
+ 763              	.L66:
+ 764 0010 00003443 		.word	1127481344
+ 765 0014 000034C3 		.word	-1020002304
+ 766              		.cfi_endproc
+ 767              	.LFE163:
+ 769              		.section	.text.float_rounding,"ax",%progbits
+ 770              		.align	1
+ 771              		.global	float_rounding
+ 772              		.syntax unified
+ 773              		.thumb
+ 774              		.thumb_func
+ 776              	float_rounding:
+ 777              	.LVL45:
+ 778              	.LFB164:
  240:Robot/Lib/user_lib.c **** 
- 241:Robot/Lib/user_lib.c **** /**
- 242:Robot/Lib/user_lib.c ****   * @brief          最小二乘法拟合
- 243:Robot/Lib/user_lib.c ****   * @param[in]      最小二乘法结构体
- 244:Robot/Lib/user_lib.c ****   * @param[in]      信号新样本距上一个样本时间间隔
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 17
+ 241:Robot/Lib/user_lib.c **** int float_rounding(float raw)
+ 242:Robot/Lib/user_lib.c **** {
+ 779              		.loc 1 242 1 is_stmt 1 view -0
+ 780              		.cfi_startproc
+ 781              		@ args = 0, pretend = 0, frame = 0
+ 782              		@ frame_needed = 0, uses_anonymous_args = 0
+ 783              		@ link register save eliminated.
+ 243:Robot/Lib/user_lib.c ****     static int integer;
+ 784              		.loc 1 243 5 view .LVU210
+ 244:Robot/Lib/user_lib.c ****     static float decimal;
+ 785              		.loc 1 244 5 view .LVU211
+ 245:Robot/Lib/user_lib.c ****     integer = (int)raw;
+ 786              		.loc 1 245 5 view .LVU212
+ 787              		.loc 1 245 15 is_stmt 0 view .LVU213
+ 788 0000 FDEEC07A 		vcvt.s32.f32	s15, s0
+ 789              		.loc 1 245 13 view .LVU214
+ 790 0004 0C4B     		ldr	r3, .L72
+ 791 0006 C3ED007A 		vstr.32	s15, [r3]	@ int
+ 246:Robot/Lib/user_lib.c ****     decimal = raw - integer;
+ 792              		.loc 1 246 5 is_stmt 1 view .LVU215
+ 793              		.loc 1 246 19 is_stmt 0 view .LVU216
+ 794 000a B8EEE77A 		vcvt.f32.s32	s14, s15
+ 795 000e 30EE470A 		vsub.f32	s0, s0, s14
+ 796              	.LVL46:
+ 797              		.loc 1 246 13 view .LVU217
+ 798 0012 0A4B     		ldr	r3, .L72+4
+ 799 0014 83ED000A 		vstr.32	s0, [r3]
+ 247:Robot/Lib/user_lib.c ****     if (decimal > 0.5f)
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 19
 
 
- 245:Robot/Lib/user_lib.c ****   * @param[in]      信号值
- 246:Robot/Lib/user_lib.c ****   */
- 247:Robot/Lib/user_lib.c **** void OLS_Update(Ordinary_Least_Squares_t *OLS, float deltax, float y)
- 248:Robot/Lib/user_lib.c **** {
- 685              		.loc 1 248 1 is_stmt 1 view -0
- 686              		.cfi_startproc
- 687              		@ args = 0, pretend = 0, frame = 0
- 688              		@ frame_needed = 0, uses_anonymous_args = 0
- 689              		.loc 1 248 1 is_stmt 0 view .LVU173
- 690 0000 00B5     		push	{lr}
- 691              	.LCFI2:
- 692              		.cfi_def_cfa_offset 4
- 693              		.cfi_offset 14, -4
- 249:Robot/Lib/user_lib.c ****     static float temp = 0;
- 694              		.loc 1 249 5 is_stmt 1 view .LVU174
- 250:Robot/Lib/user_lib.c ****     temp = OLS->x[1];
- 695              		.loc 1 250 5 view .LVU175
- 696              		.loc 1 250 15 is_stmt 0 view .LVU176
- 697 0002 D0F80630 		ldr	r3, [r0, #6]	@ unaligned
- 698              		.loc 1 250 10 view .LVU177
- 699 0006 93ED017A 		vldr.32	s14, [r3, #4]
- 700 000a 7C4B     		ldr	r3, .L79
- 701 000c 83ED007A 		vstr.32	s14, [r3]
- 251:Robot/Lib/user_lib.c ****     for (uint16_t i = 0; i < OLS->Order - 1; ++i)
- 702              		.loc 1 251 5 is_stmt 1 view .LVU178
- 703              	.LBB4:
- 704              		.loc 1 251 10 view .LVU179
- 705              	.LVL48:
- 706              		.loc 1 251 19 is_stmt 0 view .LVU180
- 707 0010 0023     		movs	r3, #0
- 708              		.loc 1 251 5 view .LVU181
- 709 0012 15E0     		b	.L71
- 710              	.LVL49:
- 711              	.L72:
- 252:Robot/Lib/user_lib.c ****     {
- 253:Robot/Lib/user_lib.c ****         OLS->x[i] = OLS->x[i + 1] - temp;
- 712              		.loc 1 253 9 is_stmt 1 discriminator 3 view .LVU182
- 713              		.loc 1 253 24 is_stmt 0 discriminator 3 view .LVU183
- 714 0014 D0F80620 		ldr	r2, [r0, #6]	@ unaligned
- 715              		.loc 1 253 27 discriminator 3 view .LVU184
- 716 0018 591C     		adds	r1, r3, #1
- 717 001a 02EB810C 		add	ip, r2, r1, lsl #2
- 718 001e DCED007A 		vldr.32	s15, [ip]
- 719              		.loc 1 253 15 discriminator 3 view .LVU185
- 720 0022 02EB8302 		add	r2, r2, r3, lsl #2
- 721              		.loc 1 253 35 discriminator 3 view .LVU186
- 722 0026 77EEC77A 		vsub.f32	s15, s15, s14
- 723              		.loc 1 253 19 discriminator 3 view .LVU187
- 724 002a C2ED007A 		vstr.32	s15, [r2]
- 254:Robot/Lib/user_lib.c ****         OLS->y[i] = OLS->y[i + 1];
- 725              		.loc 1 254 9 is_stmt 1 discriminator 3 view .LVU188
- 726              		.loc 1 254 24 is_stmt 0 discriminator 3 view .LVU189
- 727 002e D0F80A20 		ldr	r2, [r0, #10]	@ unaligned
- 728              		.loc 1 254 15 discriminator 3 view .LVU190
- 729 0032 02EB8303 		add	r3, r2, r3, lsl #2
- 730              	.LVL50:
- 731              		.loc 1 254 27 discriminator 3 view .LVU191
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 18
+ 800              		.loc 1 247 5 is_stmt 1 view .LVU218
+ 801              		.loc 1 247 8 is_stmt 0 view .LVU219
+ 802 0018 B6EE007A 		vmov.f32	s14, #5.0e-1
+ 803 001c B4EEC70A 		vcmpe.f32	s0, s14
+ 804 0020 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 805 0024 04DD     		ble	.L69
+ 248:Robot/Lib/user_lib.c ****         integer++;
+ 806              		.loc 1 248 9 is_stmt 1 view .LVU220
+ 807              		.loc 1 248 16 is_stmt 0 view .LVU221
+ 808 0026 17EE903A 		vmov	r3, s15	@ int
+ 809 002a 0133     		adds	r3, r3, #1
+ 810 002c 024A     		ldr	r2, .L72
+ 811 002e 1360     		str	r3, [r2]
+ 812              	.L69:
+ 249:Robot/Lib/user_lib.c ****     return integer;
+ 813              		.loc 1 249 5 is_stmt 1 view .LVU222
+ 250:Robot/Lib/user_lib.c **** }
+ 814              		.loc 1 250 1 is_stmt 0 view .LVU223
+ 815 0030 014B     		ldr	r3, .L72
+ 816 0032 1868     		ldr	r0, [r3]
+ 817 0034 7047     		bx	lr
+ 818              	.L73:
+ 819 0036 00BF     		.align	2
+ 820              	.L72:
+ 821 0038 00000000 		.word	.LANCHOR0
+ 822 003c 00000000 		.word	.LANCHOR1
+ 823              		.cfi_endproc
+ 824              	.LFE164:
+ 826              		.section	.text.OLS_Init,"ax",%progbits
+ 827              		.align	1
+ 828              		.global	OLS_Init
+ 829              		.syntax unified
+ 830              		.thumb
+ 831              		.thumb_func
+ 833              	OLS_Init:
+ 834              	.LVL47:
+ 835              	.LFB165:
+ 251:Robot/Lib/user_lib.c **** 
+ 252:Robot/Lib/user_lib.c **** /**
+ 253:Robot/Lib/user_lib.c ****   * @brief          最小二乘法初始化
+ 254:Robot/Lib/user_lib.c ****   * @param[in]      最小二乘法结构体
+ 255:Robot/Lib/user_lib.c ****   * @param[in]      样本数
+ 256:Robot/Lib/user_lib.c ****   * @retval         返回空
+ 257:Robot/Lib/user_lib.c ****   */
+ 258:Robot/Lib/user_lib.c **** void OLS_Init(Ordinary_Least_Squares_t *OLS, uint16_t order)
+ 259:Robot/Lib/user_lib.c **** {
+ 836              		.loc 1 259 1 is_stmt 1 view -0
+ 837              		.cfi_startproc
+ 838              		@ args = 0, pretend = 0, frame = 0
+ 839              		@ frame_needed = 0, uses_anonymous_args = 0
+ 840              		.loc 1 259 1 is_stmt 0 view .LVU225
+ 841 0000 70B5     		push	{r4, r5, r6, lr}
+ 842              	.LCFI5:
+ 843              		.cfi_def_cfa_offset 16
+ 844              		.cfi_offset 4, -16
+ 845              		.cfi_offset 5, -12
+ 846              		.cfi_offset 6, -8
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 20
 
 
- 732 0036 02EB8102 		add	r2, r2, r1, lsl #2
- 733 003a 1268     		ldr	r2, [r2]	@ float
- 734              		.loc 1 254 19 discriminator 3 view .LVU192
- 735 003c 1A60     		str	r2, [r3]	@ float
- 251:Robot/Lib/user_lib.c ****     for (uint16_t i = 0; i < OLS->Order - 1; ++i)
- 736              		.loc 1 251 46 is_stmt 1 discriminator 3 view .LVU193
- 737 003e 8BB2     		uxth	r3, r1
- 738              	.LVL51:
- 739              	.L71:
- 251:Robot/Lib/user_lib.c ****     for (uint16_t i = 0; i < OLS->Order - 1; ++i)
- 740              		.loc 1 251 26 discriminator 1 view .LVU194
- 251:Robot/Lib/user_lib.c ****     for (uint16_t i = 0; i < OLS->Order - 1; ++i)
- 741              		.loc 1 251 33 is_stmt 0 discriminator 1 view .LVU195
- 742 0040 0288     		ldrh	r2, [r0]	@ unaligned
- 251:Robot/Lib/user_lib.c ****     for (uint16_t i = 0; i < OLS->Order - 1; ++i)
- 743              		.loc 1 251 41 discriminator 1 view .LVU196
- 744 0042 511E     		subs	r1, r2, #1
- 251:Robot/Lib/user_lib.c ****     for (uint16_t i = 0; i < OLS->Order - 1; ++i)
- 745              		.loc 1 251 5 discriminator 1 view .LVU197
- 746 0044 8B42     		cmp	r3, r1
- 747 0046 E5DB     		blt	.L72
- 748              	.LBE4:
- 255:Robot/Lib/user_lib.c ****     }
- 256:Robot/Lib/user_lib.c ****     OLS->x[OLS->Order - 1] = OLS->x[OLS->Order - 2] + deltax;
- 749              		.loc 1 256 5 is_stmt 1 view .LVU198
- 750              		.loc 1 256 33 is_stmt 0 view .LVU199
- 751 0048 D0F80610 		ldr	r1, [r0, #6]	@ unaligned
- 752              		.loc 1 256 36 view .LVU200
- 753 004c 6C4B     		ldr	r3, .L79+4
- 754              	.LVL52:
- 755              		.loc 1 256 36 view .LVU201
- 756 004e 1344     		add	r3, r3, r2
- 757 0050 01EB8303 		add	r3, r1, r3, lsl #2
- 758 0054 D3ED007A 		vldr.32	s15, [r3]
- 759              		.loc 1 256 11 view .LVU202
- 760 0058 6FF0404C 		mvn	ip, #-1073741824
- 761 005c 6244     		add	r2, r2, ip
- 762 005e 01EB8202 		add	r2, r1, r2, lsl #2
- 763              		.loc 1 256 53 view .LVU203
- 764 0062 37EE800A 		vadd.f32	s0, s15, s0
- 765              	.LVL53:
- 766              		.loc 1 256 28 view .LVU204
- 767 0066 82ED000A 		vstr.32	s0, [r2]
- 257:Robot/Lib/user_lib.c ****     OLS->y[OLS->Order - 1] = y;
- 768              		.loc 1 257 5 is_stmt 1 view .LVU205
- 769              		.loc 1 257 8 is_stmt 0 view .LVU206
- 770 006a D0F80A30 		ldr	r3, [r0, #10]	@ unaligned
- 771              		.loc 1 257 15 view .LVU207
- 772 006e 0288     		ldrh	r2, [r0]	@ unaligned
- 773              		.loc 1 257 11 view .LVU208
- 774 0070 6244     		add	r2, r2, ip
- 775 0072 03EB8203 		add	r3, r3, r2, lsl #2
- 776              		.loc 1 257 28 view .LVU209
- 777 0076 C3ED000A 		vstr.32	s1, [r3]
- 258:Robot/Lib/user_lib.c **** 
- 259:Robot/Lib/user_lib.c ****     if (OLS->Count < OLS->Order)
- 778              		.loc 1 259 5 is_stmt 1 view .LVU210
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 19
+ 847              		.cfi_offset 14, -4
+ 848 0002 0446     		mov	r4, r0
+ 260:Robot/Lib/user_lib.c ****     OLS->Order = order;
+ 849              		.loc 1 260 5 is_stmt 1 view .LVU226
+ 850              		.loc 1 260 16 is_stmt 0 view .LVU227
+ 851 0004 0180     		strh	r1, [r0]	@ unaligned
+ 261:Robot/Lib/user_lib.c ****     OLS->Count = 0;
+ 852              		.loc 1 261 5 is_stmt 1 view .LVU228
+ 853              		.loc 1 261 16 is_stmt 0 view .LVU229
+ 854 0006 0025     		movs	r5, #0
+ 855 0008 8570     		strb	r5, [r0, #2]
+ 856 000a C570     		strb	r5, [r0, #3]
+ 857 000c 0571     		strb	r5, [r0, #4]
+ 858 000e 4571     		strb	r5, [r0, #5]
+ 262:Robot/Lib/user_lib.c ****     OLS->x = (float *)user_malloc(sizeof(float) * order);
+ 859              		.loc 1 262 5 is_stmt 1 view .LVU230
+ 860              		.loc 1 262 23 is_stmt 0 view .LVU231
+ 861 0010 8E00     		lsls	r6, r1, #2
+ 862 0012 3046     		mov	r0, r6
+ 863              	.LVL48:
+ 864              		.loc 1 262 23 view .LVU232
+ 865 0014 FFF7FEFF 		bl	pvPortMalloc
+ 866              	.LVL49:
+ 867              		.loc 1 262 12 view .LVU233
+ 868 0018 C4F80600 		str	r0, [r4, #6]	@ unaligned
+ 263:Robot/Lib/user_lib.c ****     OLS->y = (float *)user_malloc(sizeof(float) * order);
+ 869              		.loc 1 263 5 is_stmt 1 view .LVU234
+ 870              		.loc 1 263 23 is_stmt 0 view .LVU235
+ 871 001c 3046     		mov	r0, r6
+ 872 001e FFF7FEFF 		bl	pvPortMalloc
+ 873              	.LVL50:
+ 874              		.loc 1 263 12 view .LVU236
+ 875 0022 C4F80A00 		str	r0, [r4, #10]	@ unaligned
+ 264:Robot/Lib/user_lib.c ****     OLS->k = 0;
+ 876              		.loc 1 264 5 is_stmt 1 view .LVU237
+ 877              		.loc 1 264 12 is_stmt 0 view .LVU238
+ 878 0026 0023     		movs	r3, #0
+ 879 0028 C4F80E30 		str	r3, [r4, #14]	@ unaligned
+ 265:Robot/Lib/user_lib.c ****     OLS->b = 0;
+ 880              		.loc 1 265 5 is_stmt 1 view .LVU239
+ 881              		.loc 1 265 12 is_stmt 0 view .LVU240
+ 882 002c C4F81230 		str	r3, [r4, #18]	@ unaligned
+ 266:Robot/Lib/user_lib.c ****     memset((void *)OLS->x, 0, sizeof(float) * order);
+ 883              		.loc 1 266 5 is_stmt 1 view .LVU241
+ 884 0030 3246     		mov	r2, r6
+ 885 0032 2946     		mov	r1, r5
+ 886 0034 D4F80600 		ldr	r0, [r4, #6]	@ unaligned
+ 887 0038 FFF7FEFF 		bl	memset
+ 888              	.LVL51:
+ 267:Robot/Lib/user_lib.c ****     memset((void *)OLS->y, 0, sizeof(float) * order);
+ 889              		.loc 1 267 5 view .LVU242
+ 890 003c 3246     		mov	r2, r6
+ 891 003e 2946     		mov	r1, r5
+ 892 0040 D4F80A00 		ldr	r0, [r4, #10]	@ unaligned
+ 893 0044 FFF7FEFF 		bl	memset
+ 894              	.LVL52:
+ 268:Robot/Lib/user_lib.c ****     memset((void *)OLS->t, 0, sizeof(float) * 4);
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 21
 
 
- 779              		.loc 1 259 12 is_stmt 0 view .LVU211
- 780 007a D0F80230 		ldr	r3, [r0, #2]	@ unaligned
- 781              		.loc 1 259 25 view .LVU212
- 782 007e B0F800C0 		ldrh	ip, [r0]	@ unaligned
- 783              		.loc 1 259 8 view .LVU213
- 784 0082 6345     		cmp	r3, ip
- 785 0084 02D2     		bcs	.L73
- 260:Robot/Lib/user_lib.c ****     {
- 261:Robot/Lib/user_lib.c ****         OLS->Count++;
- 786              		.loc 1 261 9 is_stmt 1 view .LVU214
- 787              		.loc 1 261 19 is_stmt 0 view .LVU215
- 788 0086 0133     		adds	r3, r3, #1
- 789 0088 C0F80230 		str	r3, [r0, #2]	@ unaligned
- 790              	.L73:
- 262:Robot/Lib/user_lib.c ****     }
- 263:Robot/Lib/user_lib.c ****     memset((void *)OLS->t, 0, sizeof(float) * 4);
- 791              		.loc 1 263 5 is_stmt 1 view .LVU216
- 792 008c 0023     		movs	r3, #0
- 793 008e C0F81A30 		str	r3, [r0, #26]	@ unaligned
- 794 0092 C0F81E30 		str	r3, [r0, #30]	@ unaligned
- 795 0096 C0F82230 		str	r3, [r0, #34]	@ unaligned
- 796 009a C0F82630 		str	r3, [r0, #38]	@ unaligned
- 264:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
- 797              		.loc 1 264 5 view .LVU217
- 798              	.LBB5:
- 799              		.loc 1 264 10 view .LVU218
- 800              		.loc 1 264 39 is_stmt 0 view .LVU219
- 801 009e D0F80230 		ldr	r3, [r0, #2]	@ unaligned
- 802              		.loc 1 264 34 view .LVU220
- 803 00a2 9BB2     		uxth	r3, r3
- 804              		.loc 1 264 19 view .LVU221
- 805 00a4 ACEB0303 		sub	r3, ip, r3
- 806 00a8 9BB2     		uxth	r3, r3
- 807              	.LVL54:
- 808              		.loc 1 264 19 view .LVU222
- 809 00aa 1A46     		mov	r2, r3
- 810              		.loc 1 264 5 view .LVU223
- 811 00ac 3FE0     		b	.L74
- 812              	.LVL55:
- 813              	.L75:
- 265:Robot/Lib/user_lib.c ****     {
- 266:Robot/Lib/user_lib.c ****         OLS->t[0] += OLS->x[i] * OLS->x[i];
- 814              		.loc 1 266 9 is_stmt 1 discriminator 3 view .LVU224
- 815              		.loc 1 266 25 is_stmt 0 discriminator 3 view .LVU225
- 816 00ae D0F80610 		ldr	r1, [r0, #6]	@ unaligned
- 817              		.loc 1 266 28 discriminator 3 view .LVU226
- 818 00b2 01EB8201 		add	r1, r1, r2, lsl #2
- 819 00b6 D1ED007A 		vldr.32	s15, [r1]
- 820              		.loc 1 266 32 discriminator 3 view .LVU227
- 821 00ba 67EEA77A 		vmul.f32	s15, s15, s15
- 822              		.loc 1 266 19 discriminator 3 view .LVU228
- 823 00be D0F81AE0 		ldr	lr, [r0, #26]	@ unaligned
- 824 00c2 07EE10EA 		vmov	s14, lr
- 825 00c6 77EE877A 		vadd.f32	s15, s15, s14
- 826 00ca 17EE90EA 		vmov	lr, s15	@ int
- 827 00ce C0F81AE0 		str	lr, [r0, #26]	@ unaligned
- 267:Robot/Lib/user_lib.c ****         OLS->t[1] += OLS->x[i];
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 20
+ 895              		.loc 1 268 5 view .LVU243
+ 896 0048 C4F81A50 		str	r5, [r4, #26]	@ unaligned
+ 897 004c C4F81E50 		str	r5, [r4, #30]	@ unaligned
+ 898 0050 C4F82250 		str	r5, [r4, #34]	@ unaligned
+ 899 0054 C4F82650 		str	r5, [r4, #38]	@ unaligned
+ 269:Robot/Lib/user_lib.c **** }
+ 900              		.loc 1 269 1 is_stmt 0 view .LVU244
+ 901 0058 70BD     		pop	{r4, r5, r6, pc}
+ 902              		.loc 1 269 1 view .LVU245
+ 903              		.cfi_endproc
+ 904              	.LFE165:
+ 906              		.section	.text.OLS_Update,"ax",%progbits
+ 907              		.align	1
+ 908              		.global	OLS_Update
+ 909              		.syntax unified
+ 910              		.thumb
+ 911              		.thumb_func
+ 913              	OLS_Update:
+ 914              	.LVL53:
+ 915              	.LFB166:
+ 270:Robot/Lib/user_lib.c **** 
+ 271:Robot/Lib/user_lib.c **** /**
+ 272:Robot/Lib/user_lib.c ****   * @brief          最小二乘法拟合
+ 273:Robot/Lib/user_lib.c ****   * @param[in]      最小二乘法结构体
+ 274:Robot/Lib/user_lib.c ****   * @param[in]      信号新样本距上一个样本时间间隔
+ 275:Robot/Lib/user_lib.c ****   * @param[in]      信号值
+ 276:Robot/Lib/user_lib.c ****   */
+ 277:Robot/Lib/user_lib.c **** void OLS_Update(Ordinary_Least_Squares_t *OLS, float deltax, float y)
+ 278:Robot/Lib/user_lib.c **** {
+ 916              		.loc 1 278 1 is_stmt 1 view -0
+ 917              		.cfi_startproc
+ 918              		@ args = 0, pretend = 0, frame = 0
+ 919              		@ frame_needed = 0, uses_anonymous_args = 0
+ 920              		.loc 1 278 1 is_stmt 0 view .LVU247
+ 921 0000 00B5     		push	{lr}
+ 922              	.LCFI6:
+ 923              		.cfi_def_cfa_offset 4
+ 924              		.cfi_offset 14, -4
+ 279:Robot/Lib/user_lib.c ****     static float temp = 0;
+ 925              		.loc 1 279 5 is_stmt 1 view .LVU248
+ 280:Robot/Lib/user_lib.c ****     temp = OLS->x[1];
+ 926              		.loc 1 280 5 view .LVU249
+ 927              		.loc 1 280 15 is_stmt 0 view .LVU250
+ 928 0002 D0F80630 		ldr	r3, [r0, #6]	@ unaligned
+ 929              		.loc 1 280 10 view .LVU251
+ 930 0006 93ED017A 		vldr.32	s14, [r3, #4]
+ 931 000a 7C4B     		ldr	r3, .L85
+ 932 000c 83ED007A 		vstr.32	s14, [r3]
+ 281:Robot/Lib/user_lib.c ****     for (uint16_t i = 0; i < OLS->Order - 1; ++i)
+ 933              		.loc 1 281 5 is_stmt 1 view .LVU252
+ 934              	.LBB4:
+ 935              		.loc 1 281 10 view .LVU253
+ 936              	.LVL54:
+ 937              		.loc 1 281 19 is_stmt 0 view .LVU254
+ 938 0010 0023     		movs	r3, #0
+ 939              		.loc 1 281 5 view .LVU255
+ 940 0012 15E0     		b	.L77
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 22
 
 
- 828              		.loc 1 267 9 is_stmt 1 discriminator 3 view .LVU229
- 829              		.loc 1 267 28 is_stmt 0 discriminator 3 view .LVU230
- 830 00d2 D1ED007A 		vldr.32	s15, [r1]
- 831              		.loc 1 267 19 discriminator 3 view .LVU231
- 832 00d6 D0F81EE0 		ldr	lr, [r0, #30]	@ unaligned
- 833 00da 07EE10EA 		vmov	s14, lr
- 834 00de 77EE877A 		vadd.f32	s15, s15, s14
- 835 00e2 17EE90EA 		vmov	lr, s15	@ int
- 836 00e6 C0F81EE0 		str	lr, [r0, #30]	@ unaligned
- 268:Robot/Lib/user_lib.c ****         OLS->t[2] += OLS->x[i] * OLS->y[i];
- 837              		.loc 1 268 9 is_stmt 1 discriminator 3 view .LVU232
- 838              		.loc 1 268 28 is_stmt 0 discriminator 3 view .LVU233
- 839 00ea D1ED007A 		vldr.32	s15, [r1]
- 840              		.loc 1 268 37 discriminator 3 view .LVU234
- 841 00ee D0F80A10 		ldr	r1, [r0, #10]	@ unaligned
- 842              		.loc 1 268 40 discriminator 3 view .LVU235
- 843 00f2 01EB8201 		add	r1, r1, r2, lsl #2
- 844 00f6 91ED007A 		vldr.32	s14, [r1]
- 845              		.loc 1 268 32 discriminator 3 view .LVU236
- 846 00fa 67EE877A 		vmul.f32	s15, s15, s14
- 847              		.loc 1 268 19 discriminator 3 view .LVU237
- 848 00fe D0F822E0 		ldr	lr, [r0, #34]	@ unaligned
- 849 0102 07EE10EA 		vmov	s14, lr
- 850 0106 77EE877A 		vadd.f32	s15, s15, s14
- 851 010a 17EE90EA 		vmov	lr, s15	@ int
- 852 010e C0F822E0 		str	lr, [r0, #34]	@ unaligned
- 269:Robot/Lib/user_lib.c ****         OLS->t[3] += OLS->y[i];
- 853              		.loc 1 269 9 is_stmt 1 discriminator 3 view .LVU238
- 854              		.loc 1 269 28 is_stmt 0 discriminator 3 view .LVU239
- 855 0112 D1ED007A 		vldr.32	s15, [r1]
- 856              		.loc 1 269 19 discriminator 3 view .LVU240
- 857 0116 D0F82610 		ldr	r1, [r0, #38]	@ unaligned
- 858 011a 07EE101A 		vmov	s14, r1
- 859 011e 77EE877A 		vadd.f32	s15, s15, s14
- 860 0122 17EE901A 		vmov	r1, s15	@ int
- 861 0126 C0F82610 		str	r1, [r0, #38]	@ unaligned
- 264:Robot/Lib/user_lib.c ****     {
- 862              		.loc 1 264 64 is_stmt 1 discriminator 3 view .LVU241
- 863 012a 0132     		adds	r2, r2, #1
- 864              	.LVL56:
- 264:Robot/Lib/user_lib.c ****     {
- 865              		.loc 1 264 64 is_stmt 0 discriminator 3 view .LVU242
- 866 012c 92B2     		uxth	r2, r2
- 867              	.LVL57:
- 868              	.L74:
- 264:Robot/Lib/user_lib.c ****     {
- 869              		.loc 1 264 48 is_stmt 1 discriminator 1 view .LVU243
- 264:Robot/Lib/user_lib.c ****     {
- 870              		.loc 1 264 5 is_stmt 0 discriminator 1 view .LVU244
- 871 012e 9445     		cmp	ip, r2
- 872 0130 BDD8     		bhi	.L75
- 873              	.LBE5:
- 270:Robot/Lib/user_lib.c ****     }
- 271:Robot/Lib/user_lib.c **** 
- 272:Robot/Lib/user_lib.c ****     OLS->k = (OLS->t[2] * OLS->Order - OLS->t[1] * OLS->t[3]) / (OLS->t[0] * OLS->Order - OLS->t[1]
- 874              		.loc 1 272 5 is_stmt 1 view .LVU245
- 875              		.loc 1 272 21 is_stmt 0 view .LVU246
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 21
+ 941              	.LVL55:
+ 942              	.L78:
+ 282:Robot/Lib/user_lib.c ****     {
+ 283:Robot/Lib/user_lib.c ****         OLS->x[i] = OLS->x[i + 1] - temp;
+ 943              		.loc 1 283 9 is_stmt 1 discriminator 3 view .LVU256
+ 944              		.loc 1 283 24 is_stmt 0 discriminator 3 view .LVU257
+ 945 0014 D0F80620 		ldr	r2, [r0, #6]	@ unaligned
+ 946              		.loc 1 283 27 discriminator 3 view .LVU258
+ 947 0018 591C     		adds	r1, r3, #1
+ 948 001a 02EB810C 		add	ip, r2, r1, lsl #2
+ 949 001e DCED007A 		vldr.32	s15, [ip]
+ 950              		.loc 1 283 15 discriminator 3 view .LVU259
+ 951 0022 02EB8302 		add	r2, r2, r3, lsl #2
+ 952              		.loc 1 283 35 discriminator 3 view .LVU260
+ 953 0026 77EEC77A 		vsub.f32	s15, s15, s14
+ 954              		.loc 1 283 19 discriminator 3 view .LVU261
+ 955 002a C2ED007A 		vstr.32	s15, [r2]
+ 284:Robot/Lib/user_lib.c ****         OLS->y[i] = OLS->y[i + 1];
+ 956              		.loc 1 284 9 is_stmt 1 discriminator 3 view .LVU262
+ 957              		.loc 1 284 24 is_stmt 0 discriminator 3 view .LVU263
+ 958 002e D0F80A20 		ldr	r2, [r0, #10]	@ unaligned
+ 959              		.loc 1 284 15 discriminator 3 view .LVU264
+ 960 0032 02EB8303 		add	r3, r2, r3, lsl #2
+ 961              	.LVL56:
+ 962              		.loc 1 284 27 discriminator 3 view .LVU265
+ 963 0036 02EB8102 		add	r2, r2, r1, lsl #2
+ 964 003a 1268     		ldr	r2, [r2]	@ float
+ 965              		.loc 1 284 19 discriminator 3 view .LVU266
+ 966 003c 1A60     		str	r2, [r3]	@ float
+ 281:Robot/Lib/user_lib.c ****     for (uint16_t i = 0; i < OLS->Order - 1; ++i)
+ 967              		.loc 1 281 46 is_stmt 1 discriminator 3 view .LVU267
+ 968 003e 8BB2     		uxth	r3, r1
+ 969              	.LVL57:
+ 970              	.L77:
+ 281:Robot/Lib/user_lib.c ****     for (uint16_t i = 0; i < OLS->Order - 1; ++i)
+ 971              		.loc 1 281 26 discriminator 1 view .LVU268
+ 281:Robot/Lib/user_lib.c ****     for (uint16_t i = 0; i < OLS->Order - 1; ++i)
+ 972              		.loc 1 281 33 is_stmt 0 discriminator 1 view .LVU269
+ 973 0040 0288     		ldrh	r2, [r0]	@ unaligned
+ 281:Robot/Lib/user_lib.c ****     for (uint16_t i = 0; i < OLS->Order - 1; ++i)
+ 974              		.loc 1 281 41 discriminator 1 view .LVU270
+ 975 0042 511E     		subs	r1, r2, #1
+ 281:Robot/Lib/user_lib.c ****     for (uint16_t i = 0; i < OLS->Order - 1; ++i)
+ 976              		.loc 1 281 5 discriminator 1 view .LVU271
+ 977 0044 8B42     		cmp	r3, r1
+ 978 0046 E5DB     		blt	.L78
+ 979              	.LBE4:
+ 285:Robot/Lib/user_lib.c ****     }
+ 286:Robot/Lib/user_lib.c ****     OLS->x[OLS->Order - 1] = OLS->x[OLS->Order - 2] + deltax;
+ 980              		.loc 1 286 5 is_stmt 1 view .LVU272
+ 981              		.loc 1 286 33 is_stmt 0 view .LVU273
+ 982 0048 D0F80610 		ldr	r1, [r0, #6]	@ unaligned
+ 983              		.loc 1 286 36 view .LVU274
+ 984 004c 6C4B     		ldr	r3, .L85+4
+ 985              	.LVL58:
+ 986              		.loc 1 286 36 view .LVU275
+ 987 004e 1344     		add	r3, r3, r2
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 23
 
 
- 876 0132 D0F82220 		ldr	r2, [r0, #34]	@ unaligned
- 877              	.LVL58:
- 878              		.loc 1 272 21 view .LVU247
- 879 0136 06EE902A 		vmov	s13, r2	@ int
- 880              		.loc 1 272 25 view .LVU248
- 881 013a 07EE90CA 		vmov	s15, ip	@ int
- 882 013e B8EEE75A 		vcvt.f32.s32	s10, s15
- 883 0142 66EE854A 		vmul.f32	s9, s13, s10
- 884              		.loc 1 272 46 view .LVU249
- 885 0146 D0F81E20 		ldr	r2, [r0, #30]	@ unaligned
- 886 014a 05EE902A 		vmov	s11, r2	@ int
- 887              		.loc 1 272 58 view .LVU250
- 888 014e D0F82620 		ldr	r2, [r0, #38]	@ unaligned
- 889 0152 07EE902A 		vmov	s15, r2	@ int
- 890              		.loc 1 272 50 view .LVU251
- 891 0156 25EEA77A 		vmul.f32	s14, s11, s15
- 892              		.loc 1 272 38 view .LVU252
- 893 015a 74EEC74A 		vsub.f32	s9, s9, s14
- 894              		.loc 1 272 72 view .LVU253
- 895 015e D0F81A20 		ldr	r2, [r0, #26]	@ unaligned
- 896 0162 04EE102A 		vmov	s8, r2	@ int
- 897              		.loc 1 272 76 view .LVU254
- 898 0166 25EE047A 		vmul.f32	s14, s10, s8
- 899              		.loc 1 272 101 view .LVU255
- 900 016a 25EEA56A 		vmul.f32	s12, s11, s11
- 901              		.loc 1 272 89 view .LVU256
- 902 016e 37EE467A 		vsub.f32	s14, s14, s12
- 903              		.loc 1 272 63 view .LVU257
- 904 0172 84EE876A 		vdiv.f32	s12, s9, s14
- 905              		.loc 1 272 12 view .LVU258
- 906 0176 16EE102A 		vmov	r2, s12
- 907 017a C0F80E20 		str	r2, [r0, #14]	@ unaligned
- 273:Robot/Lib/user_lib.c ****     OLS->b = (OLS->t[0] * OLS->t[3] - OLS->t[1] * OLS->t[2]) / (OLS->t[0] * OLS->Order - OLS->t[1] 
- 908              		.loc 1 273 5 is_stmt 1 view .LVU259
- 909              		.loc 1 273 25 is_stmt 0 view .LVU260
- 910 017e 67EE847A 		vmul.f32	s15, s15, s8
- 911              		.loc 1 273 49 view .LVU261
- 912 0182 66EEA56A 		vmul.f32	s13, s13, s11
- 913              		.loc 1 273 37 view .LVU262
- 914 0186 77EEE67A 		vsub.f32	s15, s15, s13
- 915              		.loc 1 273 62 view .LVU263
- 916 018a C7EE876A 		vdiv.f32	s13, s15, s14
- 917              		.loc 1 273 12 view .LVU264
- 918 018e 16EE902A 		vmov	r2, s13
- 919 0192 C0F81220 		str	r2, [r0, #18]	@ unaligned
- 274:Robot/Lib/user_lib.c **** 
- 275:Robot/Lib/user_lib.c ****     OLS->StandardDeviation = 0;
- 920              		.loc 1 275 5 is_stmt 1 view .LVU265
- 921              		.loc 1 275 28 is_stmt 0 view .LVU266
- 922 0196 0022     		movs	r2, #0
- 923 0198 C0F81620 		str	r2, [r0, #22]	@ unaligned
- 276:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
- 924              		.loc 1 276 5 is_stmt 1 view .LVU267
- 925              	.LBB6:
- 926              		.loc 1 276 10 view .LVU268
- 927              	.LVL59:
- 928              		.loc 1 276 5 is_stmt 0 view .LVU269
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 22
+ 988 0050 01EB8303 		add	r3, r1, r3, lsl #2
+ 989 0054 D3ED007A 		vldr.32	s15, [r3]
+ 990              		.loc 1 286 11 view .LVU276
+ 991 0058 6FF0404C 		mvn	ip, #-1073741824
+ 992 005c 6244     		add	r2, r2, ip
+ 993 005e 01EB8202 		add	r2, r1, r2, lsl #2
+ 994              		.loc 1 286 53 view .LVU277
+ 995 0062 37EE800A 		vadd.f32	s0, s15, s0
+ 996              	.LVL59:
+ 997              		.loc 1 286 28 view .LVU278
+ 998 0066 82ED000A 		vstr.32	s0, [r2]
+ 287:Robot/Lib/user_lib.c ****     OLS->y[OLS->Order - 1] = y;
+ 999              		.loc 1 287 5 is_stmt 1 view .LVU279
+ 1000              		.loc 1 287 8 is_stmt 0 view .LVU280
+ 1001 006a D0F80A30 		ldr	r3, [r0, #10]	@ unaligned
+ 1002              		.loc 1 287 15 view .LVU281
+ 1003 006e 0288     		ldrh	r2, [r0]	@ unaligned
+ 1004              		.loc 1 287 11 view .LVU282
+ 1005 0070 6244     		add	r2, r2, ip
+ 1006 0072 03EB8203 		add	r3, r3, r2, lsl #2
+ 1007              		.loc 1 287 28 view .LVU283
+ 1008 0076 C3ED000A 		vstr.32	s1, [r3]
+ 288:Robot/Lib/user_lib.c **** 
+ 289:Robot/Lib/user_lib.c ****     if (OLS->Count < OLS->Order)
+ 1009              		.loc 1 289 5 is_stmt 1 view .LVU284
+ 1010              		.loc 1 289 12 is_stmt 0 view .LVU285
+ 1011 007a D0F80230 		ldr	r3, [r0, #2]	@ unaligned
+ 1012              		.loc 1 289 25 view .LVU286
+ 1013 007e B0F800C0 		ldrh	ip, [r0]	@ unaligned
+ 1014              		.loc 1 289 8 view .LVU287
+ 1015 0082 6345     		cmp	r3, ip
+ 1016 0084 02D2     		bcs	.L79
+ 290:Robot/Lib/user_lib.c ****     {
+ 291:Robot/Lib/user_lib.c ****         OLS->Count++;
+ 1017              		.loc 1 291 9 is_stmt 1 view .LVU288
+ 1018              		.loc 1 291 19 is_stmt 0 view .LVU289
+ 1019 0086 0133     		adds	r3, r3, #1
+ 1020 0088 C0F80230 		str	r3, [r0, #2]	@ unaligned
+ 1021              	.L79:
+ 292:Robot/Lib/user_lib.c ****     }
+ 293:Robot/Lib/user_lib.c ****     memset((void *)OLS->t, 0, sizeof(float) * 4);
+ 1022              		.loc 1 293 5 is_stmt 1 view .LVU290
+ 1023 008c 0023     		movs	r3, #0
+ 1024 008e C0F81A30 		str	r3, [r0, #26]	@ unaligned
+ 1025 0092 C0F81E30 		str	r3, [r0, #30]	@ unaligned
+ 1026 0096 C0F82230 		str	r3, [r0, #34]	@ unaligned
+ 1027 009a C0F82630 		str	r3, [r0, #38]	@ unaligned
+ 294:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
+ 1028              		.loc 1 294 5 view .LVU291
+ 1029              	.LBB5:
+ 1030              		.loc 1 294 10 view .LVU292
+ 1031              		.loc 1 294 39 is_stmt 0 view .LVU293
+ 1032 009e D0F80230 		ldr	r3, [r0, #2]	@ unaligned
+ 1033              		.loc 1 294 34 view .LVU294
+ 1034 00a2 9BB2     		uxth	r3, r3
+ 1035              		.loc 1 294 19 view .LVU295
+ 1036 00a4 ACEB0303 		sub	r3, ip, r3
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 24
 
 
- 929 019c 1FE0     		b	.L76
- 930              	.L77:
- 277:Robot/Lib/user_lib.c ****     {
- 278:Robot/Lib/user_lib.c ****         OLS->StandardDeviation += fabsf(OLS->k * OLS->x[i] + OLS->b - OLS->y[i]);
- 931              		.loc 1 278 9 is_stmt 1 discriminator 3 view .LVU270
- 932              		.loc 1 278 53 is_stmt 0 discriminator 3 view .LVU271
- 933 019e D0F80620 		ldr	r2, [r0, #6]	@ unaligned
- 934              		.loc 1 278 56 discriminator 3 view .LVU272
- 935 01a2 02EB8302 		add	r2, r2, r3, lsl #2
- 936 01a6 D2ED007A 		vldr.32	s15, [r2]
- 937              		.loc 1 278 48 discriminator 3 view .LVU273
- 938 01aa 66EE277A 		vmul.f32	s15, s12, s15
- 939              		.loc 1 278 60 discriminator 3 view .LVU274
- 940 01ae 76EEA77A 		vadd.f32	s15, s13, s15
- 941              		.loc 1 278 74 discriminator 3 view .LVU275
- 942 01b2 D0F80A20 		ldr	r2, [r0, #10]	@ unaligned
- 943              		.loc 1 278 77 discriminator 3 view .LVU276
- 944 01b6 02EB8302 		add	r2, r2, r3, lsl #2
- 945 01ba 92ED007A 		vldr.32	s14, [r2]
- 946              		.loc 1 278 69 discriminator 3 view .LVU277
- 947 01be 77EEC77A 		vsub.f32	s15, s15, s14
- 948              		.loc 1 278 35 discriminator 3 view .LVU278
- 949 01c2 F0EEE77A 		vabs.f32	s15, s15
- 950              		.loc 1 278 32 discriminator 3 view .LVU279
- 951 01c6 D0F81620 		ldr	r2, [r0, #22]	@ unaligned
- 952 01ca 07EE102A 		vmov	s14, r2
- 953 01ce 77EE877A 		vadd.f32	s15, s15, s14
- 954 01d2 17EE902A 		vmov	r2, s15	@ int
- 955 01d6 C0F81620 		str	r2, [r0, #22]	@ unaligned
- 276:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
- 956              		.loc 1 276 64 is_stmt 1 discriminator 3 view .LVU280
- 957 01da 0133     		adds	r3, r3, #1
- 958              	.LVL60:
- 276:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
- 959              		.loc 1 276 64 is_stmt 0 discriminator 3 view .LVU281
- 960 01dc 9BB2     		uxth	r3, r3
- 961              	.LVL61:
- 962              	.L76:
- 276:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
- 963              		.loc 1 276 48 is_stmt 1 discriminator 1 view .LVU282
- 276:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
- 964              		.loc 1 276 5 is_stmt 0 discriminator 1 view .LVU283
- 965 01de 9C45     		cmp	ip, r3
- 966 01e0 DDD8     		bhi	.L77
- 276:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
- 967              		.loc 1 276 5 discriminator 1 view .LVU284
- 968              	.LBE6:
- 279:Robot/Lib/user_lib.c ****     }
- 280:Robot/Lib/user_lib.c ****     OLS->StandardDeviation /= OLS->Order;
- 969              		.loc 1 280 5 is_stmt 1 view .LVU285
- 970              		.loc 1 280 28 is_stmt 0 view .LVU286
- 971 01e2 D0F81620 		ldr	r2, [r0, #22]	@ unaligned
- 972 01e6 07EE902A 		vmov	s15, r2
- 973 01ea C7EE857A 		vdiv.f32	s15, s15, s10
- 974 01ee 17EE903A 		vmov	r3, s15
- 975              	.LVL62:
- 976              		.loc 1 280 28 view .LVU287
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 23
-
-
- 977 01f2 C0F81630 		str	r3, [r0, #22]	@ unaligned
- 281:Robot/Lib/user_lib.c **** }
- 978              		.loc 1 281 1 view .LVU288
- 979 01f6 5DF804FB 		ldr	pc, [sp], #4
- 980              	.L80:
- 981 01fa 00BF     		.align	2
- 982              	.L79:
- 983 01fc 00000000 		.word	.LANCHOR2
- 984 0200 FEFFFF3F 		.word	1073741822
- 985              		.cfi_endproc
- 986              	.LFE162:
- 988              		.section	.text.OLS_Derivative,"ax",%progbits
- 989              		.align	1
- 990              		.global	OLS_Derivative
- 991              		.syntax unified
- 992              		.thumb
- 993              		.thumb_func
- 995              	OLS_Derivative:
- 996              	.LVL63:
- 997              	.LFB163:
- 282:Robot/Lib/user_lib.c **** 
- 283:Robot/Lib/user_lib.c **** /**
- 284:Robot/Lib/user_lib.c ****   * @brief          最小二乘法提取信号微分
- 285:Robot/Lib/user_lib.c ****   * @param[in]      最小二乘法结构体
- 286:Robot/Lib/user_lib.c ****   * @param[in]      信号新样本距上一个样本时间间隔
- 287:Robot/Lib/user_lib.c ****   * @param[in]      信号值
- 288:Robot/Lib/user_lib.c ****   * @retval         返回斜率k
- 289:Robot/Lib/user_lib.c ****   */
- 290:Robot/Lib/user_lib.c **** float OLS_Derivative(Ordinary_Least_Squares_t *OLS, float deltax, float y)
- 291:Robot/Lib/user_lib.c **** {
- 998              		.loc 1 291 1 is_stmt 1 view -0
- 999              		.cfi_startproc
- 1000              		@ args = 0, pretend = 0, frame = 0
- 1001              		@ frame_needed = 0, uses_anonymous_args = 0
- 1002              		.loc 1 291 1 is_stmt 0 view .LVU290
- 1003 0000 00B5     		push	{lr}
- 1004              	.LCFI3:
- 1005              		.cfi_def_cfa_offset 4
- 1006              		.cfi_offset 14, -4
- 292:Robot/Lib/user_lib.c ****     static float temp = 0;
- 1007              		.loc 1 292 5 is_stmt 1 view .LVU291
- 293:Robot/Lib/user_lib.c ****     temp = OLS->x[1];
- 1008              		.loc 1 293 5 view .LVU292
- 1009              		.loc 1 293 15 is_stmt 0 view .LVU293
- 1010 0002 D0F80630 		ldr	r3, [r0, #6]	@ unaligned
- 1011              		.loc 1 293 10 view .LVU294
- 1012 0006 93ED017A 		vldr.32	s14, [r3, #4]
- 1013 000a 784B     		ldr	r3, .L90
- 1014 000c 83ED007A 		vstr.32	s14, [r3]
- 294:Robot/Lib/user_lib.c ****     for (uint16_t i = 0; i < OLS->Order - 1; ++i)
- 1015              		.loc 1 294 5 is_stmt 1 view .LVU295
- 1016              	.LBB7:
- 1017              		.loc 1 294 10 view .LVU296
- 1018              	.LVL64:
- 1019              		.loc 1 294 19 is_stmt 0 view .LVU297
- 1020 0010 0023     		movs	r3, #0
- 1021              		.loc 1 294 5 view .LVU298
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 24
-
-
- 1022 0012 15E0     		b	.L82
- 1023              	.LVL65:
- 1024              	.L83:
+ 1037 00a8 9BB2     		uxth	r3, r3
+ 1038              	.LVL60:
+ 1039              		.loc 1 294 19 view .LVU296
+ 1040 00aa 1A46     		mov	r2, r3
+ 1041              		.loc 1 294 5 view .LVU297
+ 1042 00ac 3FE0     		b	.L80
+ 1043              	.LVL61:
+ 1044              	.L81:
  295:Robot/Lib/user_lib.c ****     {
- 296:Robot/Lib/user_lib.c ****         OLS->x[i] = OLS->x[i + 1] - temp;
- 1025              		.loc 1 296 9 is_stmt 1 discriminator 3 view .LVU299
- 1026              		.loc 1 296 24 is_stmt 0 discriminator 3 view .LVU300
- 1027 0014 D0F80620 		ldr	r2, [r0, #6]	@ unaligned
- 1028              		.loc 1 296 27 discriminator 3 view .LVU301
- 1029 0018 591C     		adds	r1, r3, #1
- 1030 001a 02EB810C 		add	ip, r2, r1, lsl #2
- 1031 001e DCED007A 		vldr.32	s15, [ip]
- 1032              		.loc 1 296 15 discriminator 3 view .LVU302
- 1033 0022 02EB8302 		add	r2, r2, r3, lsl #2
- 1034              		.loc 1 296 35 discriminator 3 view .LVU303
- 1035 0026 77EEC77A 		vsub.f32	s15, s15, s14
- 1036              		.loc 1 296 19 discriminator 3 view .LVU304
- 1037 002a C2ED007A 		vstr.32	s15, [r2]
- 297:Robot/Lib/user_lib.c ****         OLS->y[i] = OLS->y[i + 1];
- 1038              		.loc 1 297 9 is_stmt 1 discriminator 3 view .LVU305
- 1039              		.loc 1 297 24 is_stmt 0 discriminator 3 view .LVU306
- 1040 002e D0F80A20 		ldr	r2, [r0, #10]	@ unaligned
- 1041              		.loc 1 297 15 discriminator 3 view .LVU307
- 1042 0032 02EB8303 		add	r3, r2, r3, lsl #2
- 1043              	.LVL66:
- 1044              		.loc 1 297 27 discriminator 3 view .LVU308
- 1045 0036 02EB8102 		add	r2, r2, r1, lsl #2
- 1046 003a 1268     		ldr	r2, [r2]	@ float
- 1047              		.loc 1 297 19 discriminator 3 view .LVU309
- 1048 003c 1A60     		str	r2, [r3]	@ float
- 294:Robot/Lib/user_lib.c ****     for (uint16_t i = 0; i < OLS->Order - 1; ++i)
- 1049              		.loc 1 294 46 is_stmt 1 discriminator 3 view .LVU310
- 1050 003e 8BB2     		uxth	r3, r1
- 1051              	.LVL67:
- 1052              	.L82:
- 294:Robot/Lib/user_lib.c ****     for (uint16_t i = 0; i < OLS->Order - 1; ++i)
- 1053              		.loc 1 294 26 discriminator 1 view .LVU311
- 294:Robot/Lib/user_lib.c ****     for (uint16_t i = 0; i < OLS->Order - 1; ++i)
- 1054              		.loc 1 294 33 is_stmt 0 discriminator 1 view .LVU312
- 1055 0040 0288     		ldrh	r2, [r0]	@ unaligned
- 294:Robot/Lib/user_lib.c ****     for (uint16_t i = 0; i < OLS->Order - 1; ++i)
- 1056              		.loc 1 294 41 discriminator 1 view .LVU313
- 1057 0042 511E     		subs	r1, r2, #1
- 294:Robot/Lib/user_lib.c ****     for (uint16_t i = 0; i < OLS->Order - 1; ++i)
- 1058              		.loc 1 294 5 discriminator 1 view .LVU314
- 1059 0044 8B42     		cmp	r3, r1
- 1060 0046 E5DB     		blt	.L83
- 1061              	.LBE7:
- 298:Robot/Lib/user_lib.c ****     }
- 299:Robot/Lib/user_lib.c ****     OLS->x[OLS->Order - 1] = OLS->x[OLS->Order - 2] + deltax;
- 1062              		.loc 1 299 5 is_stmt 1 view .LVU315
- 1063              		.loc 1 299 33 is_stmt 0 view .LVU316
- 1064 0048 D0F80610 		ldr	r1, [r0, #6]	@ unaligned
- 1065              		.loc 1 299 36 view .LVU317
- 1066 004c 684B     		ldr	r3, .L90+4
- 1067              	.LVL68:
- 1068              		.loc 1 299 36 view .LVU318
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 25
+ 296:Robot/Lib/user_lib.c ****         OLS->t[0] += OLS->x[i] * OLS->x[i];
+ 1045              		.loc 1 296 9 is_stmt 1 discriminator 3 view .LVU298
+ 1046              		.loc 1 296 25 is_stmt 0 discriminator 3 view .LVU299
+ 1047 00ae D0F80610 		ldr	r1, [r0, #6]	@ unaligned
+ 1048              		.loc 1 296 28 discriminator 3 view .LVU300
+ 1049 00b2 01EB8201 		add	r1, r1, r2, lsl #2
+ 1050 00b6 D1ED007A 		vldr.32	s15, [r1]
+ 1051              		.loc 1 296 32 discriminator 3 view .LVU301
+ 1052 00ba 67EEA77A 		vmul.f32	s15, s15, s15
+ 1053              		.loc 1 296 19 discriminator 3 view .LVU302
+ 1054 00be D0F81AE0 		ldr	lr, [r0, #26]	@ unaligned
+ 1055 00c2 07EE10EA 		vmov	s14, lr
+ 1056 00c6 77EE877A 		vadd.f32	s15, s15, s14
+ 1057 00ca 17EE90EA 		vmov	lr, s15	@ int
+ 1058 00ce C0F81AE0 		str	lr, [r0, #26]	@ unaligned
+ 297:Robot/Lib/user_lib.c ****         OLS->t[1] += OLS->x[i];
+ 1059              		.loc 1 297 9 is_stmt 1 discriminator 3 view .LVU303
+ 1060              		.loc 1 297 28 is_stmt 0 discriminator 3 view .LVU304
+ 1061 00d2 D1ED007A 		vldr.32	s15, [r1]
+ 1062              		.loc 1 297 19 discriminator 3 view .LVU305
+ 1063 00d6 D0F81EE0 		ldr	lr, [r0, #30]	@ unaligned
+ 1064 00da 07EE10EA 		vmov	s14, lr
+ 1065 00de 77EE877A 		vadd.f32	s15, s15, s14
+ 1066 00e2 17EE90EA 		vmov	lr, s15	@ int
+ 1067 00e6 C0F81EE0 		str	lr, [r0, #30]	@ unaligned
+ 298:Robot/Lib/user_lib.c ****         OLS->t[2] += OLS->x[i] * OLS->y[i];
+ 1068              		.loc 1 298 9 is_stmt 1 discriminator 3 view .LVU306
+ 1069              		.loc 1 298 28 is_stmt 0 discriminator 3 view .LVU307
+ 1070 00ea D1ED007A 		vldr.32	s15, [r1]
+ 1071              		.loc 1 298 37 discriminator 3 view .LVU308
+ 1072 00ee D0F80A10 		ldr	r1, [r0, #10]	@ unaligned
+ 1073              		.loc 1 298 40 discriminator 3 view .LVU309
+ 1074 00f2 01EB8201 		add	r1, r1, r2, lsl #2
+ 1075 00f6 91ED007A 		vldr.32	s14, [r1]
+ 1076              		.loc 1 298 32 discriminator 3 view .LVU310
+ 1077 00fa 67EE877A 		vmul.f32	s15, s15, s14
+ 1078              		.loc 1 298 19 discriminator 3 view .LVU311
+ 1079 00fe D0F822E0 		ldr	lr, [r0, #34]	@ unaligned
+ 1080 0102 07EE10EA 		vmov	s14, lr
+ 1081 0106 77EE877A 		vadd.f32	s15, s15, s14
+ 1082 010a 17EE90EA 		vmov	lr, s15	@ int
+ 1083 010e C0F822E0 		str	lr, [r0, #34]	@ unaligned
+ 299:Robot/Lib/user_lib.c ****         OLS->t[3] += OLS->y[i];
+ 1084              		.loc 1 299 9 is_stmt 1 discriminator 3 view .LVU312
+ 1085              		.loc 1 299 28 is_stmt 0 discriminator 3 view .LVU313
+ 1086 0112 D1ED007A 		vldr.32	s15, [r1]
+ 1087              		.loc 1 299 19 discriminator 3 view .LVU314
+ 1088 0116 D0F82610 		ldr	r1, [r0, #38]	@ unaligned
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 25
 
 
- 1069 004e 1344     		add	r3, r3, r2
- 1070 0050 01EB8303 		add	r3, r1, r3, lsl #2
- 1071 0054 D3ED007A 		vldr.32	s15, [r3]
- 1072              		.loc 1 299 11 view .LVU319
- 1073 0058 6FF0404C 		mvn	ip, #-1073741824
- 1074 005c 6244     		add	r2, r2, ip
- 1075 005e 01EB8202 		add	r2, r1, r2, lsl #2
- 1076              		.loc 1 299 53 view .LVU320
- 1077 0062 37EE800A 		vadd.f32	s0, s15, s0
- 1078              	.LVL69:
- 1079              		.loc 1 299 28 view .LVU321
- 1080 0066 82ED000A 		vstr.32	s0, [r2]
- 300:Robot/Lib/user_lib.c ****     OLS->y[OLS->Order - 1] = y;
- 1081              		.loc 1 300 5 is_stmt 1 view .LVU322
- 1082              		.loc 1 300 8 is_stmt 0 view .LVU323
- 1083 006a D0F80A30 		ldr	r3, [r0, #10]	@ unaligned
- 1084              		.loc 1 300 15 view .LVU324
- 1085 006e 0288     		ldrh	r2, [r0]	@ unaligned
- 1086              		.loc 1 300 11 view .LVU325
- 1087 0070 6244     		add	r2, r2, ip
- 1088 0072 03EB8203 		add	r3, r3, r2, lsl #2
- 1089              		.loc 1 300 28 view .LVU326
- 1090 0076 C3ED000A 		vstr.32	s1, [r3]
+ 1089 011a 07EE101A 		vmov	s14, r1
+ 1090 011e 77EE877A 		vadd.f32	s15, s15, s14
+ 1091 0122 17EE901A 		vmov	r1, s15	@ int
+ 1092 0126 C0F82610 		str	r1, [r0, #38]	@ unaligned
+ 294:Robot/Lib/user_lib.c ****     {
+ 1093              		.loc 1 294 64 is_stmt 1 discriminator 3 view .LVU315
+ 1094 012a 0132     		adds	r2, r2, #1
+ 1095              	.LVL62:
+ 294:Robot/Lib/user_lib.c ****     {
+ 1096              		.loc 1 294 64 is_stmt 0 discriminator 3 view .LVU316
+ 1097 012c 92B2     		uxth	r2, r2
+ 1098              	.LVL63:
+ 1099              	.L80:
+ 294:Robot/Lib/user_lib.c ****     {
+ 1100              		.loc 1 294 48 is_stmt 1 discriminator 1 view .LVU317
+ 294:Robot/Lib/user_lib.c ****     {
+ 1101              		.loc 1 294 5 is_stmt 0 discriminator 1 view .LVU318
+ 1102 012e 9445     		cmp	ip, r2
+ 1103 0130 BDD8     		bhi	.L81
+ 1104              	.LBE5:
+ 300:Robot/Lib/user_lib.c ****     }
  301:Robot/Lib/user_lib.c **** 
- 302:Robot/Lib/user_lib.c ****     if (OLS->Count < OLS->Order)
- 1091              		.loc 1 302 5 is_stmt 1 view .LVU327
- 1092              		.loc 1 302 12 is_stmt 0 view .LVU328
- 1093 007a D0F80230 		ldr	r3, [r0, #2]	@ unaligned
- 1094              		.loc 1 302 25 view .LVU329
- 1095 007e B0F800C0 		ldrh	ip, [r0]	@ unaligned
- 1096              		.loc 1 302 8 view .LVU330
- 1097 0082 6345     		cmp	r3, ip
- 1098 0084 02D2     		bcs	.L84
- 303:Robot/Lib/user_lib.c ****     {
- 304:Robot/Lib/user_lib.c ****         OLS->Count++;
- 1099              		.loc 1 304 9 is_stmt 1 view .LVU331
- 1100              		.loc 1 304 19 is_stmt 0 view .LVU332
- 1101 0086 0133     		adds	r3, r3, #1
- 1102 0088 C0F80230 		str	r3, [r0, #2]	@ unaligned
- 1103              	.L84:
- 305:Robot/Lib/user_lib.c ****     }
- 306:Robot/Lib/user_lib.c **** 
- 307:Robot/Lib/user_lib.c ****     memset((void *)OLS->t, 0, sizeof(float) * 4);
- 1104              		.loc 1 307 5 is_stmt 1 view .LVU333
- 1105 008c 0023     		movs	r3, #0
- 1106 008e C0F81A30 		str	r3, [r0, #26]	@ unaligned
- 1107 0092 C0F81E30 		str	r3, [r0, #30]	@ unaligned
- 1108 0096 C0F82230 		str	r3, [r0, #34]	@ unaligned
- 1109 009a C0F82630 		str	r3, [r0, #38]	@ unaligned
- 308:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
- 1110              		.loc 1 308 5 view .LVU334
- 1111              	.LBB8:
- 1112              		.loc 1 308 10 view .LVU335
- 1113              		.loc 1 308 39 is_stmt 0 view .LVU336
- 1114 009e D0F80230 		ldr	r3, [r0, #2]	@ unaligned
- 1115              		.loc 1 308 34 view .LVU337
- 1116 00a2 9BB2     		uxth	r3, r3
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 26
+ 302:Robot/Lib/user_lib.c ****     OLS->k = (OLS->t[2] * OLS->Order - OLS->t[1] * OLS->t[3]) / (OLS->t[0] * OLS->Order - OLS->t[1]
+ 1105              		.loc 1 302 5 is_stmt 1 view .LVU319
+ 1106              		.loc 1 302 21 is_stmt 0 view .LVU320
+ 1107 0132 D0F82220 		ldr	r2, [r0, #34]	@ unaligned
+ 1108              	.LVL64:
+ 1109              		.loc 1 302 21 view .LVU321
+ 1110 0136 06EE902A 		vmov	s13, r2	@ int
+ 1111              		.loc 1 302 25 view .LVU322
+ 1112 013a 07EE90CA 		vmov	s15, ip	@ int
+ 1113 013e B8EEE75A 		vcvt.f32.s32	s10, s15
+ 1114 0142 66EE854A 		vmul.f32	s9, s13, s10
+ 1115              		.loc 1 302 46 view .LVU323
+ 1116 0146 D0F81E20 		ldr	r2, [r0, #30]	@ unaligned
+ 1117 014a 05EE902A 		vmov	s11, r2	@ int
+ 1118              		.loc 1 302 58 view .LVU324
+ 1119 014e D0F82620 		ldr	r2, [r0, #38]	@ unaligned
+ 1120 0152 07EE902A 		vmov	s15, r2	@ int
+ 1121              		.loc 1 302 50 view .LVU325
+ 1122 0156 25EEA77A 		vmul.f32	s14, s11, s15
+ 1123              		.loc 1 302 38 view .LVU326
+ 1124 015a 74EEC74A 		vsub.f32	s9, s9, s14
+ 1125              		.loc 1 302 72 view .LVU327
+ 1126 015e D0F81A20 		ldr	r2, [r0, #26]	@ unaligned
+ 1127 0162 04EE102A 		vmov	s8, r2	@ int
+ 1128              		.loc 1 302 76 view .LVU328
+ 1129 0166 25EE047A 		vmul.f32	s14, s10, s8
+ 1130              		.loc 1 302 101 view .LVU329
+ 1131 016a 25EEA56A 		vmul.f32	s12, s11, s11
+ 1132              		.loc 1 302 89 view .LVU330
+ 1133 016e 37EE467A 		vsub.f32	s14, s14, s12
+ 1134              		.loc 1 302 63 view .LVU331
+ 1135 0172 84EE876A 		vdiv.f32	s12, s9, s14
+ 1136              		.loc 1 302 12 view .LVU332
+ 1137 0176 16EE102A 		vmov	r2, s12
+ 1138 017a C0F80E20 		str	r2, [r0, #14]	@ unaligned
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 26
 
 
- 1117              		.loc 1 308 19 view .LVU338
- 1118 00a4 ACEB0303 		sub	r3, ip, r3
- 1119 00a8 9BB2     		uxth	r3, r3
- 1120              	.LVL70:
- 1121              		.loc 1 308 19 view .LVU339
- 1122 00aa 1A46     		mov	r2, r3
- 1123              		.loc 1 308 5 view .LVU340
- 1124 00ac 3FE0     		b	.L85
- 1125              	.LVL71:
- 1126              	.L86:
- 309:Robot/Lib/user_lib.c ****     {
- 310:Robot/Lib/user_lib.c ****         OLS->t[0] += OLS->x[i] * OLS->x[i];
- 1127              		.loc 1 310 9 is_stmt 1 discriminator 3 view .LVU341
- 1128              		.loc 1 310 25 is_stmt 0 discriminator 3 view .LVU342
- 1129 00ae D0F80610 		ldr	r1, [r0, #6]	@ unaligned
- 1130              		.loc 1 310 28 discriminator 3 view .LVU343
- 1131 00b2 01EB8201 		add	r1, r1, r2, lsl #2
- 1132 00b6 D1ED007A 		vldr.32	s15, [r1]
- 1133              		.loc 1 310 32 discriminator 3 view .LVU344
- 1134 00ba 67EEA77A 		vmul.f32	s15, s15, s15
- 1135              		.loc 1 310 19 discriminator 3 view .LVU345
- 1136 00be D0F81AE0 		ldr	lr, [r0, #26]	@ unaligned
- 1137 00c2 07EE10EA 		vmov	s14, lr
- 1138 00c6 77EE877A 		vadd.f32	s15, s15, s14
- 1139 00ca 17EE90EA 		vmov	lr, s15	@ int
- 1140 00ce C0F81AE0 		str	lr, [r0, #26]	@ unaligned
- 311:Robot/Lib/user_lib.c ****         OLS->t[1] += OLS->x[i];
- 1141              		.loc 1 311 9 is_stmt 1 discriminator 3 view .LVU346
- 1142              		.loc 1 311 28 is_stmt 0 discriminator 3 view .LVU347
- 1143 00d2 D1ED007A 		vldr.32	s15, [r1]
- 1144              		.loc 1 311 19 discriminator 3 view .LVU348
- 1145 00d6 D0F81EE0 		ldr	lr, [r0, #30]	@ unaligned
- 1146 00da 07EE10EA 		vmov	s14, lr
- 1147 00de 77EE877A 		vadd.f32	s15, s15, s14
- 1148 00e2 17EE90EA 		vmov	lr, s15	@ int
- 1149 00e6 C0F81EE0 		str	lr, [r0, #30]	@ unaligned
- 312:Robot/Lib/user_lib.c ****         OLS->t[2] += OLS->x[i] * OLS->y[i];
- 1150              		.loc 1 312 9 is_stmt 1 discriminator 3 view .LVU349
- 1151              		.loc 1 312 28 is_stmt 0 discriminator 3 view .LVU350
- 1152 00ea D1ED007A 		vldr.32	s15, [r1]
- 1153              		.loc 1 312 37 discriminator 3 view .LVU351
- 1154 00ee D0F80A10 		ldr	r1, [r0, #10]	@ unaligned
- 1155              		.loc 1 312 40 discriminator 3 view .LVU352
- 1156 00f2 01EB8201 		add	r1, r1, r2, lsl #2
- 1157 00f6 91ED007A 		vldr.32	s14, [r1]
- 1158              		.loc 1 312 32 discriminator 3 view .LVU353
- 1159 00fa 67EE877A 		vmul.f32	s15, s15, s14
- 1160              		.loc 1 312 19 discriminator 3 view .LVU354
- 1161 00fe D0F822E0 		ldr	lr, [r0, #34]	@ unaligned
- 1162 0102 07EE10EA 		vmov	s14, lr
- 1163 0106 77EE877A 		vadd.f32	s15, s15, s14
- 1164 010a 17EE90EA 		vmov	lr, s15	@ int
- 1165 010e C0F822E0 		str	lr, [r0, #34]	@ unaligned
- 313:Robot/Lib/user_lib.c ****         OLS->t[3] += OLS->y[i];
- 1166              		.loc 1 313 9 is_stmt 1 discriminator 3 view .LVU355
- 1167              		.loc 1 313 28 is_stmt 0 discriminator 3 view .LVU356
- 1168 0112 D1ED007A 		vldr.32	s15, [r1]
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 27
+ 303:Robot/Lib/user_lib.c ****     OLS->b = (OLS->t[0] * OLS->t[3] - OLS->t[1] * OLS->t[2]) / (OLS->t[0] * OLS->Order - OLS->t[1] 
+ 1139              		.loc 1 303 5 is_stmt 1 view .LVU333
+ 1140              		.loc 1 303 25 is_stmt 0 view .LVU334
+ 1141 017e 67EE847A 		vmul.f32	s15, s15, s8
+ 1142              		.loc 1 303 49 view .LVU335
+ 1143 0182 66EEA56A 		vmul.f32	s13, s13, s11
+ 1144              		.loc 1 303 37 view .LVU336
+ 1145 0186 77EEE67A 		vsub.f32	s15, s15, s13
+ 1146              		.loc 1 303 62 view .LVU337
+ 1147 018a C7EE876A 		vdiv.f32	s13, s15, s14
+ 1148              		.loc 1 303 12 view .LVU338
+ 1149 018e 16EE902A 		vmov	r2, s13
+ 1150 0192 C0F81220 		str	r2, [r0, #18]	@ unaligned
+ 304:Robot/Lib/user_lib.c **** 
+ 305:Robot/Lib/user_lib.c ****     OLS->StandardDeviation = 0;
+ 1151              		.loc 1 305 5 is_stmt 1 view .LVU339
+ 1152              		.loc 1 305 28 is_stmt 0 view .LVU340
+ 1153 0196 0022     		movs	r2, #0
+ 1154 0198 C0F81620 		str	r2, [r0, #22]	@ unaligned
+ 306:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
+ 1155              		.loc 1 306 5 is_stmt 1 view .LVU341
+ 1156              	.LBB6:
+ 1157              		.loc 1 306 10 view .LVU342
+ 1158              	.LVL65:
+ 1159              		.loc 1 306 5 is_stmt 0 view .LVU343
+ 1160 019c 1FE0     		b	.L82
+ 1161              	.L83:
+ 307:Robot/Lib/user_lib.c ****     {
+ 308:Robot/Lib/user_lib.c ****         OLS->StandardDeviation += fabsf(OLS->k * OLS->x[i] + OLS->b - OLS->y[i]);
+ 1162              		.loc 1 308 9 is_stmt 1 discriminator 3 view .LVU344
+ 1163              		.loc 1 308 53 is_stmt 0 discriminator 3 view .LVU345
+ 1164 019e D0F80620 		ldr	r2, [r0, #6]	@ unaligned
+ 1165              		.loc 1 308 56 discriminator 3 view .LVU346
+ 1166 01a2 02EB8302 		add	r2, r2, r3, lsl #2
+ 1167 01a6 D2ED007A 		vldr.32	s15, [r2]
+ 1168              		.loc 1 308 48 discriminator 3 view .LVU347
+ 1169 01aa 66EE277A 		vmul.f32	s15, s12, s15
+ 1170              		.loc 1 308 60 discriminator 3 view .LVU348
+ 1171 01ae 76EEA77A 		vadd.f32	s15, s13, s15
+ 1172              		.loc 1 308 74 discriminator 3 view .LVU349
+ 1173 01b2 D0F80A20 		ldr	r2, [r0, #10]	@ unaligned
+ 1174              		.loc 1 308 77 discriminator 3 view .LVU350
+ 1175 01b6 02EB8302 		add	r2, r2, r3, lsl #2
+ 1176 01ba 92ED007A 		vldr.32	s14, [r2]
+ 1177              		.loc 1 308 69 discriminator 3 view .LVU351
+ 1178 01be 77EEC77A 		vsub.f32	s15, s15, s14
+ 1179              		.loc 1 308 35 discriminator 3 view .LVU352
+ 1180 01c2 F0EEE77A 		vabs.f32	s15, s15
+ 1181              		.loc 1 308 32 discriminator 3 view .LVU353
+ 1182 01c6 D0F81620 		ldr	r2, [r0, #22]	@ unaligned
+ 1183 01ca 07EE102A 		vmov	s14, r2
+ 1184 01ce 77EE877A 		vadd.f32	s15, s15, s14
+ 1185 01d2 17EE902A 		vmov	r2, s15	@ int
+ 1186 01d6 C0F81620 		str	r2, [r0, #22]	@ unaligned
+ 306:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
+ 1187              		.loc 1 306 64 is_stmt 1 discriminator 3 view .LVU354
+ 1188 01da 0133     		adds	r3, r3, #1
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 27
 
 
- 1169              		.loc 1 313 19 discriminator 3 view .LVU357
- 1170 0116 D0F82610 		ldr	r1, [r0, #38]	@ unaligned
- 1171 011a 07EE101A 		vmov	s14, r1
- 1172 011e 77EE877A 		vadd.f32	s15, s15, s14
- 1173 0122 17EE901A 		vmov	r1, s15	@ int
- 1174 0126 C0F82610 		str	r1, [r0, #38]	@ unaligned
- 308:Robot/Lib/user_lib.c ****     {
- 1175              		.loc 1 308 64 is_stmt 1 discriminator 3 view .LVU358
- 1176 012a 0132     		adds	r2, r2, #1
- 1177              	.LVL72:
- 308:Robot/Lib/user_lib.c ****     {
- 1178              		.loc 1 308 64 is_stmt 0 discriminator 3 view .LVU359
- 1179 012c 92B2     		uxth	r2, r2
- 1180              	.LVL73:
- 1181              	.L85:
- 308:Robot/Lib/user_lib.c ****     {
- 1182              		.loc 1 308 48 is_stmt 1 discriminator 1 view .LVU360
- 308:Robot/Lib/user_lib.c ****     {
- 1183              		.loc 1 308 5 is_stmt 0 discriminator 1 view .LVU361
- 1184 012e 9445     		cmp	ip, r2
- 1185 0130 BDD8     		bhi	.L86
- 1186              	.LBE8:
- 314:Robot/Lib/user_lib.c ****     }
- 315:Robot/Lib/user_lib.c **** 
- 316:Robot/Lib/user_lib.c ****     OLS->k = (OLS->t[2] * OLS->Order - OLS->t[1] * OLS->t[3]) / (OLS->t[0] * OLS->Order - OLS->t[1]
- 1187              		.loc 1 316 5 is_stmt 1 view .LVU362
- 1188              		.loc 1 316 21 is_stmt 0 view .LVU363
- 1189 0132 D0F82220 		ldr	r2, [r0, #34]	@ unaligned
- 1190              	.LVL74:
- 1191              		.loc 1 316 21 view .LVU364
- 1192 0136 07EE102A 		vmov	s14, r2	@ int
- 1193              		.loc 1 316 25 view .LVU365
- 1194 013a 07EE90CA 		vmov	s15, ip	@ int
- 1195 013e F8EEE75A 		vcvt.f32.s32	s11, s15
- 1196 0142 67EE256A 		vmul.f32	s13, s14, s11
- 1197              		.loc 1 316 46 view .LVU366
- 1198 0146 D0F81E20 		ldr	r2, [r0, #30]	@ unaligned
- 1199 014a 06EE102A 		vmov	s12, r2	@ int
- 1200              		.loc 1 316 58 view .LVU367
- 1201 014e D0F82620 		ldr	r2, [r0, #38]	@ unaligned
- 1202 0152 07EE102A 		vmov	s14, r2	@ int
- 1203              		.loc 1 316 50 view .LVU368
- 1204 0156 26EE077A 		vmul.f32	s14, s12, s14
- 1205              		.loc 1 316 38 view .LVU369
- 1206 015a 36EEC77A 		vsub.f32	s14, s13, s14
- 1207              		.loc 1 316 72 view .LVU370
- 1208 015e D0F81A20 		ldr	r2, [r0, #26]	@ unaligned
- 1209 0162 07EE902A 		vmov	s15, r2	@ int
- 1210              		.loc 1 316 76 view .LVU371
- 1211 0166 65EEA77A 		vmul.f32	s15, s11, s15
- 1212              		.loc 1 316 101 view .LVU372
- 1213 016a 26EE066A 		vmul.f32	s12, s12, s12
- 1214              		.loc 1 316 89 view .LVU373
- 1215 016e 77EEC67A 		vsub.f32	s15, s15, s12
- 1216              		.loc 1 316 63 view .LVU374
- 1217 0172 87EE270A 		vdiv.f32	s0, s14, s15
- 1218              		.loc 1 316 12 view .LVU375
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 28
+ 1189              	.LVL66:
+ 306:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
+ 1190              		.loc 1 306 64 is_stmt 0 discriminator 3 view .LVU355
+ 1191 01dc 9BB2     		uxth	r3, r3
+ 1192              	.LVL67:
+ 1193              	.L82:
+ 306:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
+ 1194              		.loc 1 306 48 is_stmt 1 discriminator 1 view .LVU356
+ 306:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
+ 1195              		.loc 1 306 5 is_stmt 0 discriminator 1 view .LVU357
+ 1196 01de 9C45     		cmp	ip, r3
+ 1197 01e0 DDD8     		bhi	.L83
+ 306:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
+ 1198              		.loc 1 306 5 discriminator 1 view .LVU358
+ 1199              	.LBE6:
+ 309:Robot/Lib/user_lib.c ****     }
+ 310:Robot/Lib/user_lib.c ****     OLS->StandardDeviation /= OLS->Order;
+ 1200              		.loc 1 310 5 is_stmt 1 view .LVU359
+ 1201              		.loc 1 310 28 is_stmt 0 view .LVU360
+ 1202 01e2 D0F81620 		ldr	r2, [r0, #22]	@ unaligned
+ 1203 01e6 07EE902A 		vmov	s15, r2
+ 1204 01ea C7EE857A 		vdiv.f32	s15, s15, s10
+ 1205 01ee 17EE903A 		vmov	r3, s15
+ 1206              	.LVL68:
+ 1207              		.loc 1 310 28 view .LVU361
+ 1208 01f2 C0F81630 		str	r3, [r0, #22]	@ unaligned
+ 311:Robot/Lib/user_lib.c **** }
+ 1209              		.loc 1 311 1 view .LVU362
+ 1210 01f6 5DF804FB 		ldr	pc, [sp], #4
+ 1211              	.L86:
+ 1212 01fa 00BF     		.align	2
+ 1213              	.L85:
+ 1214 01fc 00000000 		.word	.LANCHOR2
+ 1215 0200 FEFFFF3F 		.word	1073741822
+ 1216              		.cfi_endproc
+ 1217              	.LFE166:
+ 1219              		.section	.text.OLS_Derivative,"ax",%progbits
+ 1220              		.align	1
+ 1221              		.global	OLS_Derivative
+ 1222              		.syntax unified
+ 1223              		.thumb
+ 1224              		.thumb_func
+ 1226              	OLS_Derivative:
+ 1227              	.LVL69:
+ 1228              	.LFB167:
+ 312:Robot/Lib/user_lib.c **** 
+ 313:Robot/Lib/user_lib.c **** /**
+ 314:Robot/Lib/user_lib.c ****   * @brief          最小二乘法提取信号微分
+ 315:Robot/Lib/user_lib.c ****   * @param[in]      最小二乘法结构体
+ 316:Robot/Lib/user_lib.c ****   * @param[in]      信号新样本距上一个样本时间间隔
+ 317:Robot/Lib/user_lib.c ****   * @param[in]      信号值
+ 318:Robot/Lib/user_lib.c ****   * @retval         返回斜率k
+ 319:Robot/Lib/user_lib.c ****   */
+ 320:Robot/Lib/user_lib.c **** float OLS_Derivative(Ordinary_Least_Squares_t *OLS, float deltax, float y)
+ 321:Robot/Lib/user_lib.c **** {
+ 1229              		.loc 1 321 1 is_stmt 1 view -0
+ 1230              		.cfi_startproc
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 28
 
 
- 1219 0176 10EE102A 		vmov	r2, s0
- 1220 017a C0F80E20 		str	r2, [r0, #14]	@ unaligned
- 317:Robot/Lib/user_lib.c **** 
- 318:Robot/Lib/user_lib.c ****     OLS->StandardDeviation = 0;
- 1221              		.loc 1 318 5 is_stmt 1 view .LVU376
- 1222              		.loc 1 318 28 is_stmt 0 view .LVU377
- 1223 017e 0022     		movs	r2, #0
- 1224 0180 C0F81620 		str	r2, [r0, #22]	@ unaligned
- 319:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
- 1225              		.loc 1 319 5 is_stmt 1 view .LVU378
- 1226              	.LBB9:
- 1227              		.loc 1 319 10 view .LVU379
- 1228              	.LVL75:
- 1229              		.loc 1 319 5 is_stmt 0 view .LVU380
- 1230 0184 23E0     		b	.L87
- 1231              	.L88:
- 320:Robot/Lib/user_lib.c ****     {
- 321:Robot/Lib/user_lib.c ****         OLS->StandardDeviation += fabsf(OLS->k * OLS->x[i] + OLS->b - OLS->y[i]);
- 1232              		.loc 1 321 9 is_stmt 1 discriminator 3 view .LVU381
- 1233              		.loc 1 321 53 is_stmt 0 discriminator 3 view .LVU382
- 1234 0186 D0F80620 		ldr	r2, [r0, #6]	@ unaligned
- 1235              		.loc 1 321 56 discriminator 3 view .LVU383
- 1236 018a 02EB8302 		add	r2, r2, r3, lsl #2
- 1237 018e D2ED007A 		vldr.32	s15, [r2]
- 1238              		.loc 1 321 48 discriminator 3 view .LVU384
- 1239 0192 20EE277A 		vmul.f32	s14, s0, s15
- 1240              		.loc 1 321 65 discriminator 3 view .LVU385
- 1241 0196 D0F81220 		ldr	r2, [r0, #18]	@ unaligned
- 1242 019a 07EE902A 		vmov	s15, r2	@ int
- 1243              		.loc 1 321 60 discriminator 3 view .LVU386
- 1244 019e 77EE277A 		vadd.f32	s15, s14, s15
- 1245              		.loc 1 321 74 discriminator 3 view .LVU387
- 1246 01a2 D0F80A20 		ldr	r2, [r0, #10]	@ unaligned
- 1247              		.loc 1 321 77 discriminator 3 view .LVU388
- 1248 01a6 02EB8302 		add	r2, r2, r3, lsl #2
- 1249 01aa 92ED007A 		vldr.32	s14, [r2]
- 1250              		.loc 1 321 69 discriminator 3 view .LVU389
- 1251 01ae 77EEC77A 		vsub.f32	s15, s15, s14
- 1252              		.loc 1 321 35 discriminator 3 view .LVU390
- 1253 01b2 F0EEE77A 		vabs.f32	s15, s15
- 1254              		.loc 1 321 32 discriminator 3 view .LVU391
- 1255 01b6 D0F81620 		ldr	r2, [r0, #22]	@ unaligned
- 1256 01ba 07EE102A 		vmov	s14, r2
- 1257 01be 77EE877A 		vadd.f32	s15, s15, s14
- 1258 01c2 17EE902A 		vmov	r2, s15	@ int
- 1259 01c6 C0F81620 		str	r2, [r0, #22]	@ unaligned
- 319:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
- 1260              		.loc 1 319 64 is_stmt 1 discriminator 3 view .LVU392
- 1261 01ca 0133     		adds	r3, r3, #1
- 1262              	.LVL76:
- 319:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
- 1263              		.loc 1 319 64 is_stmt 0 discriminator 3 view .LVU393
- 1264 01cc 9BB2     		uxth	r3, r3
- 1265              	.LVL77:
- 1266              	.L87:
- 319:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
- 1267              		.loc 1 319 48 is_stmt 1 discriminator 1 view .LVU394
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 29
+ 1231              		@ args = 0, pretend = 0, frame = 0
+ 1232              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1233              		.loc 1 321 1 is_stmt 0 view .LVU364
+ 1234 0000 00B5     		push	{lr}
+ 1235              	.LCFI7:
+ 1236              		.cfi_def_cfa_offset 4
+ 1237              		.cfi_offset 14, -4
+ 322:Robot/Lib/user_lib.c ****     static float temp = 0;
+ 1238              		.loc 1 322 5 is_stmt 1 view .LVU365
+ 323:Robot/Lib/user_lib.c ****     temp = OLS->x[1];
+ 1239              		.loc 1 323 5 view .LVU366
+ 1240              		.loc 1 323 15 is_stmt 0 view .LVU367
+ 1241 0002 D0F80630 		ldr	r3, [r0, #6]	@ unaligned
+ 1242              		.loc 1 323 10 view .LVU368
+ 1243 0006 93ED017A 		vldr.32	s14, [r3, #4]
+ 1244 000a 784B     		ldr	r3, .L96
+ 1245 000c 83ED007A 		vstr.32	s14, [r3]
+ 324:Robot/Lib/user_lib.c ****     for (uint16_t i = 0; i < OLS->Order - 1; ++i)
+ 1246              		.loc 1 324 5 is_stmt 1 view .LVU369
+ 1247              	.LBB7:
+ 1248              		.loc 1 324 10 view .LVU370
+ 1249              	.LVL70:
+ 1250              		.loc 1 324 19 is_stmt 0 view .LVU371
+ 1251 0010 0023     		movs	r3, #0
+ 1252              		.loc 1 324 5 view .LVU372
+ 1253 0012 15E0     		b	.L88
+ 1254              	.LVL71:
+ 1255              	.L89:
+ 325:Robot/Lib/user_lib.c ****     {
+ 326:Robot/Lib/user_lib.c ****         OLS->x[i] = OLS->x[i + 1] - temp;
+ 1256              		.loc 1 326 9 is_stmt 1 discriminator 3 view .LVU373
+ 1257              		.loc 1 326 24 is_stmt 0 discriminator 3 view .LVU374
+ 1258 0014 D0F80620 		ldr	r2, [r0, #6]	@ unaligned
+ 1259              		.loc 1 326 27 discriminator 3 view .LVU375
+ 1260 0018 591C     		adds	r1, r3, #1
+ 1261 001a 02EB810C 		add	ip, r2, r1, lsl #2
+ 1262 001e DCED007A 		vldr.32	s15, [ip]
+ 1263              		.loc 1 326 15 discriminator 3 view .LVU376
+ 1264 0022 02EB8302 		add	r2, r2, r3, lsl #2
+ 1265              		.loc 1 326 35 discriminator 3 view .LVU377
+ 1266 0026 77EEC77A 		vsub.f32	s15, s15, s14
+ 1267              		.loc 1 326 19 discriminator 3 view .LVU378
+ 1268 002a C2ED007A 		vstr.32	s15, [r2]
+ 327:Robot/Lib/user_lib.c ****         OLS->y[i] = OLS->y[i + 1];
+ 1269              		.loc 1 327 9 is_stmt 1 discriminator 3 view .LVU379
+ 1270              		.loc 1 327 24 is_stmt 0 discriminator 3 view .LVU380
+ 1271 002e D0F80A20 		ldr	r2, [r0, #10]	@ unaligned
+ 1272              		.loc 1 327 15 discriminator 3 view .LVU381
+ 1273 0032 02EB8303 		add	r3, r2, r3, lsl #2
+ 1274              	.LVL72:
+ 1275              		.loc 1 327 27 discriminator 3 view .LVU382
+ 1276 0036 02EB8102 		add	r2, r2, r1, lsl #2
+ 1277 003a 1268     		ldr	r2, [r2]	@ float
+ 1278              		.loc 1 327 19 discriminator 3 view .LVU383
+ 1279 003c 1A60     		str	r2, [r3]	@ float
+ 324:Robot/Lib/user_lib.c ****     for (uint16_t i = 0; i < OLS->Order - 1; ++i)
+ 1280              		.loc 1 324 46 is_stmt 1 discriminator 3 view .LVU384
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 29
 
 
- 319:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
- 1268              		.loc 1 319 5 is_stmt 0 discriminator 1 view .LVU395
- 1269 01ce 9C45     		cmp	ip, r3
- 1270 01d0 D9D8     		bhi	.L88
- 319:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
- 1271              		.loc 1 319 5 discriminator 1 view .LVU396
- 1272              	.LBE9:
- 322:Robot/Lib/user_lib.c ****     }
- 323:Robot/Lib/user_lib.c ****     OLS->StandardDeviation /= OLS->Order;
- 1273              		.loc 1 323 5 is_stmt 1 view .LVU397
- 1274              		.loc 1 323 28 is_stmt 0 view .LVU398
- 1275 01d2 D0F81620 		ldr	r2, [r0, #22]	@ unaligned
- 1276 01d6 07EE902A 		vmov	s15, r2
- 1277 01da C7EEA57A 		vdiv.f32	s15, s15, s11
- 1278 01de 17EE903A 		vmov	r3, s15
- 1279              	.LVL78:
- 1280              		.loc 1 323 28 view .LVU399
- 1281 01e2 C0F81630 		str	r3, [r0, #22]	@ unaligned
- 324:Robot/Lib/user_lib.c **** 
- 325:Robot/Lib/user_lib.c ****     return OLS->k;
- 1282              		.loc 1 325 5 is_stmt 1 view .LVU400
- 326:Robot/Lib/user_lib.c **** }
- 1283              		.loc 1 326 1 is_stmt 0 view .LVU401
- 1284 01e6 5DF804FB 		ldr	pc, [sp], #4
- 1285              	.L91:
- 1286 01ea 00BF     		.align	2
- 1287              	.L90:
- 1288 01ec 00000000 		.word	.LANCHOR3
- 1289 01f0 FEFFFF3F 		.word	1073741822
- 1290              		.cfi_endproc
- 1291              	.LFE163:
- 1293              		.section	.text.Get_OLS_Derivative,"ax",%progbits
- 1294              		.align	1
- 1295              		.global	Get_OLS_Derivative
- 1296              		.syntax unified
- 1297              		.thumb
- 1298              		.thumb_func
- 1300              	Get_OLS_Derivative:
- 1301              	.LVL79:
- 1302              	.LFB164:
- 327:Robot/Lib/user_lib.c **** 
- 328:Robot/Lib/user_lib.c **** /**
- 329:Robot/Lib/user_lib.c ****   * @brief          获取最小二乘法提取信号微分
- 330:Robot/Lib/user_lib.c ****   * @param[in]      最小二乘法结构体
- 331:Robot/Lib/user_lib.c ****   * @retval         返回斜率k
- 332:Robot/Lib/user_lib.c ****   */
- 333:Robot/Lib/user_lib.c **** float Get_OLS_Derivative(Ordinary_Least_Squares_t *OLS)
- 334:Robot/Lib/user_lib.c **** {
- 1303              		.loc 1 334 1 is_stmt 1 view -0
- 1304              		.cfi_startproc
- 1305              		@ args = 0, pretend = 0, frame = 0
- 1306              		@ frame_needed = 0, uses_anonymous_args = 0
- 1307              		@ link register save eliminated.
- 335:Robot/Lib/user_lib.c ****     return OLS->k;
- 1308              		.loc 1 335 5 view .LVU403
- 1309              		.loc 1 335 15 is_stmt 0 view .LVU404
- 1310 0000 D0F80E30 		ldr	r3, [r0, #14]	@ unaligned
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 30
+ 1281 003e 8BB2     		uxth	r3, r1
+ 1282              	.LVL73:
+ 1283              	.L88:
+ 324:Robot/Lib/user_lib.c ****     for (uint16_t i = 0; i < OLS->Order - 1; ++i)
+ 1284              		.loc 1 324 26 discriminator 1 view .LVU385
+ 324:Robot/Lib/user_lib.c ****     for (uint16_t i = 0; i < OLS->Order - 1; ++i)
+ 1285              		.loc 1 324 33 is_stmt 0 discriminator 1 view .LVU386
+ 1286 0040 0288     		ldrh	r2, [r0]	@ unaligned
+ 324:Robot/Lib/user_lib.c ****     for (uint16_t i = 0; i < OLS->Order - 1; ++i)
+ 1287              		.loc 1 324 41 discriminator 1 view .LVU387
+ 1288 0042 511E     		subs	r1, r2, #1
+ 324:Robot/Lib/user_lib.c ****     for (uint16_t i = 0; i < OLS->Order - 1; ++i)
+ 1289              		.loc 1 324 5 discriminator 1 view .LVU388
+ 1290 0044 8B42     		cmp	r3, r1
+ 1291 0046 E5DB     		blt	.L89
+ 1292              	.LBE7:
+ 328:Robot/Lib/user_lib.c ****     }
+ 329:Robot/Lib/user_lib.c ****     OLS->x[OLS->Order - 1] = OLS->x[OLS->Order - 2] + deltax;
+ 1293              		.loc 1 329 5 is_stmt 1 view .LVU389
+ 1294              		.loc 1 329 33 is_stmt 0 view .LVU390
+ 1295 0048 D0F80610 		ldr	r1, [r0, #6]	@ unaligned
+ 1296              		.loc 1 329 36 view .LVU391
+ 1297 004c 684B     		ldr	r3, .L96+4
+ 1298              	.LVL74:
+ 1299              		.loc 1 329 36 view .LVU392
+ 1300 004e 1344     		add	r3, r3, r2
+ 1301 0050 01EB8303 		add	r3, r1, r3, lsl #2
+ 1302 0054 D3ED007A 		vldr.32	s15, [r3]
+ 1303              		.loc 1 329 11 view .LVU393
+ 1304 0058 6FF0404C 		mvn	ip, #-1073741824
+ 1305 005c 6244     		add	r2, r2, ip
+ 1306 005e 01EB8202 		add	r2, r1, r2, lsl #2
+ 1307              		.loc 1 329 53 view .LVU394
+ 1308 0062 37EE800A 		vadd.f32	s0, s15, s0
+ 1309              	.LVL75:
+ 1310              		.loc 1 329 28 view .LVU395
+ 1311 0066 82ED000A 		vstr.32	s0, [r2]
+ 330:Robot/Lib/user_lib.c ****     OLS->y[OLS->Order - 1] = y;
+ 1312              		.loc 1 330 5 is_stmt 1 view .LVU396
+ 1313              		.loc 1 330 8 is_stmt 0 view .LVU397
+ 1314 006a D0F80A30 		ldr	r3, [r0, #10]	@ unaligned
+ 1315              		.loc 1 330 15 view .LVU398
+ 1316 006e 0288     		ldrh	r2, [r0]	@ unaligned
+ 1317              		.loc 1 330 11 view .LVU399
+ 1318 0070 6244     		add	r2, r2, ip
+ 1319 0072 03EB8203 		add	r3, r3, r2, lsl #2
+ 1320              		.loc 1 330 28 view .LVU400
+ 1321 0076 C3ED000A 		vstr.32	s1, [r3]
+ 331:Robot/Lib/user_lib.c **** 
+ 332:Robot/Lib/user_lib.c ****     if (OLS->Count < OLS->Order)
+ 1322              		.loc 1 332 5 is_stmt 1 view .LVU401
+ 1323              		.loc 1 332 12 is_stmt 0 view .LVU402
+ 1324 007a D0F80230 		ldr	r3, [r0, #2]	@ unaligned
+ 1325              		.loc 1 332 25 view .LVU403
+ 1326 007e B0F800C0 		ldrh	ip, [r0]	@ unaligned
+ 1327              		.loc 1 332 8 view .LVU404
+ 1328 0082 6345     		cmp	r3, ip
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 30
 
 
- 1311 0004 00EE103A 		vmov	s0, r3	@ int
- 336:Robot/Lib/user_lib.c **** }
- 1312              		.loc 1 336 1 view .LVU405
- 1313 0008 7047     		bx	lr
- 1314              		.cfi_endproc
- 1315              	.LFE164:
- 1317              		.section	.text.OLS_Smooth,"ax",%progbits
- 1318              		.align	1
- 1319              		.global	OLS_Smooth
- 1320              		.syntax unified
- 1321              		.thumb
- 1322              		.thumb_func
- 1324              	OLS_Smooth:
- 1325              	.LVL80:
- 1326              	.LFB165:
- 337:Robot/Lib/user_lib.c **** 
- 338:Robot/Lib/user_lib.c **** /**
- 339:Robot/Lib/user_lib.c ****   * @brief          最小二乘法平滑信号
- 340:Robot/Lib/user_lib.c ****   * @param[in]      最小二乘法结构体
- 341:Robot/Lib/user_lib.c ****   * @param[in]      信号新样本距上一个样本时间间隔
- 342:Robot/Lib/user_lib.c ****   * @param[in]      信号值
- 343:Robot/Lib/user_lib.c ****   * @retval         返回平滑输出
- 344:Robot/Lib/user_lib.c ****   */
- 345:Robot/Lib/user_lib.c **** float OLS_Smooth(Ordinary_Least_Squares_t *OLS, float deltax, float y)
- 346:Robot/Lib/user_lib.c **** {
- 1327              		.loc 1 346 1 is_stmt 1 view -0
- 1328              		.cfi_startproc
- 1329              		@ args = 0, pretend = 0, frame = 0
- 1330              		@ frame_needed = 0, uses_anonymous_args = 0
- 1331              		.loc 1 346 1 is_stmt 0 view .LVU407
- 1332 0000 00B5     		push	{lr}
- 1333              	.LCFI4:
- 1334              		.cfi_def_cfa_offset 4
- 1335              		.cfi_offset 14, -4
- 347:Robot/Lib/user_lib.c ****     static float temp = 0;
- 1336              		.loc 1 347 5 is_stmt 1 view .LVU408
- 348:Robot/Lib/user_lib.c ****     temp = OLS->x[1];
- 1337              		.loc 1 348 5 view .LVU409
- 1338              		.loc 1 348 15 is_stmt 0 view .LVU410
- 1339 0002 D0F80630 		ldr	r3, [r0, #6]	@ unaligned
- 1340              		.loc 1 348 10 view .LVU411
- 1341 0006 93ED017A 		vldr.32	s14, [r3, #4]
- 1342 000a 824B     		ldr	r3, .L102
- 1343 000c 83ED007A 		vstr.32	s14, [r3]
- 349:Robot/Lib/user_lib.c ****     for (uint16_t i = 0; i < OLS->Order - 1; ++i)
- 1344              		.loc 1 349 5 is_stmt 1 view .LVU412
- 1345              	.LBB10:
- 1346              		.loc 1 349 10 view .LVU413
- 1347              	.LVL81:
- 1348              		.loc 1 349 19 is_stmt 0 view .LVU414
- 1349 0010 0023     		movs	r3, #0
- 1350              		.loc 1 349 5 view .LVU415
- 1351 0012 15E0     		b	.L94
- 1352              	.LVL82:
- 1353              	.L95:
+ 1329 0084 02D2     		bcs	.L90
+ 333:Robot/Lib/user_lib.c ****     {
+ 334:Robot/Lib/user_lib.c ****         OLS->Count++;
+ 1330              		.loc 1 334 9 is_stmt 1 view .LVU405
+ 1331              		.loc 1 334 19 is_stmt 0 view .LVU406
+ 1332 0086 0133     		adds	r3, r3, #1
+ 1333 0088 C0F80230 		str	r3, [r0, #2]	@ unaligned
+ 1334              	.L90:
+ 335:Robot/Lib/user_lib.c ****     }
+ 336:Robot/Lib/user_lib.c **** 
+ 337:Robot/Lib/user_lib.c ****     memset((void *)OLS->t, 0, sizeof(float) * 4);
+ 1335              		.loc 1 337 5 is_stmt 1 view .LVU407
+ 1336 008c 0023     		movs	r3, #0
+ 1337 008e C0F81A30 		str	r3, [r0, #26]	@ unaligned
+ 1338 0092 C0F81E30 		str	r3, [r0, #30]	@ unaligned
+ 1339 0096 C0F82230 		str	r3, [r0, #34]	@ unaligned
+ 1340 009a C0F82630 		str	r3, [r0, #38]	@ unaligned
+ 338:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
+ 1341              		.loc 1 338 5 view .LVU408
+ 1342              	.LBB8:
+ 1343              		.loc 1 338 10 view .LVU409
+ 1344              		.loc 1 338 39 is_stmt 0 view .LVU410
+ 1345 009e D0F80230 		ldr	r3, [r0, #2]	@ unaligned
+ 1346              		.loc 1 338 34 view .LVU411
+ 1347 00a2 9BB2     		uxth	r3, r3
+ 1348              		.loc 1 338 19 view .LVU412
+ 1349 00a4 ACEB0303 		sub	r3, ip, r3
+ 1350 00a8 9BB2     		uxth	r3, r3
+ 1351              	.LVL76:
+ 1352              		.loc 1 338 19 view .LVU413
+ 1353 00aa 1A46     		mov	r2, r3
+ 1354              		.loc 1 338 5 view .LVU414
+ 1355 00ac 3FE0     		b	.L91
+ 1356              	.LVL77:
+ 1357              	.L92:
+ 339:Robot/Lib/user_lib.c ****     {
+ 340:Robot/Lib/user_lib.c ****         OLS->t[0] += OLS->x[i] * OLS->x[i];
+ 1358              		.loc 1 340 9 is_stmt 1 discriminator 3 view .LVU415
+ 1359              		.loc 1 340 25 is_stmt 0 discriminator 3 view .LVU416
+ 1360 00ae D0F80610 		ldr	r1, [r0, #6]	@ unaligned
+ 1361              		.loc 1 340 28 discriminator 3 view .LVU417
+ 1362 00b2 01EB8201 		add	r1, r1, r2, lsl #2
+ 1363 00b6 D1ED007A 		vldr.32	s15, [r1]
+ 1364              		.loc 1 340 32 discriminator 3 view .LVU418
+ 1365 00ba 67EEA77A 		vmul.f32	s15, s15, s15
+ 1366              		.loc 1 340 19 discriminator 3 view .LVU419
+ 1367 00be D0F81AE0 		ldr	lr, [r0, #26]	@ unaligned
+ 1368 00c2 07EE10EA 		vmov	s14, lr
+ 1369 00c6 77EE877A 		vadd.f32	s15, s15, s14
+ 1370 00ca 17EE90EA 		vmov	lr, s15	@ int
+ 1371 00ce C0F81AE0 		str	lr, [r0, #26]	@ unaligned
+ 341:Robot/Lib/user_lib.c ****         OLS->t[1] += OLS->x[i];
+ 1372              		.loc 1 341 9 is_stmt 1 discriminator 3 view .LVU420
+ 1373              		.loc 1 341 28 is_stmt 0 discriminator 3 view .LVU421
+ 1374 00d2 D1ED007A 		vldr.32	s15, [r1]
+ 1375              		.loc 1 341 19 discriminator 3 view .LVU422
+ 1376 00d6 D0F81EE0 		ldr	lr, [r0, #30]	@ unaligned
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 31
+
+
+ 1377 00da 07EE10EA 		vmov	s14, lr
+ 1378 00de 77EE877A 		vadd.f32	s15, s15, s14
+ 1379 00e2 17EE90EA 		vmov	lr, s15	@ int
+ 1380 00e6 C0F81EE0 		str	lr, [r0, #30]	@ unaligned
+ 342:Robot/Lib/user_lib.c ****         OLS->t[2] += OLS->x[i] * OLS->y[i];
+ 1381              		.loc 1 342 9 is_stmt 1 discriminator 3 view .LVU423
+ 1382              		.loc 1 342 28 is_stmt 0 discriminator 3 view .LVU424
+ 1383 00ea D1ED007A 		vldr.32	s15, [r1]
+ 1384              		.loc 1 342 37 discriminator 3 view .LVU425
+ 1385 00ee D0F80A10 		ldr	r1, [r0, #10]	@ unaligned
+ 1386              		.loc 1 342 40 discriminator 3 view .LVU426
+ 1387 00f2 01EB8201 		add	r1, r1, r2, lsl #2
+ 1388 00f6 91ED007A 		vldr.32	s14, [r1]
+ 1389              		.loc 1 342 32 discriminator 3 view .LVU427
+ 1390 00fa 67EE877A 		vmul.f32	s15, s15, s14
+ 1391              		.loc 1 342 19 discriminator 3 view .LVU428
+ 1392 00fe D0F822E0 		ldr	lr, [r0, #34]	@ unaligned
+ 1393 0102 07EE10EA 		vmov	s14, lr
+ 1394 0106 77EE877A 		vadd.f32	s15, s15, s14
+ 1395 010a 17EE90EA 		vmov	lr, s15	@ int
+ 1396 010e C0F822E0 		str	lr, [r0, #34]	@ unaligned
+ 343:Robot/Lib/user_lib.c ****         OLS->t[3] += OLS->y[i];
+ 1397              		.loc 1 343 9 is_stmt 1 discriminator 3 view .LVU429
+ 1398              		.loc 1 343 28 is_stmt 0 discriminator 3 view .LVU430
+ 1399 0112 D1ED007A 		vldr.32	s15, [r1]
+ 1400              		.loc 1 343 19 discriminator 3 view .LVU431
+ 1401 0116 D0F82610 		ldr	r1, [r0, #38]	@ unaligned
+ 1402 011a 07EE101A 		vmov	s14, r1
+ 1403 011e 77EE877A 		vadd.f32	s15, s15, s14
+ 1404 0122 17EE901A 		vmov	r1, s15	@ int
+ 1405 0126 C0F82610 		str	r1, [r0, #38]	@ unaligned
+ 338:Robot/Lib/user_lib.c ****     {
+ 1406              		.loc 1 338 64 is_stmt 1 discriminator 3 view .LVU432
+ 1407 012a 0132     		adds	r2, r2, #1
+ 1408              	.LVL78:
+ 338:Robot/Lib/user_lib.c ****     {
+ 1409              		.loc 1 338 64 is_stmt 0 discriminator 3 view .LVU433
+ 1410 012c 92B2     		uxth	r2, r2
+ 1411              	.LVL79:
+ 1412              	.L91:
+ 338:Robot/Lib/user_lib.c ****     {
+ 1413              		.loc 1 338 48 is_stmt 1 discriminator 1 view .LVU434
+ 338:Robot/Lib/user_lib.c ****     {
+ 1414              		.loc 1 338 5 is_stmt 0 discriminator 1 view .LVU435
+ 1415 012e 9445     		cmp	ip, r2
+ 1416 0130 BDD8     		bhi	.L92
+ 1417              	.LBE8:
+ 344:Robot/Lib/user_lib.c ****     }
+ 345:Robot/Lib/user_lib.c **** 
+ 346:Robot/Lib/user_lib.c ****     OLS->k = (OLS->t[2] * OLS->Order - OLS->t[1] * OLS->t[3]) / (OLS->t[0] * OLS->Order - OLS->t[1]
+ 1418              		.loc 1 346 5 is_stmt 1 view .LVU436
+ 1419              		.loc 1 346 21 is_stmt 0 view .LVU437
+ 1420 0132 D0F82220 		ldr	r2, [r0, #34]	@ unaligned
+ 1421              	.LVL80:
+ 1422              		.loc 1 346 21 view .LVU438
+ 1423 0136 07EE102A 		vmov	s14, r2	@ int
+ 1424              		.loc 1 346 25 view .LVU439
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 32
+
+
+ 1425 013a 07EE90CA 		vmov	s15, ip	@ int
+ 1426 013e F8EEE75A 		vcvt.f32.s32	s11, s15
+ 1427 0142 67EE256A 		vmul.f32	s13, s14, s11
+ 1428              		.loc 1 346 46 view .LVU440
+ 1429 0146 D0F81E20 		ldr	r2, [r0, #30]	@ unaligned
+ 1430 014a 06EE102A 		vmov	s12, r2	@ int
+ 1431              		.loc 1 346 58 view .LVU441
+ 1432 014e D0F82620 		ldr	r2, [r0, #38]	@ unaligned
+ 1433 0152 07EE102A 		vmov	s14, r2	@ int
+ 1434              		.loc 1 346 50 view .LVU442
+ 1435 0156 26EE077A 		vmul.f32	s14, s12, s14
+ 1436              		.loc 1 346 38 view .LVU443
+ 1437 015a 36EEC77A 		vsub.f32	s14, s13, s14
+ 1438              		.loc 1 346 72 view .LVU444
+ 1439 015e D0F81A20 		ldr	r2, [r0, #26]	@ unaligned
+ 1440 0162 07EE902A 		vmov	s15, r2	@ int
+ 1441              		.loc 1 346 76 view .LVU445
+ 1442 0166 65EEA77A 		vmul.f32	s15, s11, s15
+ 1443              		.loc 1 346 101 view .LVU446
+ 1444 016a 26EE066A 		vmul.f32	s12, s12, s12
+ 1445              		.loc 1 346 89 view .LVU447
+ 1446 016e 77EEC67A 		vsub.f32	s15, s15, s12
+ 1447              		.loc 1 346 63 view .LVU448
+ 1448 0172 87EE270A 		vdiv.f32	s0, s14, s15
+ 1449              		.loc 1 346 12 view .LVU449
+ 1450 0176 10EE102A 		vmov	r2, s0
+ 1451 017a C0F80E20 		str	r2, [r0, #14]	@ unaligned
+ 347:Robot/Lib/user_lib.c **** 
+ 348:Robot/Lib/user_lib.c ****     OLS->StandardDeviation = 0;
+ 1452              		.loc 1 348 5 is_stmt 1 view .LVU450
+ 1453              		.loc 1 348 28 is_stmt 0 view .LVU451
+ 1454 017e 0022     		movs	r2, #0
+ 1455 0180 C0F81620 		str	r2, [r0, #22]	@ unaligned
+ 349:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
+ 1456              		.loc 1 349 5 is_stmt 1 view .LVU452
+ 1457              	.LBB9:
+ 1458              		.loc 1 349 10 view .LVU453
+ 1459              	.LVL81:
+ 1460              		.loc 1 349 5 is_stmt 0 view .LVU454
+ 1461 0184 23E0     		b	.L93
+ 1462              	.L94:
  350:Robot/Lib/user_lib.c ****     {
- 351:Robot/Lib/user_lib.c ****         OLS->x[i] = OLS->x[i + 1] - temp;
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 31
+ 351:Robot/Lib/user_lib.c ****         OLS->StandardDeviation += fabsf(OLS->k * OLS->x[i] + OLS->b - OLS->y[i]);
+ 1463              		.loc 1 351 9 is_stmt 1 discriminator 3 view .LVU455
+ 1464              		.loc 1 351 53 is_stmt 0 discriminator 3 view .LVU456
+ 1465 0186 D0F80620 		ldr	r2, [r0, #6]	@ unaligned
+ 1466              		.loc 1 351 56 discriminator 3 view .LVU457
+ 1467 018a 02EB8302 		add	r2, r2, r3, lsl #2
+ 1468 018e D2ED007A 		vldr.32	s15, [r2]
+ 1469              		.loc 1 351 48 discriminator 3 view .LVU458
+ 1470 0192 20EE277A 		vmul.f32	s14, s0, s15
+ 1471              		.loc 1 351 65 discriminator 3 view .LVU459
+ 1472 0196 D0F81220 		ldr	r2, [r0, #18]	@ unaligned
+ 1473 019a 07EE902A 		vmov	s15, r2	@ int
+ 1474              		.loc 1 351 60 discriminator 3 view .LVU460
+ 1475 019e 77EE277A 		vadd.f32	s15, s14, s15
+ 1476              		.loc 1 351 74 discriminator 3 view .LVU461
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 33
 
 
- 1354              		.loc 1 351 9 is_stmt 1 discriminator 3 view .LVU416
- 1355              		.loc 1 351 24 is_stmt 0 discriminator 3 view .LVU417
- 1356 0014 D0F80620 		ldr	r2, [r0, #6]	@ unaligned
- 1357              		.loc 1 351 27 discriminator 3 view .LVU418
- 1358 0018 591C     		adds	r1, r3, #1
- 1359 001a 02EB810C 		add	ip, r2, r1, lsl #2
- 1360 001e DCED007A 		vldr.32	s15, [ip]
- 1361              		.loc 1 351 15 discriminator 3 view .LVU419
- 1362 0022 02EB8302 		add	r2, r2, r3, lsl #2
- 1363              		.loc 1 351 35 discriminator 3 view .LVU420
- 1364 0026 77EEC77A 		vsub.f32	s15, s15, s14
- 1365              		.loc 1 351 19 discriminator 3 view .LVU421
- 1366 002a C2ED007A 		vstr.32	s15, [r2]
- 352:Robot/Lib/user_lib.c ****         OLS->y[i] = OLS->y[i + 1];
- 1367              		.loc 1 352 9 is_stmt 1 discriminator 3 view .LVU422
- 1368              		.loc 1 352 24 is_stmt 0 discriminator 3 view .LVU423
- 1369 002e D0F80A20 		ldr	r2, [r0, #10]	@ unaligned
- 1370              		.loc 1 352 15 discriminator 3 view .LVU424
- 1371 0032 02EB8303 		add	r3, r2, r3, lsl #2
- 1372              	.LVL83:
- 1373              		.loc 1 352 27 discriminator 3 view .LVU425
- 1374 0036 02EB8102 		add	r2, r2, r1, lsl #2
- 1375 003a 1268     		ldr	r2, [r2]	@ float
- 1376              		.loc 1 352 19 discriminator 3 view .LVU426
- 1377 003c 1A60     		str	r2, [r3]	@ float
- 349:Robot/Lib/user_lib.c ****     for (uint16_t i = 0; i < OLS->Order - 1; ++i)
- 1378              		.loc 1 349 46 is_stmt 1 discriminator 3 view .LVU427
- 1379 003e 8BB2     		uxth	r3, r1
- 1380              	.LVL84:
- 1381              	.L94:
- 349:Robot/Lib/user_lib.c ****     for (uint16_t i = 0; i < OLS->Order - 1; ++i)
- 1382              		.loc 1 349 26 discriminator 1 view .LVU428
- 349:Robot/Lib/user_lib.c ****     for (uint16_t i = 0; i < OLS->Order - 1; ++i)
- 1383              		.loc 1 349 33 is_stmt 0 discriminator 1 view .LVU429
- 1384 0040 0288     		ldrh	r2, [r0]	@ unaligned
- 349:Robot/Lib/user_lib.c ****     for (uint16_t i = 0; i < OLS->Order - 1; ++i)
- 1385              		.loc 1 349 41 discriminator 1 view .LVU430
- 1386 0042 511E     		subs	r1, r2, #1
- 349:Robot/Lib/user_lib.c ****     for (uint16_t i = 0; i < OLS->Order - 1; ++i)
- 1387              		.loc 1 349 5 discriminator 1 view .LVU431
- 1388 0044 8B42     		cmp	r3, r1
- 1389 0046 E5DB     		blt	.L95
- 1390              	.LBE10:
- 353:Robot/Lib/user_lib.c ****     }
- 354:Robot/Lib/user_lib.c ****     OLS->x[OLS->Order - 1] = OLS->x[OLS->Order - 2] + deltax;
- 1391              		.loc 1 354 5 is_stmt 1 view .LVU432
- 1392              		.loc 1 354 33 is_stmt 0 view .LVU433
- 1393 0048 D0F80610 		ldr	r1, [r0, #6]	@ unaligned
- 1394              		.loc 1 354 36 view .LVU434
- 1395 004c 724B     		ldr	r3, .L102+4
- 1396              	.LVL85:
- 1397              		.loc 1 354 36 view .LVU435
- 1398 004e 1344     		add	r3, r3, r2
- 1399 0050 01EB8303 		add	r3, r1, r3, lsl #2
- 1400 0054 D3ED007A 		vldr.32	s15, [r3]
- 1401              		.loc 1 354 11 view .LVU436
- 1402 0058 6FF0404C 		mvn	ip, #-1073741824
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 32
+ 1477 01a2 D0F80A20 		ldr	r2, [r0, #10]	@ unaligned
+ 1478              		.loc 1 351 77 discriminator 3 view .LVU462
+ 1479 01a6 02EB8302 		add	r2, r2, r3, lsl #2
+ 1480 01aa 92ED007A 		vldr.32	s14, [r2]
+ 1481              		.loc 1 351 69 discriminator 3 view .LVU463
+ 1482 01ae 77EEC77A 		vsub.f32	s15, s15, s14
+ 1483              		.loc 1 351 35 discriminator 3 view .LVU464
+ 1484 01b2 F0EEE77A 		vabs.f32	s15, s15
+ 1485              		.loc 1 351 32 discriminator 3 view .LVU465
+ 1486 01b6 D0F81620 		ldr	r2, [r0, #22]	@ unaligned
+ 1487 01ba 07EE102A 		vmov	s14, r2
+ 1488 01be 77EE877A 		vadd.f32	s15, s15, s14
+ 1489 01c2 17EE902A 		vmov	r2, s15	@ int
+ 1490 01c6 C0F81620 		str	r2, [r0, #22]	@ unaligned
+ 349:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
+ 1491              		.loc 1 349 64 is_stmt 1 discriminator 3 view .LVU466
+ 1492 01ca 0133     		adds	r3, r3, #1
+ 1493              	.LVL82:
+ 349:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
+ 1494              		.loc 1 349 64 is_stmt 0 discriminator 3 view .LVU467
+ 1495 01cc 9BB2     		uxth	r3, r3
+ 1496              	.LVL83:
+ 1497              	.L93:
+ 349:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
+ 1498              		.loc 1 349 48 is_stmt 1 discriminator 1 view .LVU468
+ 349:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
+ 1499              		.loc 1 349 5 is_stmt 0 discriminator 1 view .LVU469
+ 1500 01ce 9C45     		cmp	ip, r3
+ 1501 01d0 D9D8     		bhi	.L94
+ 349:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
+ 1502              		.loc 1 349 5 discriminator 1 view .LVU470
+ 1503              	.LBE9:
+ 352:Robot/Lib/user_lib.c ****     }
+ 353:Robot/Lib/user_lib.c ****     OLS->StandardDeviation /= OLS->Order;
+ 1504              		.loc 1 353 5 is_stmt 1 view .LVU471
+ 1505              		.loc 1 353 28 is_stmt 0 view .LVU472
+ 1506 01d2 D0F81620 		ldr	r2, [r0, #22]	@ unaligned
+ 1507 01d6 07EE902A 		vmov	s15, r2
+ 1508 01da C7EEA57A 		vdiv.f32	s15, s15, s11
+ 1509 01de 17EE903A 		vmov	r3, s15
+ 1510              	.LVL84:
+ 1511              		.loc 1 353 28 view .LVU473
+ 1512 01e2 C0F81630 		str	r3, [r0, #22]	@ unaligned
+ 354:Robot/Lib/user_lib.c **** 
+ 355:Robot/Lib/user_lib.c ****     return OLS->k;
+ 1513              		.loc 1 355 5 is_stmt 1 view .LVU474
+ 356:Robot/Lib/user_lib.c **** }
+ 1514              		.loc 1 356 1 is_stmt 0 view .LVU475
+ 1515 01e6 5DF804FB 		ldr	pc, [sp], #4
+ 1516              	.L97:
+ 1517 01ea 00BF     		.align	2
+ 1518              	.L96:
+ 1519 01ec 00000000 		.word	.LANCHOR3
+ 1520 01f0 FEFFFF3F 		.word	1073741822
+ 1521              		.cfi_endproc
+ 1522              	.LFE167:
+ 1524              		.section	.text.Get_OLS_Derivative,"ax",%progbits
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 34
 
 
- 1403 005c 6244     		add	r2, r2, ip
- 1404 005e 01EB8202 		add	r2, r1, r2, lsl #2
- 1405              		.loc 1 354 53 view .LVU437
- 1406 0062 37EE800A 		vadd.f32	s0, s15, s0
- 1407              	.LVL86:
- 1408              		.loc 1 354 28 view .LVU438
- 1409 0066 82ED000A 		vstr.32	s0, [r2]
- 355:Robot/Lib/user_lib.c ****     OLS->y[OLS->Order - 1] = y;
- 1410              		.loc 1 355 5 is_stmt 1 view .LVU439
- 1411              		.loc 1 355 8 is_stmt 0 view .LVU440
- 1412 006a D0F80A30 		ldr	r3, [r0, #10]	@ unaligned
- 1413              		.loc 1 355 15 view .LVU441
- 1414 006e 0288     		ldrh	r2, [r0]	@ unaligned
- 1415              		.loc 1 355 11 view .LVU442
- 1416 0070 6244     		add	r2, r2, ip
- 1417 0072 03EB8203 		add	r3, r3, r2, lsl #2
- 1418              		.loc 1 355 28 view .LVU443
- 1419 0076 C3ED000A 		vstr.32	s1, [r3]
- 356:Robot/Lib/user_lib.c **** 
- 357:Robot/Lib/user_lib.c ****     if (OLS->Count < OLS->Order)
- 1420              		.loc 1 357 5 is_stmt 1 view .LVU444
- 1421              		.loc 1 357 12 is_stmt 0 view .LVU445
- 1422 007a D0F80230 		ldr	r3, [r0, #2]	@ unaligned
- 1423              		.loc 1 357 25 view .LVU446
- 1424 007e B0F800C0 		ldrh	ip, [r0]	@ unaligned
- 1425              		.loc 1 357 8 view .LVU447
- 1426 0082 6345     		cmp	r3, ip
- 1427 0084 02D2     		bcs	.L96
- 358:Robot/Lib/user_lib.c ****     {
- 359:Robot/Lib/user_lib.c ****         OLS->Count++;
- 1428              		.loc 1 359 9 is_stmt 1 view .LVU448
- 1429              		.loc 1 359 19 is_stmt 0 view .LVU449
- 1430 0086 0133     		adds	r3, r3, #1
- 1431 0088 C0F80230 		str	r3, [r0, #2]	@ unaligned
- 1432              	.L96:
- 360:Robot/Lib/user_lib.c ****     }
- 361:Robot/Lib/user_lib.c **** 
- 362:Robot/Lib/user_lib.c ****     memset((void *)OLS->t, 0, sizeof(float) * 4);
- 1433              		.loc 1 362 5 is_stmt 1 view .LVU450
- 1434 008c 0023     		movs	r3, #0
- 1435 008e C0F81A30 		str	r3, [r0, #26]	@ unaligned
- 1436 0092 C0F81E30 		str	r3, [r0, #30]	@ unaligned
- 1437 0096 C0F82230 		str	r3, [r0, #34]	@ unaligned
- 1438 009a C0F82630 		str	r3, [r0, #38]	@ unaligned
- 363:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
- 1439              		.loc 1 363 5 view .LVU451
- 1440              	.LBB11:
- 1441              		.loc 1 363 10 view .LVU452
- 1442              		.loc 1 363 39 is_stmt 0 view .LVU453
- 1443 009e D0F80230 		ldr	r3, [r0, #2]	@ unaligned
- 1444              		.loc 1 363 34 view .LVU454
- 1445 00a2 9BB2     		uxth	r3, r3
- 1446              		.loc 1 363 19 view .LVU455
- 1447 00a4 ACEB0303 		sub	r3, ip, r3
- 1448 00a8 9BB2     		uxth	r3, r3
- 1449              	.LVL87:
- 1450              		.loc 1 363 19 view .LVU456
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 33
+ 1525              		.align	1
+ 1526              		.global	Get_OLS_Derivative
+ 1527              		.syntax unified
+ 1528              		.thumb
+ 1529              		.thumb_func
+ 1531              	Get_OLS_Derivative:
+ 1532              	.LVL85:
+ 1533              	.LFB168:
+ 357:Robot/Lib/user_lib.c **** 
+ 358:Robot/Lib/user_lib.c **** /**
+ 359:Robot/Lib/user_lib.c ****   * @brief          获取最小二乘法提取信号微分
+ 360:Robot/Lib/user_lib.c ****   * @param[in]      最小二乘法结构体
+ 361:Robot/Lib/user_lib.c ****   * @retval         返回斜率k
+ 362:Robot/Lib/user_lib.c ****   */
+ 363:Robot/Lib/user_lib.c **** float Get_OLS_Derivative(Ordinary_Least_Squares_t *OLS)
+ 364:Robot/Lib/user_lib.c **** {
+ 1534              		.loc 1 364 1 is_stmt 1 view -0
+ 1535              		.cfi_startproc
+ 1536              		@ args = 0, pretend = 0, frame = 0
+ 1537              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1538              		@ link register save eliminated.
+ 365:Robot/Lib/user_lib.c ****     return OLS->k;
+ 1539              		.loc 1 365 5 view .LVU477
+ 1540              		.loc 1 365 15 is_stmt 0 view .LVU478
+ 1541 0000 D0F80E30 		ldr	r3, [r0, #14]	@ unaligned
+ 1542 0004 00EE103A 		vmov	s0, r3	@ int
+ 366:Robot/Lib/user_lib.c **** }
+ 1543              		.loc 1 366 1 view .LVU479
+ 1544 0008 7047     		bx	lr
+ 1545              		.cfi_endproc
+ 1546              	.LFE168:
+ 1548              		.section	.text.OLS_Smooth,"ax",%progbits
+ 1549              		.align	1
+ 1550              		.global	OLS_Smooth
+ 1551              		.syntax unified
+ 1552              		.thumb
+ 1553              		.thumb_func
+ 1555              	OLS_Smooth:
+ 1556              	.LVL86:
+ 1557              	.LFB169:
+ 367:Robot/Lib/user_lib.c **** 
+ 368:Robot/Lib/user_lib.c **** /**
+ 369:Robot/Lib/user_lib.c ****   * @brief          最小二乘法平滑信号
+ 370:Robot/Lib/user_lib.c ****   * @param[in]      最小二乘法结构体
+ 371:Robot/Lib/user_lib.c ****   * @param[in]      信号新样本距上一个样本时间间隔
+ 372:Robot/Lib/user_lib.c ****   * @param[in]      信号值
+ 373:Robot/Lib/user_lib.c ****   * @retval         返回平滑输出
+ 374:Robot/Lib/user_lib.c ****   */
+ 375:Robot/Lib/user_lib.c **** float OLS_Smooth(Ordinary_Least_Squares_t *OLS, float deltax, float y)
+ 376:Robot/Lib/user_lib.c **** {
+ 1558              		.loc 1 376 1 is_stmt 1 view -0
+ 1559              		.cfi_startproc
+ 1560              		@ args = 0, pretend = 0, frame = 0
+ 1561              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1562              		.loc 1 376 1 is_stmt 0 view .LVU481
+ 1563 0000 00B5     		push	{lr}
+ 1564              	.LCFI8:
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 35
 
 
- 1451 00aa 1A46     		mov	r2, r3
- 1452              		.loc 1 363 5 view .LVU457
- 1453 00ac 3FE0     		b	.L97
- 1454              	.LVL88:
- 1455              	.L98:
- 364:Robot/Lib/user_lib.c ****     {
- 365:Robot/Lib/user_lib.c ****         OLS->t[0] += OLS->x[i] * OLS->x[i];
- 1456              		.loc 1 365 9 is_stmt 1 discriminator 3 view .LVU458
- 1457              		.loc 1 365 25 is_stmt 0 discriminator 3 view .LVU459
- 1458 00ae D0F80610 		ldr	r1, [r0, #6]	@ unaligned
- 1459              		.loc 1 365 28 discriminator 3 view .LVU460
- 1460 00b2 01EB8201 		add	r1, r1, r2, lsl #2
- 1461 00b6 D1ED007A 		vldr.32	s15, [r1]
- 1462              		.loc 1 365 32 discriminator 3 view .LVU461
- 1463 00ba 67EEA77A 		vmul.f32	s15, s15, s15
- 1464              		.loc 1 365 19 discriminator 3 view .LVU462
- 1465 00be D0F81AE0 		ldr	lr, [r0, #26]	@ unaligned
- 1466 00c2 07EE10EA 		vmov	s14, lr
- 1467 00c6 77EE877A 		vadd.f32	s15, s15, s14
- 1468 00ca 17EE90EA 		vmov	lr, s15	@ int
- 1469 00ce C0F81AE0 		str	lr, [r0, #26]	@ unaligned
- 366:Robot/Lib/user_lib.c ****         OLS->t[1] += OLS->x[i];
- 1470              		.loc 1 366 9 is_stmt 1 discriminator 3 view .LVU463
- 1471              		.loc 1 366 28 is_stmt 0 discriminator 3 view .LVU464
- 1472 00d2 D1ED007A 		vldr.32	s15, [r1]
- 1473              		.loc 1 366 19 discriminator 3 view .LVU465
- 1474 00d6 D0F81EE0 		ldr	lr, [r0, #30]	@ unaligned
- 1475 00da 07EE10EA 		vmov	s14, lr
- 1476 00de 77EE877A 		vadd.f32	s15, s15, s14
- 1477 00e2 17EE90EA 		vmov	lr, s15	@ int
- 1478 00e6 C0F81EE0 		str	lr, [r0, #30]	@ unaligned
- 367:Robot/Lib/user_lib.c ****         OLS->t[2] += OLS->x[i] * OLS->y[i];
- 1479              		.loc 1 367 9 is_stmt 1 discriminator 3 view .LVU466
- 1480              		.loc 1 367 28 is_stmt 0 discriminator 3 view .LVU467
- 1481 00ea D1ED007A 		vldr.32	s15, [r1]
- 1482              		.loc 1 367 37 discriminator 3 view .LVU468
- 1483 00ee D0F80A10 		ldr	r1, [r0, #10]	@ unaligned
- 1484              		.loc 1 367 40 discriminator 3 view .LVU469
- 1485 00f2 01EB8201 		add	r1, r1, r2, lsl #2
- 1486 00f6 91ED007A 		vldr.32	s14, [r1]
- 1487              		.loc 1 367 32 discriminator 3 view .LVU470
- 1488 00fa 67EE877A 		vmul.f32	s15, s15, s14
- 1489              		.loc 1 367 19 discriminator 3 view .LVU471
- 1490 00fe D0F822E0 		ldr	lr, [r0, #34]	@ unaligned
- 1491 0102 07EE10EA 		vmov	s14, lr
- 1492 0106 77EE877A 		vadd.f32	s15, s15, s14
- 1493 010a 17EE90EA 		vmov	lr, s15	@ int
- 1494 010e C0F822E0 		str	lr, [r0, #34]	@ unaligned
- 368:Robot/Lib/user_lib.c ****         OLS->t[3] += OLS->y[i];
- 1495              		.loc 1 368 9 is_stmt 1 discriminator 3 view .LVU472
- 1496              		.loc 1 368 28 is_stmt 0 discriminator 3 view .LVU473
- 1497 0112 D1ED007A 		vldr.32	s15, [r1]
- 1498              		.loc 1 368 19 discriminator 3 view .LVU474
- 1499 0116 D0F82610 		ldr	r1, [r0, #38]	@ unaligned
- 1500 011a 07EE101A 		vmov	s14, r1
- 1501 011e 77EE877A 		vadd.f32	s15, s15, s14
- 1502 0122 17EE901A 		vmov	r1, s15	@ int
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 34
+ 1565              		.cfi_def_cfa_offset 4
+ 1566              		.cfi_offset 14, -4
+ 377:Robot/Lib/user_lib.c ****     static float temp = 0;
+ 1567              		.loc 1 377 5 is_stmt 1 view .LVU482
+ 378:Robot/Lib/user_lib.c ****     temp = OLS->x[1];
+ 1568              		.loc 1 378 5 view .LVU483
+ 1569              		.loc 1 378 15 is_stmt 0 view .LVU484
+ 1570 0002 D0F80630 		ldr	r3, [r0, #6]	@ unaligned
+ 1571              		.loc 1 378 10 view .LVU485
+ 1572 0006 93ED017A 		vldr.32	s14, [r3, #4]
+ 1573 000a 824B     		ldr	r3, .L108
+ 1574 000c 83ED007A 		vstr.32	s14, [r3]
+ 379:Robot/Lib/user_lib.c ****     for (uint16_t i = 0; i < OLS->Order - 1; ++i)
+ 1575              		.loc 1 379 5 is_stmt 1 view .LVU486
+ 1576              	.LBB10:
+ 1577              		.loc 1 379 10 view .LVU487
+ 1578              	.LVL87:
+ 1579              		.loc 1 379 19 is_stmt 0 view .LVU488
+ 1580 0010 0023     		movs	r3, #0
+ 1581              		.loc 1 379 5 view .LVU489
+ 1582 0012 15E0     		b	.L100
+ 1583              	.LVL88:
+ 1584              	.L101:
+ 380:Robot/Lib/user_lib.c ****     {
+ 381:Robot/Lib/user_lib.c ****         OLS->x[i] = OLS->x[i + 1] - temp;
+ 1585              		.loc 1 381 9 is_stmt 1 discriminator 3 view .LVU490
+ 1586              		.loc 1 381 24 is_stmt 0 discriminator 3 view .LVU491
+ 1587 0014 D0F80620 		ldr	r2, [r0, #6]	@ unaligned
+ 1588              		.loc 1 381 27 discriminator 3 view .LVU492
+ 1589 0018 591C     		adds	r1, r3, #1
+ 1590 001a 02EB810C 		add	ip, r2, r1, lsl #2
+ 1591 001e DCED007A 		vldr.32	s15, [ip]
+ 1592              		.loc 1 381 15 discriminator 3 view .LVU493
+ 1593 0022 02EB8302 		add	r2, r2, r3, lsl #2
+ 1594              		.loc 1 381 35 discriminator 3 view .LVU494
+ 1595 0026 77EEC77A 		vsub.f32	s15, s15, s14
+ 1596              		.loc 1 381 19 discriminator 3 view .LVU495
+ 1597 002a C2ED007A 		vstr.32	s15, [r2]
+ 382:Robot/Lib/user_lib.c ****         OLS->y[i] = OLS->y[i + 1];
+ 1598              		.loc 1 382 9 is_stmt 1 discriminator 3 view .LVU496
+ 1599              		.loc 1 382 24 is_stmt 0 discriminator 3 view .LVU497
+ 1600 002e D0F80A20 		ldr	r2, [r0, #10]	@ unaligned
+ 1601              		.loc 1 382 15 discriminator 3 view .LVU498
+ 1602 0032 02EB8303 		add	r3, r2, r3, lsl #2
+ 1603              	.LVL89:
+ 1604              		.loc 1 382 27 discriminator 3 view .LVU499
+ 1605 0036 02EB8102 		add	r2, r2, r1, lsl #2
+ 1606 003a 1268     		ldr	r2, [r2]	@ float
+ 1607              		.loc 1 382 19 discriminator 3 view .LVU500
+ 1608 003c 1A60     		str	r2, [r3]	@ float
+ 379:Robot/Lib/user_lib.c ****     for (uint16_t i = 0; i < OLS->Order - 1; ++i)
+ 1609              		.loc 1 379 46 is_stmt 1 discriminator 3 view .LVU501
+ 1610 003e 8BB2     		uxth	r3, r1
+ 1611              	.LVL90:
+ 1612              	.L100:
+ 379:Robot/Lib/user_lib.c ****     for (uint16_t i = 0; i < OLS->Order - 1; ++i)
+ 1613              		.loc 1 379 26 discriminator 1 view .LVU502
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 36
 
 
- 1503 0126 C0F82610 		str	r1, [r0, #38]	@ unaligned
- 363:Robot/Lib/user_lib.c ****     {
- 1504              		.loc 1 363 64 is_stmt 1 discriminator 3 view .LVU475
- 1505 012a 0132     		adds	r2, r2, #1
- 1506              	.LVL89:
- 363:Robot/Lib/user_lib.c ****     {
- 1507              		.loc 1 363 64 is_stmt 0 discriminator 3 view .LVU476
- 1508 012c 92B2     		uxth	r2, r2
- 1509              	.LVL90:
- 1510              	.L97:
- 363:Robot/Lib/user_lib.c ****     {
- 1511              		.loc 1 363 48 is_stmt 1 discriminator 1 view .LVU477
- 363:Robot/Lib/user_lib.c ****     {
- 1512              		.loc 1 363 5 is_stmt 0 discriminator 1 view .LVU478
- 1513 012e 9445     		cmp	ip, r2
- 1514 0130 BDD8     		bhi	.L98
- 1515              	.LBE11:
- 369:Robot/Lib/user_lib.c ****     }
- 370:Robot/Lib/user_lib.c **** 
- 371:Robot/Lib/user_lib.c ****     OLS->k = (OLS->t[2] * OLS->Order - OLS->t[1] * OLS->t[3]) / (OLS->t[0] * OLS->Order - OLS->t[1]
- 1516              		.loc 1 371 5 is_stmt 1 view .LVU479
- 1517              		.loc 1 371 21 is_stmt 0 view .LVU480
- 1518 0132 D0F82220 		ldr	r2, [r0, #34]	@ unaligned
- 1519              	.LVL91:
- 1520              		.loc 1 371 21 view .LVU481
- 1521 0136 06EE102A 		vmov	s12, r2	@ int
- 1522              		.loc 1 371 25 view .LVU482
- 1523 013a 07EE90CA 		vmov	s15, ip	@ int
- 1524 013e B8EEE75A 		vcvt.f32.s32	s10, s15
- 1525 0142 66EE054A 		vmul.f32	s9, s12, s10
- 1526              		.loc 1 371 46 view .LVU483
- 1527 0146 D0F81E20 		ldr	r2, [r0, #30]	@ unaligned
- 1528 014a 05EE902A 		vmov	s11, r2	@ int
- 1529              		.loc 1 371 58 view .LVU484
- 1530 014e D0F82620 		ldr	r2, [r0, #38]	@ unaligned
- 1531 0152 07EE902A 		vmov	s15, r2	@ int
- 1532              		.loc 1 371 50 view .LVU485
- 1533 0156 25EEA77A 		vmul.f32	s14, s11, s15
- 1534              		.loc 1 371 38 view .LVU486
- 1535 015a 74EEC74A 		vsub.f32	s9, s9, s14
- 1536              		.loc 1 371 72 view .LVU487
- 1537 015e D0F81A20 		ldr	r2, [r0, #26]	@ unaligned
- 1538 0162 04EE102A 		vmov	s8, r2	@ int
- 1539              		.loc 1 371 76 view .LVU488
- 1540 0166 25EE047A 		vmul.f32	s14, s10, s8
- 1541              		.loc 1 371 101 view .LVU489
- 1542 016a 65EEA56A 		vmul.f32	s13, s11, s11
- 1543              		.loc 1 371 89 view .LVU490
- 1544 016e 37EE667A 		vsub.f32	s14, s14, s13
- 1545              		.loc 1 371 63 view .LVU491
- 1546 0172 C4EE876A 		vdiv.f32	s13, s9, s14
- 1547              		.loc 1 371 12 view .LVU492
- 1548 0176 16EE902A 		vmov	r2, s13
- 1549 017a C0F80E20 		str	r2, [r0, #14]	@ unaligned
- 372:Robot/Lib/user_lib.c ****     OLS->b = (OLS->t[0] * OLS->t[3] - OLS->t[1] * OLS->t[2]) / (OLS->t[0] * OLS->Order - OLS->t[1] 
- 1550              		.loc 1 372 5 is_stmt 1 view .LVU493
- 1551              		.loc 1 372 25 is_stmt 0 view .LVU494
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 35
+ 379:Robot/Lib/user_lib.c ****     for (uint16_t i = 0; i < OLS->Order - 1; ++i)
+ 1614              		.loc 1 379 33 is_stmt 0 discriminator 1 view .LVU503
+ 1615 0040 0288     		ldrh	r2, [r0]	@ unaligned
+ 379:Robot/Lib/user_lib.c ****     for (uint16_t i = 0; i < OLS->Order - 1; ++i)
+ 1616              		.loc 1 379 41 discriminator 1 view .LVU504
+ 1617 0042 511E     		subs	r1, r2, #1
+ 379:Robot/Lib/user_lib.c ****     for (uint16_t i = 0; i < OLS->Order - 1; ++i)
+ 1618              		.loc 1 379 5 discriminator 1 view .LVU505
+ 1619 0044 8B42     		cmp	r3, r1
+ 1620 0046 E5DB     		blt	.L101
+ 1621              	.LBE10:
+ 383:Robot/Lib/user_lib.c ****     }
+ 384:Robot/Lib/user_lib.c ****     OLS->x[OLS->Order - 1] = OLS->x[OLS->Order - 2] + deltax;
+ 1622              		.loc 1 384 5 is_stmt 1 view .LVU506
+ 1623              		.loc 1 384 33 is_stmt 0 view .LVU507
+ 1624 0048 D0F80610 		ldr	r1, [r0, #6]	@ unaligned
+ 1625              		.loc 1 384 36 view .LVU508
+ 1626 004c 724B     		ldr	r3, .L108+4
+ 1627              	.LVL91:
+ 1628              		.loc 1 384 36 view .LVU509
+ 1629 004e 1344     		add	r3, r3, r2
+ 1630 0050 01EB8303 		add	r3, r1, r3, lsl #2
+ 1631 0054 D3ED007A 		vldr.32	s15, [r3]
+ 1632              		.loc 1 384 11 view .LVU510
+ 1633 0058 6FF0404C 		mvn	ip, #-1073741824
+ 1634 005c 6244     		add	r2, r2, ip
+ 1635 005e 01EB8202 		add	r2, r1, r2, lsl #2
+ 1636              		.loc 1 384 53 view .LVU511
+ 1637 0062 37EE800A 		vadd.f32	s0, s15, s0
+ 1638              	.LVL92:
+ 1639              		.loc 1 384 28 view .LVU512
+ 1640 0066 82ED000A 		vstr.32	s0, [r2]
+ 385:Robot/Lib/user_lib.c ****     OLS->y[OLS->Order - 1] = y;
+ 1641              		.loc 1 385 5 is_stmt 1 view .LVU513
+ 1642              		.loc 1 385 8 is_stmt 0 view .LVU514
+ 1643 006a D0F80A30 		ldr	r3, [r0, #10]	@ unaligned
+ 1644              		.loc 1 385 15 view .LVU515
+ 1645 006e 0288     		ldrh	r2, [r0]	@ unaligned
+ 1646              		.loc 1 385 11 view .LVU516
+ 1647 0070 6244     		add	r2, r2, ip
+ 1648 0072 03EB8203 		add	r3, r3, r2, lsl #2
+ 1649              		.loc 1 385 28 view .LVU517
+ 1650 0076 C3ED000A 		vstr.32	s1, [r3]
+ 386:Robot/Lib/user_lib.c **** 
+ 387:Robot/Lib/user_lib.c ****     if (OLS->Count < OLS->Order)
+ 1651              		.loc 1 387 5 is_stmt 1 view .LVU518
+ 1652              		.loc 1 387 12 is_stmt 0 view .LVU519
+ 1653 007a D0F80230 		ldr	r3, [r0, #2]	@ unaligned
+ 1654              		.loc 1 387 25 view .LVU520
+ 1655 007e B0F800C0 		ldrh	ip, [r0]	@ unaligned
+ 1656              		.loc 1 387 8 view .LVU521
+ 1657 0082 6345     		cmp	r3, ip
+ 1658 0084 02D2     		bcs	.L102
+ 388:Robot/Lib/user_lib.c ****     {
+ 389:Robot/Lib/user_lib.c ****         OLS->Count++;
+ 1659              		.loc 1 389 9 is_stmt 1 view .LVU522
+ 1660              		.loc 1 389 19 is_stmt 0 view .LVU523
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 37
 
 
- 1552 017e 67EE847A 		vmul.f32	s15, s15, s8
- 1553              		.loc 1 372 49 view .LVU495
- 1554 0182 26EE256A 		vmul.f32	s12, s12, s11
- 1555              		.loc 1 372 37 view .LVU496
- 1556 0186 77EEC67A 		vsub.f32	s15, s15, s12
- 1557              		.loc 1 372 62 view .LVU497
- 1558 018a 87EE870A 		vdiv.f32	s0, s15, s14
- 1559              		.loc 1 372 12 view .LVU498
- 1560 018e 10EE102A 		vmov	r2, s0
- 1561 0192 C0F81220 		str	r2, [r0, #18]	@ unaligned
- 373:Robot/Lib/user_lib.c **** 
- 374:Robot/Lib/user_lib.c ****     OLS->StandardDeviation = 0;
- 1562              		.loc 1 374 5 is_stmt 1 view .LVU499
- 1563              		.loc 1 374 28 is_stmt 0 view .LVU500
- 1564 0196 0022     		movs	r2, #0
- 1565 0198 C0F81620 		str	r2, [r0, #22]	@ unaligned
- 375:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
- 1566              		.loc 1 375 5 is_stmt 1 view .LVU501
- 1567              	.LBB12:
- 1568              		.loc 1 375 10 view .LVU502
- 1569              	.LVL92:
- 1570              		.loc 1 375 5 is_stmt 0 view .LVU503
- 1571 019c 1FE0     		b	.L99
- 1572              	.L100:
- 376:Robot/Lib/user_lib.c ****     {
- 377:Robot/Lib/user_lib.c ****         OLS->StandardDeviation += fabsf(OLS->k * OLS->x[i] + OLS->b - OLS->y[i]);
- 1573              		.loc 1 377 9 is_stmt 1 discriminator 3 view .LVU504
- 1574              		.loc 1 377 53 is_stmt 0 discriminator 3 view .LVU505
- 1575 019e D0F80620 		ldr	r2, [r0, #6]	@ unaligned
- 1576              		.loc 1 377 56 discriminator 3 view .LVU506
- 1577 01a2 02EB8302 		add	r2, r2, r3, lsl #2
- 1578 01a6 D2ED007A 		vldr.32	s15, [r2]
- 1579              		.loc 1 377 48 discriminator 3 view .LVU507
- 1580 01aa 66EEA77A 		vmul.f32	s15, s13, s15
- 1581              		.loc 1 377 60 discriminator 3 view .LVU508
- 1582 01ae 70EE277A 		vadd.f32	s15, s0, s15
- 1583              		.loc 1 377 74 discriminator 3 view .LVU509
- 1584 01b2 D0F80A20 		ldr	r2, [r0, #10]	@ unaligned
- 1585              		.loc 1 377 77 discriminator 3 view .LVU510
- 1586 01b6 02EB8302 		add	r2, r2, r3, lsl #2
- 1587 01ba 92ED007A 		vldr.32	s14, [r2]
- 1588              		.loc 1 377 69 discriminator 3 view .LVU511
- 1589 01be 77EEC77A 		vsub.f32	s15, s15, s14
- 1590              		.loc 1 377 35 discriminator 3 view .LVU512
- 1591 01c2 F0EEE77A 		vabs.f32	s15, s15
- 1592              		.loc 1 377 32 discriminator 3 view .LVU513
- 1593 01c6 D0F81620 		ldr	r2, [r0, #22]	@ unaligned
- 1594 01ca 07EE102A 		vmov	s14, r2
- 1595 01ce 77EE877A 		vadd.f32	s15, s15, s14
- 1596 01d2 17EE902A 		vmov	r2, s15	@ int
- 1597 01d6 C0F81620 		str	r2, [r0, #22]	@ unaligned
- 375:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
- 1598              		.loc 1 375 64 is_stmt 1 discriminator 3 view .LVU514
- 1599 01da 0133     		adds	r3, r3, #1
- 1600              	.LVL93:
- 375:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
- 1601              		.loc 1 375 64 is_stmt 0 discriminator 3 view .LVU515
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 36
+ 1661 0086 0133     		adds	r3, r3, #1
+ 1662 0088 C0F80230 		str	r3, [r0, #2]	@ unaligned
+ 1663              	.L102:
+ 390:Robot/Lib/user_lib.c ****     }
+ 391:Robot/Lib/user_lib.c **** 
+ 392:Robot/Lib/user_lib.c ****     memset((void *)OLS->t, 0, sizeof(float) * 4);
+ 1664              		.loc 1 392 5 is_stmt 1 view .LVU524
+ 1665 008c 0023     		movs	r3, #0
+ 1666 008e C0F81A30 		str	r3, [r0, #26]	@ unaligned
+ 1667 0092 C0F81E30 		str	r3, [r0, #30]	@ unaligned
+ 1668 0096 C0F82230 		str	r3, [r0, #34]	@ unaligned
+ 1669 009a C0F82630 		str	r3, [r0, #38]	@ unaligned
+ 393:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
+ 1670              		.loc 1 393 5 view .LVU525
+ 1671              	.LBB11:
+ 1672              		.loc 1 393 10 view .LVU526
+ 1673              		.loc 1 393 39 is_stmt 0 view .LVU527
+ 1674 009e D0F80230 		ldr	r3, [r0, #2]	@ unaligned
+ 1675              		.loc 1 393 34 view .LVU528
+ 1676 00a2 9BB2     		uxth	r3, r3
+ 1677              		.loc 1 393 19 view .LVU529
+ 1678 00a4 ACEB0303 		sub	r3, ip, r3
+ 1679 00a8 9BB2     		uxth	r3, r3
+ 1680              	.LVL93:
+ 1681              		.loc 1 393 19 view .LVU530
+ 1682 00aa 1A46     		mov	r2, r3
+ 1683              		.loc 1 393 5 view .LVU531
+ 1684 00ac 3FE0     		b	.L103
+ 1685              	.LVL94:
+ 1686              	.L104:
+ 394:Robot/Lib/user_lib.c ****     {
+ 395:Robot/Lib/user_lib.c ****         OLS->t[0] += OLS->x[i] * OLS->x[i];
+ 1687              		.loc 1 395 9 is_stmt 1 discriminator 3 view .LVU532
+ 1688              		.loc 1 395 25 is_stmt 0 discriminator 3 view .LVU533
+ 1689 00ae D0F80610 		ldr	r1, [r0, #6]	@ unaligned
+ 1690              		.loc 1 395 28 discriminator 3 view .LVU534
+ 1691 00b2 01EB8201 		add	r1, r1, r2, lsl #2
+ 1692 00b6 D1ED007A 		vldr.32	s15, [r1]
+ 1693              		.loc 1 395 32 discriminator 3 view .LVU535
+ 1694 00ba 67EEA77A 		vmul.f32	s15, s15, s15
+ 1695              		.loc 1 395 19 discriminator 3 view .LVU536
+ 1696 00be D0F81AE0 		ldr	lr, [r0, #26]	@ unaligned
+ 1697 00c2 07EE10EA 		vmov	s14, lr
+ 1698 00c6 77EE877A 		vadd.f32	s15, s15, s14
+ 1699 00ca 17EE90EA 		vmov	lr, s15	@ int
+ 1700 00ce C0F81AE0 		str	lr, [r0, #26]	@ unaligned
+ 396:Robot/Lib/user_lib.c ****         OLS->t[1] += OLS->x[i];
+ 1701              		.loc 1 396 9 is_stmt 1 discriminator 3 view .LVU537
+ 1702              		.loc 1 396 28 is_stmt 0 discriminator 3 view .LVU538
+ 1703 00d2 D1ED007A 		vldr.32	s15, [r1]
+ 1704              		.loc 1 396 19 discriminator 3 view .LVU539
+ 1705 00d6 D0F81EE0 		ldr	lr, [r0, #30]	@ unaligned
+ 1706 00da 07EE10EA 		vmov	s14, lr
+ 1707 00de 77EE877A 		vadd.f32	s15, s15, s14
+ 1708 00e2 17EE90EA 		vmov	lr, s15	@ int
+ 1709 00e6 C0F81EE0 		str	lr, [r0, #30]	@ unaligned
+ 397:Robot/Lib/user_lib.c ****         OLS->t[2] += OLS->x[i] * OLS->y[i];
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 38
 
 
- 1602 01dc 9BB2     		uxth	r3, r3
- 1603              	.LVL94:
- 1604              	.L99:
- 375:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
- 1605              		.loc 1 375 48 is_stmt 1 discriminator 1 view .LVU516
- 375:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
- 1606              		.loc 1 375 5 is_stmt 0 discriminator 1 view .LVU517
- 1607 01de 9C45     		cmp	ip, r3
- 1608 01e0 DDD8     		bhi	.L100
- 375:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
- 1609              		.loc 1 375 5 discriminator 1 view .LVU518
- 1610              	.LBE12:
- 378:Robot/Lib/user_lib.c ****     }
- 379:Robot/Lib/user_lib.c ****     OLS->StandardDeviation /= OLS->Order;
- 1611              		.loc 1 379 5 is_stmt 1 view .LVU519
- 1612              		.loc 1 379 28 is_stmt 0 view .LVU520
- 1613 01e2 D0F81620 		ldr	r2, [r0, #22]	@ unaligned
- 1614 01e6 07EE902A 		vmov	s15, r2
- 1615 01ea C7EE857A 		vdiv.f32	s15, s15, s10
- 1616 01ee 17EE903A 		vmov	r3, s15
- 1617              	.LVL95:
- 1618              		.loc 1 379 28 view .LVU521
- 1619 01f2 C0F81630 		str	r3, [r0, #22]	@ unaligned
- 380:Robot/Lib/user_lib.c **** 
- 381:Robot/Lib/user_lib.c ****     return OLS->k * OLS->x[OLS->Order - 1] + OLS->b;
- 1620              		.loc 1 381 5 is_stmt 1 view .LVU522
- 1621              		.loc 1 381 24 is_stmt 0 view .LVU523
- 1622 01f6 D0F80630 		ldr	r3, [r0, #6]	@ unaligned
- 1623              		.loc 1 381 27 view .LVU524
- 1624 01fa 6FF04042 		mvn	r2, #-1073741824
- 1625 01fe 6244     		add	r2, r2, ip
- 1626 0200 03EB8203 		add	r3, r3, r2, lsl #2
- 1627 0204 D3ED007A 		vldr.32	s15, [r3]
- 1628              		.loc 1 381 19 view .LVU525
- 1629 0208 66EEA76A 		vmul.f32	s13, s13, s15
- 382:Robot/Lib/user_lib.c **** }
- 1630              		.loc 1 382 1 view .LVU526
- 1631 020c 30EE260A 		vadd.f32	s0, s0, s13
- 1632 0210 5DF804FB 		ldr	pc, [sp], #4
- 1633              	.L103:
- 1634              		.align	2
- 1635              	.L102:
- 1636 0214 00000000 		.word	.LANCHOR4
- 1637 0218 FEFFFF3F 		.word	1073741822
- 1638              		.cfi_endproc
- 1639              	.LFE165:
- 1641              		.section	.text.Get_OLS_Smooth,"ax",%progbits
- 1642              		.align	1
- 1643              		.global	Get_OLS_Smooth
- 1644              		.syntax unified
- 1645              		.thumb
- 1646              		.thumb_func
- 1648              	Get_OLS_Smooth:
- 1649              	.LVL96:
- 1650              	.LFB166:
- 383:Robot/Lib/user_lib.c **** 
- 384:Robot/Lib/user_lib.c **** /**
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 37
+ 1710              		.loc 1 397 9 is_stmt 1 discriminator 3 view .LVU540
+ 1711              		.loc 1 397 28 is_stmt 0 discriminator 3 view .LVU541
+ 1712 00ea D1ED007A 		vldr.32	s15, [r1]
+ 1713              		.loc 1 397 37 discriminator 3 view .LVU542
+ 1714 00ee D0F80A10 		ldr	r1, [r0, #10]	@ unaligned
+ 1715              		.loc 1 397 40 discriminator 3 view .LVU543
+ 1716 00f2 01EB8201 		add	r1, r1, r2, lsl #2
+ 1717 00f6 91ED007A 		vldr.32	s14, [r1]
+ 1718              		.loc 1 397 32 discriminator 3 view .LVU544
+ 1719 00fa 67EE877A 		vmul.f32	s15, s15, s14
+ 1720              		.loc 1 397 19 discriminator 3 view .LVU545
+ 1721 00fe D0F822E0 		ldr	lr, [r0, #34]	@ unaligned
+ 1722 0102 07EE10EA 		vmov	s14, lr
+ 1723 0106 77EE877A 		vadd.f32	s15, s15, s14
+ 1724 010a 17EE90EA 		vmov	lr, s15	@ int
+ 1725 010e C0F822E0 		str	lr, [r0, #34]	@ unaligned
+ 398:Robot/Lib/user_lib.c ****         OLS->t[3] += OLS->y[i];
+ 1726              		.loc 1 398 9 is_stmt 1 discriminator 3 view .LVU546
+ 1727              		.loc 1 398 28 is_stmt 0 discriminator 3 view .LVU547
+ 1728 0112 D1ED007A 		vldr.32	s15, [r1]
+ 1729              		.loc 1 398 19 discriminator 3 view .LVU548
+ 1730 0116 D0F82610 		ldr	r1, [r0, #38]	@ unaligned
+ 1731 011a 07EE101A 		vmov	s14, r1
+ 1732 011e 77EE877A 		vadd.f32	s15, s15, s14
+ 1733 0122 17EE901A 		vmov	r1, s15	@ int
+ 1734 0126 C0F82610 		str	r1, [r0, #38]	@ unaligned
+ 393:Robot/Lib/user_lib.c ****     {
+ 1735              		.loc 1 393 64 is_stmt 1 discriminator 3 view .LVU549
+ 1736 012a 0132     		adds	r2, r2, #1
+ 1737              	.LVL95:
+ 393:Robot/Lib/user_lib.c ****     {
+ 1738              		.loc 1 393 64 is_stmt 0 discriminator 3 view .LVU550
+ 1739 012c 92B2     		uxth	r2, r2
+ 1740              	.LVL96:
+ 1741              	.L103:
+ 393:Robot/Lib/user_lib.c ****     {
+ 1742              		.loc 1 393 48 is_stmt 1 discriminator 1 view .LVU551
+ 393:Robot/Lib/user_lib.c ****     {
+ 1743              		.loc 1 393 5 is_stmt 0 discriminator 1 view .LVU552
+ 1744 012e 9445     		cmp	ip, r2
+ 1745 0130 BDD8     		bhi	.L104
+ 1746              	.LBE11:
+ 399:Robot/Lib/user_lib.c ****     }
+ 400:Robot/Lib/user_lib.c **** 
+ 401:Robot/Lib/user_lib.c ****     OLS->k = (OLS->t[2] * OLS->Order - OLS->t[1] * OLS->t[3]) / (OLS->t[0] * OLS->Order - OLS->t[1]
+ 1747              		.loc 1 401 5 is_stmt 1 view .LVU553
+ 1748              		.loc 1 401 21 is_stmt 0 view .LVU554
+ 1749 0132 D0F82220 		ldr	r2, [r0, #34]	@ unaligned
+ 1750              	.LVL97:
+ 1751              		.loc 1 401 21 view .LVU555
+ 1752 0136 06EE102A 		vmov	s12, r2	@ int
+ 1753              		.loc 1 401 25 view .LVU556
+ 1754 013a 07EE90CA 		vmov	s15, ip	@ int
+ 1755 013e B8EEE75A 		vcvt.f32.s32	s10, s15
+ 1756 0142 66EE054A 		vmul.f32	s9, s12, s10
+ 1757              		.loc 1 401 46 view .LVU557
+ 1758 0146 D0F81E20 		ldr	r2, [r0, #30]	@ unaligned
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 39
 
 
- 385:Robot/Lib/user_lib.c ****   * @brief          获取最小二乘法平滑信号
- 386:Robot/Lib/user_lib.c ****   * @param[in]      最小二乘法结构体
- 387:Robot/Lib/user_lib.c ****   * @retval         返回平滑输出
- 388:Robot/Lib/user_lib.c ****   */
- 389:Robot/Lib/user_lib.c **** float Get_OLS_Smooth(Ordinary_Least_Squares_t *OLS)
- 390:Robot/Lib/user_lib.c **** {
- 1651              		.loc 1 390 1 is_stmt 1 view -0
- 1652              		.cfi_startproc
- 1653              		@ args = 0, pretend = 0, frame = 0
- 1654              		@ frame_needed = 0, uses_anonymous_args = 0
- 1655              		@ link register save eliminated.
- 391:Robot/Lib/user_lib.c ****     return OLS->k * OLS->x[OLS->Order - 1] + OLS->b;
- 1656              		.loc 1 391 5 view .LVU528
- 1657              		.loc 1 391 15 is_stmt 0 view .LVU529
- 1658 0000 D0F80E30 		ldr	r3, [r0, #14]	@ unaligned
- 1659 0004 07EE903A 		vmov	s15, r3	@ int
- 1660              		.loc 1 391 24 view .LVU530
- 1661 0008 D0F80630 		ldr	r3, [r0, #6]	@ unaligned
- 1662              		.loc 1 391 31 view .LVU531
- 1663 000c 0188     		ldrh	r1, [r0]	@ unaligned
- 1664              		.loc 1 391 27 view .LVU532
- 1665 000e 6FF04042 		mvn	r2, #-1073741824
- 1666 0012 0A44     		add	r2, r2, r1
- 1667 0014 03EB8203 		add	r3, r3, r2, lsl #2
- 1668 0018 93ED000A 		vldr.32	s0, [r3]
- 1669              		.loc 1 391 19 view .LVU533
- 1670 001c 67EE807A 		vmul.f32	s15, s15, s0
- 1671              		.loc 1 391 49 view .LVU534
- 1672 0020 D0F81230 		ldr	r3, [r0, #18]	@ unaligned
- 1673 0024 00EE103A 		vmov	s0, r3	@ int
- 392:Robot/Lib/user_lib.c **** }
- 1674              		.loc 1 392 1 view .LVU535
- 1675 0028 37EE800A 		vadd.f32	s0, s15, s0
- 1676 002c 7047     		bx	lr
- 1677              		.cfi_endproc
- 1678              	.LFE166:
- 1680              		.section	.text.slope_following,"ax",%progbits
- 1681              		.align	1
- 1682              		.global	slope_following
- 1683              		.syntax unified
- 1684              		.thumb
- 1685              		.thumb_func
- 1687              	slope_following:
- 1688              	.LVL97:
- 1689              	.LFB167:
- 393:Robot/Lib/user_lib.c **** 
- 394:Robot/Lib/user_lib.c **** void slope_following(float *target,float *set,float acc)
- 395:Robot/Lib/user_lib.c **** {
- 1690              		.loc 1 395 1 is_stmt 1 view -0
- 1691              		.cfi_startproc
- 1692              		@ args = 0, pretend = 0, frame = 0
- 1693              		@ frame_needed = 0, uses_anonymous_args = 0
- 1694              		@ link register save eliminated.
- 396:Robot/Lib/user_lib.c **** 	if(*target > *set)
- 1695              		.loc 1 396 2 view .LVU537
- 1696              		.loc 1 396 5 is_stmt 0 view .LVU538
- 1697 0000 90ED007A 		vldr.32	s14, [r0]
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 38
+ 1759 014a 05EE902A 		vmov	s11, r2	@ int
+ 1760              		.loc 1 401 58 view .LVU558
+ 1761 014e D0F82620 		ldr	r2, [r0, #38]	@ unaligned
+ 1762 0152 07EE902A 		vmov	s15, r2	@ int
+ 1763              		.loc 1 401 50 view .LVU559
+ 1764 0156 25EEA77A 		vmul.f32	s14, s11, s15
+ 1765              		.loc 1 401 38 view .LVU560
+ 1766 015a 74EEC74A 		vsub.f32	s9, s9, s14
+ 1767              		.loc 1 401 72 view .LVU561
+ 1768 015e D0F81A20 		ldr	r2, [r0, #26]	@ unaligned
+ 1769 0162 04EE102A 		vmov	s8, r2	@ int
+ 1770              		.loc 1 401 76 view .LVU562
+ 1771 0166 25EE047A 		vmul.f32	s14, s10, s8
+ 1772              		.loc 1 401 101 view .LVU563
+ 1773 016a 65EEA56A 		vmul.f32	s13, s11, s11
+ 1774              		.loc 1 401 89 view .LVU564
+ 1775 016e 37EE667A 		vsub.f32	s14, s14, s13
+ 1776              		.loc 1 401 63 view .LVU565
+ 1777 0172 C4EE876A 		vdiv.f32	s13, s9, s14
+ 1778              		.loc 1 401 12 view .LVU566
+ 1779 0176 16EE902A 		vmov	r2, s13
+ 1780 017a C0F80E20 		str	r2, [r0, #14]	@ unaligned
+ 402:Robot/Lib/user_lib.c ****     OLS->b = (OLS->t[0] * OLS->t[3] - OLS->t[1] * OLS->t[2]) / (OLS->t[0] * OLS->Order - OLS->t[1] 
+ 1781              		.loc 1 402 5 is_stmt 1 view .LVU567
+ 1782              		.loc 1 402 25 is_stmt 0 view .LVU568
+ 1783 017e 67EE847A 		vmul.f32	s15, s15, s8
+ 1784              		.loc 1 402 49 view .LVU569
+ 1785 0182 26EE256A 		vmul.f32	s12, s12, s11
+ 1786              		.loc 1 402 37 view .LVU570
+ 1787 0186 77EEC67A 		vsub.f32	s15, s15, s12
+ 1788              		.loc 1 402 62 view .LVU571
+ 1789 018a 87EE870A 		vdiv.f32	s0, s15, s14
+ 1790              		.loc 1 402 12 view .LVU572
+ 1791 018e 10EE102A 		vmov	r2, s0
+ 1792 0192 C0F81220 		str	r2, [r0, #18]	@ unaligned
+ 403:Robot/Lib/user_lib.c **** 
+ 404:Robot/Lib/user_lib.c ****     OLS->StandardDeviation = 0;
+ 1793              		.loc 1 404 5 is_stmt 1 view .LVU573
+ 1794              		.loc 1 404 28 is_stmt 0 view .LVU574
+ 1795 0196 0022     		movs	r2, #0
+ 1796 0198 C0F81620 		str	r2, [r0, #22]	@ unaligned
+ 405:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
+ 1797              		.loc 1 405 5 is_stmt 1 view .LVU575
+ 1798              	.LBB12:
+ 1799              		.loc 1 405 10 view .LVU576
+ 1800              	.LVL98:
+ 1801              		.loc 1 405 5 is_stmt 0 view .LVU577
+ 1802 019c 1FE0     		b	.L105
+ 1803              	.L106:
+ 406:Robot/Lib/user_lib.c ****     {
+ 407:Robot/Lib/user_lib.c ****         OLS->StandardDeviation += fabsf(OLS->k * OLS->x[i] + OLS->b - OLS->y[i]);
+ 1804              		.loc 1 407 9 is_stmt 1 discriminator 3 view .LVU578
+ 1805              		.loc 1 407 53 is_stmt 0 discriminator 3 view .LVU579
+ 1806 019e D0F80620 		ldr	r2, [r0, #6]	@ unaligned
+ 1807              		.loc 1 407 56 discriminator 3 view .LVU580
+ 1808 01a2 02EB8302 		add	r2, r2, r3, lsl #2
+ 1809 01a6 D2ED007A 		vldr.32	s15, [r2]
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 40
 
 
- 1698              		.loc 1 396 15 view .LVU539
- 1699 0004 D1ED007A 		vldr.32	s15, [r1]
- 1700              		.loc 1 396 4 view .LVU540
- 1701 0008 B4EEE77A 		vcmpe.f32	s14, s15
- 1702 000c F1EE10FA 		vmrs	APSR_nzcv, FPSCR
- 1703 0010 0DDD     		ble	.L116
- 397:Robot/Lib/user_lib.c **** 	{
- 398:Robot/Lib/user_lib.c **** 		*set = *set + acc;
- 1704              		.loc 1 398 3 is_stmt 1 view .LVU541
- 1705              		.loc 1 398 15 is_stmt 0 view .LVU542
- 1706 0012 77EE807A 		vadd.f32	s15, s15, s0
- 1707              		.loc 1 398 8 view .LVU543
- 1708 0016 C1ED007A 		vstr.32	s15, [r1]
- 399:Robot/Lib/user_lib.c **** 		if(*set >= *target)
- 1709              		.loc 1 399 3 is_stmt 1 view .LVU544
- 1710              		.loc 1 399 14 is_stmt 0 view .LVU545
- 1711 001a 90ED007A 		vldr.32	s14, [r0]
- 1712              		.loc 1 399 5 view .LVU546
- 1713 001e F4EEC77A 		vcmpe.f32	s15, s14
- 1714 0022 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
- 1715 0026 14DB     		blt	.L105
- 400:Robot/Lib/user_lib.c **** 		*set = *target;
- 1716              		.loc 1 400 3 is_stmt 1 view .LVU547
- 1717              		.loc 1 400 8 is_stmt 0 view .LVU548
- 1718 0028 81ED007A 		vstr.32	s14, [r1]
- 1719 002c 7047     		bx	lr
- 1720              	.L116:
- 401:Robot/Lib/user_lib.c **** 	}
- 402:Robot/Lib/user_lib.c **** 	else if(*target < *set)
- 1721              		.loc 1 402 7 is_stmt 1 view .LVU549
- 1722              		.loc 1 402 9 is_stmt 0 view .LVU550
- 1723 002e B4EEE77A 		vcmpe.f32	s14, s15
- 1724 0032 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
- 1725 0036 0CD5     		bpl	.L105
- 403:Robot/Lib/user_lib.c **** 	{
- 404:Robot/Lib/user_lib.c **** 		*set = *set - acc;
- 1726              		.loc 1 404 3 is_stmt 1 view .LVU551
- 1727              		.loc 1 404 15 is_stmt 0 view .LVU552
- 1728 0038 77EEC07A 		vsub.f32	s15, s15, s0
- 1729              		.loc 1 404 8 view .LVU553
- 1730 003c C1ED007A 		vstr.32	s15, [r1]
- 405:Robot/Lib/user_lib.c **** 		if(*set <= *target)
- 1731              		.loc 1 405 3 is_stmt 1 view .LVU554
- 1732              		.loc 1 405 14 is_stmt 0 view .LVU555
- 1733 0040 90ED007A 		vldr.32	s14, [r0]
- 1734              		.loc 1 405 5 view .LVU556
- 1735 0044 F4EEC77A 		vcmpe.f32	s15, s14
- 1736 0048 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
- 1737 004c 01D8     		bhi	.L105
- 406:Robot/Lib/user_lib.c **** 		*set = *target;
- 1738              		.loc 1 406 3 is_stmt 1 view .LVU557
- 1739              		.loc 1 406 8 is_stmt 0 view .LVU558
- 1740 004e 81ED007A 		vstr.32	s14, [r1]
- 1741              	.L105:
- 407:Robot/Lib/user_lib.c **** 	}
- 408:Robot/Lib/user_lib.c **** 
- 409:Robot/Lib/user_lib.c **** }
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 39
-
-
- 1742              		.loc 1 409 1 view .LVU559
- 1743 0052 7047     		bx	lr
- 1744              		.cfi_endproc
- 1745              	.LFE167:
- 1747              		.section	.text.angle_to_radian,"ax",%progbits
- 1748              		.align	1
- 1749              		.global	angle_to_radian
- 1750              		.syntax unified
- 1751              		.thumb
- 1752              		.thumb_func
- 1754              	angle_to_radian:
- 1755              	.LVL98:
- 1756              	.LFB168:
+ 1810              		.loc 1 407 48 discriminator 3 view .LVU581
+ 1811 01aa 66EEA77A 		vmul.f32	s15, s13, s15
+ 1812              		.loc 1 407 60 discriminator 3 view .LVU582
+ 1813 01ae 70EE277A 		vadd.f32	s15, s0, s15
+ 1814              		.loc 1 407 74 discriminator 3 view .LVU583
+ 1815 01b2 D0F80A20 		ldr	r2, [r0, #10]	@ unaligned
+ 1816              		.loc 1 407 77 discriminator 3 view .LVU584
+ 1817 01b6 02EB8302 		add	r2, r2, r3, lsl #2
+ 1818 01ba 92ED007A 		vldr.32	s14, [r2]
+ 1819              		.loc 1 407 69 discriminator 3 view .LVU585
+ 1820 01be 77EEC77A 		vsub.f32	s15, s15, s14
+ 1821              		.loc 1 407 35 discriminator 3 view .LVU586
+ 1822 01c2 F0EEE77A 		vabs.f32	s15, s15
+ 1823              		.loc 1 407 32 discriminator 3 view .LVU587
+ 1824 01c6 D0F81620 		ldr	r2, [r0, #22]	@ unaligned
+ 1825 01ca 07EE102A 		vmov	s14, r2
+ 1826 01ce 77EE877A 		vadd.f32	s15, s15, s14
+ 1827 01d2 17EE902A 		vmov	r2, s15	@ int
+ 1828 01d6 C0F81620 		str	r2, [r0, #22]	@ unaligned
+ 405:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
+ 1829              		.loc 1 405 64 is_stmt 1 discriminator 3 view .LVU588
+ 1830 01da 0133     		adds	r3, r3, #1
+ 1831              	.LVL99:
+ 405:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
+ 1832              		.loc 1 405 64 is_stmt 0 discriminator 3 view .LVU589
+ 1833 01dc 9BB2     		uxth	r3, r3
+ 1834              	.LVL100:
+ 1835              	.L105:
+ 405:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
+ 1836              		.loc 1 405 48 is_stmt 1 discriminator 1 view .LVU590
+ 405:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
+ 1837              		.loc 1 405 5 is_stmt 0 discriminator 1 view .LVU591
+ 1838 01de 9C45     		cmp	ip, r3
+ 1839 01e0 DDD8     		bhi	.L106
+ 405:Robot/Lib/user_lib.c ****     for (uint16_t i = OLS->Order - OLS->Count; i < OLS->Order; ++i)
+ 1840              		.loc 1 405 5 discriminator 1 view .LVU592
+ 1841              	.LBE12:
+ 408:Robot/Lib/user_lib.c ****     }
+ 409:Robot/Lib/user_lib.c ****     OLS->StandardDeviation /= OLS->Order;
+ 1842              		.loc 1 409 5 is_stmt 1 view .LVU593
+ 1843              		.loc 1 409 28 is_stmt 0 view .LVU594
+ 1844 01e2 D0F81620 		ldr	r2, [r0, #22]	@ unaligned
+ 1845 01e6 07EE902A 		vmov	s15, r2
+ 1846 01ea C7EE857A 		vdiv.f32	s15, s15, s10
+ 1847 01ee 17EE903A 		vmov	r3, s15
+ 1848              	.LVL101:
+ 1849              		.loc 1 409 28 view .LVU595
+ 1850 01f2 C0F81630 		str	r3, [r0, #22]	@ unaligned
  410:Robot/Lib/user_lib.c **** 
- 411:Robot/Lib/user_lib.c **** /**
- 412:Robot/Lib/user_lib.c ****  * @brief          角度转弧度
- 413:Robot/Lib/user_lib.c ****  * 
- 414:Robot/Lib/user_lib.c ****  */
- 415:Robot/Lib/user_lib.c **** 
- 416:Robot/Lib/user_lib.c **** float angle_to_radian(float angle)
- 417:Robot/Lib/user_lib.c **** {
- 1757              		.loc 1 417 1 is_stmt 1 view -0
- 1758              		.cfi_startproc
- 1759              		@ args = 0, pretend = 0, frame = 0
- 1760              		@ frame_needed = 0, uses_anonymous_args = 0
- 1761              		@ link register save eliminated.
- 418:Robot/Lib/user_lib.c ****     return angle * PI / 180;
- 1762              		.loc 1 418 5 view .LVU561
- 1763              		.loc 1 418 18 is_stmt 0 view .LVU562
- 1764 0000 DFED047A 		vldr.32	s15, .L118
- 1765 0004 20EE270A 		vmul.f32	s0, s0, s15
- 1766              	.LVL99:
- 419:Robot/Lib/user_lib.c **** }
- 1767              		.loc 1 419 1 view .LVU563
- 1768 0008 DFED037A 		vldr.32	s15, .L118+4
- 1769 000c 80EE270A 		vdiv.f32	s0, s0, s15
- 1770 0010 7047     		bx	lr
- 1771              	.L119:
- 1772 0012 00BF     		.align	2
- 1773              	.L118:
- 1774 0014 DB0F4940 		.word	1078530011
- 1775 0018 00003443 		.word	1127481344
- 1776              		.cfi_endproc
- 1777              	.LFE168:
- 1779              		.section	.text.radian_to_angle,"ax",%progbits
- 1780              		.align	1
- 1781              		.global	radian_to_angle
- 1782              		.syntax unified
- 1783              		.thumb
- 1784              		.thumb_func
- 1786              	radian_to_angle:
- 1787              	.LVL100:
- 1788              	.LFB169:
- 420:Robot/Lib/user_lib.c **** 
- 421:Robot/Lib/user_lib.c **** /**
- 422:Robot/Lib/user_lib.c ****  * @brief           弧度转角度
- 423:Robot/Lib/user_lib.c ****  * 
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 40
+ 411:Robot/Lib/user_lib.c ****     return OLS->k * OLS->x[OLS->Order - 1] + OLS->b;
+ 1851              		.loc 1 411 5 is_stmt 1 view .LVU596
+ 1852              		.loc 1 411 24 is_stmt 0 view .LVU597
+ 1853 01f6 D0F80630 		ldr	r3, [r0, #6]	@ unaligned
+ 1854              		.loc 1 411 27 view .LVU598
+ 1855 01fa 6FF04042 		mvn	r2, #-1073741824
+ 1856 01fe 6244     		add	r2, r2, ip
+ 1857 0200 03EB8203 		add	r3, r3, r2, lsl #2
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 41
 
 
- 424:Robot/Lib/user_lib.c ****  */
- 425:Robot/Lib/user_lib.c **** 
- 426:Robot/Lib/user_lib.c **** float radian_to_angle(float radian)
- 427:Robot/Lib/user_lib.c **** {
- 1789              		.loc 1 427 1 is_stmt 1 view -0
- 1790              		.cfi_startproc
- 1791              		@ args = 0, pretend = 0, frame = 0
- 1792              		@ frame_needed = 0, uses_anonymous_args = 0
- 1793              		@ link register save eliminated.
- 428:Robot/Lib/user_lib.c ****     return radian * 180 / PI;
- 1794              		.loc 1 428 5 view .LVU565
- 1795              		.loc 1 428 19 is_stmt 0 view .LVU566
- 1796 0000 DFED047A 		vldr.32	s15, .L121
- 1797 0004 20EE270A 		vmul.f32	s0, s0, s15
- 1798              	.LVL101:
- 429:Robot/Lib/user_lib.c **** }
- 1799              		.loc 1 429 1 view .LVU567
- 1800 0008 DFED037A 		vldr.32	s15, .L121+4
- 1801 000c 80EE270A 		vdiv.f32	s0, s0, s15
- 1802 0010 7047     		bx	lr
- 1803              	.L122:
- 1804 0012 00BF     		.align	2
- 1805              	.L121:
- 1806 0014 00003443 		.word	1127481344
- 1807 0018 DB0F4940 		.word	1078530011
- 1808              		.cfi_endproc
- 1809              	.LFE169:
- 1811              		.global	GlobalDebugMode
- 1812              		.section	.bss.decimal.3,"aw",%nobits
- 1813              		.align	2
- 1814              		.set	.LANCHOR1,. + 0
- 1817              	decimal.3:
- 1818 0000 00000000 		.space	4
- 1819              		.section	.bss.integer.4,"aw",%nobits
- 1820              		.align	2
- 1821              		.set	.LANCHOR0,. + 0
- 1824              	integer.4:
- 1825 0000 00000000 		.space	4
- 1826              		.section	.bss.temp.0,"aw",%nobits
- 1827              		.align	2
- 1828              		.set	.LANCHOR4,. + 0
- 1831              	temp.0:
- 1832 0000 00000000 		.space	4
- 1833              		.section	.bss.temp.1,"aw",%nobits
- 1834              		.align	2
- 1835              		.set	.LANCHOR3,. + 0
- 1838              	temp.1:
- 1839 0000 00000000 		.space	4
- 1840              		.section	.bss.temp.2,"aw",%nobits
- 1841              		.align	2
- 1842              		.set	.LANCHOR2,. + 0
- 1845              	temp.2:
- 1846 0000 00000000 		.space	4
- 1847              		.section	.data.GlobalDebugMode,"aw"
- 1850              	GlobalDebugMode:
- 1851 0000 07       		.byte	7
- 1852              		.text
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 41
+ 1858 0204 D3ED007A 		vldr.32	s15, [r3]
+ 1859              		.loc 1 411 19 view .LVU599
+ 1860 0208 66EEA76A 		vmul.f32	s13, s13, s15
+ 412:Robot/Lib/user_lib.c **** }
+ 1861              		.loc 1 412 1 view .LVU600
+ 1862 020c 30EE260A 		vadd.f32	s0, s0, s13
+ 1863 0210 5DF804FB 		ldr	pc, [sp], #4
+ 1864              	.L109:
+ 1865              		.align	2
+ 1866              	.L108:
+ 1867 0214 00000000 		.word	.LANCHOR4
+ 1868 0218 FEFFFF3F 		.word	1073741822
+ 1869              		.cfi_endproc
+ 1870              	.LFE169:
+ 1872              		.section	.text.Get_OLS_Smooth,"ax",%progbits
+ 1873              		.align	1
+ 1874              		.global	Get_OLS_Smooth
+ 1875              		.syntax unified
+ 1876              		.thumb
+ 1877              		.thumb_func
+ 1879              	Get_OLS_Smooth:
+ 1880              	.LVL102:
+ 1881              	.LFB170:
+ 413:Robot/Lib/user_lib.c **** 
+ 414:Robot/Lib/user_lib.c **** /**
+ 415:Robot/Lib/user_lib.c ****   * @brief          获取最小二乘法平滑信号
+ 416:Robot/Lib/user_lib.c ****   * @param[in]      最小二乘法结构体
+ 417:Robot/Lib/user_lib.c ****   * @retval         返回平滑输出
+ 418:Robot/Lib/user_lib.c ****   */
+ 419:Robot/Lib/user_lib.c **** float Get_OLS_Smooth(Ordinary_Least_Squares_t *OLS)
+ 420:Robot/Lib/user_lib.c **** {
+ 1882              		.loc 1 420 1 is_stmt 1 view -0
+ 1883              		.cfi_startproc
+ 1884              		@ args = 0, pretend = 0, frame = 0
+ 1885              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1886              		@ link register save eliminated.
+ 421:Robot/Lib/user_lib.c ****     return OLS->k * OLS->x[OLS->Order - 1] + OLS->b;
+ 1887              		.loc 1 421 5 view .LVU602
+ 1888              		.loc 1 421 15 is_stmt 0 view .LVU603
+ 1889 0000 D0F80E30 		ldr	r3, [r0, #14]	@ unaligned
+ 1890 0004 07EE903A 		vmov	s15, r3	@ int
+ 1891              		.loc 1 421 24 view .LVU604
+ 1892 0008 D0F80630 		ldr	r3, [r0, #6]	@ unaligned
+ 1893              		.loc 1 421 31 view .LVU605
+ 1894 000c 0188     		ldrh	r1, [r0]	@ unaligned
+ 1895              		.loc 1 421 27 view .LVU606
+ 1896 000e 6FF04042 		mvn	r2, #-1073741824
+ 1897 0012 0A44     		add	r2, r2, r1
+ 1898 0014 03EB8203 		add	r3, r3, r2, lsl #2
+ 1899 0018 93ED000A 		vldr.32	s0, [r3]
+ 1900              		.loc 1 421 19 view .LVU607
+ 1901 001c 67EE807A 		vmul.f32	s15, s15, s0
+ 1902              		.loc 1 421 49 view .LVU608
+ 1903 0020 D0F81230 		ldr	r3, [r0, #18]	@ unaligned
+ 1904 0024 00EE103A 		vmov	s0, r3	@ int
+ 422:Robot/Lib/user_lib.c **** }
+ 1905              		.loc 1 422 1 view .LVU609
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 42
 
 
- 1853              	.Letext0:
- 1854              		.file 2 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\machine\\_default_types.h"
- 1855              		.file 3 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
- 1856              		.file 4 "Robot/Lib/user_lib.h"
- 1857              		.file 5 "Middlewares/Third_Party/FreeRTOS/Source/include/portable.h"
- 1858              		.file 6 "<built-in>"
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 42
+ 1906 0028 37EE800A 		vadd.f32	s0, s15, s0
+ 1907 002c 7047     		bx	lr
+ 1908              		.cfi_endproc
+ 1909              	.LFE170:
+ 1911              		.section	.text.slope_following,"ax",%progbits
+ 1912              		.align	1
+ 1913              		.global	slope_following
+ 1914              		.syntax unified
+ 1915              		.thumb
+ 1916              		.thumb_func
+ 1918              	slope_following:
+ 1919              	.LVL103:
+ 1920              	.LFB171:
+ 423:Robot/Lib/user_lib.c **** 
+ 424:Robot/Lib/user_lib.c **** void slope_following(float *target,float *set,float acc)
+ 425:Robot/Lib/user_lib.c **** {
+ 1921              		.loc 1 425 1 is_stmt 1 view -0
+ 1922              		.cfi_startproc
+ 1923              		@ args = 0, pretend = 0, frame = 0
+ 1924              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1925              		@ link register save eliminated.
+ 426:Robot/Lib/user_lib.c **** 	if(*target > *set)
+ 1926              		.loc 1 426 2 view .LVU611
+ 1927              		.loc 1 426 5 is_stmt 0 view .LVU612
+ 1928 0000 90ED007A 		vldr.32	s14, [r0]
+ 1929              		.loc 1 426 15 view .LVU613
+ 1930 0004 D1ED007A 		vldr.32	s15, [r1]
+ 1931              		.loc 1 426 4 view .LVU614
+ 1932 0008 B4EEE77A 		vcmpe.f32	s14, s15
+ 1933 000c F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 1934 0010 0DDD     		ble	.L122
+ 427:Robot/Lib/user_lib.c **** 	{
+ 428:Robot/Lib/user_lib.c **** 		*set = *set + acc;
+ 1935              		.loc 1 428 3 is_stmt 1 view .LVU615
+ 1936              		.loc 1 428 15 is_stmt 0 view .LVU616
+ 1937 0012 77EE807A 		vadd.f32	s15, s15, s0
+ 1938              		.loc 1 428 8 view .LVU617
+ 1939 0016 C1ED007A 		vstr.32	s15, [r1]
+ 429:Robot/Lib/user_lib.c **** 		if(*set >= *target)
+ 1940              		.loc 1 429 3 is_stmt 1 view .LVU618
+ 1941              		.loc 1 429 14 is_stmt 0 view .LVU619
+ 1942 001a 90ED007A 		vldr.32	s14, [r0]
+ 1943              		.loc 1 429 5 view .LVU620
+ 1944 001e F4EEC77A 		vcmpe.f32	s15, s14
+ 1945 0022 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 1946 0026 14DB     		blt	.L111
+ 430:Robot/Lib/user_lib.c **** 		*set = *target;
+ 1947              		.loc 1 430 3 is_stmt 1 view .LVU621
+ 1948              		.loc 1 430 8 is_stmt 0 view .LVU622
+ 1949 0028 81ED007A 		vstr.32	s14, [r1]
+ 1950 002c 7047     		bx	lr
+ 1951              	.L122:
+ 431:Robot/Lib/user_lib.c **** 	}
+ 432:Robot/Lib/user_lib.c **** 	else if(*target < *set)
+ 1952              		.loc 1 432 7 is_stmt 1 view .LVU623
+ 1953              		.loc 1 432 9 is_stmt 0 view .LVU624
+ 1954 002e B4EEE77A 		vcmpe.f32	s14, s15
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 43
+
+
+ 1955 0032 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 1956 0036 0CD5     		bpl	.L111
+ 433:Robot/Lib/user_lib.c **** 	{
+ 434:Robot/Lib/user_lib.c **** 		*set = *set - acc;
+ 1957              		.loc 1 434 3 is_stmt 1 view .LVU625
+ 1958              		.loc 1 434 15 is_stmt 0 view .LVU626
+ 1959 0038 77EEC07A 		vsub.f32	s15, s15, s0
+ 1960              		.loc 1 434 8 view .LVU627
+ 1961 003c C1ED007A 		vstr.32	s15, [r1]
+ 435:Robot/Lib/user_lib.c **** 		if(*set <= *target)
+ 1962              		.loc 1 435 3 is_stmt 1 view .LVU628
+ 1963              		.loc 1 435 14 is_stmt 0 view .LVU629
+ 1964 0040 90ED007A 		vldr.32	s14, [r0]
+ 1965              		.loc 1 435 5 view .LVU630
+ 1966 0044 F4EEC77A 		vcmpe.f32	s15, s14
+ 1967 0048 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 1968 004c 01D8     		bhi	.L111
+ 436:Robot/Lib/user_lib.c **** 		*set = *target;
+ 1969              		.loc 1 436 3 is_stmt 1 view .LVU631
+ 1970              		.loc 1 436 8 is_stmt 0 view .LVU632
+ 1971 004e 81ED007A 		vstr.32	s14, [r1]
+ 1972              	.L111:
+ 437:Robot/Lib/user_lib.c **** 	}
+ 438:Robot/Lib/user_lib.c **** 
+ 439:Robot/Lib/user_lib.c **** }
+ 1973              		.loc 1 439 1 view .LVU633
+ 1974 0052 7047     		bx	lr
+ 1975              		.cfi_endproc
+ 1976              	.LFE171:
+ 1978              		.section	.text.angle_to_radian,"ax",%progbits
+ 1979              		.align	1
+ 1980              		.global	angle_to_radian
+ 1981              		.syntax unified
+ 1982              		.thumb
+ 1983              		.thumb_func
+ 1985              	angle_to_radian:
+ 1986              	.LVL104:
+ 1987              	.LFB172:
+ 440:Robot/Lib/user_lib.c **** 
+ 441:Robot/Lib/user_lib.c **** /**
+ 442:Robot/Lib/user_lib.c ****  * @brief          角度转弧度
+ 443:Robot/Lib/user_lib.c ****  * 
+ 444:Robot/Lib/user_lib.c ****  */
+ 445:Robot/Lib/user_lib.c **** 
+ 446:Robot/Lib/user_lib.c **** float angle_to_radian(float angle)
+ 447:Robot/Lib/user_lib.c **** {
+ 1988              		.loc 1 447 1 is_stmt 1 view -0
+ 1989              		.cfi_startproc
+ 1990              		@ args = 0, pretend = 0, frame = 0
+ 1991              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1992              		@ link register save eliminated.
+ 448:Robot/Lib/user_lib.c ****     return angle * PI / 180;
+ 1993              		.loc 1 448 5 view .LVU635
+ 1994              		.loc 1 448 18 is_stmt 0 view .LVU636
+ 1995 0000 DFED047A 		vldr.32	s15, .L124
+ 1996 0004 20EE270A 		vmul.f32	s0, s0, s15
+ 1997              	.LVL105:
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 44
+
+
+ 449:Robot/Lib/user_lib.c **** }
+ 1998              		.loc 1 449 1 view .LVU637
+ 1999 0008 DFED037A 		vldr.32	s15, .L124+4
+ 2000 000c 80EE270A 		vdiv.f32	s0, s0, s15
+ 2001 0010 7047     		bx	lr
+ 2002              	.L125:
+ 2003 0012 00BF     		.align	2
+ 2004              	.L124:
+ 2005 0014 DB0F4940 		.word	1078530011
+ 2006 0018 00003443 		.word	1127481344
+ 2007              		.cfi_endproc
+ 2008              	.LFE172:
+ 2010              		.section	.text.radian_to_angle,"ax",%progbits
+ 2011              		.align	1
+ 2012              		.global	radian_to_angle
+ 2013              		.syntax unified
+ 2014              		.thumb
+ 2015              		.thumb_func
+ 2017              	radian_to_angle:
+ 2018              	.LVL106:
+ 2019              	.LFB173:
+ 450:Robot/Lib/user_lib.c **** 
+ 451:Robot/Lib/user_lib.c **** /**
+ 452:Robot/Lib/user_lib.c ****  * @brief           弧度转角度
+ 453:Robot/Lib/user_lib.c ****  * 
+ 454:Robot/Lib/user_lib.c ****  */
+ 455:Robot/Lib/user_lib.c **** 
+ 456:Robot/Lib/user_lib.c **** float radian_to_angle(float radian)
+ 457:Robot/Lib/user_lib.c **** {
+ 2020              		.loc 1 457 1 is_stmt 1 view -0
+ 2021              		.cfi_startproc
+ 2022              		@ args = 0, pretend = 0, frame = 0
+ 2023              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2024              		@ link register save eliminated.
+ 458:Robot/Lib/user_lib.c ****     return radian * 180 / PI;
+ 2025              		.loc 1 458 5 view .LVU639
+ 2026              		.loc 1 458 19 is_stmt 0 view .LVU640
+ 2027 0000 DFED047A 		vldr.32	s15, .L127
+ 2028 0004 20EE270A 		vmul.f32	s0, s0, s15
+ 2029              	.LVL107:
+ 459:Robot/Lib/user_lib.c **** }
+ 2030              		.loc 1 459 1 view .LVU641
+ 2031 0008 DFED037A 		vldr.32	s15, .L127+4
+ 2032 000c 80EE270A 		vdiv.f32	s0, s0, s15
+ 2033 0010 7047     		bx	lr
+ 2034              	.L128:
+ 2035 0012 00BF     		.align	2
+ 2036              	.L127:
+ 2037 0014 00003443 		.word	1127481344
+ 2038 0018 DB0F4940 		.word	1078530011
+ 2039              		.cfi_endproc
+ 2040              	.LFE173:
+ 2042              		.global	GlobalDebugMode
+ 2043              		.section	.bss.decimal.3,"aw",%nobits
+ 2044              		.align	2
+ 2045              		.set	.LANCHOR1,. + 0
+ 2048              	decimal.3:
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 45
+
+
+ 2049 0000 00000000 		.space	4
+ 2050              		.section	.bss.integer.4,"aw",%nobits
+ 2051              		.align	2
+ 2052              		.set	.LANCHOR0,. + 0
+ 2055              	integer.4:
+ 2056 0000 00000000 		.space	4
+ 2057              		.section	.bss.temp.0,"aw",%nobits
+ 2058              		.align	2
+ 2059              		.set	.LANCHOR4,. + 0
+ 2062              	temp.0:
+ 2063 0000 00000000 		.space	4
+ 2064              		.section	.bss.temp.1,"aw",%nobits
+ 2065              		.align	2
+ 2066              		.set	.LANCHOR3,. + 0
+ 2069              	temp.1:
+ 2070 0000 00000000 		.space	4
+ 2071              		.section	.bss.temp.2,"aw",%nobits
+ 2072              		.align	2
+ 2073              		.set	.LANCHOR2,. + 0
+ 2076              	temp.2:
+ 2077 0000 00000000 		.space	4
+ 2078              		.section	.data.GlobalDebugMode,"aw"
+ 2081              	GlobalDebugMode:
+ 2082 0000 07       		.byte	7
+ 2083              		.text
+ 2084              	.Letext0:
+ 2085              		.file 2 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 2086              		.file 3 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
+ 2087              		.file 4 "Robot/Lib/user_lib.h"
+ 2088              		.file 5 "Middlewares/Third_Party/FreeRTOS/Source/include/portable.h"
+ 2089              		.file 6 "<built-in>"
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 46
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 user_lib.c
-D:\temp\TMP\ccm3Oq2D.s:19     .text.Sqrt:00000000 $t
-D:\temp\TMP\ccm3Oq2D.s:25     .text.Sqrt:00000000 Sqrt
-D:\temp\TMP\ccm3Oq2D.s:92     .text.Sqrt:00000054 $d
-D:\temp\TMP\ccm3Oq2D.s:98     .text.ramp_init:00000000 $t
-D:\temp\TMP\ccm3Oq2D.s:104    .text.ramp_init:00000000 ramp_init
-D:\temp\TMP\ccm3Oq2D.s:134    .text.ramp_calc:00000000 $t
-D:\temp\TMP\ccm3Oq2D.s:140    .text.ramp_calc:00000000 ramp_calc
-D:\temp\TMP\ccm3Oq2D.s:192    .text.abs_limit:00000000 $t
-D:\temp\TMP\ccm3Oq2D.s:198    .text.abs_limit:00000000 abs_limit
-D:\temp\TMP\ccm3Oq2D.s:232    .text.sign:00000000 $t
-D:\temp\TMP\ccm3Oq2D.s:238    .text.sign:00000000 sign
-D:\temp\TMP\ccm3Oq2D.s:267    .text.float_deadband:00000000 $t
-D:\temp\TMP\ccm3Oq2D.s:273    .text.float_deadband:00000000 float_deadband
-D:\temp\TMP\ccm3Oq2D.s:300    .text.float_deadband:0000001c $d
-D:\temp\TMP\ccm3Oq2D.s:305    .text.int16_deadline:00000000 $t
-D:\temp\TMP\ccm3Oq2D.s:311    .text.int16_deadline:00000000 int16_deadline
-D:\temp\TMP\ccm3Oq2D.s:343    .text.float_constrain:00000000 $t
-D:\temp\TMP\ccm3Oq2D.s:349    .text.float_constrain:00000000 float_constrain
-D:\temp\TMP\ccm3Oq2D.s:384    .text.int16_constrain:00000000 $t
-D:\temp\TMP\ccm3Oq2D.s:390    .text.int16_constrain:00000000 int16_constrain
-D:\temp\TMP\ccm3Oq2D.s:423    .text.loop_float_constrain:00000000 $t
-D:\temp\TMP\ccm3Oq2D.s:429    .text.loop_float_constrain:00000000 loop_float_constrain
-D:\temp\TMP\ccm3Oq2D.s:503    .text.theta_format:00000000 $t
-D:\temp\TMP\ccm3Oq2D.s:509    .text.theta_format:00000000 theta_format
-D:\temp\TMP\ccm3Oq2D.s:533    .text.theta_format:00000010 $d
-D:\temp\TMP\ccm3Oq2D.s:539    .text.float_rounding:00000000 $t
-D:\temp\TMP\ccm3Oq2D.s:545    .text.float_rounding:00000000 float_rounding
-D:\temp\TMP\ccm3Oq2D.s:590    .text.float_rounding:00000038 $d
-D:\temp\TMP\ccm3Oq2D.s:596    .text.OLS_Init:00000000 $t
-D:\temp\TMP\ccm3Oq2D.s:602    .text.OLS_Init:00000000 OLS_Init
-D:\temp\TMP\ccm3Oq2D.s:676    .text.OLS_Update:00000000 $t
-D:\temp\TMP\ccm3Oq2D.s:682    .text.OLS_Update:00000000 OLS_Update
-D:\temp\TMP\ccm3Oq2D.s:983    .text.OLS_Update:000001fc $d
-D:\temp\TMP\ccm3Oq2D.s:989    .text.OLS_Derivative:00000000 $t
-D:\temp\TMP\ccm3Oq2D.s:995    .text.OLS_Derivative:00000000 OLS_Derivative
-D:\temp\TMP\ccm3Oq2D.s:1288   .text.OLS_Derivative:000001ec $d
-D:\temp\TMP\ccm3Oq2D.s:1294   .text.Get_OLS_Derivative:00000000 $t
-D:\temp\TMP\ccm3Oq2D.s:1300   .text.Get_OLS_Derivative:00000000 Get_OLS_Derivative
-D:\temp\TMP\ccm3Oq2D.s:1318   .text.OLS_Smooth:00000000 $t
-D:\temp\TMP\ccm3Oq2D.s:1324   .text.OLS_Smooth:00000000 OLS_Smooth
-D:\temp\TMP\ccm3Oq2D.s:1636   .text.OLS_Smooth:00000214 $d
-D:\temp\TMP\ccm3Oq2D.s:1642   .text.Get_OLS_Smooth:00000000 $t
-D:\temp\TMP\ccm3Oq2D.s:1648   .text.Get_OLS_Smooth:00000000 Get_OLS_Smooth
-D:\temp\TMP\ccm3Oq2D.s:1681   .text.slope_following:00000000 $t
-D:\temp\TMP\ccm3Oq2D.s:1687   .text.slope_following:00000000 slope_following
-D:\temp\TMP\ccm3Oq2D.s:1748   .text.angle_to_radian:00000000 $t
-D:\temp\TMP\ccm3Oq2D.s:1754   .text.angle_to_radian:00000000 angle_to_radian
-D:\temp\TMP\ccm3Oq2D.s:1774   .text.angle_to_radian:00000014 $d
-D:\temp\TMP\ccm3Oq2D.s:1780   .text.radian_to_angle:00000000 $t
-D:\temp\TMP\ccm3Oq2D.s:1786   .text.radian_to_angle:00000000 radian_to_angle
-D:\temp\TMP\ccm3Oq2D.s:1806   .text.radian_to_angle:00000014 $d
-D:\temp\TMP\ccm3Oq2D.s:1850   .data.GlobalDebugMode:00000000 GlobalDebugMode
-D:\temp\TMP\ccm3Oq2D.s:1813   .bss.decimal.3:00000000 $d
-D:\temp\TMP\ccm3Oq2D.s:1817   .bss.decimal.3:00000000 decimal.3
-D:\temp\TMP\ccm3Oq2D.s:1820   .bss.integer.4:00000000 $d
-ARM GAS  D:\temp\TMP\ccm3Oq2D.s 			page 43
+D:\temp\TMP\cc0Ffsxd.s:19     .text.Sqrt:00000000 $t
+D:\temp\TMP\cc0Ffsxd.s:25     .text.Sqrt:00000000 Sqrt
+D:\temp\TMP\cc0Ffsxd.s:92     .text.Sqrt:00000054 $d
+D:\temp\TMP\cc0Ffsxd.s:98     .text.ramp_init:00000000 $t
+D:\temp\TMP\cc0Ffsxd.s:104    .text.ramp_init:00000000 ramp_init
+D:\temp\TMP\cc0Ffsxd.s:134    .text.ramp_calc:00000000 $t
+D:\temp\TMP\cc0Ffsxd.s:140    .text.ramp_calc:00000000 ramp_calc
+D:\temp\TMP\cc0Ffsxd.s:192    .text.abs_limit:00000000 $t
+D:\temp\TMP\cc0Ffsxd.s:198    .text.abs_limit:00000000 abs_limit
+D:\temp\TMP\cc0Ffsxd.s:232    .text.sign:00000000 $t
+D:\temp\TMP\cc0Ffsxd.s:238    .text.sign:00000000 sign
+D:\temp\TMP\cc0Ffsxd.s:267    .text.float_deadband:00000000 $t
+D:\temp\TMP\cc0Ffsxd.s:273    .text.float_deadband:00000000 float_deadband
+D:\temp\TMP\cc0Ffsxd.s:300    .text.float_deadband:0000001c $d
+D:\temp\TMP\cc0Ffsxd.s:305    .text.int16_deadline:00000000 $t
+D:\temp\TMP\cc0Ffsxd.s:311    .text.int16_deadline:00000000 int16_deadline
+D:\temp\TMP\cc0Ffsxd.s:343    .text.float_constrain:00000000 $t
+D:\temp\TMP\cc0Ffsxd.s:349    .text.float_constrain:00000000 float_constrain
+D:\temp\TMP\cc0Ffsxd.s:384    .text.Norm3d:00000000 $t
+D:\temp\TMP\cc0Ffsxd.s:390    .text.Norm3d:00000000 Norm3d
+D:\temp\TMP\cc0Ffsxd.s:458    .text.NormOf3d:00000000 $t
+D:\temp\TMP\cc0Ffsxd.s:464    .text.NormOf3d:00000000 NormOf3d
+D:\temp\TMP\cc0Ffsxd.s:502    .text.Cross3d:00000000 $t
+D:\temp\TMP\cc0Ffsxd.s:508    .text.Cross3d:00000000 Cross3d
+D:\temp\TMP\cc0Ffsxd.s:573    .text.Dot3d:00000000 $t
+D:\temp\TMP\cc0Ffsxd.s:579    .text.Dot3d:00000000 Dot3d
+D:\temp\TMP\cc0Ffsxd.s:615    .text.int16_constrain:00000000 $t
+D:\temp\TMP\cc0Ffsxd.s:621    .text.int16_constrain:00000000 int16_constrain
+D:\temp\TMP\cc0Ffsxd.s:654    .text.loop_float_constrain:00000000 $t
+D:\temp\TMP\cc0Ffsxd.s:660    .text.loop_float_constrain:00000000 loop_float_constrain
+D:\temp\TMP\cc0Ffsxd.s:734    .text.theta_format:00000000 $t
+D:\temp\TMP\cc0Ffsxd.s:740    .text.theta_format:00000000 theta_format
+D:\temp\TMP\cc0Ffsxd.s:764    .text.theta_format:00000010 $d
+D:\temp\TMP\cc0Ffsxd.s:770    .text.float_rounding:00000000 $t
+D:\temp\TMP\cc0Ffsxd.s:776    .text.float_rounding:00000000 float_rounding
+D:\temp\TMP\cc0Ffsxd.s:821    .text.float_rounding:00000038 $d
+D:\temp\TMP\cc0Ffsxd.s:827    .text.OLS_Init:00000000 $t
+D:\temp\TMP\cc0Ffsxd.s:833    .text.OLS_Init:00000000 OLS_Init
+D:\temp\TMP\cc0Ffsxd.s:907    .text.OLS_Update:00000000 $t
+D:\temp\TMP\cc0Ffsxd.s:913    .text.OLS_Update:00000000 OLS_Update
+D:\temp\TMP\cc0Ffsxd.s:1214   .text.OLS_Update:000001fc $d
+D:\temp\TMP\cc0Ffsxd.s:1220   .text.OLS_Derivative:00000000 $t
+D:\temp\TMP\cc0Ffsxd.s:1226   .text.OLS_Derivative:00000000 OLS_Derivative
+D:\temp\TMP\cc0Ffsxd.s:1519   .text.OLS_Derivative:000001ec $d
+D:\temp\TMP\cc0Ffsxd.s:1525   .text.Get_OLS_Derivative:00000000 $t
+D:\temp\TMP\cc0Ffsxd.s:1531   .text.Get_OLS_Derivative:00000000 Get_OLS_Derivative
+D:\temp\TMP\cc0Ffsxd.s:1549   .text.OLS_Smooth:00000000 $t
+D:\temp\TMP\cc0Ffsxd.s:1555   .text.OLS_Smooth:00000000 OLS_Smooth
+D:\temp\TMP\cc0Ffsxd.s:1867   .text.OLS_Smooth:00000214 $d
+D:\temp\TMP\cc0Ffsxd.s:1873   .text.Get_OLS_Smooth:00000000 $t
+D:\temp\TMP\cc0Ffsxd.s:1879   .text.Get_OLS_Smooth:00000000 Get_OLS_Smooth
+D:\temp\TMP\cc0Ffsxd.s:1912   .text.slope_following:00000000 $t
+D:\temp\TMP\cc0Ffsxd.s:1918   .text.slope_following:00000000 slope_following
+D:\temp\TMP\cc0Ffsxd.s:1979   .text.angle_to_radian:00000000 $t
+D:\temp\TMP\cc0Ffsxd.s:1985   .text.angle_to_radian:00000000 angle_to_radian
+ARM GAS  D:\temp\TMP\cc0Ffsxd.s 			page 47
 
 
-D:\temp\TMP\ccm3Oq2D.s:1824   .bss.integer.4:00000000 integer.4
-D:\temp\TMP\ccm3Oq2D.s:1827   .bss.temp.0:00000000 $d
-D:\temp\TMP\ccm3Oq2D.s:1831   .bss.temp.0:00000000 temp.0
-D:\temp\TMP\ccm3Oq2D.s:1834   .bss.temp.1:00000000 $d
-D:\temp\TMP\ccm3Oq2D.s:1838   .bss.temp.1:00000000 temp.1
-D:\temp\TMP\ccm3Oq2D.s:1841   .bss.temp.2:00000000 $d
-D:\temp\TMP\ccm3Oq2D.s:1845   .bss.temp.2:00000000 temp.2
+D:\temp\TMP\cc0Ffsxd.s:2005   .text.angle_to_radian:00000014 $d
+D:\temp\TMP\cc0Ffsxd.s:2011   .text.radian_to_angle:00000000 $t
+D:\temp\TMP\cc0Ffsxd.s:2017   .text.radian_to_angle:00000000 radian_to_angle
+D:\temp\TMP\cc0Ffsxd.s:2037   .text.radian_to_angle:00000014 $d
+D:\temp\TMP\cc0Ffsxd.s:2081   .data.GlobalDebugMode:00000000 GlobalDebugMode
+D:\temp\TMP\cc0Ffsxd.s:2044   .bss.decimal.3:00000000 $d
+D:\temp\TMP\cc0Ffsxd.s:2048   .bss.decimal.3:00000000 decimal.3
+D:\temp\TMP\cc0Ffsxd.s:2051   .bss.integer.4:00000000 $d
+D:\temp\TMP\cc0Ffsxd.s:2055   .bss.integer.4:00000000 integer.4
+D:\temp\TMP\cc0Ffsxd.s:2058   .bss.temp.0:00000000 $d
+D:\temp\TMP\cc0Ffsxd.s:2062   .bss.temp.0:00000000 temp.0
+D:\temp\TMP\cc0Ffsxd.s:2065   .bss.temp.1:00000000 $d
+D:\temp\TMP\cc0Ffsxd.s:2069   .bss.temp.1:00000000 temp.1
+D:\temp\TMP\cc0Ffsxd.s:2072   .bss.temp.2:00000000 $d
+D:\temp\TMP\cc0Ffsxd.s:2076   .bss.temp.2:00000000 temp.2
 
 UNDEFINED SYMBOLS
 pvPortMalloc

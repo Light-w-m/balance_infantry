@@ -1,4 +1,4 @@
-ARM GAS  D:\temp\TMP\ccitzH6G.s 			page 1
+ARM GAS  D:\temp\TMP\cc65bfxy.s 			page 1
 
 
    1              		.cpu cortex-m7
@@ -18,14 +18,14 @@ ARM GAS  D:\temp\TMP\ccitzH6G.s 			page 1
   15              		.text
   16              	.Ltext0:
   17              		.cfi_sections	.debug_frame
-  18              		.section	.text.INS_Init,"ax",%progbits
+  18              		.section	.text.InitQuaternion,"ax",%progbits
   19              		.align	1
-  20              		.global	INS_Init
-  21              		.syntax unified
-  22              		.thumb
-  23              		.thumb_func
-  25              	INS_Init:
-  26              	.LFB193:
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  24              	InitQuaternion:
+  25              	.LVL0:
+  26              	.LFB195:
   27              		.file 1 "Robot/RoboTask/ins/INS_task.c"
    1:Robot/RoboTask/ins/INS_task.c **** /**
    2:Robot/RoboTask/ins/INS_task.c ****   *********************************************************************
@@ -43,1393 +43,1657 @@ ARM GAS  D:\temp\TMP\ccitzH6G.s 			page 1
   14:Robot/RoboTask/ins/INS_task.c ****   */
   15:Robot/RoboTask/ins/INS_task.c **** 	
   16:Robot/RoboTask/ins/INS_task.c **** #include "INS_task.h"
-  17:Robot/RoboTask/ins/INS_task.c **** #include "QuaternionEKF.h"
-  18:Robot/RoboTask/ins/INS_task.c **** #include "bsp_dwt.h"
-  19:Robot/RoboTask/ins/INS_task.c **** #include "mahony_filter.h"
-  20:Robot/RoboTask/ins/INS_task.c **** #include "gpio.h"
-  21:Robot/RoboTask/ins/INS_task.c **** #include "pid.h"
-  22:Robot/RoboTask/ins/INS_task.c **** #include "spi.h"
-  23:Robot/RoboTask/ins/INS_task.c **** #include "tim.h"
-  24:Robot/RoboTask/ins/INS_task.c **** #include "cmsis_os.h"
-  25:Robot/RoboTask/ins/INS_task.c **** 
-  26:Robot/RoboTask/ins/INS_task.c **** INS_t INS;
-  27:Robot/RoboTask/ins/INS_task.c **** extern IMU_Data_t BMI088;
-  28:Robot/RoboTask/ins/INS_task.c **** PidTypeDef imu_temp_pid;
-  29:Robot/RoboTask/ins/INS_task.c **** 
-  30:Robot/RoboTask/ins/INS_task.c **** struct MAHONY_FILTER_t mahony;
-  31:Robot/RoboTask/ins/INS_task.c **** Axis3f Gyro,Accel;
-ARM GAS  D:\temp\TMP\ccitzH6G.s 			page 2
+  17:Robot/RoboTask/ins/INS_task.c **** #include "controller.h"
+  18:Robot/RoboTask/ins/INS_task.c **** #include "QuaternionEKF.h"
+  19:Robot/RoboTask/ins/INS_task.c **** #include "bsp_dwt.h"
+  20:Robot/RoboTask/ins/INS_task.c **** #include "user_lib.h"
+  21:Robot/RoboTask/ins/INS_task.c **** #include "mahony_filter.h"
+  22:Robot/RoboTask/ins/INS_task.c **** #include "gpio.h"
+  23:Robot/RoboTask/ins/INS_task.c **** #include "pid.h"
+  24:Robot/RoboTask/ins/INS_task.c **** #include "spi.h"
+  25:Robot/RoboTask/ins/INS_task.c **** #include "tim.h"
+  26:Robot/RoboTask/ins/INS_task.c **** #include "cmsis_os.h"
+  27:Robot/RoboTask/ins/INS_task.c **** 
+  28:Robot/RoboTask/ins/INS_task.c **** INS_t INS;
+  29:Robot/RoboTask/ins/INS_task.c **** extern IMU_Data_t BMI088;
+  30:Robot/RoboTask/ins/INS_task.c **** static PIDInstance TempCtrl = {0};
+  31:Robot/RoboTask/ins/INS_task.c **** static float RefTemp = 40; // 恒温设定温度
+ARM GAS  D:\temp\TMP\cc65bfxy.s 			page 2
 
 
-  32:Robot/RoboTask/ins/INS_task.c **** float gravity[3] = {0, 0, 9.81f};
-  33:Robot/RoboTask/ins/INS_task.c **** 
-  34:Robot/RoboTask/ins/INS_task.c **** uint32_t INS_DWT_Count = 0;
-  35:Robot/RoboTask/ins/INS_task.c **** float ins_dt = 0.0f;
-  36:Robot/RoboTask/ins/INS_task.c **** float ins_time;
-  37:Robot/RoboTask/ins/INS_task.c **** int stop_time;
-  38:Robot/RoboTask/ins/INS_task.c **** 
-  39:Robot/RoboTask/ins/INS_task.c **** // extern osSemaphoreId imuBinarySem01Handle;
-  40:Robot/RoboTask/ins/INS_task.c **** float temp;
-  41:Robot/RoboTask/ins/INS_task.c **** uint8_t forceStop = 0;
-  42:Robot/RoboTask/ins/INS_task.c **** 
-  43:Robot/RoboTask/ins/INS_task.c **** void INS_Init(void)
-  44:Robot/RoboTask/ins/INS_task.c **** { 
-  28              		.loc 1 44 1 view -0
-  29              		.cfi_startproc
-  30              		@ args = 0, pretend = 0, frame = 0
-  31              		@ frame_needed = 0, uses_anonymous_args = 0
-  32 0000 08B5     		push	{r3, lr}
-  33              	.LCFI0:
-  34              		.cfi_def_cfa_offset 8
-  35              		.cfi_offset 3, -8
-  36              		.cfi_offset 14, -4
-  45:Robot/RoboTask/ins/INS_task.c **** 	mahony_init(&mahony,1.0f,0.0f,0.001f);
-  37              		.loc 1 45 2 view .LVU1
-  38 0002 9FED061A 		vldr.32	s2, .L3
-  39 0006 DFED060A 		vldr.32	s1, .L3+4
-  40 000a B7EE000A 		vmov.f32	s0, #1.0e+0
-  41 000e 0548     		ldr	r0, .L3+8
-  42 0010 FFF7FEFF 		bl	mahony_init
-  43              	.LVL0:
-  46:Robot/RoboTask/ins/INS_task.c ****    	INS.AccelLPF = 0.0089f;
-  44              		.loc 1 46 5 view .LVU2
-  45              		.loc 1 46 18 is_stmt 0 view .LVU3
-  46 0014 044B     		ldr	r3, .L3+12
-  47 0016 054A     		ldr	r2, .L3+16
-  48 0018 1A64     		str	r2, [r3, #64]	@ float
-  47:Robot/RoboTask/ins/INS_task.c **** }
-  49              		.loc 1 47 1 view .LVU4
-  50 001a 08BD     		pop	{r3, pc}
-  51              	.L4:
-  52              		.align	2
-  53              	.L3:
-  54 001c 6F12833A 		.word	981668463
-  55 0020 00000000 		.word	0
-  56 0024 00000000 		.word	.LANCHOR0
-  57 0028 00000000 		.word	.LANCHOR1
-  58 002c 4ED1113C 		.word	1007800654
-  59              		.cfi_endproc
-  60              	.LFE193:
-  62              		.section	.text.BodyFrameToEarthFrame,"ax",%progbits
-  63              		.align	1
-  64              		.global	BodyFrameToEarthFrame
-  65              		.syntax unified
-  66              		.thumb
-  67              		.thumb_func
-  69              	BodyFrameToEarthFrame:
-  70              	.LVL1:
-ARM GAS  D:\temp\TMP\ccitzH6G.s 			page 3
-
-
-  71              	.LFB195:
-  48:Robot/RoboTask/ins/INS_task.c **** 
-  49:Robot/RoboTask/ins/INS_task.c **** void INS_task(void)
-  50:Robot/RoboTask/ins/INS_task.c **** {
-  51:Robot/RoboTask/ins/INS_task.c **** 	 INS_Init();
-  52:Robot/RoboTask/ins/INS_task.c **** 	 
-  53:Robot/RoboTask/ins/INS_task.c **** 	 while(1)
-  54:Robot/RoboTask/ins/INS_task.c **** 	 {  
-  55:Robot/RoboTask/ins/INS_task.c **** 		ins_dt = DWT_GetDeltaT(&INS_DWT_Count);
-  56:Robot/RoboTask/ins/INS_task.c ****     
-  57:Robot/RoboTask/ins/INS_task.c **** 		mahony.dt = ins_dt;
-  58:Robot/RoboTask/ins/INS_task.c **** 
-  59:Robot/RoboTask/ins/INS_task.c **** 		BMI088_Read(&BMI088);
+  32:Robot/RoboTask/ins/INS_task.c **** 
+  33:Robot/RoboTask/ins/INS_task.c **** struct MAHONY_FILTER_t mahony;
+  34:Robot/RoboTask/ins/INS_task.c **** Axis3f Gyro,Accel;
+  35:Robot/RoboTask/ins/INS_task.c **** float gravity[3] = {0, 0, 9.81f};
+  36:Robot/RoboTask/ins/INS_task.c **** 
+  37:Robot/RoboTask/ins/INS_task.c **** uint32_t INS_DWT_Count = 0;
+  38:Robot/RoboTask/ins/INS_task.c **** float ins_dt = 0.0f;
+  39:Robot/RoboTask/ins/INS_task.c **** float ins_time;
+  40:Robot/RoboTask/ins/INS_task.c **** int stop_time;
+  41:Robot/RoboTask/ins/INS_task.c **** 
+  42:Robot/RoboTask/ins/INS_task.c **** // extern osSemaphoreId imuBinarySem01Handle;
+  43:Robot/RoboTask/ins/INS_task.c **** float temp;
+  44:Robot/RoboTask/ins/INS_task.c **** uint8_t forceStop = 0;
+  45:Robot/RoboTask/ins/INS_task.c **** 
+  46:Robot/RoboTask/ins/INS_task.c **** static void IMUPWMSet(uint16_t pwm)
+  47:Robot/RoboTask/ins/INS_task.c **** {
+  48:Robot/RoboTask/ins/INS_task.c ****     __HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_4, pwm);
+  49:Robot/RoboTask/ins/INS_task.c **** }
+  50:Robot/RoboTask/ins/INS_task.c **** 
+  51:Robot/RoboTask/ins/INS_task.c **** /**
+  52:Robot/RoboTask/ins/INS_task.c ****  * @brief 温度控制
+  53:Robot/RoboTask/ins/INS_task.c ****  *
+  54:Robot/RoboTask/ins/INS_task.c ****  */
+  55:Robot/RoboTask/ins/INS_task.c **** static void IMU_Temperature_Ctrl(void)
+  56:Robot/RoboTask/ins/INS_task.c **** {
+  57:Robot/RoboTask/ins/INS_task.c ****     PIDCalculate(&TempCtrl, BMI088.Temperature, RefTemp);
+  58:Robot/RoboTask/ins/INS_task.c ****     IMUPWMSet(float_constrain(float_rounding(TempCtrl.Output), 0, UINT32_MAX));
+  59:Robot/RoboTask/ins/INS_task.c **** }
   60:Robot/RoboTask/ins/INS_task.c **** 
-  61:Robot/RoboTask/ins/INS_task.c **** 		INS.Accel[X_AXIS] = BMI088.Accel[X_AXIS];
-  62:Robot/RoboTask/ins/INS_task.c **** 		INS.Accel[Y_AXIS] = BMI088.Accel[Y_AXIS];
-  63:Robot/RoboTask/ins/INS_task.c **** 		INS.Accel[Z_AXIS] = BMI088.Accel[Z_AXIS];
-  64:Robot/RoboTask/ins/INS_task.c **** 
-  65:Robot/RoboTask/ins/INS_task.c **** 		Accel.x=BMI088.Accel[0];
-  66:Robot/RoboTask/ins/INS_task.c **** 		Accel.y=BMI088.Accel[1];
-  67:Robot/RoboTask/ins/INS_task.c **** 		Accel.z=BMI088.Accel[2];
-  68:Robot/RoboTask/ins/INS_task.c **** 
-  69:Robot/RoboTask/ins/INS_task.c **** 		INS.Gyro[X_AXIS] = BMI088.Gyro[X_AXIS];
-  70:Robot/RoboTask/ins/INS_task.c **** 		INS.Gyro[Y_AXIS] = BMI088.Gyro[Y_AXIS];
-  71:Robot/RoboTask/ins/INS_task.c **** 		INS.Gyro[Z_AXIS] = BMI088.Gyro[Z_AXIS];
-  72:Robot/RoboTask/ins/INS_task.c **** 
-  73:Robot/RoboTask/ins/INS_task.c **** 		Gyro.x=BMI088.Gyro[0];
-  74:Robot/RoboTask/ins/INS_task.c **** 		Gyro.y=BMI088.Gyro[1];
-  75:Robot/RoboTask/ins/INS_task.c **** 		Gyro.z=BMI088.Gyro[2];
-  76:Robot/RoboTask/ins/INS_task.c **** 
-  77:Robot/RoboTask/ins/INS_task.c **** 		//核心函数，EKF更新四元数
-  78:Robot/RoboTask/ins/INS_task.c **** 		// IMU_QuaternionEKF_Update(INS.Gyro[X_AXIS], INS.Gyro[Y_AXIS], INS.Gyro[Z_AXIS], INS.Accel[X_AXI
-  79:Robot/RoboTask/ins/INS_task.c **** 
-  80:Robot/RoboTask/ins/INS_task.c **** 		mahony_input(&mahony,Gyro,Accel);
-  81:Robot/RoboTask/ins/INS_task.c **** 		mahony_update(&mahony);
-  82:Robot/RoboTask/ins/INS_task.c **** 		mahony_output(&mahony);
-  83:Robot/RoboTask/ins/INS_task.c **** 		RotationMatrix_update(&mahony);
-  84:Robot/RoboTask/ins/INS_task.c **** 					
-  85:Robot/RoboTask/ins/INS_task.c **** 		INS.q[0]=mahony.q0;
-  86:Robot/RoboTask/ins/INS_task.c **** 		INS.q[1]=mahony.q1;
-  87:Robot/RoboTask/ins/INS_task.c **** 		INS.q[2]=mahony.q2;
-  88:Robot/RoboTask/ins/INS_task.c **** 		INS.q[3]=mahony.q3;
-  89:Robot/RoboTask/ins/INS_task.c **** 		
-  90:Robot/RoboTask/ins/INS_task.c **** 		// 将重力从导航坐标系n转换到机体系b,随后根据加速度计数据计算运动加�
-  91:Robot/RoboTask/ins/INS_task.c **** 		float gravity_b[3];
-  92:Robot/RoboTask/ins/INS_task.c **** 		EarthFrameToBodyFrame(gravity, gravity_b, INS.q);
-  93:Robot/RoboTask/ins/INS_task.c **** 		for (uint8_t i = 0; i < 3; i++) // 同样过一个低通滤波
-  94:Robot/RoboTask/ins/INS_task.c **** 		{
-  95:Robot/RoboTask/ins/INS_task.c **** 			INS.MotionAccel_b[i] = (INS.Accel[i] - gravity_b[i]) * ins_dt / (INS.AccelLPF + ins_dt) 
-  96:Robot/RoboTask/ins/INS_task.c **** 															+ INS.MotionAccel_b[i] * INS.AccelLPF / (INS.AccelLPF + ins_dt); 
-  97:Robot/RoboTask/ins/INS_task.c **** 	//			INS.MotionAccel_b[i] = (INS.Accel[i] ) * dt / (INS.AccelLPF + dt) 
-  98:Robot/RoboTask/ins/INS_task.c **** 	//														+ INS.MotionAccel_b[i] * INS.AccelLPF / (INS.AccelLPF + dt);			
-  99:Robot/RoboTask/ins/INS_task.c **** 		}
- 100:Robot/RoboTask/ins/INS_task.c **** 		BodyFrameToEarthFrame(INS.MotionAccel_b, INS.MotionAccel_n, INS.q); // 转换回导航系n
- 101:Robot/RoboTask/ins/INS_task.c **** 		
- 102:Robot/RoboTask/ins/INS_task.c **** 		//死区处理
- 103:Robot/RoboTask/ins/INS_task.c **** 		if(fabsf(INS.MotionAccel_n[0])<0.02f)
-ARM GAS  D:\temp\TMP\ccitzH6G.s 			page 4
+  61:Robot/RoboTask/ins/INS_task.c **** // 使用加速度计的数据初始化Roll和Pitch,而Yaw置0,这样可以避免在初始时候的
+  62:Robot/RoboTask/ins/INS_task.c **** static void InitQuaternion(float *init_q4)
+  63:Robot/RoboTask/ins/INS_task.c **** {
+  28              		.loc 1 63 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 40
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		.loc 1 63 1 is_stmt 0 view .LVU1
+  33 0000 70B5     		push	{r4, r5, r6, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 16
+  36              		.cfi_offset 4, -16
+  37              		.cfi_offset 5, -12
+  38              		.cfi_offset 6, -8
+  39              		.cfi_offset 14, -4
+  40 0002 2DED028B 		vpush.64	{d8}
+  41              	.LCFI1:
+  42              		.cfi_def_cfa_offset 24
+  43              		.cfi_offset 80, -24
+  44              		.cfi_offset 81, -20
+  45 0006 8AB0     		sub	sp, sp, #40
+  46              	.LCFI2:
+  47              		.cfi_def_cfa_offset 64
+  48 0008 0646     		mov	r6, r0
+  64:Robot/RoboTask/ins/INS_task.c ****     float acc_init[3] = {0};
+  49              		.loc 1 64 5 is_stmt 1 view .LVU2
+  50              		.loc 1 64 11 is_stmt 0 view .LVU3
+  51 000a 0024     		movs	r4, #0
+ARM GAS  D:\temp\TMP\cc65bfxy.s 			page 3
 
 
- 104:Robot/RoboTask/ins/INS_task.c **** 		{
- 105:Robot/RoboTask/ins/INS_task.c **** 			INS.MotionAccel_n[0]=0.0f;	//x轴
- 106:Robot/RoboTask/ins/INS_task.c **** 		}
- 107:Robot/RoboTask/ins/INS_task.c **** 		if(fabsf(INS.MotionAccel_n[1])<0.02f)
- 108:Robot/RoboTask/ins/INS_task.c **** 		{
- 109:Robot/RoboTask/ins/INS_task.c **** 			INS.MotionAccel_n[1]=0.0f;	//y轴
- 110:Robot/RoboTask/ins/INS_task.c **** 		}
- 111:Robot/RoboTask/ins/INS_task.c **** 		if(fabsf(INS.MotionAccel_n[2])<0.04f)
- 112:Robot/RoboTask/ins/INS_task.c **** 		{
- 113:Robot/RoboTask/ins/INS_task.c **** 			INS.MotionAccel_n[2]=0.0f;//z轴
- 114:Robot/RoboTask/ins/INS_task.c **** 		}
- 115:Robot/RoboTask/ins/INS_task.c **** 		
- 116:Robot/RoboTask/ins/INS_task.c **** 		if(ins_time>3000.0f)
- 117:Robot/RoboTask/ins/INS_task.c **** 		{
- 118:Robot/RoboTask/ins/INS_task.c **** 			INS.v_n=INS.v_n+INS.MotionAccel_n[1]*0.001f;
- 119:Robot/RoboTask/ins/INS_task.c **** 		  	INS.x_n=INS.x_n+INS.v_n*0.001f;
- 120:Robot/RoboTask/ins/INS_task.c **** 			INS.ins_flag=1;//四元数基本收敛，加速度也基本收敛，可以开始底盘任务
- 121:Robot/RoboTask/ins/INS_task.c **** 			// 获取最终数据
- 122:Robot/RoboTask/ins/INS_task.c **** 			INS.Pitch=mahony.roll*180.0f/PI;
- 123:Robot/RoboTask/ins/INS_task.c **** 			INS.Roll=mahony.pitch*180.0f/PI;
- 124:Robot/RoboTask/ins/INS_task.c **** 			INS.Yaw=mahony.yaw*180.0f/PI;
- 125:Robot/RoboTask/ins/INS_task.c **** 		
- 126:Robot/RoboTask/ins/INS_task.c **** 			//INS.YawTotalAngle=INS.YawTotalAngle+INS.Gyro[2]*0.001f;
- 127:Robot/RoboTask/ins/INS_task.c **** 			
- 128:Robot/RoboTask/ins/INS_task.c **** 			if (INS.Yaw - INS.YawAngleLast > 3.1415926f)
- 129:Robot/RoboTask/ins/INS_task.c **** 			{
- 130:Robot/RoboTask/ins/INS_task.c **** 					INS.YawRoundCount--;
- 131:Robot/RoboTask/ins/INS_task.c **** 			}
- 132:Robot/RoboTask/ins/INS_task.c **** 			else if (INS.Yaw - INS.YawAngleLast < -3.1415926f)
- 133:Robot/RoboTask/ins/INS_task.c **** 			{
- 134:Robot/RoboTask/ins/INS_task.c **** 					INS.YawRoundCount++;
- 135:Robot/RoboTask/ins/INS_task.c **** 			}
- 136:Robot/RoboTask/ins/INS_task.c **** 			INS.YawTotalAngle = (6.283f* INS.YawRoundCount + INS.Yaw) * 180.0f / PI;
- 137:Robot/RoboTask/ins/INS_task.c **** 			INS.YawAngleLast = INS.Yaw*180.0f/PI;
- 138:Robot/RoboTask/ins/INS_task.c **** 		}
- 139:Robot/RoboTask/ins/INS_task.c **** 		else
- 140:Robot/RoboTask/ins/INS_task.c **** 		{
- 141:Robot/RoboTask/ins/INS_task.c **** 		ins_time++;
- 142:Robot/RoboTask/ins/INS_task.c **** 		}
- 143:Robot/RoboTask/ins/INS_task.c **** 			
- 144:Robot/RoboTask/ins/INS_task.c **** 		osDelay(1);
- 145:Robot/RoboTask/ins/INS_task.c **** 	}
- 146:Robot/RoboTask/ins/INS_task.c **** } 
- 147:Robot/RoboTask/ins/INS_task.c **** 
- 148:Robot/RoboTask/ins/INS_task.c **** /**
- 149:Robot/RoboTask/ins/INS_task.c **** ************************************************************************
- 150:Robot/RoboTask/ins/INS_task.c **** * @brief:      	IMU_TempCtrlTask(void const * argument)
- 151:Robot/RoboTask/ins/INS_task.c **** * @param:       argument - 任务参数
- 152:Robot/RoboTask/ins/INS_task.c **** * @retval:     	void
- 153:Robot/RoboTask/ins/INS_task.c **** * @details:    	IMU温度控制任务函数
- 154:Robot/RoboTask/ins/INS_task.c **** ************************************************************************
- 155:Robot/RoboTask/ins/INS_task.c **** **/
- 156:Robot/RoboTask/ins/INS_task.c **** // void IMU_TempCtrlTask(void const * argument)
- 157:Robot/RoboTask/ins/INS_task.c **** // {
- 158:Robot/RoboTask/ins/INS_task.c **** // 	osDelay(500);
- 159:Robot/RoboTask/ins/INS_task.c **** //     HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_4);
- 160:Robot/RoboTask/ins/INS_task.c **** // 	while(BMI088_init(&hspi2,2))
-ARM GAS  D:\temp\TMP\ccitzH6G.s 			page 5
+  52 000c 0794     		str	r4, [sp, #28]
+  53 000e 0894     		str	r4, [sp, #32]
+  54 0010 0994     		str	r4, [sp, #36]
+  65:Robot/RoboTask/ins/INS_task.c ****     float gravity_norm[3] = {0, 0, 1}; // 导航系重力加速度矢量,归一化后为(0,0,1)
+  55              		.loc 1 65 5 is_stmt 1 view .LVU4
+  56              		.loc 1 65 11 is_stmt 0 view .LVU5
+  57 0012 0023     		movs	r3, #0
+  58 0014 0493     		str	r3, [sp, #16]	@ float
+  59 0016 0593     		str	r3, [sp, #20]	@ float
+  60 0018 4FF07E53 		mov	r3, #1065353216
+  61 001c 0693     		str	r3, [sp, #24]	@ float
+  66:Robot/RoboTask/ins/INS_task.c ****     float axis_rot[3] = {0};           // 旋转轴
+  62              		.loc 1 66 5 is_stmt 1 view .LVU6
+  63              		.loc 1 66 11 is_stmt 0 view .LVU7
+  64 001e 0194     		str	r4, [sp, #4]
+  65 0020 0294     		str	r4, [sp, #8]
+  66 0022 0394     		str	r4, [sp, #12]
+  67:Robot/RoboTask/ins/INS_task.c ****     // 读取100次加速度计数据,取平均值作为初始值
+  68:Robot/RoboTask/ins/INS_task.c ****     for (uint8_t i = 0; i < 100; ++i)
+  67              		.loc 1 68 5 is_stmt 1 view .LVU8
+  68              	.LBB2:
+  69              		.loc 1 68 10 view .LVU9
+  70              	.LVL1:
+  71              		.loc 1 68 5 is_stmt 0 view .LVU10
+  72 0024 21E0     		b	.L2
+  73              	.LVL2:
+  74              	.L3:
+  69:Robot/RoboTask/ins/INS_task.c ****     {
+  70:Robot/RoboTask/ins/INS_task.c ****         BMI088_Read(&BMI088);
+  75              		.loc 1 70 9 is_stmt 1 discriminator 3 view .LVU11
+  76 0026 354D     		ldr	r5, .L9
+  77 0028 2846     		mov	r0, r5
+  78 002a FFF7FEFF 		bl	BMI088_Read
+  79              	.LVL3:
+  71:Robot/RoboTask/ins/INS_task.c ****         acc_init[X_AXIS] += BMI088.Accel[X_AXIS];
+  80              		.loc 1 71 9 discriminator 3 view .LVU12
+  81              		.loc 1 71 41 is_stmt 0 discriminator 3 view .LVU13
+  82 002e 95ED007A 		vldr.32	s14, [r5]
+  83              		.loc 1 71 26 discriminator 3 view .LVU14
+  84 0032 DDED077A 		vldr.32	s15, [sp, #28]
+  85 0036 77EE877A 		vadd.f32	s15, s15, s14
+  86 003a CDED077A 		vstr.32	s15, [sp, #28]
+  72:Robot/RoboTask/ins/INS_task.c ****         acc_init[Y_AXIS] += BMI088.Accel[Y_AXIS];
+  87              		.loc 1 72 9 is_stmt 1 discriminator 3 view .LVU15
+  88              		.loc 1 72 41 is_stmt 0 discriminator 3 view .LVU16
+  89 003e 95ED017A 		vldr.32	s14, [r5, #4]
+  90              		.loc 1 72 26 discriminator 3 view .LVU17
+  91 0042 DDED087A 		vldr.32	s15, [sp, #32]
+  92 0046 77EE877A 		vadd.f32	s15, s15, s14
+  93 004a CDED087A 		vstr.32	s15, [sp, #32]
+  73:Robot/RoboTask/ins/INS_task.c ****         acc_init[Z_AXIS] += BMI088.Accel[Z_AXIS];
+  94              		.loc 1 73 9 is_stmt 1 discriminator 3 view .LVU18
+  95              		.loc 1 73 41 is_stmt 0 discriminator 3 view .LVU19
+  96 004e 95ED027A 		vldr.32	s14, [r5, #8]
+  97              		.loc 1 73 26 discriminator 3 view .LVU20
+  98 0052 DDED097A 		vldr.32	s15, [sp, #36]
+  99 0056 77EE877A 		vadd.f32	s15, s15, s14
+ARM GAS  D:\temp\TMP\cc65bfxy.s 			page 4
 
 
- 161:Robot/RoboTask/ins/INS_task.c **** // 	{
- 162:Robot/RoboTask/ins/INS_task.c **** 
- 163:Robot/RoboTask/ins/INS_task.c **** // 	}
- 164:Robot/RoboTask/ins/INS_task.c **** 
- 165:Robot/RoboTask/ins/INS_task.c **** // 	PID_init(&imu_temp_pid, PID_DELTA, (float[]){KP,KI,KD}, MAX_OUT, 0.0f);
- 166:Robot/RoboTask/ins/INS_task.c **** 
- 167:Robot/RoboTask/ins/INS_task.c **** // 	for(;;)
- 168:Robot/RoboTask/ins/INS_task.c **** // 	{
- 169:Robot/RoboTask/ins/INS_task.c **** // 		osSemaphoreWait(imuBinarySem01Handle, osWaitForever);
- 170:Robot/RoboTask/ins/INS_task.c **** 
- 171:Robot/RoboTask/ins/INS_task.c **** // 		BMI088_Read(&BMI088);
- 172:Robot/RoboTask/ins/INS_task.c **** // 		temp = BMI088.Temperature;
- 173:Robot/RoboTask/ins/INS_task.c **** 
- 174:Robot/RoboTask/ins/INS_task.c **** // 		float out = PID_Calc(&imu_temp_pid, temp, DES_TEMP);
- 175:Robot/RoboTask/ins/INS_task.c **** 
- 176:Robot/RoboTask/ins/INS_task.c **** // 		if (out > MAX_OUT) out = MAX_OUT;
- 177:Robot/RoboTask/ins/INS_task.c **** //         if (out < 0) out = 0.f;
- 178:Robot/RoboTask/ins/INS_task.c ****         
- 179:Robot/RoboTask/ins/INS_task.c **** //         if (forceStop == 1)
- 180:Robot/RoboTask/ins/INS_task.c **** //         {
- 181:Robot/RoboTask/ins/INS_task.c **** //             out = 0.0f;
- 182:Robot/RoboTask/ins/INS_task.c **** //         }
- 183:Robot/RoboTask/ins/INS_task.c **** 
- 184:Robot/RoboTask/ins/INS_task.c **** // 		htim3.Instance->CCR4 = (uint16_t)out;
- 185:Robot/RoboTask/ins/INS_task.c **** // 	}
- 186:Robot/RoboTask/ins/INS_task.c **** // }
- 187:Robot/RoboTask/ins/INS_task.c **** 
- 188:Robot/RoboTask/ins/INS_task.c **** 
- 189:Robot/RoboTask/ins/INS_task.c **** /**
- 190:Robot/RoboTask/ins/INS_task.c ****  * @brief          Transform 3dvector from BodyFrame to EarthFrame
- 191:Robot/RoboTask/ins/INS_task.c ****  * @param[1]       vector in BodyFrame
- 192:Robot/RoboTask/ins/INS_task.c ****  * @param[2]       vector in EarthFrame
- 193:Robot/RoboTask/ins/INS_task.c ****  * @param[3]       quaternion
- 194:Robot/RoboTask/ins/INS_task.c ****  */
- 195:Robot/RoboTask/ins/INS_task.c **** void BodyFrameToEarthFrame(const float *vecBF, float *vecEF, float *q)
- 196:Robot/RoboTask/ins/INS_task.c **** {
-  72              		.loc 1 196 1 is_stmt 1 view -0
-  73              		.cfi_startproc
-  74              		@ args = 0, pretend = 0, frame = 0
-  75              		@ frame_needed = 0, uses_anonymous_args = 0
-  76              		@ link register save eliminated.
- 197:Robot/RoboTask/ins/INS_task.c ****     vecEF[0] = 2.0f * ((0.5f - q[2] * q[2] - q[3] * q[3]) * vecBF[0] +
-  77              		.loc 1 197 5 view .LVU6
-  78              		.loc 1 197 33 is_stmt 0 view .LVU7
-  79 0000 92ED026A 		vldr.32	s12, [r2, #8]
-  80              		.loc 1 197 37 view .LVU8
-  81 0004 66EE067A 		vmul.f32	s15, s12, s12
-  82              		.loc 1 197 30 view .LVU9
-  83 0008 F6EE006A 		vmov.f32	s13, #5.0e-1
-  84 000c 76EEE77A 		vsub.f32	s15, s13, s15
-  85              		.loc 1 197 47 view .LVU10
-  86 0010 92ED037A 		vldr.32	s14, [r2, #12]
-  87              		.loc 1 197 51 view .LVU11
-  88 0014 67EE075A 		vmul.f32	s11, s14, s14
-  89              		.loc 1 197 44 view .LVU12
-  90 0018 77EEE57A 		vsub.f32	s15, s15, s11
-  91              		.loc 1 197 66 view .LVU13
-ARM GAS  D:\temp\TMP\ccitzH6G.s 			page 6
+ 100 005a CDED097A 		vstr.32	s15, [sp, #36]
+  74:Robot/RoboTask/ins/INS_task.c ****         DWT_Delay(0.001);
+ 101              		.loc 1 74 9 is_stmt 1 discriminator 3 view .LVU21
+ 102 005e 9FED280A 		vldr.32	s0, .L9+4
+ 103 0062 FFF7FEFF 		bl	DWT_Delay
+ 104              	.LVL4:
+  68:Robot/RoboTask/ins/INS_task.c ****     {
+ 105              		.loc 1 68 34 discriminator 3 view .LVU22
+ 106 0066 0134     		adds	r4, r4, #1
+ 107              	.LVL5:
+  68:Robot/RoboTask/ins/INS_task.c ****     {
+ 108              		.loc 1 68 34 is_stmt 0 discriminator 3 view .LVU23
+ 109 0068 E4B2     		uxtb	r4, r4
+ 110              	.LVL6:
+ 111              	.L2:
+  68:Robot/RoboTask/ins/INS_task.c ****     {
+ 112              		.loc 1 68 25 is_stmt 1 discriminator 1 view .LVU24
+  68:Robot/RoboTask/ins/INS_task.c ****     {
+ 113              		.loc 1 68 5 is_stmt 0 discriminator 1 view .LVU25
+ 114 006a 632C     		cmp	r4, #99
+ 115 006c DBD9     		bls	.L3
+ 116              	.LBE2:
+ 117              	.LBB3:
+  75:Robot/RoboTask/ins/INS_task.c ****     }
+  76:Robot/RoboTask/ins/INS_task.c ****     for (uint8_t i = 0; i < 3; ++i)
+ 118              		.loc 1 76 18 view .LVU26
+ 119 006e 0023     		movs	r3, #0
+ 120 0070 0CE0     		b	.L4
+ 121              	.LVL7:
+ 122              	.L5:
+  77:Robot/RoboTask/ins/INS_task.c ****         acc_init[i] /= 100;
+ 123              		.loc 1 77 9 is_stmt 1 discriminator 3 view .LVU27
+ 124              		.loc 1 77 21 is_stmt 0 discriminator 3 view .LVU28
+ 125 0072 0AAA     		add	r2, sp, #40
+ 126 0074 02EB8302 		add	r2, r2, r3, lsl #2
+ 127 0078 52ED036A 		vldr.32	s13, [r2, #-12]
+ 128 007c 9FED217A 		vldr.32	s14, .L9+8
+ 129 0080 C6EE877A 		vdiv.f32	s15, s13, s14
+ 130 0084 42ED037A 		vstr.32	s15, [r2, #-12]
+  76:Robot/RoboTask/ins/INS_task.c ****         acc_init[i] /= 100;
+ 131              		.loc 1 76 32 is_stmt 1 discriminator 3 view .LVU29
+ 132 0088 0133     		adds	r3, r3, #1
+ 133              	.LVL8:
+  76:Robot/RoboTask/ins/INS_task.c ****         acc_init[i] /= 100;
+ 134              		.loc 1 76 32 is_stmt 0 discriminator 3 view .LVU30
+ 135 008a DBB2     		uxtb	r3, r3
+ 136              	.LVL9:
+ 137              	.L4:
+  76:Robot/RoboTask/ins/INS_task.c ****         acc_init[i] /= 100;
+ 138              		.loc 1 76 25 is_stmt 1 discriminator 1 view .LVU31
+  76:Robot/RoboTask/ins/INS_task.c ****         acc_init[i] /= 100;
+ 139              		.loc 1 76 5 is_stmt 0 discriminator 1 view .LVU32
+ 140 008c 022B     		cmp	r3, #2
+ 141 008e F0D9     		bls	.L5
+ 142              	.LBE3:
+  78:Robot/RoboTask/ins/INS_task.c ****     Norm3d(acc_init);
+ 143              		.loc 1 78 5 is_stmt 1 view .LVU33
+ARM GAS  D:\temp\TMP\cc65bfxy.s 			page 5
 
 
-  92 001c D0ED005A 		vldr.32	s11, [r0]
-  93              		.loc 1 197 59 view .LVU14
-  94 0020 67EEA57A 		vmul.f32	s15, s15, s11
- 198:Robot/RoboTask/ins/INS_task.c ****                        (q[1] * q[2] - q[0] * q[3]) * vecBF[1] +
-  95              		.loc 1 198 26 view .LVU15
-  96 0024 D2ED014A 		vldr.32	s9, [r2, #4]
-  97              		.loc 1 198 30 view .LVU16
-  98 0028 66EE245A 		vmul.f32	s11, s12, s9
-  99              		.loc 1 198 40 view .LVU17
- 100 002c 92ED005A 		vldr.32	s10, [r2]
- 101              		.loc 1 198 44 view .LVU18
- 102 0030 27EE054A 		vmul.f32	s8, s14, s10
- 103              		.loc 1 198 37 view .LVU19
- 104 0034 75EEC45A 		vsub.f32	s11, s11, s8
- 105              		.loc 1 198 59 view .LVU20
- 106 0038 90ED014A 		vldr.32	s8, [r0, #4]
- 107              		.loc 1 198 52 view .LVU21
- 108 003c 65EE845A 		vmul.f32	s11, s11, s8
- 197:Robot/RoboTask/ins/INS_task.c ****     vecEF[0] = 2.0f * ((0.5f - q[2] * q[2] - q[3] * q[3]) * vecBF[0] +
- 109              		.loc 1 197 70 view .LVU22
- 110 0040 77EEA57A 		vadd.f32	s15, s15, s11
- 199:Robot/RoboTask/ins/INS_task.c ****                        (q[1] * q[3] + q[0] * q[2]) * vecBF[2]);
- 111              		.loc 1 199 30 view .LVU23
- 112 0044 27EE247A 		vmul.f32	s14, s14, s9
- 113              		.loc 1 199 44 view .LVU24
- 114 0048 26EE056A 		vmul.f32	s12, s12, s10
- 115              		.loc 1 199 37 view .LVU25
- 116 004c 37EE067A 		vadd.f32	s14, s14, s12
- 117              		.loc 1 199 59 view .LVU26
- 118 0050 90ED026A 		vldr.32	s12, [r0, #8]
- 119              		.loc 1 199 52 view .LVU27
- 120 0054 27EE067A 		vmul.f32	s14, s14, s12
- 198:Robot/RoboTask/ins/INS_task.c ****                        (q[1] * q[2] - q[0] * q[3]) * vecBF[1] +
- 121              		.loc 1 198 63 view .LVU28
- 122 0058 77EE877A 		vadd.f32	s15, s15, s14
- 197:Robot/RoboTask/ins/INS_task.c ****     vecEF[0] = 2.0f * ((0.5f - q[2] * q[2] - q[3] * q[3]) * vecBF[0] +
- 123              		.loc 1 197 21 view .LVU29
- 124 005c 77EEA77A 		vadd.f32	s15, s15, s15
- 197:Robot/RoboTask/ins/INS_task.c ****     vecEF[0] = 2.0f * ((0.5f - q[2] * q[2] - q[3] * q[3]) * vecBF[0] +
- 125              		.loc 1 197 14 view .LVU30
- 126 0060 C1ED007A 		vstr.32	s15, [r1]
- 200:Robot/RoboTask/ins/INS_task.c **** 
- 201:Robot/RoboTask/ins/INS_task.c ****     vecEF[1] = 2.0f * ((q[1] * q[2] + q[0] * q[3]) * vecBF[0] +
- 127              		.loc 1 201 5 is_stmt 1 view .LVU31
- 128              		.loc 1 201 26 is_stmt 0 view .LVU32
- 129 0064 D2ED015A 		vldr.32	s11, [r2, #4]
- 130              		.loc 1 201 33 view .LVU33
- 131 0068 D2ED027A 		vldr.32	s15, [r2, #8]
- 132              		.loc 1 201 30 view .LVU34
- 133 006c 25EEA77A 		vmul.f32	s14, s11, s15
- 134              		.loc 1 201 40 view .LVU35
- 135 0070 D2ED004A 		vldr.32	s9, [r2]
- 136              		.loc 1 201 47 view .LVU36
- 137 0074 92ED035A 		vldr.32	s10, [r2, #12]
- 138              		.loc 1 201 44 view .LVU37
- 139 0078 24EE856A 		vmul.f32	s12, s9, s10
- 140              		.loc 1 201 37 view .LVU38
-ARM GAS  D:\temp\TMP\ccitzH6G.s 			page 7
+ 144 0090 07A8     		add	r0, sp, #28
+ 145 0092 FFF7FEFF 		bl	Norm3d
+ 146              	.LVL10:
+  79:Robot/RoboTask/ins/INS_task.c ****     // 计算原始加速度矢量和导航系重力加速度矢量的夹角
+  80:Robot/RoboTask/ins/INS_task.c ****     float angle = acosf(Dot3d(acc_init, gravity_norm));
+ 147              		.loc 1 80 5 view .LVU34
+ 148              		.loc 1 80 19 is_stmt 0 view .LVU35
+ 149 0096 04A9     		add	r1, sp, #16
+ 150 0098 07A8     		add	r0, sp, #28
+ 151 009a FFF7FEFF 		bl	Dot3d
+ 152              	.LVL11:
+ 153 009e FFF7FEFF 		bl	acosf
+ 154              	.LVL12:
+ 155 00a2 B0EE408A 		vmov.f32	s16, s0
+ 156              	.LVL13:
+  81:Robot/RoboTask/ins/INS_task.c ****     Cross3d(acc_init, gravity_norm, axis_rot);
+ 157              		.loc 1 81 5 is_stmt 1 view .LVU36
+ 158 00a6 01AA     		add	r2, sp, #4
+ 159 00a8 04A9     		add	r1, sp, #16
+ 160 00aa 07A8     		add	r0, sp, #28
+ 161 00ac FFF7FEFF 		bl	Cross3d
+ 162              	.LVL14:
+  82:Robot/RoboTask/ins/INS_task.c ****     Norm3d(axis_rot);
+ 163              		.loc 1 82 5 view .LVU37
+ 164 00b0 01A8     		add	r0, sp, #4
+ 165 00b2 FFF7FEFF 		bl	Norm3d
+ 166              	.LVL15:
+  83:Robot/RoboTask/ins/INS_task.c ****     init_q4[0] = cosf(angle / 2.0f);
+ 167              		.loc 1 83 5 view .LVU38
+ 168              		.loc 1 83 18 is_stmt 0 view .LVU39
+ 169 00b6 F6EE007A 		vmov.f32	s15, #5.0e-1
+ 170 00ba 28EE278A 		vmul.f32	s16, s16, s15
+ 171              	.LVL16:
+ 172              		.loc 1 83 18 view .LVU40
+ 173 00be B0EE480A 		vmov.f32	s0, s16
+ 174 00c2 FFF7FEFF 		bl	cosf
+ 175              	.LVL17:
+ 176              		.loc 1 83 16 view .LVU41
+ 177 00c6 86ED000A 		vstr.32	s0, [r6]
+  84:Robot/RoboTask/ins/INS_task.c ****     for (uint8_t i = 0; i < 2; ++i)
+ 178              		.loc 1 84 5 is_stmt 1 view .LVU42
+ 179              	.LBB4:
+ 180              		.loc 1 84 10 view .LVU43
+ 181              	.LVL18:
+ 182              		.loc 1 84 18 is_stmt 0 view .LVU44
+ 183 00ca 0024     		movs	r4, #0
+ 184              	.LVL19:
+ 185              		.loc 1 84 5 view .LVU45
+ 186 00cc 10E0     		b	.L6
+ 187              	.LVL20:
+ 188              	.L7:
+  85:Robot/RoboTask/ins/INS_task.c ****         init_q4[i + 1] = axis_rot[i] * sinf(angle / 2.0f); // 轴角公式,第三轴为0(没有z轴
+ 189              		.loc 1 85 9 is_stmt 1 discriminator 3 view .LVU46
+ 190              		.loc 1 85 34 is_stmt 0 discriminator 3 view .LVU47
+ 191 00ce 0AAB     		add	r3, sp, #40
+ 192 00d0 03EB8403 		add	r3, r3, r4, lsl #2
+ 193 00d4 53ED098A 		vldr.32	s17, [r3, #-36]
+ARM GAS  D:\temp\TMP\cc65bfxy.s 			page 6
 
 
- 141 007c 37EE067A 		vadd.f32	s14, s14, s12
- 142              		.loc 1 201 59 view .LVU39
- 143 0080 90ED006A 		vldr.32	s12, [r0]
- 144              		.loc 1 201 52 view .LVU40
- 145 0084 27EE067A 		vmul.f32	s14, s14, s12
- 202:Robot/RoboTask/ins/INS_task.c ****                        (0.5f - q[1] * q[1] - q[3] * q[3]) * vecBF[1] +
- 146              		.loc 1 202 37 view .LVU41
- 147 0088 25EEA56A 		vmul.f32	s12, s11, s11
- 148              		.loc 1 202 30 view .LVU42
- 149 008c 36EEC66A 		vsub.f32	s12, s13, s12
- 150              		.loc 1 202 51 view .LVU43
- 151 0090 25EE054A 		vmul.f32	s8, s10, s10
- 152              		.loc 1 202 44 view .LVU44
- 153 0094 36EE446A 		vsub.f32	s12, s12, s8
- 154              		.loc 1 202 66 view .LVU45
- 155 0098 90ED014A 		vldr.32	s8, [r0, #4]
- 156              		.loc 1 202 59 view .LVU46
- 157 009c 26EE046A 		vmul.f32	s12, s12, s8
- 201:Robot/RoboTask/ins/INS_task.c ****                        (0.5f - q[1] * q[1] - q[3] * q[3]) * vecBF[1] +
- 158              		.loc 1 201 63 view .LVU47
- 159 00a0 37EE067A 		vadd.f32	s14, s14, s12
- 203:Robot/RoboTask/ins/INS_task.c ****                        (q[2] * q[3] - q[0] * q[1]) * vecBF[2]);
- 160              		.loc 1 203 30 view .LVU48
- 161 00a4 67EE857A 		vmul.f32	s15, s15, s10
- 162              		.loc 1 203 44 view .LVU49
- 163 00a8 65EEA45A 		vmul.f32	s11, s11, s9
- 164              		.loc 1 203 37 view .LVU50
- 165 00ac 77EEE57A 		vsub.f32	s15, s15, s11
- 166              		.loc 1 203 59 view .LVU51
- 167 00b0 90ED026A 		vldr.32	s12, [r0, #8]
- 168              		.loc 1 203 52 view .LVU52
- 169 00b4 67EE867A 		vmul.f32	s15, s15, s12
- 202:Robot/RoboTask/ins/INS_task.c ****                        (0.5f - q[1] * q[1] - q[3] * q[3]) * vecBF[1] +
- 170              		.loc 1 202 70 view .LVU53
- 171 00b8 37EE277A 		vadd.f32	s14, s14, s15
- 201:Robot/RoboTask/ins/INS_task.c ****                        (0.5f - q[1] * q[1] - q[3] * q[3]) * vecBF[1] +
- 172              		.loc 1 201 21 view .LVU54
- 173 00bc 37EE077A 		vadd.f32	s14, s14, s14
- 201:Robot/RoboTask/ins/INS_task.c ****                        (0.5f - q[1] * q[1] - q[3] * q[3]) * vecBF[1] +
- 174              		.loc 1 201 14 view .LVU55
- 175 00c0 81ED017A 		vstr.32	s14, [r1, #4]
- 204:Robot/RoboTask/ins/INS_task.c **** 
- 205:Robot/RoboTask/ins/INS_task.c ****     vecEF[2] = 2.0f * ((q[1] * q[3] - q[0] * q[2]) * vecBF[0] +
- 176              		.loc 1 205 5 is_stmt 1 view .LVU56
- 177              		.loc 1 205 26 is_stmt 0 view .LVU57
- 178 00c4 D2ED015A 		vldr.32	s11, [r2, #4]
- 179              		.loc 1 205 33 view .LVU58
- 180 00c8 92ED037A 		vldr.32	s14, [r2, #12]
- 181              		.loc 1 205 30 view .LVU59
- 182 00cc 65EE877A 		vmul.f32	s15, s11, s14
- 183              		.loc 1 205 40 view .LVU60
- 184 00d0 92ED005A 		vldr.32	s10, [r2]
- 185              		.loc 1 205 47 view .LVU61
- 186 00d4 92ED026A 		vldr.32	s12, [r2, #8]
- 187              		.loc 1 205 44 view .LVU62
- 188 00d8 65EE064A 		vmul.f32	s9, s10, s12
- 189              		.loc 1 205 37 view .LVU63
-ARM GAS  D:\temp\TMP\ccitzH6G.s 			page 8
+ 194              		.loc 1 85 40 discriminator 3 view .LVU48
+ 195 00d8 B0EE480A 		vmov.f32	s0, s16
+ 196 00dc FFF7FEFF 		bl	sinf
+ 197              	.LVL21:
+ 198              		.loc 1 85 16 discriminator 3 view .LVU49
+ 199 00e0 0134     		adds	r4, r4, #1
+ 200              	.LVL22:
+ 201              		.loc 1 85 16 discriminator 3 view .LVU50
+ 202 00e2 06EB8403 		add	r3, r6, r4, lsl #2
+ 203              		.loc 1 85 38 discriminator 3 view .LVU51
+ 204 00e6 68EE808A 		vmul.f32	s17, s17, s0
+ 205              		.loc 1 85 24 discriminator 3 view .LVU52
+ 206 00ea C3ED008A 		vstr.32	s17, [r3]
+  84:Robot/RoboTask/ins/INS_task.c ****     for (uint8_t i = 0; i < 2; ++i)
+ 207              		.loc 1 84 32 is_stmt 1 discriminator 3 view .LVU53
+ 208 00ee E4B2     		uxtb	r4, r4
+ 209              	.LVL23:
+ 210              	.L6:
+  84:Robot/RoboTask/ins/INS_task.c ****     for (uint8_t i = 0; i < 2; ++i)
+ 211              		.loc 1 84 25 discriminator 1 view .LVU54
+  84:Robot/RoboTask/ins/INS_task.c ****     for (uint8_t i = 0; i < 2; ++i)
+ 212              		.loc 1 84 5 is_stmt 0 discriminator 1 view .LVU55
+ 213 00f0 012C     		cmp	r4, #1
+ 214 00f2 ECD9     		bls	.L7
+ 215              	.LBE4:
+  86:Robot/RoboTask/ins/INS_task.c **** }
+ 216              		.loc 1 86 1 view .LVU56
+ 217 00f4 0AB0     		add	sp, sp, #40
+ 218              	.LCFI3:
+ 219              		.cfi_def_cfa_offset 24
+ 220              		@ sp needed
+ 221 00f6 BDEC028B 		vldm	sp!, {d8}
+ 222              	.LCFI4:
+ 223              		.cfi_restore 80
+ 224              		.cfi_restore 81
+ 225              		.cfi_def_cfa_offset 16
+ 226 00fa 70BD     		pop	{r4, r5, r6, pc}
+ 227              	.LVL24:
+ 228              	.L10:
+ 229              		.loc 1 86 1 view .LVU57
+ 230              		.align	2
+ 231              	.L9:
+ 232 00fc 00000000 		.word	BMI088
+ 233 0100 6F12833A 		.word	981668463
+ 234 0104 0000C842 		.word	1120403456
+ 235              		.cfi_endproc
+ 236              	.LFE195:
+ 238              		.section	.text.INS_Init,"ax",%progbits
+ 239              		.align	1
+ 240              		.global	INS_Init
+ 241              		.syntax unified
+ 242              		.thumb
+ 243              		.thumb_func
+ 245              	INS_Init:
+ 246              	.LFB196:
+  87:Robot/RoboTask/ins/INS_task.c **** 
+  88:Robot/RoboTask/ins/INS_task.c **** void INS_Init(void)
+ARM GAS  D:\temp\TMP\cc65bfxy.s 			page 7
 
 
- 190 00dc 77EEE47A 		vsub.f32	s15, s15, s9
- 191              		.loc 1 205 59 view .LVU64
- 192 00e0 D0ED004A 		vldr.32	s9, [r0]
- 193              		.loc 1 205 52 view .LVU65
- 194 00e4 67EEA47A 		vmul.f32	s15, s15, s9
- 206:Robot/RoboTask/ins/INS_task.c ****                        (q[2] * q[3] + q[0] * q[1]) * vecBF[1] +
- 195              		.loc 1 206 30 view .LVU66
- 196 00e8 27EE067A 		vmul.f32	s14, s14, s12
- 197              		.loc 1 206 44 view .LVU67
- 198 00ec 25EE855A 		vmul.f32	s10, s11, s10
- 199              		.loc 1 206 37 view .LVU68
- 200 00f0 37EE057A 		vadd.f32	s14, s14, s10
- 201              		.loc 1 206 59 view .LVU69
- 202 00f4 90ED015A 		vldr.32	s10, [r0, #4]
- 203              		.loc 1 206 52 view .LVU70
- 204 00f8 27EE057A 		vmul.f32	s14, s14, s10
- 205:Robot/RoboTask/ins/INS_task.c ****                        (q[2] * q[3] + q[0] * q[1]) * vecBF[1] +
- 205              		.loc 1 205 63 view .LVU71
- 206 00fc 77EE877A 		vadd.f32	s15, s15, s14
- 207:Robot/RoboTask/ins/INS_task.c ****                        (0.5f - q[1] * q[1] - q[2] * q[2]) * vecBF[2]);
- 207              		.loc 1 207 37 view .LVU72
- 208 0100 65EEA55A 		vmul.f32	s11, s11, s11
- 209              		.loc 1 207 30 view .LVU73
- 210 0104 76EEE56A 		vsub.f32	s13, s13, s11
- 211              		.loc 1 207 51 view .LVU74
- 212 0108 26EE066A 		vmul.f32	s12, s12, s12
- 213              		.loc 1 207 44 view .LVU75
- 214 010c 76EEC66A 		vsub.f32	s13, s13, s12
- 215              		.loc 1 207 66 view .LVU76
- 216 0110 90ED027A 		vldr.32	s14, [r0, #8]
- 217              		.loc 1 207 59 view .LVU77
- 218 0114 66EE876A 		vmul.f32	s13, s13, s14
- 206:Robot/RoboTask/ins/INS_task.c ****                        (q[2] * q[3] + q[0] * q[1]) * vecBF[1] +
- 219              		.loc 1 206 63 view .LVU78
- 220 0118 77EEA67A 		vadd.f32	s15, s15, s13
- 205:Robot/RoboTask/ins/INS_task.c ****                        (q[2] * q[3] + q[0] * q[1]) * vecBF[1] +
- 221              		.loc 1 205 21 view .LVU79
- 222 011c 77EEA77A 		vadd.f32	s15, s15, s15
- 205:Robot/RoboTask/ins/INS_task.c ****                        (q[2] * q[3] + q[0] * q[1]) * vecBF[1] +
- 223              		.loc 1 205 14 view .LVU80
- 224 0120 C1ED027A 		vstr.32	s15, [r1, #8]
- 208:Robot/RoboTask/ins/INS_task.c **** }
- 225              		.loc 1 208 1 view .LVU81
- 226 0124 7047     		bx	lr
- 227              		.cfi_endproc
- 228              	.LFE195:
- 230              		.section	.text.EarthFrameToBodyFrame,"ax",%progbits
- 231              		.align	1
- 232              		.global	EarthFrameToBodyFrame
- 233              		.syntax unified
- 234              		.thumb
- 235              		.thumb_func
- 237              	EarthFrameToBodyFrame:
- 238              	.LVL2:
- 239              	.LFB196:
+  89:Robot/RoboTask/ins/INS_task.c **** { 
+ 247              		.loc 1 89 1 is_stmt 1 view -0
+ 248              		.cfi_startproc
+ 249              		@ args = 0, pretend = 0, frame = 16
+ 250              		@ frame_needed = 0, uses_anonymous_args = 0
+ 251 0000 00B5     		push	{lr}
+ 252              	.LCFI5:
+ 253              		.cfi_def_cfa_offset 4
+ 254              		.cfi_offset 14, -4
+ 255 0002 2DED028B 		vpush.64	{d8}
+ 256              	.LCFI6:
+ 257              		.cfi_def_cfa_offset 12
+ 258              		.cfi_offset 80, -12
+ 259              		.cfi_offset 81, -8
+ 260 0006 85B0     		sub	sp, sp, #20
+ 261              	.LCFI7:
+ 262              		.cfi_def_cfa_offset 32
+ 263              	.L12:
+  90:Robot/RoboTask/ins/INS_task.c **** 	while (BMI088_init(&hspi2,2) != BMI088_NO_ERROR)
+  91:Robot/RoboTask/ins/INS_task.c ****     {
+  92:Robot/RoboTask/ins/INS_task.c ****         /* code */
+  93:Robot/RoboTask/ins/INS_task.c ****     }
+ 264              		.loc 1 93 5 discriminator 1 view .LVU59
+  90:Robot/RoboTask/ins/INS_task.c **** 	while (BMI088_init(&hspi2,2) != BMI088_NO_ERROR)
+ 265              		.loc 1 90 8 discriminator 1 view .LVU60
+  90:Robot/RoboTask/ins/INS_task.c **** 	while (BMI088_init(&hspi2,2) != BMI088_NO_ERROR)
+ 266              		.loc 1 90 9 is_stmt 0 discriminator 1 view .LVU61
+ 267 0008 0221     		movs	r1, #2
+ 268 000a 1748     		ldr	r0, .L14
+ 269 000c FFF7FEFF 		bl	BMI088_init
+ 270              	.LVL25:
+  90:Robot/RoboTask/ins/INS_task.c **** 	while (BMI088_init(&hspi2,2) != BMI088_NO_ERROR)
+ 271              		.loc 1 90 8 discriminator 1 view .LVU62
+ 272 0010 0028     		cmp	r0, #0
+ 273 0012 F9D1     		bne	.L12
+  94:Robot/RoboTask/ins/INS_task.c **** 	mahony_init(&mahony,1.0f,0.0f,0.001f);
+ 274              		.loc 1 94 2 is_stmt 1 view .LVU63
+ 275 0014 9FED158A 		vldr.32	s16, .L14+4
+ 276 0018 DFED158A 		vldr.32	s17, .L14+8
+ 277 001c B0EE481A 		vmov.f32	s2, s16
+ 278 0020 F0EE680A 		vmov.f32	s1, s17
+ 279 0024 B7EE000A 		vmov.f32	s0, #1.0e+0
+ 280 0028 1248     		ldr	r0, .L14+12
+ 281 002a FFF7FEFF 		bl	mahony_init
+ 282              	.LVL26:
+  95:Robot/RoboTask/ins/INS_task.c ****    	INS.AccelLPF = 0.0089f;
+ 283              		.loc 1 95 5 view .LVU64
+ 284              		.loc 1 95 18 is_stmt 0 view .LVU65
+ 285 002e 124B     		ldr	r3, .L14+16
+ 286 0030 124A     		ldr	r2, .L14+20
+ 287 0032 1A64     		str	r2, [r3, #64]	@ float
+  96:Robot/RoboTask/ins/INS_task.c **** 
+  97:Robot/RoboTask/ins/INS_task.c **** 	float init_quaternion[4] = {0};
+ 288              		.loc 1 97 2 is_stmt 1 view .LVU66
+ 289              		.loc 1 97 8 is_stmt 0 view .LVU67
+ 290 0034 0023     		movs	r3, #0
+ 291 0036 0093     		str	r3, [sp]
+ARM GAS  D:\temp\TMP\cc65bfxy.s 			page 8
+
+
+ 292 0038 0193     		str	r3, [sp, #4]
+ 293 003a 0293     		str	r3, [sp, #8]
+ 294 003c 0393     		str	r3, [sp, #12]
+  98:Robot/RoboTask/ins/INS_task.c ****     InitQuaternion(init_quaternion);
+ 295              		.loc 1 98 5 is_stmt 1 view .LVU68
+ 296 003e 6846     		mov	r0, sp
+ 297 0040 FFF7FEFF 		bl	InitQuaternion
+ 298              	.LVL27:
+  99:Robot/RoboTask/ins/INS_task.c ****     IMU_QuaternionEKF_Init(init_quaternion, 10, 0.001, 1000000, 1, 0);
+ 299              		.loc 1 99 5 view .LVU69
+ 300 0044 B0EE682A 		vmov.f32	s4, s17
+ 301 0048 F7EE001A 		vmov.f32	s3, #1.0e+0
+ 302 004c 9FED0C1A 		vldr.32	s2, .L14+24
+ 303 0050 F0EE480A 		vmov.f32	s1, s16
+ 304 0054 B2EE040A 		vmov.f32	s0, #1.0e+1
+ 305 0058 6846     		mov	r0, sp
+ 306 005a FFF7FEFF 		bl	IMU_QuaternionEKF_Init
+ 307              	.LVL28:
+ 100:Robot/RoboTask/ins/INS_task.c **** }
+ 308              		.loc 1 100 1 is_stmt 0 view .LVU70
+ 309 005e 05B0     		add	sp, sp, #20
+ 310              	.LCFI8:
+ 311              		.cfi_def_cfa_offset 12
+ 312              		@ sp needed
+ 313 0060 BDEC028B 		vldm	sp!, {d8}
+ 314              	.LCFI9:
+ 315              		.cfi_restore 80
+ 316              		.cfi_restore 81
+ 317              		.cfi_def_cfa_offset 4
+ 318 0064 5DF804FB 		ldr	pc, [sp], #4
+ 319              	.L15:
+ 320              		.align	2
+ 321              	.L14:
+ 322 0068 00000000 		.word	hspi2
+ 323 006c 6F12833A 		.word	981668463
+ 324 0070 00000000 		.word	0
+ 325 0074 00000000 		.word	.LANCHOR0
+ 326 0078 00000000 		.word	.LANCHOR1
+ 327 007c 4ED1113C 		.word	1007800654
+ 328 0080 00247449 		.word	1232348160
+ 329              		.cfi_endproc
+ 330              	.LFE196:
+ 332              		.section	.text.BodyFrameToEarthFrame,"ax",%progbits
+ 333              		.align	1
+ 334              		.global	BodyFrameToEarthFrame
+ 335              		.syntax unified
+ 336              		.thumb
+ 337              		.thumb_func
+ 339              	BodyFrameToEarthFrame:
+ 340              	.LVL29:
+ 341              	.LFB198:
+ 101:Robot/RoboTask/ins/INS_task.c **** 
+ 102:Robot/RoboTask/ins/INS_task.c **** 
+ 103:Robot/RoboTask/ins/INS_task.c **** void INS_task(void)
+ 104:Robot/RoboTask/ins/INS_task.c **** {
+ 105:Robot/RoboTask/ins/INS_task.c **** 	 INS_Init();
+ 106:Robot/RoboTask/ins/INS_task.c **** 	 
+ARM GAS  D:\temp\TMP\cc65bfxy.s 			page 9
+
+
+ 107:Robot/RoboTask/ins/INS_task.c **** 	 while(1)
+ 108:Robot/RoboTask/ins/INS_task.c **** 	 {  
+ 109:Robot/RoboTask/ins/INS_task.c **** 		ins_dt = DWT_GetDeltaT(&INS_DWT_Count);
+ 110:Robot/RoboTask/ins/INS_task.c ****     
+ 111:Robot/RoboTask/ins/INS_task.c **** 		mahony.dt = ins_dt;
+ 112:Robot/RoboTask/ins/INS_task.c **** 
+ 113:Robot/RoboTask/ins/INS_task.c **** 		BMI088_Read(&BMI088);
+ 114:Robot/RoboTask/ins/INS_task.c **** 
+ 115:Robot/RoboTask/ins/INS_task.c **** 		INS.Accel[X_AXIS] = BMI088.Accel[X_AXIS];
+ 116:Robot/RoboTask/ins/INS_task.c **** 		INS.Accel[Y_AXIS] = BMI088.Accel[Y_AXIS];
+ 117:Robot/RoboTask/ins/INS_task.c **** 		INS.Accel[Z_AXIS] = BMI088.Accel[Z_AXIS];
+ 118:Robot/RoboTask/ins/INS_task.c **** 
+ 119:Robot/RoboTask/ins/INS_task.c **** 		Accel.x=BMI088.Accel[0];
+ 120:Robot/RoboTask/ins/INS_task.c **** 		Accel.y=BMI088.Accel[1];
+ 121:Robot/RoboTask/ins/INS_task.c **** 		Accel.z=BMI088.Accel[2];
+ 122:Robot/RoboTask/ins/INS_task.c **** 
+ 123:Robot/RoboTask/ins/INS_task.c **** 		INS.Gyro[X_AXIS] = BMI088.Gyro[X_AXIS];
+ 124:Robot/RoboTask/ins/INS_task.c **** 		INS.Gyro[Y_AXIS] = BMI088.Gyro[Y_AXIS];
+ 125:Robot/RoboTask/ins/INS_task.c **** 		INS.Gyro[Z_AXIS] = BMI088.Gyro[Z_AXIS];
+ 126:Robot/RoboTask/ins/INS_task.c **** 
+ 127:Robot/RoboTask/ins/INS_task.c **** 		Gyro.x=BMI088.Gyro[0];
+ 128:Robot/RoboTask/ins/INS_task.c **** 		Gyro.y=BMI088.Gyro[1];
+ 129:Robot/RoboTask/ins/INS_task.c **** 		Gyro.z=BMI088.Gyro[2];
+ 130:Robot/RoboTask/ins/INS_task.c **** 
+ 131:Robot/RoboTask/ins/INS_task.c **** 		//核心函数，EKF更新四元数
+ 132:Robot/RoboTask/ins/INS_task.c **** 		IMU_QuaternionEKF_Update(INS.Gyro[X_AXIS], INS.Gyro[Y_AXIS], INS.Gyro[Z_AXIS], INS.Accel[X_AXIS],
+ 133:Robot/RoboTask/ins/INS_task.c **** 
+ 134:Robot/RoboTask/ins/INS_task.c **** 		mahony_input(&mahony,Gyro,Accel);
+ 135:Robot/RoboTask/ins/INS_task.c **** 		mahony_update(&mahony);
+ 136:Robot/RoboTask/ins/INS_task.c **** 		mahony_output(&mahony);
+ 137:Robot/RoboTask/ins/INS_task.c **** 		RotationMatrix_update(&mahony);
+ 138:Robot/RoboTask/ins/INS_task.c **** 					
+ 139:Robot/RoboTask/ins/INS_task.c **** 		INS.q[0]=mahony.q0;
+ 140:Robot/RoboTask/ins/INS_task.c **** 		INS.q[1]=mahony.q1;
+ 141:Robot/RoboTask/ins/INS_task.c **** 		INS.q[2]=mahony.q2;
+ 142:Robot/RoboTask/ins/INS_task.c **** 		INS.q[3]=mahony.q3;
+ 143:Robot/RoboTask/ins/INS_task.c **** 
+ 144:Robot/RoboTask/ins/INS_task.c **** 		memcpy(INS.q, QEKF_INS.q, sizeof(QEKF_INS.q));
+ 145:Robot/RoboTask/ins/INS_task.c **** 		
+ 146:Robot/RoboTask/ins/INS_task.c **** 		// 将重力从导航坐标系n转换到机体系b,随后根据加速度计数据计算运动加�
+ 147:Robot/RoboTask/ins/INS_task.c **** 		float gravity_b[3];
+ 148:Robot/RoboTask/ins/INS_task.c **** 		EarthFrameToBodyFrame(gravity, gravity_b, INS.q);
+ 149:Robot/RoboTask/ins/INS_task.c **** 		for (uint8_t i = 0; i < 3; i++) // 同样过一个低通滤波
+ 150:Robot/RoboTask/ins/INS_task.c **** 		{
+ 151:Robot/RoboTask/ins/INS_task.c **** 			INS.MotionAccel_b[i] = (INS.Accel[i] - gravity_b[i]) * ins_dt / (INS.AccelLPF + ins_dt) 
+ 152:Robot/RoboTask/ins/INS_task.c **** 															+ INS.MotionAccel_b[i] * INS.AccelLPF / (INS.AccelLPF + ins_dt); 
+ 153:Robot/RoboTask/ins/INS_task.c **** 	//			INS.MotionAccel_b[i] = (INS.Accel[i] ) * dt / (INS.AccelLPF + dt) 
+ 154:Robot/RoboTask/ins/INS_task.c **** 	//														+ INS.MotionAccel_b[i] * INS.AccelLPF / (INS.AccelLPF + dt);			
+ 155:Robot/RoboTask/ins/INS_task.c **** 		}
+ 156:Robot/RoboTask/ins/INS_task.c **** 		BodyFrameToEarthFrame(INS.MotionAccel_b, INS.MotionAccel_n, INS.q); // 转换回导航系n
+ 157:Robot/RoboTask/ins/INS_task.c **** 		
+ 158:Robot/RoboTask/ins/INS_task.c **** 		//死区处理
+ 159:Robot/RoboTask/ins/INS_task.c **** 		if(fabsf(INS.MotionAccel_n[0])<0.02f)
+ 160:Robot/RoboTask/ins/INS_task.c **** 		{
+ 161:Robot/RoboTask/ins/INS_task.c **** 			INS.MotionAccel_n[0]=0.0f;	//x轴
+ 162:Robot/RoboTask/ins/INS_task.c **** 		}
+ 163:Robot/RoboTask/ins/INS_task.c **** 		if(fabsf(INS.MotionAccel_n[1])<0.02f)
+ARM GAS  D:\temp\TMP\cc65bfxy.s 			page 10
+
+
+ 164:Robot/RoboTask/ins/INS_task.c **** 		{
+ 165:Robot/RoboTask/ins/INS_task.c **** 			INS.MotionAccel_n[1]=0.0f;	//y轴
+ 166:Robot/RoboTask/ins/INS_task.c **** 		}
+ 167:Robot/RoboTask/ins/INS_task.c **** 		if(fabsf(INS.MotionAccel_n[2])<0.04f)
+ 168:Robot/RoboTask/ins/INS_task.c **** 		{
+ 169:Robot/RoboTask/ins/INS_task.c **** 			INS.MotionAccel_n[2]=0.0f;//z轴
+ 170:Robot/RoboTask/ins/INS_task.c **** 		}
+ 171:Robot/RoboTask/ins/INS_task.c **** 		
+ 172:Robot/RoboTask/ins/INS_task.c **** 		if(ins_time>2000.0f)
+ 173:Robot/RoboTask/ins/INS_task.c **** 		{
+ 174:Robot/RoboTask/ins/INS_task.c **** 			INS.v_n=INS.v_n+INS.MotionAccel_n[1]*0.001f;
+ 175:Robot/RoboTask/ins/INS_task.c **** 		  	INS.x_n=INS.x_n+INS.v_n*0.001f;
+ 176:Robot/RoboTask/ins/INS_task.c **** 			INS.ins_flag=1;//四元数基本收敛，加速度也基本收敛，可以开始底盘任务
+ 177:Robot/RoboTask/ins/INS_task.c **** 			// 获取最终数据
+ 178:Robot/RoboTask/ins/INS_task.c **** 			INS.Pitch=mahony.roll*180.0f/PI;
+ 179:Robot/RoboTask/ins/INS_task.c **** 			INS.Roll=mahony.pitch*180.0f/PI;
+ 180:Robot/RoboTask/ins/INS_task.c **** 			INS.Yaw=mahony.yaw*180.0f/PI;
+ 181:Robot/RoboTask/ins/INS_task.c **** 			// INS.Pitch=mahony.roll;
+ 182:Robot/RoboTask/ins/INS_task.c **** 			// INS.Roll=mahony.pitch;
+ 183:Robot/RoboTask/ins/INS_task.c **** 			// INS.Yaw=mahony.yaw;
+ 184:Robot/RoboTask/ins/INS_task.c **** 		
+ 185:Robot/RoboTask/ins/INS_task.c **** 			INS.YawTotalAngle = QEKF_INS.YawTotalAngle;
+ 186:Robot/RoboTask/ins/INS_task.c **** 		}
+ 187:Robot/RoboTask/ins/INS_task.c **** 		else
+ 188:Robot/RoboTask/ins/INS_task.c **** 		{
+ 189:Robot/RoboTask/ins/INS_task.c **** 		ins_time++;
+ 190:Robot/RoboTask/ins/INS_task.c **** 		}
+ 191:Robot/RoboTask/ins/INS_task.c **** 			
+ 192:Robot/RoboTask/ins/INS_task.c **** 		osDelay(1);
+ 193:Robot/RoboTask/ins/INS_task.c **** 		// IMU_Temperature_Ctrl();
+ 194:Robot/RoboTask/ins/INS_task.c **** 	}
+ 195:Robot/RoboTask/ins/INS_task.c **** } 
+ 196:Robot/RoboTask/ins/INS_task.c **** 
+ 197:Robot/RoboTask/ins/INS_task.c **** 
+ 198:Robot/RoboTask/ins/INS_task.c **** /**
+ 199:Robot/RoboTask/ins/INS_task.c ****  * @brief          Transform 3dvector from BodyFrame to EarthFrame
+ 200:Robot/RoboTask/ins/INS_task.c ****  * @param[1]       vector in BodyFrame
+ 201:Robot/RoboTask/ins/INS_task.c ****  * @param[2]       vector in EarthFrame
+ 202:Robot/RoboTask/ins/INS_task.c ****  * @param[3]       quaternion
+ 203:Robot/RoboTask/ins/INS_task.c ****  */
+ 204:Robot/RoboTask/ins/INS_task.c **** void BodyFrameToEarthFrame(const float *vecBF, float *vecEF, float *q)
+ 205:Robot/RoboTask/ins/INS_task.c **** {
+ 342              		.loc 1 205 1 is_stmt 1 view -0
+ 343              		.cfi_startproc
+ 344              		@ args = 0, pretend = 0, frame = 0
+ 345              		@ frame_needed = 0, uses_anonymous_args = 0
+ 346              		@ link register save eliminated.
+ 206:Robot/RoboTask/ins/INS_task.c ****     vecEF[0] = 2.0f * ((0.5f - q[2] * q[2] - q[3] * q[3]) * vecBF[0] +
+ 347              		.loc 1 206 5 view .LVU72
+ 348              		.loc 1 206 33 is_stmt 0 view .LVU73
+ 349 0000 92ED026A 		vldr.32	s12, [r2, #8]
+ 350              		.loc 1 206 37 view .LVU74
+ 351 0004 66EE067A 		vmul.f32	s15, s12, s12
+ 352              		.loc 1 206 30 view .LVU75
+ 353 0008 F6EE006A 		vmov.f32	s13, #5.0e-1
+ 354 000c 76EEE77A 		vsub.f32	s15, s13, s15
+ 355              		.loc 1 206 47 view .LVU76
+ARM GAS  D:\temp\TMP\cc65bfxy.s 			page 11
+
+
+ 356 0010 92ED037A 		vldr.32	s14, [r2, #12]
+ 357              		.loc 1 206 51 view .LVU77
+ 358 0014 67EE075A 		vmul.f32	s11, s14, s14
+ 359              		.loc 1 206 44 view .LVU78
+ 360 0018 77EEE57A 		vsub.f32	s15, s15, s11
+ 361              		.loc 1 206 66 view .LVU79
+ 362 001c D0ED005A 		vldr.32	s11, [r0]
+ 363              		.loc 1 206 59 view .LVU80
+ 364 0020 67EEA57A 		vmul.f32	s15, s15, s11
+ 207:Robot/RoboTask/ins/INS_task.c ****                        (q[1] * q[2] - q[0] * q[3]) * vecBF[1] +
+ 365              		.loc 1 207 26 view .LVU81
+ 366 0024 D2ED014A 		vldr.32	s9, [r2, #4]
+ 367              		.loc 1 207 30 view .LVU82
+ 368 0028 66EE245A 		vmul.f32	s11, s12, s9
+ 369              		.loc 1 207 40 view .LVU83
+ 370 002c 92ED005A 		vldr.32	s10, [r2]
+ 371              		.loc 1 207 44 view .LVU84
+ 372 0030 27EE054A 		vmul.f32	s8, s14, s10
+ 373              		.loc 1 207 37 view .LVU85
+ 374 0034 75EEC45A 		vsub.f32	s11, s11, s8
+ 375              		.loc 1 207 59 view .LVU86
+ 376 0038 90ED014A 		vldr.32	s8, [r0, #4]
+ 377              		.loc 1 207 52 view .LVU87
+ 378 003c 65EE845A 		vmul.f32	s11, s11, s8
+ 206:Robot/RoboTask/ins/INS_task.c ****     vecEF[0] = 2.0f * ((0.5f - q[2] * q[2] - q[3] * q[3]) * vecBF[0] +
+ 379              		.loc 1 206 70 view .LVU88
+ 380 0040 77EEA57A 		vadd.f32	s15, s15, s11
+ 208:Robot/RoboTask/ins/INS_task.c ****                        (q[1] * q[3] + q[0] * q[2]) * vecBF[2]);
+ 381              		.loc 1 208 30 view .LVU89
+ 382 0044 27EE247A 		vmul.f32	s14, s14, s9
+ 383              		.loc 1 208 44 view .LVU90
+ 384 0048 26EE056A 		vmul.f32	s12, s12, s10
+ 385              		.loc 1 208 37 view .LVU91
+ 386 004c 37EE067A 		vadd.f32	s14, s14, s12
+ 387              		.loc 1 208 59 view .LVU92
+ 388 0050 90ED026A 		vldr.32	s12, [r0, #8]
+ 389              		.loc 1 208 52 view .LVU93
+ 390 0054 27EE067A 		vmul.f32	s14, s14, s12
+ 207:Robot/RoboTask/ins/INS_task.c ****                        (q[1] * q[2] - q[0] * q[3]) * vecBF[1] +
+ 391              		.loc 1 207 63 view .LVU94
+ 392 0058 77EE877A 		vadd.f32	s15, s15, s14
+ 206:Robot/RoboTask/ins/INS_task.c ****     vecEF[0] = 2.0f * ((0.5f - q[2] * q[2] - q[3] * q[3]) * vecBF[0] +
+ 393              		.loc 1 206 21 view .LVU95
+ 394 005c 77EEA77A 		vadd.f32	s15, s15, s15
+ 206:Robot/RoboTask/ins/INS_task.c ****     vecEF[0] = 2.0f * ((0.5f - q[2] * q[2] - q[3] * q[3]) * vecBF[0] +
+ 395              		.loc 1 206 14 view .LVU96
+ 396 0060 C1ED007A 		vstr.32	s15, [r1]
  209:Robot/RoboTask/ins/INS_task.c **** 
- 210:Robot/RoboTask/ins/INS_task.c **** /**
-ARM GAS  D:\temp\TMP\ccitzH6G.s 			page 9
+ 210:Robot/RoboTask/ins/INS_task.c ****     vecEF[1] = 2.0f * ((q[1] * q[2] + q[0] * q[3]) * vecBF[0] +
+ 397              		.loc 1 210 5 is_stmt 1 view .LVU97
+ 398              		.loc 1 210 26 is_stmt 0 view .LVU98
+ 399 0064 D2ED015A 		vldr.32	s11, [r2, #4]
+ 400              		.loc 1 210 33 view .LVU99
+ 401 0068 D2ED027A 		vldr.32	s15, [r2, #8]
+ 402              		.loc 1 210 30 view .LVU100
+ 403 006c 25EEA77A 		vmul.f32	s14, s11, s15
+ 404              		.loc 1 210 40 view .LVU101
+ARM GAS  D:\temp\TMP\cc65bfxy.s 			page 12
 
 
- 211:Robot/RoboTask/ins/INS_task.c ****  * @brief          Transform 3dvector from EarthFrame to BodyFrame
- 212:Robot/RoboTask/ins/INS_task.c ****  * @param[1]       vector in EarthFrame
- 213:Robot/RoboTask/ins/INS_task.c ****  * @param[2]       vector in BodyFrame
- 214:Robot/RoboTask/ins/INS_task.c ****  * @param[3]       quaternion
- 215:Robot/RoboTask/ins/INS_task.c ****  */
- 216:Robot/RoboTask/ins/INS_task.c **** void EarthFrameToBodyFrame(const float *vecEF, float *vecBF, float *q)
- 217:Robot/RoboTask/ins/INS_task.c **** {
- 240              		.loc 1 217 1 is_stmt 1 view -0
- 241              		.cfi_startproc
- 242              		@ args = 0, pretend = 0, frame = 0
- 243              		@ frame_needed = 0, uses_anonymous_args = 0
- 244              		@ link register save eliminated.
- 218:Robot/RoboTask/ins/INS_task.c ****     vecBF[0] = 2.0f * ((0.5f - q[2] * q[2] - q[3] * q[3]) * vecEF[0] +
- 245              		.loc 1 218 5 view .LVU83
- 246              		.loc 1 218 33 is_stmt 0 view .LVU84
- 247 0000 92ED026A 		vldr.32	s12, [r2, #8]
- 248              		.loc 1 218 37 view .LVU85
- 249 0004 66EE067A 		vmul.f32	s15, s12, s12
- 250              		.loc 1 218 30 view .LVU86
- 251 0008 F6EE006A 		vmov.f32	s13, #5.0e-1
- 252 000c 76EEE77A 		vsub.f32	s15, s13, s15
- 253              		.loc 1 218 47 view .LVU87
- 254 0010 92ED037A 		vldr.32	s14, [r2, #12]
- 255              		.loc 1 218 51 view .LVU88
- 256 0014 67EE075A 		vmul.f32	s11, s14, s14
- 257              		.loc 1 218 44 view .LVU89
- 258 0018 77EEE57A 		vsub.f32	s15, s15, s11
- 259              		.loc 1 218 66 view .LVU90
- 260 001c D0ED005A 		vldr.32	s11, [r0]
- 261              		.loc 1 218 59 view .LVU91
- 262 0020 67EEA57A 		vmul.f32	s15, s15, s11
- 219:Robot/RoboTask/ins/INS_task.c ****                        (q[1] * q[2] + q[0] * q[3]) * vecEF[1] +
- 263              		.loc 1 219 26 view .LVU92
- 264 0024 D2ED014A 		vldr.32	s9, [r2, #4]
- 265              		.loc 1 219 30 view .LVU93
- 266 0028 66EE245A 		vmul.f32	s11, s12, s9
- 267              		.loc 1 219 40 view .LVU94
- 268 002c 92ED005A 		vldr.32	s10, [r2]
- 269              		.loc 1 219 44 view .LVU95
- 270 0030 27EE054A 		vmul.f32	s8, s14, s10
- 271              		.loc 1 219 37 view .LVU96
- 272 0034 75EE845A 		vadd.f32	s11, s11, s8
- 273              		.loc 1 219 59 view .LVU97
- 274 0038 90ED014A 		vldr.32	s8, [r0, #4]
- 275              		.loc 1 219 52 view .LVU98
- 276 003c 65EE845A 		vmul.f32	s11, s11, s8
- 218:Robot/RoboTask/ins/INS_task.c ****     vecBF[0] = 2.0f * ((0.5f - q[2] * q[2] - q[3] * q[3]) * vecEF[0] +
- 277              		.loc 1 218 70 view .LVU99
- 278 0040 77EEA57A 		vadd.f32	s15, s15, s11
- 220:Robot/RoboTask/ins/INS_task.c ****                        (q[1] * q[3] - q[0] * q[2]) * vecEF[2]);
- 279              		.loc 1 220 30 view .LVU100
- 280 0044 27EE247A 		vmul.f32	s14, s14, s9
- 281              		.loc 1 220 44 view .LVU101
- 282 0048 26EE056A 		vmul.f32	s12, s12, s10
- 283              		.loc 1 220 37 view .LVU102
- 284 004c 37EE467A 		vsub.f32	s14, s14, s12
- 285              		.loc 1 220 59 view .LVU103
-ARM GAS  D:\temp\TMP\ccitzH6G.s 			page 10
+ 405 0070 D2ED004A 		vldr.32	s9, [r2]
+ 406              		.loc 1 210 47 view .LVU102
+ 407 0074 92ED035A 		vldr.32	s10, [r2, #12]
+ 408              		.loc 1 210 44 view .LVU103
+ 409 0078 24EE856A 		vmul.f32	s12, s9, s10
+ 410              		.loc 1 210 37 view .LVU104
+ 411 007c 37EE067A 		vadd.f32	s14, s14, s12
+ 412              		.loc 1 210 59 view .LVU105
+ 413 0080 90ED006A 		vldr.32	s12, [r0]
+ 414              		.loc 1 210 52 view .LVU106
+ 415 0084 27EE067A 		vmul.f32	s14, s14, s12
+ 211:Robot/RoboTask/ins/INS_task.c ****                        (0.5f - q[1] * q[1] - q[3] * q[3]) * vecBF[1] +
+ 416              		.loc 1 211 37 view .LVU107
+ 417 0088 25EEA56A 		vmul.f32	s12, s11, s11
+ 418              		.loc 1 211 30 view .LVU108
+ 419 008c 36EEC66A 		vsub.f32	s12, s13, s12
+ 420              		.loc 1 211 51 view .LVU109
+ 421 0090 25EE054A 		vmul.f32	s8, s10, s10
+ 422              		.loc 1 211 44 view .LVU110
+ 423 0094 36EE446A 		vsub.f32	s12, s12, s8
+ 424              		.loc 1 211 66 view .LVU111
+ 425 0098 90ED014A 		vldr.32	s8, [r0, #4]
+ 426              		.loc 1 211 59 view .LVU112
+ 427 009c 26EE046A 		vmul.f32	s12, s12, s8
+ 210:Robot/RoboTask/ins/INS_task.c ****                        (0.5f - q[1] * q[1] - q[3] * q[3]) * vecBF[1] +
+ 428              		.loc 1 210 63 view .LVU113
+ 429 00a0 37EE067A 		vadd.f32	s14, s14, s12
+ 212:Robot/RoboTask/ins/INS_task.c ****                        (q[2] * q[3] - q[0] * q[1]) * vecBF[2]);
+ 430              		.loc 1 212 30 view .LVU114
+ 431 00a4 67EE857A 		vmul.f32	s15, s15, s10
+ 432              		.loc 1 212 44 view .LVU115
+ 433 00a8 65EEA45A 		vmul.f32	s11, s11, s9
+ 434              		.loc 1 212 37 view .LVU116
+ 435 00ac 77EEE57A 		vsub.f32	s15, s15, s11
+ 436              		.loc 1 212 59 view .LVU117
+ 437 00b0 90ED026A 		vldr.32	s12, [r0, #8]
+ 438              		.loc 1 212 52 view .LVU118
+ 439 00b4 67EE867A 		vmul.f32	s15, s15, s12
+ 211:Robot/RoboTask/ins/INS_task.c ****                        (0.5f - q[1] * q[1] - q[3] * q[3]) * vecBF[1] +
+ 440              		.loc 1 211 70 view .LVU119
+ 441 00b8 37EE277A 		vadd.f32	s14, s14, s15
+ 210:Robot/RoboTask/ins/INS_task.c ****                        (0.5f - q[1] * q[1] - q[3] * q[3]) * vecBF[1] +
+ 442              		.loc 1 210 21 view .LVU120
+ 443 00bc 37EE077A 		vadd.f32	s14, s14, s14
+ 210:Robot/RoboTask/ins/INS_task.c ****                        (0.5f - q[1] * q[1] - q[3] * q[3]) * vecBF[1] +
+ 444              		.loc 1 210 14 view .LVU121
+ 445 00c0 81ED017A 		vstr.32	s14, [r1, #4]
+ 213:Robot/RoboTask/ins/INS_task.c **** 
+ 214:Robot/RoboTask/ins/INS_task.c ****     vecEF[2] = 2.0f * ((q[1] * q[3] - q[0] * q[2]) * vecBF[0] +
+ 446              		.loc 1 214 5 is_stmt 1 view .LVU122
+ 447              		.loc 1 214 26 is_stmt 0 view .LVU123
+ 448 00c4 D2ED015A 		vldr.32	s11, [r2, #4]
+ 449              		.loc 1 214 33 view .LVU124
+ 450 00c8 92ED037A 		vldr.32	s14, [r2, #12]
+ 451              		.loc 1 214 30 view .LVU125
+ 452 00cc 65EE877A 		vmul.f32	s15, s11, s14
+ 453              		.loc 1 214 40 view .LVU126
+ARM GAS  D:\temp\TMP\cc65bfxy.s 			page 13
 
 
- 286 0050 90ED026A 		vldr.32	s12, [r0, #8]
- 287              		.loc 1 220 52 view .LVU104
- 288 0054 27EE067A 		vmul.f32	s14, s14, s12
- 219:Robot/RoboTask/ins/INS_task.c ****                        (q[1] * q[2] + q[0] * q[3]) * vecEF[1] +
- 289              		.loc 1 219 63 view .LVU105
- 290 0058 77EE877A 		vadd.f32	s15, s15, s14
- 218:Robot/RoboTask/ins/INS_task.c ****     vecBF[0] = 2.0f * ((0.5f - q[2] * q[2] - q[3] * q[3]) * vecEF[0] +
- 291              		.loc 1 218 21 view .LVU106
- 292 005c 77EEA77A 		vadd.f32	s15, s15, s15
- 218:Robot/RoboTask/ins/INS_task.c ****     vecBF[0] = 2.0f * ((0.5f - q[2] * q[2] - q[3] * q[3]) * vecEF[0] +
- 293              		.loc 1 218 14 view .LVU107
- 294 0060 C1ED007A 		vstr.32	s15, [r1]
- 221:Robot/RoboTask/ins/INS_task.c **** 
- 222:Robot/RoboTask/ins/INS_task.c ****     vecBF[1] = 2.0f * ((q[1] * q[2] - q[0] * q[3]) * vecEF[0] +
- 295              		.loc 1 222 5 is_stmt 1 view .LVU108
- 296              		.loc 1 222 26 is_stmt 0 view .LVU109
- 297 0064 D2ED015A 		vldr.32	s11, [r2, #4]
- 298              		.loc 1 222 33 view .LVU110
- 299 0068 D2ED027A 		vldr.32	s15, [r2, #8]
- 300              		.loc 1 222 30 view .LVU111
- 301 006c 25EEA77A 		vmul.f32	s14, s11, s15
- 302              		.loc 1 222 40 view .LVU112
- 303 0070 D2ED004A 		vldr.32	s9, [r2]
- 304              		.loc 1 222 47 view .LVU113
- 305 0074 92ED035A 		vldr.32	s10, [r2, #12]
- 306              		.loc 1 222 44 view .LVU114
- 307 0078 24EE856A 		vmul.f32	s12, s9, s10
- 308              		.loc 1 222 37 view .LVU115
- 309 007c 37EE467A 		vsub.f32	s14, s14, s12
- 310              		.loc 1 222 59 view .LVU116
- 311 0080 90ED006A 		vldr.32	s12, [r0]
- 312              		.loc 1 222 52 view .LVU117
- 313 0084 27EE067A 		vmul.f32	s14, s14, s12
- 223:Robot/RoboTask/ins/INS_task.c ****                        (0.5f - q[1] * q[1] - q[3] * q[3]) * vecEF[1] +
- 314              		.loc 1 223 37 view .LVU118
- 315 0088 25EEA56A 		vmul.f32	s12, s11, s11
- 316              		.loc 1 223 30 view .LVU119
- 317 008c 36EEC66A 		vsub.f32	s12, s13, s12
- 318              		.loc 1 223 51 view .LVU120
- 319 0090 25EE054A 		vmul.f32	s8, s10, s10
- 320              		.loc 1 223 44 view .LVU121
- 321 0094 36EE446A 		vsub.f32	s12, s12, s8
- 322              		.loc 1 223 66 view .LVU122
- 323 0098 90ED014A 		vldr.32	s8, [r0, #4]
- 324              		.loc 1 223 59 view .LVU123
- 325 009c 26EE046A 		vmul.f32	s12, s12, s8
- 222:Robot/RoboTask/ins/INS_task.c ****                        (0.5f - q[1] * q[1] - q[3] * q[3]) * vecEF[1] +
- 326              		.loc 1 222 63 view .LVU124
- 327 00a0 37EE067A 		vadd.f32	s14, s14, s12
- 224:Robot/RoboTask/ins/INS_task.c ****                        (q[2] * q[3] + q[0] * q[1]) * vecEF[2]);
- 328              		.loc 1 224 30 view .LVU125
- 329 00a4 67EE857A 		vmul.f32	s15, s15, s10
- 330              		.loc 1 224 44 view .LVU126
- 331 00a8 65EEA45A 		vmul.f32	s11, s11, s9
- 332              		.loc 1 224 37 view .LVU127
- 333 00ac 77EEA57A 		vadd.f32	s15, s15, s11
- 334              		.loc 1 224 59 view .LVU128
-ARM GAS  D:\temp\TMP\ccitzH6G.s 			page 11
+ 454 00d0 92ED005A 		vldr.32	s10, [r2]
+ 455              		.loc 1 214 47 view .LVU127
+ 456 00d4 92ED026A 		vldr.32	s12, [r2, #8]
+ 457              		.loc 1 214 44 view .LVU128
+ 458 00d8 65EE064A 		vmul.f32	s9, s10, s12
+ 459              		.loc 1 214 37 view .LVU129
+ 460 00dc 77EEE47A 		vsub.f32	s15, s15, s9
+ 461              		.loc 1 214 59 view .LVU130
+ 462 00e0 D0ED004A 		vldr.32	s9, [r0]
+ 463              		.loc 1 214 52 view .LVU131
+ 464 00e4 67EEA47A 		vmul.f32	s15, s15, s9
+ 215:Robot/RoboTask/ins/INS_task.c ****                        (q[2] * q[3] + q[0] * q[1]) * vecBF[1] +
+ 465              		.loc 1 215 30 view .LVU132
+ 466 00e8 27EE067A 		vmul.f32	s14, s14, s12
+ 467              		.loc 1 215 44 view .LVU133
+ 468 00ec 25EE855A 		vmul.f32	s10, s11, s10
+ 469              		.loc 1 215 37 view .LVU134
+ 470 00f0 37EE057A 		vadd.f32	s14, s14, s10
+ 471              		.loc 1 215 59 view .LVU135
+ 472 00f4 90ED015A 		vldr.32	s10, [r0, #4]
+ 473              		.loc 1 215 52 view .LVU136
+ 474 00f8 27EE057A 		vmul.f32	s14, s14, s10
+ 214:Robot/RoboTask/ins/INS_task.c ****                        (q[2] * q[3] + q[0] * q[1]) * vecBF[1] +
+ 475              		.loc 1 214 63 view .LVU137
+ 476 00fc 77EE877A 		vadd.f32	s15, s15, s14
+ 216:Robot/RoboTask/ins/INS_task.c ****                        (0.5f - q[1] * q[1] - q[2] * q[2]) * vecBF[2]);
+ 477              		.loc 1 216 37 view .LVU138
+ 478 0100 65EEA55A 		vmul.f32	s11, s11, s11
+ 479              		.loc 1 216 30 view .LVU139
+ 480 0104 76EEE56A 		vsub.f32	s13, s13, s11
+ 481              		.loc 1 216 51 view .LVU140
+ 482 0108 26EE066A 		vmul.f32	s12, s12, s12
+ 483              		.loc 1 216 44 view .LVU141
+ 484 010c 76EEC66A 		vsub.f32	s13, s13, s12
+ 485              		.loc 1 216 66 view .LVU142
+ 486 0110 90ED027A 		vldr.32	s14, [r0, #8]
+ 487              		.loc 1 216 59 view .LVU143
+ 488 0114 66EE876A 		vmul.f32	s13, s13, s14
+ 215:Robot/RoboTask/ins/INS_task.c ****                        (q[2] * q[3] + q[0] * q[1]) * vecBF[1] +
+ 489              		.loc 1 215 63 view .LVU144
+ 490 0118 77EEA67A 		vadd.f32	s15, s15, s13
+ 214:Robot/RoboTask/ins/INS_task.c ****                        (q[2] * q[3] + q[0] * q[1]) * vecBF[1] +
+ 491              		.loc 1 214 21 view .LVU145
+ 492 011c 77EEA77A 		vadd.f32	s15, s15, s15
+ 214:Robot/RoboTask/ins/INS_task.c ****                        (q[2] * q[3] + q[0] * q[1]) * vecBF[1] +
+ 493              		.loc 1 214 14 view .LVU146
+ 494 0120 C1ED027A 		vstr.32	s15, [r1, #8]
+ 217:Robot/RoboTask/ins/INS_task.c **** }
+ 495              		.loc 1 217 1 view .LVU147
+ 496 0124 7047     		bx	lr
+ 497              		.cfi_endproc
+ 498              	.LFE198:
+ 500              		.section	.text.EarthFrameToBodyFrame,"ax",%progbits
+ 501              		.align	1
+ 502              		.global	EarthFrameToBodyFrame
+ 503              		.syntax unified
+ 504              		.thumb
+ARM GAS  D:\temp\TMP\cc65bfxy.s 			page 14
 
 
- 335 00b0 90ED026A 		vldr.32	s12, [r0, #8]
- 336              		.loc 1 224 52 view .LVU129
- 337 00b4 67EE867A 		vmul.f32	s15, s15, s12
- 223:Robot/RoboTask/ins/INS_task.c ****                        (0.5f - q[1] * q[1] - q[3] * q[3]) * vecEF[1] +
- 338              		.loc 1 223 70 view .LVU130
- 339 00b8 37EE277A 		vadd.f32	s14, s14, s15
- 222:Robot/RoboTask/ins/INS_task.c ****                        (0.5f - q[1] * q[1] - q[3] * q[3]) * vecEF[1] +
- 340              		.loc 1 222 21 view .LVU131
- 341 00bc 37EE077A 		vadd.f32	s14, s14, s14
- 222:Robot/RoboTask/ins/INS_task.c ****                        (0.5f - q[1] * q[1] - q[3] * q[3]) * vecEF[1] +
- 342              		.loc 1 222 14 view .LVU132
- 343 00c0 81ED017A 		vstr.32	s14, [r1, #4]
- 225:Robot/RoboTask/ins/INS_task.c **** 
- 226:Robot/RoboTask/ins/INS_task.c ****     vecBF[2] = 2.0f * ((q[1] * q[3] + q[0] * q[2]) * vecEF[0] +
- 344              		.loc 1 226 5 is_stmt 1 view .LVU133
- 345              		.loc 1 226 26 is_stmt 0 view .LVU134
- 346 00c4 D2ED015A 		vldr.32	s11, [r2, #4]
- 347              		.loc 1 226 33 view .LVU135
- 348 00c8 92ED037A 		vldr.32	s14, [r2, #12]
- 349              		.loc 1 226 30 view .LVU136
- 350 00cc 65EE877A 		vmul.f32	s15, s11, s14
- 351              		.loc 1 226 40 view .LVU137
- 352 00d0 92ED005A 		vldr.32	s10, [r2]
- 353              		.loc 1 226 47 view .LVU138
- 354 00d4 92ED026A 		vldr.32	s12, [r2, #8]
- 355              		.loc 1 226 44 view .LVU139
- 356 00d8 65EE064A 		vmul.f32	s9, s10, s12
- 357              		.loc 1 226 37 view .LVU140
- 358 00dc 77EEA47A 		vadd.f32	s15, s15, s9
- 359              		.loc 1 226 59 view .LVU141
- 360 00e0 D0ED004A 		vldr.32	s9, [r0]
- 361              		.loc 1 226 52 view .LVU142
- 362 00e4 67EEA47A 		vmul.f32	s15, s15, s9
- 227:Robot/RoboTask/ins/INS_task.c ****                        (q[2] * q[3] - q[0] * q[1]) * vecEF[1] +
- 363              		.loc 1 227 30 view .LVU143
- 364 00e8 27EE067A 		vmul.f32	s14, s14, s12
- 365              		.loc 1 227 44 view .LVU144
- 366 00ec 25EE855A 		vmul.f32	s10, s11, s10
- 367              		.loc 1 227 37 view .LVU145
- 368 00f0 37EE457A 		vsub.f32	s14, s14, s10
- 369              		.loc 1 227 59 view .LVU146
- 370 00f4 90ED015A 		vldr.32	s10, [r0, #4]
- 371              		.loc 1 227 52 view .LVU147
- 372 00f8 27EE057A 		vmul.f32	s14, s14, s10
- 226:Robot/RoboTask/ins/INS_task.c ****                        (q[2] * q[3] - q[0] * q[1]) * vecEF[1] +
- 373              		.loc 1 226 63 view .LVU148
- 374 00fc 77EE877A 		vadd.f32	s15, s15, s14
- 228:Robot/RoboTask/ins/INS_task.c ****                        (0.5f - q[1] * q[1] - q[2] * q[2]) * vecEF[2]);
- 375              		.loc 1 228 37 view .LVU149
- 376 0100 65EEA55A 		vmul.f32	s11, s11, s11
- 377              		.loc 1 228 30 view .LVU150
- 378 0104 76EEE56A 		vsub.f32	s13, s13, s11
- 379              		.loc 1 228 51 view .LVU151
- 380 0108 26EE066A 		vmul.f32	s12, s12, s12
- 381              		.loc 1 228 44 view .LVU152
- 382 010c 76EEC66A 		vsub.f32	s13, s13, s12
- 383              		.loc 1 228 66 view .LVU153
-ARM GAS  D:\temp\TMP\ccitzH6G.s 			page 12
+ 505              		.thumb_func
+ 507              	EarthFrameToBodyFrame:
+ 508              	.LVL30:
+ 509              	.LFB199:
+ 218:Robot/RoboTask/ins/INS_task.c **** 
+ 219:Robot/RoboTask/ins/INS_task.c **** /**
+ 220:Robot/RoboTask/ins/INS_task.c ****  * @brief          Transform 3dvector from EarthFrame to BodyFrame
+ 221:Robot/RoboTask/ins/INS_task.c ****  * @param[1]       vector in EarthFrame
+ 222:Robot/RoboTask/ins/INS_task.c ****  * @param[2]       vector in BodyFrame
+ 223:Robot/RoboTask/ins/INS_task.c ****  * @param[3]       quaternion
+ 224:Robot/RoboTask/ins/INS_task.c ****  */
+ 225:Robot/RoboTask/ins/INS_task.c **** void EarthFrameToBodyFrame(const float *vecEF, float *vecBF, float *q)
+ 226:Robot/RoboTask/ins/INS_task.c **** {
+ 510              		.loc 1 226 1 is_stmt 1 view -0
+ 511              		.cfi_startproc
+ 512              		@ args = 0, pretend = 0, frame = 0
+ 513              		@ frame_needed = 0, uses_anonymous_args = 0
+ 514              		@ link register save eliminated.
+ 227:Robot/RoboTask/ins/INS_task.c ****     vecBF[0] = 2.0f * ((0.5f - q[2] * q[2] - q[3] * q[3]) * vecEF[0] +
+ 515              		.loc 1 227 5 view .LVU149
+ 516              		.loc 1 227 33 is_stmt 0 view .LVU150
+ 517 0000 92ED026A 		vldr.32	s12, [r2, #8]
+ 518              		.loc 1 227 37 view .LVU151
+ 519 0004 66EE067A 		vmul.f32	s15, s12, s12
+ 520              		.loc 1 227 30 view .LVU152
+ 521 0008 F6EE006A 		vmov.f32	s13, #5.0e-1
+ 522 000c 76EEE77A 		vsub.f32	s15, s13, s15
+ 523              		.loc 1 227 47 view .LVU153
+ 524 0010 92ED037A 		vldr.32	s14, [r2, #12]
+ 525              		.loc 1 227 51 view .LVU154
+ 526 0014 67EE075A 		vmul.f32	s11, s14, s14
+ 527              		.loc 1 227 44 view .LVU155
+ 528 0018 77EEE57A 		vsub.f32	s15, s15, s11
+ 529              		.loc 1 227 66 view .LVU156
+ 530 001c D0ED005A 		vldr.32	s11, [r0]
+ 531              		.loc 1 227 59 view .LVU157
+ 532 0020 67EEA57A 		vmul.f32	s15, s15, s11
+ 228:Robot/RoboTask/ins/INS_task.c ****                        (q[1] * q[2] + q[0] * q[3]) * vecEF[1] +
+ 533              		.loc 1 228 26 view .LVU158
+ 534 0024 D2ED014A 		vldr.32	s9, [r2, #4]
+ 535              		.loc 1 228 30 view .LVU159
+ 536 0028 66EE245A 		vmul.f32	s11, s12, s9
+ 537              		.loc 1 228 40 view .LVU160
+ 538 002c 92ED005A 		vldr.32	s10, [r2]
+ 539              		.loc 1 228 44 view .LVU161
+ 540 0030 27EE054A 		vmul.f32	s8, s14, s10
+ 541              		.loc 1 228 37 view .LVU162
+ 542 0034 75EE845A 		vadd.f32	s11, s11, s8
+ 543              		.loc 1 228 59 view .LVU163
+ 544 0038 90ED014A 		vldr.32	s8, [r0, #4]
+ 545              		.loc 1 228 52 view .LVU164
+ 546 003c 65EE845A 		vmul.f32	s11, s11, s8
+ 227:Robot/RoboTask/ins/INS_task.c ****     vecBF[0] = 2.0f * ((0.5f - q[2] * q[2] - q[3] * q[3]) * vecEF[0] +
+ 547              		.loc 1 227 70 view .LVU165
+ 548 0040 77EEA57A 		vadd.f32	s15, s15, s11
+ 229:Robot/RoboTask/ins/INS_task.c ****                        (q[1] * q[3] - q[0] * q[2]) * vecEF[2]);
+ 549              		.loc 1 229 30 view .LVU166
+ARM GAS  D:\temp\TMP\cc65bfxy.s 			page 15
 
 
- 384 0110 90ED027A 		vldr.32	s14, [r0, #8]
- 385              		.loc 1 228 59 view .LVU154
- 386 0114 66EE876A 		vmul.f32	s13, s13, s14
- 227:Robot/RoboTask/ins/INS_task.c ****                        (q[2] * q[3] - q[0] * q[1]) * vecEF[1] +
- 387              		.loc 1 227 63 view .LVU155
- 388 0118 77EEA67A 		vadd.f32	s15, s15, s13
- 226:Robot/RoboTask/ins/INS_task.c ****                        (q[2] * q[3] - q[0] * q[1]) * vecEF[1] +
- 389              		.loc 1 226 21 view .LVU156
- 390 011c 77EEA77A 		vadd.f32	s15, s15, s15
- 226:Robot/RoboTask/ins/INS_task.c ****                        (q[2] * q[3] - q[0] * q[1]) * vecEF[1] +
- 391              		.loc 1 226 14 view .LVU157
- 392 0120 C1ED027A 		vstr.32	s15, [r1, #8]
- 229:Robot/RoboTask/ins/INS_task.c **** }
- 393              		.loc 1 229 1 view .LVU158
- 394 0124 7047     		bx	lr
- 395              		.cfi_endproc
- 396              	.LFE196:
- 398              		.section	.text.INS_task,"ax",%progbits
- 399              		.align	1
- 400              		.global	INS_task
- 401              		.syntax unified
- 402              		.thumb
- 403              		.thumb_func
- 405              	INS_task:
- 406              	.LFB194:
-  50:Robot/RoboTask/ins/INS_task.c **** 	 INS_Init();
- 407              		.loc 1 50 1 is_stmt 1 view -0
- 408              		.cfi_startproc
- 409              		@ args = 0, pretend = 0, frame = 16
- 410              		@ frame_needed = 0, uses_anonymous_args = 0
- 411 0000 70B5     		push	{r4, r5, r6, lr}
- 412              	.LCFI1:
- 413              		.cfi_def_cfa_offset 16
- 414              		.cfi_offset 4, -16
- 415              		.cfi_offset 5, -12
- 416              		.cfi_offset 6, -8
- 417              		.cfi_offset 14, -4
- 418 0002 84B0     		sub	sp, sp, #16
- 419              	.LCFI2:
- 420              		.cfi_def_cfa_offset 32
-  51:Robot/RoboTask/ins/INS_task.c **** 	 
- 421              		.loc 1 51 3 view .LVU160
- 422 0004 FFF7FEFF 		bl	INS_Init
- 423              	.LVL3:
- 424 0008 C9E0     		b	.L23
- 425              	.LVL4:
- 426              	.L9:
- 427              	.LBB2:
- 428              	.LBB3:
-  95:Robot/RoboTask/ins/INS_task.c **** 															+ INS.MotionAccel_b[i] * INS.AccelLPF / (INS.AccelLPF + ins_dt); 
- 429              		.loc 1 95 4 discriminator 3 view .LVU161
-  95:Robot/RoboTask/ins/INS_task.c **** 															+ INS.MotionAccel_b[i] * INS.AccelLPF / (INS.AccelLPF + ins_dt); 
- 430              		.loc 1 95 37 is_stmt 0 discriminator 3 view .LVU162
- 431 000a 994A     		ldr	r2, .L33
- 432 000c 991D     		adds	r1, r3, #6
- 433 000e 02EB8101 		add	r1, r2, r1, lsl #2
- 434 0012 91ED017A 		vldr.32	s14, [r1, #4]
-ARM GAS  D:\temp\TMP\ccitzH6G.s 			page 13
+ 550 0044 27EE247A 		vmul.f32	s14, s14, s9
+ 551              		.loc 1 229 44 view .LVU167
+ 552 0048 26EE056A 		vmul.f32	s12, s12, s10
+ 553              		.loc 1 229 37 view .LVU168
+ 554 004c 37EE467A 		vsub.f32	s14, s14, s12
+ 555              		.loc 1 229 59 view .LVU169
+ 556 0050 90ED026A 		vldr.32	s12, [r0, #8]
+ 557              		.loc 1 229 52 view .LVU170
+ 558 0054 27EE067A 		vmul.f32	s14, s14, s12
+ 228:Robot/RoboTask/ins/INS_task.c ****                        (q[1] * q[2] + q[0] * q[3]) * vecEF[1] +
+ 559              		.loc 1 228 63 view .LVU171
+ 560 0058 77EE877A 		vadd.f32	s15, s15, s14
+ 227:Robot/RoboTask/ins/INS_task.c ****     vecBF[0] = 2.0f * ((0.5f - q[2] * q[2] - q[3] * q[3]) * vecEF[0] +
+ 561              		.loc 1 227 21 view .LVU172
+ 562 005c 77EEA77A 		vadd.f32	s15, s15, s15
+ 227:Robot/RoboTask/ins/INS_task.c ****     vecBF[0] = 2.0f * ((0.5f - q[2] * q[2] - q[3] * q[3]) * vecEF[0] +
+ 563              		.loc 1 227 14 view .LVU173
+ 564 0060 C1ED007A 		vstr.32	s15, [r1]
+ 230:Robot/RoboTask/ins/INS_task.c **** 
+ 231:Robot/RoboTask/ins/INS_task.c ****     vecBF[1] = 2.0f * ((q[1] * q[2] - q[0] * q[3]) * vecEF[0] +
+ 565              		.loc 1 231 5 is_stmt 1 view .LVU174
+ 566              		.loc 1 231 26 is_stmt 0 view .LVU175
+ 567 0064 D2ED015A 		vldr.32	s11, [r2, #4]
+ 568              		.loc 1 231 33 view .LVU176
+ 569 0068 D2ED027A 		vldr.32	s15, [r2, #8]
+ 570              		.loc 1 231 30 view .LVU177
+ 571 006c 25EEA77A 		vmul.f32	s14, s11, s15
+ 572              		.loc 1 231 40 view .LVU178
+ 573 0070 D2ED004A 		vldr.32	s9, [r2]
+ 574              		.loc 1 231 47 view .LVU179
+ 575 0074 92ED035A 		vldr.32	s10, [r2, #12]
+ 576              		.loc 1 231 44 view .LVU180
+ 577 0078 24EE856A 		vmul.f32	s12, s9, s10
+ 578              		.loc 1 231 37 view .LVU181
+ 579 007c 37EE467A 		vsub.f32	s14, s14, s12
+ 580              		.loc 1 231 59 view .LVU182
+ 581 0080 90ED006A 		vldr.32	s12, [r0]
+ 582              		.loc 1 231 52 view .LVU183
+ 583 0084 27EE067A 		vmul.f32	s14, s14, s12
+ 232:Robot/RoboTask/ins/INS_task.c ****                        (0.5f - q[1] * q[1] - q[3] * q[3]) * vecEF[1] +
+ 584              		.loc 1 232 37 view .LVU184
+ 585 0088 25EEA56A 		vmul.f32	s12, s11, s11
+ 586              		.loc 1 232 30 view .LVU185
+ 587 008c 36EEC66A 		vsub.f32	s12, s13, s12
+ 588              		.loc 1 232 51 view .LVU186
+ 589 0090 25EE054A 		vmul.f32	s8, s10, s10
+ 590              		.loc 1 232 44 view .LVU187
+ 591 0094 36EE446A 		vsub.f32	s12, s12, s8
+ 592              		.loc 1 232 66 view .LVU188
+ 593 0098 90ED014A 		vldr.32	s8, [r0, #4]
+ 594              		.loc 1 232 59 view .LVU189
+ 595 009c 26EE046A 		vmul.f32	s12, s12, s8
+ 231:Robot/RoboTask/ins/INS_task.c ****                        (0.5f - q[1] * q[1] - q[3] * q[3]) * vecEF[1] +
+ 596              		.loc 1 231 63 view .LVU190
+ 597 00a0 37EE067A 		vadd.f32	s14, s14, s12
+ 233:Robot/RoboTask/ins/INS_task.c ****                        (q[2] * q[3] + q[0] * q[1]) * vecEF[2]);
+ 598              		.loc 1 233 30 view .LVU191
+ARM GAS  D:\temp\TMP\cc65bfxy.s 			page 16
 
 
-  95:Robot/RoboTask/ins/INS_task.c **** 															+ INS.MotionAccel_b[i] * INS.AccelLPF / (INS.AccelLPF + ins_dt); 
- 435              		.loc 1 95 52 discriminator 3 view .LVU163
- 436 0016 04A9     		add	r1, sp, #16
- 437 0018 01EB8301 		add	r1, r1, r3, lsl #2
- 438 001c 51ED037A 		vldr.32	s15, [r1, #-12]
-  95:Robot/RoboTask/ins/INS_task.c **** 															+ INS.MotionAccel_b[i] * INS.AccelLPF / (INS.AccelLPF + ins_dt); 
- 439              		.loc 1 95 41 discriminator 3 view .LVU164
- 440 0020 37EE677A 		vsub.f32	s14, s14, s15
-  95:Robot/RoboTask/ins/INS_task.c **** 															+ INS.MotionAccel_b[i] * INS.AccelLPF / (INS.AccelLPF + ins_dt); 
- 441              		.loc 1 95 57 discriminator 3 view .LVU165
- 442 0024 9349     		ldr	r1, .L33+4
- 443 0026 D1ED007A 		vldr.32	s15, [r1]
- 444 002a 27EE277A 		vmul.f32	s14, s14, s15
-  95:Robot/RoboTask/ins/INS_task.c **** 															+ INS.MotionAccel_b[i] * INS.AccelLPF / (INS.AccelLPF + ins_dt); 
- 445              		.loc 1 95 72 discriminator 3 view .LVU166
- 446 002e D2ED106A 		vldr.32	s13, [r2, #64]
-  95:Robot/RoboTask/ins/INS_task.c **** 															+ INS.MotionAccel_b[i] * INS.AccelLPF / (INS.AccelLPF + ins_dt); 
- 447              		.loc 1 95 82 discriminator 3 view .LVU167
- 448 0032 77EEA67A 		vadd.f32	s15, s15, s13
-  95:Robot/RoboTask/ins/INS_task.c **** 															+ INS.MotionAccel_b[i] * INS.AccelLPF / (INS.AccelLPF + ins_dt); 
- 449              		.loc 1 95 66 discriminator 3 view .LVU168
- 450 0036 87EE276A 		vdiv.f32	s12, s14, s15
-  96:Robot/RoboTask/ins/INS_task.c **** 	//			INS.MotionAccel_b[i] = (INS.Accel[i] ) * dt / (INS.AccelLPF + dt) 
- 451              		.loc 1 96 35 discriminator 3 view .LVU169
- 452 003a 03F10A01 		add	r1, r3, #10
- 453 003e 02EB8102 		add	r2, r2, r1, lsl #2
- 454 0042 92ED007A 		vldr.32	s14, [r2]
-  96:Robot/RoboTask/ins/INS_task.c **** 	//			INS.MotionAccel_b[i] = (INS.Accel[i] ) * dt / (INS.AccelLPF + dt) 
- 455              		.loc 1 96 39 discriminator 3 view .LVU170
- 456 0046 66EE876A 		vmul.f32	s13, s13, s14
-  96:Robot/RoboTask/ins/INS_task.c **** 	//			INS.MotionAccel_b[i] = (INS.Accel[i] ) * dt / (INS.AccelLPF + dt) 
- 457              		.loc 1 96 54 discriminator 3 view .LVU171
- 458 004a 86EEA77A 		vdiv.f32	s14, s13, s15
-  96:Robot/RoboTask/ins/INS_task.c **** 	//			INS.MotionAccel_b[i] = (INS.Accel[i] ) * dt / (INS.AccelLPF + dt) 
- 459              		.loc 1 96 16 discriminator 3 view .LVU172
- 460 004e 76EE077A 		vadd.f32	s15, s12, s14
-  95:Robot/RoboTask/ins/INS_task.c **** 															+ INS.MotionAccel_b[i] * INS.AccelLPF / (INS.AccelLPF + ins_dt); 
- 461              		.loc 1 95 25 discriminator 3 view .LVU173
- 462 0052 C2ED007A 		vstr.32	s15, [r2]
-  93:Robot/RoboTask/ins/INS_task.c **** 		{
- 463              		.loc 1 93 30 is_stmt 1 discriminator 3 view .LVU174
-  93:Robot/RoboTask/ins/INS_task.c **** 		{
- 464              		.loc 1 93 31 is_stmt 0 discriminator 3 view .LVU175
- 465 0056 0133     		adds	r3, r3, #1
- 466              	.LVL5:
-  93:Robot/RoboTask/ins/INS_task.c **** 		{
- 467              		.loc 1 93 31 discriminator 3 view .LVU176
- 468 0058 DBB2     		uxtb	r3, r3
- 469              	.LVL6:
- 470              	.L8:
-  93:Robot/RoboTask/ins/INS_task.c **** 		{
- 471              		.loc 1 93 23 is_stmt 1 discriminator 1 view .LVU177
-  93:Robot/RoboTask/ins/INS_task.c **** 		{
- 472              		.loc 1 93 3 is_stmt 0 discriminator 1 view .LVU178
- 473 005a 022B     		cmp	r3, #2
- 474 005c D5D9     		bls	.L9
- 475              	.LBE3:
-ARM GAS  D:\temp\TMP\ccitzH6G.s 			page 14
+ 599 00a4 67EE857A 		vmul.f32	s15, s15, s10
+ 600              		.loc 1 233 44 view .LVU192
+ 601 00a8 65EEA45A 		vmul.f32	s11, s11, s9
+ 602              		.loc 1 233 37 view .LVU193
+ 603 00ac 77EEA57A 		vadd.f32	s15, s15, s11
+ 604              		.loc 1 233 59 view .LVU194
+ 605 00b0 90ED026A 		vldr.32	s12, [r0, #8]
+ 606              		.loc 1 233 52 view .LVU195
+ 607 00b4 67EE867A 		vmul.f32	s15, s15, s12
+ 232:Robot/RoboTask/ins/INS_task.c ****                        (0.5f - q[1] * q[1] - q[3] * q[3]) * vecEF[1] +
+ 608              		.loc 1 232 70 view .LVU196
+ 609 00b8 37EE277A 		vadd.f32	s14, s14, s15
+ 231:Robot/RoboTask/ins/INS_task.c ****                        (0.5f - q[1] * q[1] - q[3] * q[3]) * vecEF[1] +
+ 610              		.loc 1 231 21 view .LVU197
+ 611 00bc 37EE077A 		vadd.f32	s14, s14, s14
+ 231:Robot/RoboTask/ins/INS_task.c ****                        (0.5f - q[1] * q[1] - q[3] * q[3]) * vecEF[1] +
+ 612              		.loc 1 231 14 view .LVU198
+ 613 00c0 81ED017A 		vstr.32	s14, [r1, #4]
+ 234:Robot/RoboTask/ins/INS_task.c **** 
+ 235:Robot/RoboTask/ins/INS_task.c ****     vecBF[2] = 2.0f * ((q[1] * q[3] + q[0] * q[2]) * vecEF[0] +
+ 614              		.loc 1 235 5 is_stmt 1 view .LVU199
+ 615              		.loc 1 235 26 is_stmt 0 view .LVU200
+ 616 00c4 D2ED015A 		vldr.32	s11, [r2, #4]
+ 617              		.loc 1 235 33 view .LVU201
+ 618 00c8 92ED037A 		vldr.32	s14, [r2, #12]
+ 619              		.loc 1 235 30 view .LVU202
+ 620 00cc 65EE877A 		vmul.f32	s15, s11, s14
+ 621              		.loc 1 235 40 view .LVU203
+ 622 00d0 92ED005A 		vldr.32	s10, [r2]
+ 623              		.loc 1 235 47 view .LVU204
+ 624 00d4 92ED026A 		vldr.32	s12, [r2, #8]
+ 625              		.loc 1 235 44 view .LVU205
+ 626 00d8 65EE064A 		vmul.f32	s9, s10, s12
+ 627              		.loc 1 235 37 view .LVU206
+ 628 00dc 77EEA47A 		vadd.f32	s15, s15, s9
+ 629              		.loc 1 235 59 view .LVU207
+ 630 00e0 D0ED004A 		vldr.32	s9, [r0]
+ 631              		.loc 1 235 52 view .LVU208
+ 632 00e4 67EEA47A 		vmul.f32	s15, s15, s9
+ 236:Robot/RoboTask/ins/INS_task.c ****                        (q[2] * q[3] - q[0] * q[1]) * vecEF[1] +
+ 633              		.loc 1 236 30 view .LVU209
+ 634 00e8 27EE067A 		vmul.f32	s14, s14, s12
+ 635              		.loc 1 236 44 view .LVU210
+ 636 00ec 25EE855A 		vmul.f32	s10, s11, s10
+ 637              		.loc 1 236 37 view .LVU211
+ 638 00f0 37EE457A 		vsub.f32	s14, s14, s10
+ 639              		.loc 1 236 59 view .LVU212
+ 640 00f4 90ED015A 		vldr.32	s10, [r0, #4]
+ 641              		.loc 1 236 52 view .LVU213
+ 642 00f8 27EE057A 		vmul.f32	s14, s14, s10
+ 235:Robot/RoboTask/ins/INS_task.c ****                        (q[2] * q[3] - q[0] * q[1]) * vecEF[1] +
+ 643              		.loc 1 235 63 view .LVU214
+ 644 00fc 77EE877A 		vadd.f32	s15, s15, s14
+ 237:Robot/RoboTask/ins/INS_task.c ****                        (0.5f - q[1] * q[1] - q[2] * q[2]) * vecEF[2]);
+ 645              		.loc 1 237 37 view .LVU215
+ 646 0100 65EEA55A 		vmul.f32	s11, s11, s11
+ 647              		.loc 1 237 30 view .LVU216
+ARM GAS  D:\temp\TMP\cc65bfxy.s 			page 17
 
 
- 100:Robot/RoboTask/ins/INS_task.c **** 		
- 476              		.loc 1 100 3 is_stmt 1 view .LVU179
- 477 005e 844C     		ldr	r4, .L33
- 478 0060 2246     		mov	r2, r4
- 479 0062 04F13401 		add	r1, r4, #52
- 480 0066 04F12800 		add	r0, r4, #40
- 481 006a FFF7FEFF 		bl	BodyFrameToEarthFrame
- 482              	.LVL7:
- 103:Robot/RoboTask/ins/INS_task.c **** 		{
- 483              		.loc 1 103 3 view .LVU180
- 103:Robot/RoboTask/ins/INS_task.c **** 		{
- 484              		.loc 1 103 29 is_stmt 0 view .LVU181
- 485 006e D4ED0D7A 		vldr.32	s15, [r4, #52]
- 103:Robot/RoboTask/ins/INS_task.c **** 		{
- 486              		.loc 1 103 6 view .LVU182
- 487 0072 F0EEE77A 		vabs.f32	s15, s15
- 103:Robot/RoboTask/ins/INS_task.c **** 		{
- 488              		.loc 1 103 5 view .LVU183
- 489 0076 9FED807A 		vldr.32	s14, .L33+8
- 490 007a F4EEC77A 		vcmpe.f32	s15, s14
- 491 007e F1EE10FA 		vmrs	APSR_nzcv, FPSCR
- 492 0082 01D5     		bpl	.L10
- 105:Robot/RoboTask/ins/INS_task.c **** 		}
- 493              		.loc 1 105 4 is_stmt 1 view .LVU184
- 105:Robot/RoboTask/ins/INS_task.c **** 		}
- 494              		.loc 1 105 24 is_stmt 0 view .LVU185
- 495 0084 0022     		movs	r2, #0
- 496 0086 6263     		str	r2, [r4, #52]	@ float
- 497              	.L10:
- 107:Robot/RoboTask/ins/INS_task.c **** 		{
- 498              		.loc 1 107 3 is_stmt 1 view .LVU186
- 107:Robot/RoboTask/ins/INS_task.c **** 		{
- 499              		.loc 1 107 29 is_stmt 0 view .LVU187
- 500 0088 794B     		ldr	r3, .L33
- 501 008a D3ED0E7A 		vldr.32	s15, [r3, #56]
- 107:Robot/RoboTask/ins/INS_task.c **** 		{
- 502              		.loc 1 107 6 view .LVU188
- 503 008e F0EEE77A 		vabs.f32	s15, s15
- 107:Robot/RoboTask/ins/INS_task.c **** 		{
- 504              		.loc 1 107 5 view .LVU189
- 505 0092 9FED797A 		vldr.32	s14, .L33+8
- 506 0096 F4EEC77A 		vcmpe.f32	s15, s14
- 507 009a F1EE10FA 		vmrs	APSR_nzcv, FPSCR
- 508 009e 01D5     		bpl	.L12
- 109:Robot/RoboTask/ins/INS_task.c **** 		}
- 509              		.loc 1 109 4 is_stmt 1 view .LVU190
- 109:Robot/RoboTask/ins/INS_task.c **** 		}
- 510              		.loc 1 109 24 is_stmt 0 view .LVU191
- 511 00a0 0022     		movs	r2, #0
- 512 00a2 9A63     		str	r2, [r3, #56]	@ float
- 513              	.L12:
- 111:Robot/RoboTask/ins/INS_task.c **** 		{
- 514              		.loc 1 111 3 is_stmt 1 view .LVU192
- 111:Robot/RoboTask/ins/INS_task.c **** 		{
- 515              		.loc 1 111 29 is_stmt 0 view .LVU193
- 516 00a4 724B     		ldr	r3, .L33
- 517 00a6 D3ED0F7A 		vldr.32	s15, [r3, #60]
-ARM GAS  D:\temp\TMP\ccitzH6G.s 			page 15
+ 648 0104 76EEE56A 		vsub.f32	s13, s13, s11
+ 649              		.loc 1 237 51 view .LVU217
+ 650 0108 26EE066A 		vmul.f32	s12, s12, s12
+ 651              		.loc 1 237 44 view .LVU218
+ 652 010c 76EEC66A 		vsub.f32	s13, s13, s12
+ 653              		.loc 1 237 66 view .LVU219
+ 654 0110 90ED027A 		vldr.32	s14, [r0, #8]
+ 655              		.loc 1 237 59 view .LVU220
+ 656 0114 66EE876A 		vmul.f32	s13, s13, s14
+ 236:Robot/RoboTask/ins/INS_task.c ****                        (q[2] * q[3] - q[0] * q[1]) * vecEF[1] +
+ 657              		.loc 1 236 63 view .LVU221
+ 658 0118 77EEA67A 		vadd.f32	s15, s15, s13
+ 235:Robot/RoboTask/ins/INS_task.c ****                        (q[2] * q[3] - q[0] * q[1]) * vecEF[1] +
+ 659              		.loc 1 235 21 view .LVU222
+ 660 011c 77EEA77A 		vadd.f32	s15, s15, s15
+ 235:Robot/RoboTask/ins/INS_task.c ****                        (q[2] * q[3] - q[0] * q[1]) * vecEF[1] +
+ 661              		.loc 1 235 14 view .LVU223
+ 662 0120 C1ED027A 		vstr.32	s15, [r1, #8]
+ 238:Robot/RoboTask/ins/INS_task.c **** }
+ 663              		.loc 1 238 1 view .LVU224
+ 664 0124 7047     		bx	lr
+ 665              		.cfi_endproc
+ 666              	.LFE199:
+ 668              		.section	.text.INS_task,"ax",%progbits
+ 669              		.align	1
+ 670              		.global	INS_task
+ 671              		.syntax unified
+ 672              		.thumb
+ 673              		.thumb_func
+ 675              	INS_task:
+ 676              	.LFB197:
+ 104:Robot/RoboTask/ins/INS_task.c **** 	 INS_Init();
+ 677              		.loc 1 104 1 is_stmt 1 view -0
+ 678              		.cfi_startproc
+ 679              		@ args = 0, pretend = 0, frame = 16
+ 680              		@ frame_needed = 0, uses_anonymous_args = 0
+ 681 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 682              	.LCFI10:
+ 683              		.cfi_def_cfa_offset 20
+ 684              		.cfi_offset 4, -20
+ 685              		.cfi_offset 5, -16
+ 686              		.cfi_offset 6, -12
+ 687              		.cfi_offset 7, -8
+ 688              		.cfi_offset 14, -4
+ 689 0002 85B0     		sub	sp, sp, #20
+ 690              	.LCFI11:
+ 691              		.cfi_def_cfa_offset 40
+ 105:Robot/RoboTask/ins/INS_task.c **** 	 
+ 692              		.loc 1 105 3 view .LVU226
+ 693 0004 FFF7FEFF 		bl	INS_Init
+ 694              	.LVL31:
+ 695 0008 A1E0     		b	.L30
+ 696              	.LVL32:
+ 697              	.L20:
+ 698              	.LBB5:
+ 699              	.LBB6:
+ 151:Robot/RoboTask/ins/INS_task.c **** 															+ INS.MotionAccel_b[i] * INS.AccelLPF / (INS.AccelLPF + ins_dt); 
+ARM GAS  D:\temp\TMP\cc65bfxy.s 			page 18
 
 
- 111:Robot/RoboTask/ins/INS_task.c **** 		{
- 518              		.loc 1 111 6 view .LVU194
- 519 00aa F0EEE77A 		vabs.f32	s15, s15
- 111:Robot/RoboTask/ins/INS_task.c **** 		{
- 520              		.loc 1 111 5 view .LVU195
- 521 00ae 9FED737A 		vldr.32	s14, .L33+12
- 522 00b2 F4EEC77A 		vcmpe.f32	s15, s14
- 523 00b6 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
- 524 00ba 01D5     		bpl	.L14
- 113:Robot/RoboTask/ins/INS_task.c **** 		}
- 525              		.loc 1 113 4 is_stmt 1 view .LVU196
- 113:Robot/RoboTask/ins/INS_task.c **** 		}
- 526              		.loc 1 113 24 is_stmt 0 view .LVU197
- 527 00bc 0022     		movs	r2, #0
- 528 00be DA63     		str	r2, [r3, #60]	@ float
- 529              	.L14:
- 116:Robot/RoboTask/ins/INS_task.c **** 		{
- 530              		.loc 1 116 3 is_stmt 1 view .LVU198
- 116:Robot/RoboTask/ins/INS_task.c **** 		{
- 531              		.loc 1 116 14 is_stmt 0 view .LVU199
- 532 00c0 6F4B     		ldr	r3, .L33+16
- 533 00c2 D3ED007A 		vldr.32	s15, [r3]
- 116:Robot/RoboTask/ins/INS_task.c **** 		{
- 534              		.loc 1 116 5 view .LVU200
- 535 00c6 9FED6F7A 		vldr.32	s14, .L33+20
- 536 00ca F4EEC77A 		vcmpe.f32	s15, s14
- 537 00ce F1EE10FA 		vmrs	APSR_nzcv, FPSCR
- 538 00d2 40F3C480 		ble	.L30
- 118:Robot/RoboTask/ins/INS_task.c **** 		  	INS.x_n=INS.x_n+INS.v_n*0.001f;
- 539              		.loc 1 118 4 is_stmt 1 view .LVU201
- 118:Robot/RoboTask/ins/INS_task.c **** 		  	INS.x_n=INS.x_n+INS.v_n*0.001f;
- 540              		.loc 1 118 15 is_stmt 0 view .LVU202
- 541 00d6 664B     		ldr	r3, .L33
- 542 00d8 D3ED227A 		vldr.32	s15, [r3, #136]
- 118:Robot/RoboTask/ins/INS_task.c **** 		  	INS.x_n=INS.x_n+INS.v_n*0.001f;
- 543              		.loc 1 118 37 view .LVU203
- 544 00dc 93ED0E7A 		vldr.32	s14, [r3, #56]
- 118:Robot/RoboTask/ins/INS_task.c **** 		  	INS.x_n=INS.x_n+INS.v_n*0.001f;
- 545              		.loc 1 118 40 view .LVU204
- 546 00e0 DFED696A 		vldr.32	s13, .L33+24
- 547 00e4 27EE267A 		vmul.f32	s14, s14, s13
- 118:Robot/RoboTask/ins/INS_task.c **** 		  	INS.x_n=INS.x_n+INS.v_n*0.001f;
- 548              		.loc 1 118 19 view .LVU205
- 549 00e8 77EE877A 		vadd.f32	s15, s15, s14
- 118:Robot/RoboTask/ins/INS_task.c **** 		  	INS.x_n=INS.x_n+INS.v_n*0.001f;
- 550              		.loc 1 118 11 view .LVU206
- 551 00ec C3ED227A 		vstr.32	s15, [r3, #136]
- 119:Robot/RoboTask/ins/INS_task.c **** 			INS.ins_flag=1;//四元数基本收敛，加速度也基本收敛，可以开始底盘任务
- 552              		.loc 1 119 6 is_stmt 1 view .LVU207
- 119:Robot/RoboTask/ins/INS_task.c **** 			INS.ins_flag=1;//四元数基本收敛，加速度也基本收敛，可以开始底盘任务
- 553              		.loc 1 119 17 is_stmt 0 view .LVU208
- 554 00f0 93ED237A 		vldr.32	s14, [r3, #140]
- 119:Robot/RoboTask/ins/INS_task.c **** 			INS.ins_flag=1;//四元数基本收敛，加速度也基本收敛，可以开始底盘任务
- 555              		.loc 1 119 29 view .LVU209
- 556 00f4 67EEA67A 		vmul.f32	s15, s15, s13
- 119:Robot/RoboTask/ins/INS_task.c **** 			INS.ins_flag=1;//四元数基本收敛，加速度也基本收敛，可以开始底盘任务
- 557              		.loc 1 119 21 view .LVU210
-ARM GAS  D:\temp\TMP\ccitzH6G.s 			page 16
+ 700              		.loc 1 151 4 discriminator 3 view .LVU227
+ 151:Robot/RoboTask/ins/INS_task.c **** 															+ INS.MotionAccel_b[i] * INS.AccelLPF / (INS.AccelLPF + ins_dt); 
+ 701              		.loc 1 151 37 is_stmt 0 discriminator 3 view .LVU228
+ 702 000a 864A     		ldr	r2, .L37
+ 703 000c 991D     		adds	r1, r3, #6
+ 704 000e 02EB8101 		add	r1, r2, r1, lsl #2
+ 705 0012 91ED017A 		vldr.32	s14, [r1, #4]
+ 151:Robot/RoboTask/ins/INS_task.c **** 															+ INS.MotionAccel_b[i] * INS.AccelLPF / (INS.AccelLPF + ins_dt); 
+ 706              		.loc 1 151 52 discriminator 3 view .LVU229
+ 707 0016 04A9     		add	r1, sp, #16
+ 708 0018 01EB8301 		add	r1, r1, r3, lsl #2
+ 709 001c 51ED037A 		vldr.32	s15, [r1, #-12]
+ 151:Robot/RoboTask/ins/INS_task.c **** 															+ INS.MotionAccel_b[i] * INS.AccelLPF / (INS.AccelLPF + ins_dt); 
+ 710              		.loc 1 151 41 discriminator 3 view .LVU230
+ 711 0020 37EE677A 		vsub.f32	s14, s14, s15
+ 151:Robot/RoboTask/ins/INS_task.c **** 															+ INS.MotionAccel_b[i] * INS.AccelLPF / (INS.AccelLPF + ins_dt); 
+ 712              		.loc 1 151 57 discriminator 3 view .LVU231
+ 713 0024 8049     		ldr	r1, .L37+4
+ 714 0026 D1ED007A 		vldr.32	s15, [r1]
+ 715 002a 27EE277A 		vmul.f32	s14, s14, s15
+ 151:Robot/RoboTask/ins/INS_task.c **** 															+ INS.MotionAccel_b[i] * INS.AccelLPF / (INS.AccelLPF + ins_dt); 
+ 716              		.loc 1 151 72 discriminator 3 view .LVU232
+ 717 002e D2ED106A 		vldr.32	s13, [r2, #64]
+ 151:Robot/RoboTask/ins/INS_task.c **** 															+ INS.MotionAccel_b[i] * INS.AccelLPF / (INS.AccelLPF + ins_dt); 
+ 718              		.loc 1 151 82 discriminator 3 view .LVU233
+ 719 0032 77EEA67A 		vadd.f32	s15, s15, s13
+ 151:Robot/RoboTask/ins/INS_task.c **** 															+ INS.MotionAccel_b[i] * INS.AccelLPF / (INS.AccelLPF + ins_dt); 
+ 720              		.loc 1 151 66 discriminator 3 view .LVU234
+ 721 0036 87EE276A 		vdiv.f32	s12, s14, s15
+ 152:Robot/RoboTask/ins/INS_task.c **** 	//			INS.MotionAccel_b[i] = (INS.Accel[i] ) * dt / (INS.AccelLPF + dt) 
+ 722              		.loc 1 152 35 discriminator 3 view .LVU235
+ 723 003a 03F10A01 		add	r1, r3, #10
+ 724 003e 02EB8102 		add	r2, r2, r1, lsl #2
+ 725 0042 92ED007A 		vldr.32	s14, [r2]
+ 152:Robot/RoboTask/ins/INS_task.c **** 	//			INS.MotionAccel_b[i] = (INS.Accel[i] ) * dt / (INS.AccelLPF + dt) 
+ 726              		.loc 1 152 39 discriminator 3 view .LVU236
+ 727 0046 66EE876A 		vmul.f32	s13, s13, s14
+ 152:Robot/RoboTask/ins/INS_task.c **** 	//			INS.MotionAccel_b[i] = (INS.Accel[i] ) * dt / (INS.AccelLPF + dt) 
+ 728              		.loc 1 152 54 discriminator 3 view .LVU237
+ 729 004a 86EEA77A 		vdiv.f32	s14, s13, s15
+ 152:Robot/RoboTask/ins/INS_task.c **** 	//			INS.MotionAccel_b[i] = (INS.Accel[i] ) * dt / (INS.AccelLPF + dt) 
+ 730              		.loc 1 152 16 discriminator 3 view .LVU238
+ 731 004e 76EE077A 		vadd.f32	s15, s12, s14
+ 151:Robot/RoboTask/ins/INS_task.c **** 															+ INS.MotionAccel_b[i] * INS.AccelLPF / (INS.AccelLPF + ins_dt); 
+ 732              		.loc 1 151 25 discriminator 3 view .LVU239
+ 733 0052 C2ED007A 		vstr.32	s15, [r2]
+ 149:Robot/RoboTask/ins/INS_task.c **** 		{
+ 734              		.loc 1 149 30 is_stmt 1 discriminator 3 view .LVU240
+ 149:Robot/RoboTask/ins/INS_task.c **** 		{
+ 735              		.loc 1 149 31 is_stmt 0 discriminator 3 view .LVU241
+ 736 0056 0133     		adds	r3, r3, #1
+ 737              	.LVL33:
+ 149:Robot/RoboTask/ins/INS_task.c **** 		{
+ 738              		.loc 1 149 31 discriminator 3 view .LVU242
+ 739 0058 DBB2     		uxtb	r3, r3
+ 740              	.LVL34:
+ 741              	.L19:
+ARM GAS  D:\temp\TMP\cc65bfxy.s 			page 19
 
 
- 558 00f8 77EE277A 		vadd.f32	s15, s14, s15
- 119:Robot/RoboTask/ins/INS_task.c **** 			INS.ins_flag=1;//四元数基本收敛，加速度也基本收敛，可以开始底盘任务
- 559              		.loc 1 119 13 view .LVU211
- 560 00fc C3ED237A 		vstr.32	s15, [r3, #140]
- 120:Robot/RoboTask/ins/INS_task.c **** 			// 获取最终数据
- 561              		.loc 1 120 4 is_stmt 1 view .LVU212
- 120:Robot/RoboTask/ins/INS_task.c **** 			// 获取最终数据
- 562              		.loc 1 120 16 is_stmt 0 view .LVU213
- 563 0100 0122     		movs	r2, #1
- 564 0102 83F89020 		strb	r2, [r3, #144]
- 122:Robot/RoboTask/ins/INS_task.c **** 			INS.Roll=mahony.pitch*180.0f/PI;
- 565              		.loc 1 122 4 is_stmt 1 view .LVU214
- 122:Robot/RoboTask/ins/INS_task.c **** 			INS.Roll=mahony.pitch*180.0f/PI;
- 566              		.loc 1 122 20 is_stmt 0 view .LVU215
- 567 0106 614A     		ldr	r2, .L33+28
- 568 0108 D2ED1A6A 		vldr.32	s13, [r2, #104]
- 122:Robot/RoboTask/ins/INS_task.c **** 			INS.Roll=mahony.pitch*180.0f/PI;
- 569              		.loc 1 122 25 view .LVU216
- 570 010c 9FED607A 		vldr.32	s14, .L33+32
- 571 0110 66EE876A 		vmul.f32	s13, s13, s14
- 122:Robot/RoboTask/ins/INS_task.c **** 			INS.Roll=mahony.pitch*180.0f/PI;
- 572              		.loc 1 122 32 view .LVU217
- 573 0114 DFED5F7A 		vldr.32	s15, .L33+36
- 574 0118 86EEA76A 		vdiv.f32	s12, s13, s15
- 122:Robot/RoboTask/ins/INS_task.c **** 			INS.Roll=mahony.pitch*180.0f/PI;
- 575              		.loc 1 122 13 view .LVU218
- 576 011c 83ED1D6A 		vstr.32	s12, [r3, #116]
- 123:Robot/RoboTask/ins/INS_task.c **** 			INS.Yaw=mahony.yaw*180.0f/PI;
- 577              		.loc 1 123 4 is_stmt 1 view .LVU219
- 123:Robot/RoboTask/ins/INS_task.c **** 			INS.Yaw=mahony.yaw*180.0f/PI;
- 578              		.loc 1 123 19 is_stmt 0 view .LVU220
- 579 0120 D2ED196A 		vldr.32	s13, [r2, #100]
- 123:Robot/RoboTask/ins/INS_task.c **** 			INS.Yaw=mahony.yaw*180.0f/PI;
- 580              		.loc 1 123 25 view .LVU221
- 581 0124 66EE876A 		vmul.f32	s13, s13, s14
- 123:Robot/RoboTask/ins/INS_task.c **** 			INS.Yaw=mahony.yaw*180.0f/PI;
- 582              		.loc 1 123 32 view .LVU222
- 583 0128 86EEA76A 		vdiv.f32	s12, s13, s15
- 123:Robot/RoboTask/ins/INS_task.c **** 			INS.Yaw=mahony.yaw*180.0f/PI;
- 584              		.loc 1 123 12 view .LVU223
- 585 012c 83ED1C6A 		vstr.32	s12, [r3, #112]
- 124:Robot/RoboTask/ins/INS_task.c **** 		
- 586              		.loc 1 124 4 is_stmt 1 view .LVU224
- 124:Robot/RoboTask/ins/INS_task.c **** 		
- 587              		.loc 1 124 18 is_stmt 0 view .LVU225
- 588 0130 D2ED1B6A 		vldr.32	s13, [r2, #108]
- 124:Robot/RoboTask/ins/INS_task.c **** 		
- 589              		.loc 1 124 22 view .LVU226
- 590 0134 66EE876A 		vmul.f32	s13, s13, s14
- 124:Robot/RoboTask/ins/INS_task.c **** 		
- 591              		.loc 1 124 29 view .LVU227
- 592 0138 86EEA77A 		vdiv.f32	s14, s13, s15
- 124:Robot/RoboTask/ins/INS_task.c **** 		
- 593              		.loc 1 124 11 view .LVU228
- 594 013c 83ED1E7A 		vstr.32	s14, [r3, #120]
- 128:Robot/RoboTask/ins/INS_task.c **** 			{
- 595              		.loc 1 128 4 is_stmt 1 view .LVU229
-ARM GAS  D:\temp\TMP\ccitzH6G.s 			page 17
+ 149:Robot/RoboTask/ins/INS_task.c **** 		{
+ 742              		.loc 1 149 23 is_stmt 1 discriminator 1 view .LVU243
+ 149:Robot/RoboTask/ins/INS_task.c **** 		{
+ 743              		.loc 1 149 3 is_stmt 0 discriminator 1 view .LVU244
+ 744 005a 022B     		cmp	r3, #2
+ 745 005c D5D9     		bls	.L20
+ 746              	.LBE6:
+ 156:Robot/RoboTask/ins/INS_task.c **** 		
+ 747              		.loc 1 156 3 is_stmt 1 view .LVU245
+ 748 005e 714C     		ldr	r4, .L37
+ 749 0060 2246     		mov	r2, r4
+ 750 0062 04F13401 		add	r1, r4, #52
+ 751 0066 04F12800 		add	r0, r4, #40
+ 752 006a FFF7FEFF 		bl	BodyFrameToEarthFrame
+ 753              	.LVL35:
+ 159:Robot/RoboTask/ins/INS_task.c **** 		{
+ 754              		.loc 1 159 3 view .LVU246
+ 159:Robot/RoboTask/ins/INS_task.c **** 		{
+ 755              		.loc 1 159 29 is_stmt 0 view .LVU247
+ 756 006e D4ED0D7A 		vldr.32	s15, [r4, #52]
+ 159:Robot/RoboTask/ins/INS_task.c **** 		{
+ 757              		.loc 1 159 6 view .LVU248
+ 758 0072 F0EEE77A 		vabs.f32	s15, s15
+ 159:Robot/RoboTask/ins/INS_task.c **** 		{
+ 759              		.loc 1 159 5 view .LVU249
+ 760 0076 9FED6D7A 		vldr.32	s14, .L37+8
+ 761 007a F4EEC77A 		vcmpe.f32	s15, s14
+ 762 007e F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 763 0082 01D5     		bpl	.L21
+ 161:Robot/RoboTask/ins/INS_task.c **** 		}
+ 764              		.loc 1 161 4 is_stmt 1 view .LVU250
+ 161:Robot/RoboTask/ins/INS_task.c **** 		}
+ 765              		.loc 1 161 24 is_stmt 0 view .LVU251
+ 766 0084 0022     		movs	r2, #0
+ 767 0086 6263     		str	r2, [r4, #52]	@ float
+ 768              	.L21:
+ 163:Robot/RoboTask/ins/INS_task.c **** 		{
+ 769              		.loc 1 163 3 is_stmt 1 view .LVU252
+ 163:Robot/RoboTask/ins/INS_task.c **** 		{
+ 770              		.loc 1 163 29 is_stmt 0 view .LVU253
+ 771 0088 664B     		ldr	r3, .L37
+ 772 008a D3ED0E7A 		vldr.32	s15, [r3, #56]
+ 163:Robot/RoboTask/ins/INS_task.c **** 		{
+ 773              		.loc 1 163 6 view .LVU254
+ 774 008e F0EEE77A 		vabs.f32	s15, s15
+ 163:Robot/RoboTask/ins/INS_task.c **** 		{
+ 775              		.loc 1 163 5 view .LVU255
+ 776 0092 9FED667A 		vldr.32	s14, .L37+8
+ 777 0096 F4EEC77A 		vcmpe.f32	s15, s14
+ 778 009a F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 779 009e 01D5     		bpl	.L23
+ 165:Robot/RoboTask/ins/INS_task.c **** 		}
+ 780              		.loc 1 165 4 is_stmt 1 view .LVU256
+ 165:Robot/RoboTask/ins/INS_task.c **** 		}
+ 781              		.loc 1 165 24 is_stmt 0 view .LVU257
+ 782 00a0 0022     		movs	r2, #0
+ 783 00a2 9A63     		str	r2, [r3, #56]	@ float
+ARM GAS  D:\temp\TMP\cc65bfxy.s 			page 20
 
 
- 128:Robot/RoboTask/ins/INS_task.c **** 			{
- 596              		.loc 1 128 21 is_stmt 0 view .LVU230
- 597 0140 D3ED207A 		vldr.32	s15, [r3, #128]
- 128:Robot/RoboTask/ins/INS_task.c **** 			{
- 598              		.loc 1 128 16 view .LVU231
- 599 0144 77EE677A 		vsub.f32	s15, s14, s15
- 128:Robot/RoboTask/ins/INS_task.c **** 			{
- 600              		.loc 1 128 7 view .LVU232
- 601 0148 DFED536A 		vldr.32	s13, .L33+40
- 602 014c F4EEE67A 		vcmpe.f32	s15, s13
- 603 0150 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
- 604 0154 72DD     		ble	.L31
- 130:Robot/RoboTask/ins/INS_task.c **** 			}
- 605              		.loc 1 130 6 is_stmt 1 view .LVU233
- 130:Robot/RoboTask/ins/INS_task.c **** 			}
- 606              		.loc 1 130 9 is_stmt 0 view .LVU234
- 607 0156 D3ED217A 		vldr.32	s15, [r3, #132]
- 130:Robot/RoboTask/ins/INS_task.c **** 			}
- 608              		.loc 1 130 23 view .LVU235
- 609 015a F7EE006A 		vmov.f32	s13, #1.0e+0
- 610 015e 77EEE67A 		vsub.f32	s15, s15, s13
- 611 0162 C3ED217A 		vstr.32	s15, [r3, #132]
- 612              	.L20:
- 136:Robot/RoboTask/ins/INS_task.c **** 			INS.YawAngleLast = INS.Yaw*180.0f/PI;
- 613              		.loc 1 136 4 is_stmt 1 view .LVU236
- 136:Robot/RoboTask/ins/INS_task.c **** 			INS.YawAngleLast = INS.Yaw*180.0f/PI;
- 614              		.loc 1 136 36 is_stmt 0 view .LVU237
- 615 0166 424B     		ldr	r3, .L33
- 616 0168 D3ED217A 		vldr.32	s15, [r3, #132]
- 136:Robot/RoboTask/ins/INS_task.c **** 			INS.YawAngleLast = INS.Yaw*180.0f/PI;
- 617              		.loc 1 136 31 view .LVU238
- 618 016c DFED4B6A 		vldr.32	s13, .L33+44
- 619 0170 67EEA67A 		vmul.f32	s15, s15, s13
- 136:Robot/RoboTask/ins/INS_task.c **** 			INS.YawAngleLast = INS.Yaw*180.0f/PI;
- 620              		.loc 1 136 51 view .LVU239
- 621 0174 77EE277A 		vadd.f32	s15, s14, s15
- 136:Robot/RoboTask/ins/INS_task.c **** 			INS.YawAngleLast = INS.Yaw*180.0f/PI;
- 622              		.loc 1 136 62 view .LVU240
- 623 0178 9FED456A 		vldr.32	s12, .L33+32
- 624 017c 67EE867A 		vmul.f32	s15, s15, s12
- 136:Robot/RoboTask/ins/INS_task.c **** 			INS.YawAngleLast = INS.Yaw*180.0f/PI;
- 625              		.loc 1 136 71 view .LVU241
- 626 0180 DFED446A 		vldr.32	s13, .L33+36
- 627 0184 C7EEA65A 		vdiv.f32	s11, s15, s13
- 136:Robot/RoboTask/ins/INS_task.c **** 			INS.YawAngleLast = INS.Yaw*180.0f/PI;
- 628              		.loc 1 136 22 view .LVU242
- 629 0188 C3ED1F5A 		vstr.32	s11, [r3, #124]
- 137:Robot/RoboTask/ins/INS_task.c **** 		}
- 630              		.loc 1 137 4 is_stmt 1 view .LVU243
- 137:Robot/RoboTask/ins/INS_task.c **** 		}
- 631              		.loc 1 137 30 is_stmt 0 view .LVU244
- 632 018c 27EE067A 		vmul.f32	s14, s14, s12
- 137:Robot/RoboTask/ins/INS_task.c **** 		}
- 633              		.loc 1 137 37 view .LVU245
- 634 0190 C7EE267A 		vdiv.f32	s15, s14, s13
- 137:Robot/RoboTask/ins/INS_task.c **** 		}
- 635              		.loc 1 137 21 view .LVU246
-ARM GAS  D:\temp\TMP\ccitzH6G.s 			page 18
+ 784              	.L23:
+ 167:Robot/RoboTask/ins/INS_task.c **** 		{
+ 785              		.loc 1 167 3 is_stmt 1 view .LVU258
+ 167:Robot/RoboTask/ins/INS_task.c **** 		{
+ 786              		.loc 1 167 29 is_stmt 0 view .LVU259
+ 787 00a4 5F4B     		ldr	r3, .L37
+ 788 00a6 D3ED0F7A 		vldr.32	s15, [r3, #60]
+ 167:Robot/RoboTask/ins/INS_task.c **** 		{
+ 789              		.loc 1 167 6 view .LVU260
+ 790 00aa F0EEE77A 		vabs.f32	s15, s15
+ 167:Robot/RoboTask/ins/INS_task.c **** 		{
+ 791              		.loc 1 167 5 view .LVU261
+ 792 00ae 9FED607A 		vldr.32	s14, .L37+12
+ 793 00b2 F4EEC77A 		vcmpe.f32	s15, s14
+ 794 00b6 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 795 00ba 01D5     		bpl	.L25
+ 169:Robot/RoboTask/ins/INS_task.c **** 		}
+ 796              		.loc 1 169 4 is_stmt 1 view .LVU262
+ 169:Robot/RoboTask/ins/INS_task.c **** 		}
+ 797              		.loc 1 169 24 is_stmt 0 view .LVU263
+ 798 00bc 0022     		movs	r2, #0
+ 799 00be DA63     		str	r2, [r3, #60]	@ float
+ 800              	.L25:
+ 172:Robot/RoboTask/ins/INS_task.c **** 		{
+ 801              		.loc 1 172 3 is_stmt 1 view .LVU264
+ 172:Robot/RoboTask/ins/INS_task.c **** 		{
+ 802              		.loc 1 172 14 is_stmt 0 view .LVU265
+ 803 00c0 5C4B     		ldr	r3, .L37+16
+ 804 00c2 D3ED007A 		vldr.32	s15, [r3]
+ 172:Robot/RoboTask/ins/INS_task.c **** 		{
+ 805              		.loc 1 172 5 view .LVU266
+ 806 00c6 9FED5C7A 		vldr.32	s14, .L37+20
+ 807 00ca F4EEC77A 		vcmpe.f32	s15, s14
+ 808 00ce F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 809 00d2 40F39F80 		ble	.L35
+ 174:Robot/RoboTask/ins/INS_task.c **** 		  	INS.x_n=INS.x_n+INS.v_n*0.001f;
+ 810              		.loc 1 174 4 is_stmt 1 view .LVU267
+ 174:Robot/RoboTask/ins/INS_task.c **** 		  	INS.x_n=INS.x_n+INS.v_n*0.001f;
+ 811              		.loc 1 174 15 is_stmt 0 view .LVU268
+ 812 00d6 534B     		ldr	r3, .L37
+ 813 00d8 D3ED207A 		vldr.32	s15, [r3, #128]
+ 174:Robot/RoboTask/ins/INS_task.c **** 		  	INS.x_n=INS.x_n+INS.v_n*0.001f;
+ 814              		.loc 1 174 37 view .LVU269
+ 815 00dc 93ED0E7A 		vldr.32	s14, [r3, #56]
+ 174:Robot/RoboTask/ins/INS_task.c **** 		  	INS.x_n=INS.x_n+INS.v_n*0.001f;
+ 816              		.loc 1 174 40 view .LVU270
+ 817 00e0 DFED566A 		vldr.32	s13, .L37+24
+ 818 00e4 27EE267A 		vmul.f32	s14, s14, s13
+ 174:Robot/RoboTask/ins/INS_task.c **** 		  	INS.x_n=INS.x_n+INS.v_n*0.001f;
+ 819              		.loc 1 174 19 view .LVU271
+ 820 00e8 77EE877A 		vadd.f32	s15, s15, s14
+ 174:Robot/RoboTask/ins/INS_task.c **** 		  	INS.x_n=INS.x_n+INS.v_n*0.001f;
+ 821              		.loc 1 174 11 view .LVU272
+ 822 00ec C3ED207A 		vstr.32	s15, [r3, #128]
+ 175:Robot/RoboTask/ins/INS_task.c **** 			INS.ins_flag=1;//四元数基本收敛，加速度也基本收敛，可以开始底盘任务
+ 823              		.loc 1 175 6 is_stmt 1 view .LVU273
+ 175:Robot/RoboTask/ins/INS_task.c **** 			INS.ins_flag=1;//四元数基本收敛，加速度也基本收敛，可以开始底盘任务
+ARM GAS  D:\temp\TMP\cc65bfxy.s 			page 21
 
 
- 636 0194 C3ED207A 		vstr.32	s15, [r3, #128]
- 637              	.L22:
- 144:Robot/RoboTask/ins/INS_task.c **** 	}
- 638              		.loc 1 144 3 is_stmt 1 view .LVU247
- 639 0198 0120     		movs	r0, #1
- 640 019a FFF7FEFF 		bl	osDelay
- 641              	.LVL8:
- 642              	.LBE2:
-  53:Robot/RoboTask/ins/INS_task.c **** 	 {  
- 643              		.loc 1 53 8 view .LVU248
- 644              	.L23:
-  53:Robot/RoboTask/ins/INS_task.c **** 	 {  
- 645              		.loc 1 53 3 view .LVU249
- 646              	.LBB5:
-  55:Robot/RoboTask/ins/INS_task.c ****     
- 647              		.loc 1 55 3 view .LVU250
-  55:Robot/RoboTask/ins/INS_task.c ****     
- 648              		.loc 1 55 12 is_stmt 0 view .LVU251
- 649 019e 4048     		ldr	r0, .L33+48
- 650 01a0 FFF7FEFF 		bl	DWT_GetDeltaT
- 651              	.LVL9:
-  55:Robot/RoboTask/ins/INS_task.c ****     
- 652              		.loc 1 55 10 view .LVU252
- 653 01a4 334B     		ldr	r3, .L33+4
- 654 01a6 83ED000A 		vstr.32	s0, [r3]
-  57:Robot/RoboTask/ins/INS_task.c **** 
- 655              		.loc 1 57 3 is_stmt 1 view .LVU253
-  57:Robot/RoboTask/ins/INS_task.c **** 
- 656              		.loc 1 57 13 is_stmt 0 view .LVU254
- 657 01aa 384D     		ldr	r5, .L33+28
- 658 01ac 85ED020A 		vstr.32	s0, [r5, #8]
-  59:Robot/RoboTask/ins/INS_task.c **** 
- 659              		.loc 1 59 3 is_stmt 1 view .LVU255
- 660 01b0 3C4E     		ldr	r6, .L33+52
- 661 01b2 3046     		mov	r0, r6
- 662 01b4 FFF7FEFF 		bl	BMI088_Read
- 663              	.LVL10:
-  61:Robot/RoboTask/ins/INS_task.c **** 		INS.Accel[Y_AXIS] = BMI088.Accel[Y_AXIS];
- 664              		.loc 1 61 3 view .LVU256
-  61:Robot/RoboTask/ins/INS_task.c **** 		INS.Accel[Y_AXIS] = BMI088.Accel[Y_AXIS];
- 665              		.loc 1 61 35 is_stmt 0 view .LVU257
- 666 01b8 D6ED001A 		vldr.32	s3, [r6]
-  61:Robot/RoboTask/ins/INS_task.c **** 		INS.Accel[Y_AXIS] = BMI088.Accel[Y_AXIS];
- 667              		.loc 1 61 21 view .LVU258
- 668 01bc 2C4C     		ldr	r4, .L33
- 669 01be C4ED071A 		vstr.32	s3, [r4, #28]
-  62:Robot/RoboTask/ins/INS_task.c **** 		INS.Accel[Z_AXIS] = BMI088.Accel[Z_AXIS];
- 670              		.loc 1 62 3 is_stmt 1 view .LVU259
-  62:Robot/RoboTask/ins/INS_task.c **** 		INS.Accel[Z_AXIS] = BMI088.Accel[Z_AXIS];
- 671              		.loc 1 62 35 is_stmt 0 view .LVU260
- 672 01c2 96ED012A 		vldr.32	s4, [r6, #4]
-  62:Robot/RoboTask/ins/INS_task.c **** 		INS.Accel[Z_AXIS] = BMI088.Accel[Z_AXIS];
- 673              		.loc 1 62 21 view .LVU261
- 674 01c6 84ED082A 		vstr.32	s4, [r4, #32]
-  63:Robot/RoboTask/ins/INS_task.c **** 
- 675              		.loc 1 63 3 is_stmt 1 view .LVU262
-  63:Robot/RoboTask/ins/INS_task.c **** 
-ARM GAS  D:\temp\TMP\ccitzH6G.s 			page 19
+ 824              		.loc 1 175 17 is_stmt 0 view .LVU274
+ 825 00f0 93ED217A 		vldr.32	s14, [r3, #132]
+ 175:Robot/RoboTask/ins/INS_task.c **** 			INS.ins_flag=1;//四元数基本收敛，加速度也基本收敛，可以开始底盘任务
+ 826              		.loc 1 175 29 view .LVU275
+ 827 00f4 67EEA67A 		vmul.f32	s15, s15, s13
+ 175:Robot/RoboTask/ins/INS_task.c **** 			INS.ins_flag=1;//四元数基本收敛，加速度也基本收敛，可以开始底盘任务
+ 828              		.loc 1 175 21 view .LVU276
+ 829 00f8 77EE277A 		vadd.f32	s15, s14, s15
+ 175:Robot/RoboTask/ins/INS_task.c **** 			INS.ins_flag=1;//四元数基本收敛，加速度也基本收敛，可以开始底盘任务
+ 830              		.loc 1 175 13 view .LVU277
+ 831 00fc C3ED217A 		vstr.32	s15, [r3, #132]
+ 176:Robot/RoboTask/ins/INS_task.c **** 			// 获取最终数据
+ 832              		.loc 1 176 4 is_stmt 1 view .LVU278
+ 176:Robot/RoboTask/ins/INS_task.c **** 			// 获取最终数据
+ 833              		.loc 1 176 16 is_stmt 0 view .LVU279
+ 834 0100 0122     		movs	r2, #1
+ 835 0102 83F88820 		strb	r2, [r3, #136]
+ 178:Robot/RoboTask/ins/INS_task.c **** 			INS.Roll=mahony.pitch*180.0f/PI;
+ 836              		.loc 1 178 4 is_stmt 1 view .LVU280
+ 178:Robot/RoboTask/ins/INS_task.c **** 			INS.Roll=mahony.pitch*180.0f/PI;
+ 837              		.loc 1 178 20 is_stmt 0 view .LVU281
+ 838 0106 4E4A     		ldr	r2, .L37+28
+ 839 0108 92ED1A7A 		vldr.32	s14, [r2, #104]
+ 178:Robot/RoboTask/ins/INS_task.c **** 			INS.Roll=mahony.pitch*180.0f/PI;
+ 840              		.loc 1 178 25 view .LVU282
+ 841 010c DFED4D6A 		vldr.32	s13, .L37+32
+ 842 0110 27EE267A 		vmul.f32	s14, s14, s13
+ 178:Robot/RoboTask/ins/INS_task.c **** 			INS.Roll=mahony.pitch*180.0f/PI;
+ 843              		.loc 1 178 32 view .LVU283
+ 844 0114 DFED4C7A 		vldr.32	s15, .L37+36
+ 845 0118 87EE276A 		vdiv.f32	s12, s14, s15
+ 178:Robot/RoboTask/ins/INS_task.c **** 			INS.Roll=mahony.pitch*180.0f/PI;
+ 846              		.loc 1 178 13 view .LVU284
+ 847 011c 83ED1D6A 		vstr.32	s12, [r3, #116]
+ 179:Robot/RoboTask/ins/INS_task.c **** 			INS.Yaw=mahony.yaw*180.0f/PI;
+ 848              		.loc 1 179 4 is_stmt 1 view .LVU285
+ 179:Robot/RoboTask/ins/INS_task.c **** 			INS.Yaw=mahony.yaw*180.0f/PI;
+ 849              		.loc 1 179 19 is_stmt 0 view .LVU286
+ 850 0120 92ED197A 		vldr.32	s14, [r2, #100]
+ 179:Robot/RoboTask/ins/INS_task.c **** 			INS.Yaw=mahony.yaw*180.0f/PI;
+ 851              		.loc 1 179 25 view .LVU287
+ 852 0124 27EE267A 		vmul.f32	s14, s14, s13
+ 179:Robot/RoboTask/ins/INS_task.c **** 			INS.Yaw=mahony.yaw*180.0f/PI;
+ 853              		.loc 1 179 32 view .LVU288
+ 854 0128 87EE276A 		vdiv.f32	s12, s14, s15
+ 179:Robot/RoboTask/ins/INS_task.c **** 			INS.Yaw=mahony.yaw*180.0f/PI;
+ 855              		.loc 1 179 12 view .LVU289
+ 856 012c 83ED1C6A 		vstr.32	s12, [r3, #112]
+ 180:Robot/RoboTask/ins/INS_task.c **** 			// INS.Pitch=mahony.roll;
+ 857              		.loc 1 180 4 is_stmt 1 view .LVU290
+ 180:Robot/RoboTask/ins/INS_task.c **** 			// INS.Pitch=mahony.roll;
+ 858              		.loc 1 180 18 is_stmt 0 view .LVU291
+ 859 0130 92ED1B7A 		vldr.32	s14, [r2, #108]
+ 180:Robot/RoboTask/ins/INS_task.c **** 			// INS.Pitch=mahony.roll;
+ 860              		.loc 1 180 22 view .LVU292
+ 861 0134 27EE267A 		vmul.f32	s14, s14, s13
+ 180:Robot/RoboTask/ins/INS_task.c **** 			// INS.Pitch=mahony.roll;
+ARM GAS  D:\temp\TMP\cc65bfxy.s 			page 22
 
 
- 676              		.loc 1 63 35 is_stmt 0 view .LVU263
- 677 01ca D6ED022A 		vldr.32	s5, [r6, #8]
-  63:Robot/RoboTask/ins/INS_task.c **** 
- 678              		.loc 1 63 21 view .LVU264
- 679 01ce C4ED092A 		vstr.32	s5, [r4, #36]
-  65:Robot/RoboTask/ins/INS_task.c **** 		Accel.y=BMI088.Accel[1];
- 680              		.loc 1 65 3 is_stmt 1 view .LVU265
-  65:Robot/RoboTask/ins/INS_task.c **** 		Accel.y=BMI088.Accel[1];
- 681              		.loc 1 65 10 is_stmt 0 view .LVU266
- 682 01d2 354B     		ldr	r3, .L33+56
- 683 01d4 C3ED001A 		vstr.32	s3, [r3]
-  66:Robot/RoboTask/ins/INS_task.c **** 		Accel.z=BMI088.Accel[2];
- 684              		.loc 1 66 3 is_stmt 1 view .LVU267
-  66:Robot/RoboTask/ins/INS_task.c **** 		Accel.z=BMI088.Accel[2];
- 685              		.loc 1 66 10 is_stmt 0 view .LVU268
- 686 01d8 83ED012A 		vstr.32	s4, [r3, #4]
-  67:Robot/RoboTask/ins/INS_task.c **** 
- 687              		.loc 1 67 3 is_stmt 1 view .LVU269
-  67:Robot/RoboTask/ins/INS_task.c **** 
- 688              		.loc 1 67 10 is_stmt 0 view .LVU270
- 689 01dc C3ED022A 		vstr.32	s5, [r3, #8]
-  69:Robot/RoboTask/ins/INS_task.c **** 		INS.Gyro[Y_AXIS] = BMI088.Gyro[Y_AXIS];
- 690              		.loc 1 69 3 is_stmt 1 view .LVU271
-  69:Robot/RoboTask/ins/INS_task.c **** 		INS.Gyro[Y_AXIS] = BMI088.Gyro[Y_AXIS];
- 691              		.loc 1 69 33 is_stmt 0 view .LVU272
- 692 01e0 96ED030A 		vldr.32	s0, [r6, #12]
-  69:Robot/RoboTask/ins/INS_task.c **** 		INS.Gyro[Y_AXIS] = BMI088.Gyro[Y_AXIS];
- 693              		.loc 1 69 20 view .LVU273
- 694 01e4 84ED040A 		vstr.32	s0, [r4, #16]
-  70:Robot/RoboTask/ins/INS_task.c **** 		INS.Gyro[Z_AXIS] = BMI088.Gyro[Z_AXIS];
- 695              		.loc 1 70 3 is_stmt 1 view .LVU274
-  70:Robot/RoboTask/ins/INS_task.c **** 		INS.Gyro[Z_AXIS] = BMI088.Gyro[Z_AXIS];
- 696              		.loc 1 70 33 is_stmt 0 view .LVU275
- 697 01e8 D6ED040A 		vldr.32	s1, [r6, #16]
-  70:Robot/RoboTask/ins/INS_task.c **** 		INS.Gyro[Z_AXIS] = BMI088.Gyro[Z_AXIS];
- 698              		.loc 1 70 20 view .LVU276
- 699 01ec C4ED050A 		vstr.32	s1, [r4, #20]
-  71:Robot/RoboTask/ins/INS_task.c **** 
- 700              		.loc 1 71 3 is_stmt 1 view .LVU277
-  71:Robot/RoboTask/ins/INS_task.c **** 
- 701              		.loc 1 71 33 is_stmt 0 view .LVU278
- 702 01f0 96ED051A 		vldr.32	s2, [r6, #20]
-  71:Robot/RoboTask/ins/INS_task.c **** 
- 703              		.loc 1 71 20 view .LVU279
- 704 01f4 84ED061A 		vstr.32	s2, [r4, #24]
-  73:Robot/RoboTask/ins/INS_task.c **** 		Gyro.y=BMI088.Gyro[1];
- 705              		.loc 1 73 3 is_stmt 1 view .LVU280
-  73:Robot/RoboTask/ins/INS_task.c **** 		Gyro.y=BMI088.Gyro[1];
- 706              		.loc 1 73 9 is_stmt 0 view .LVU281
- 707 01f8 2C4B     		ldr	r3, .L33+60
- 708 01fa 83ED000A 		vstr.32	s0, [r3]
-  74:Robot/RoboTask/ins/INS_task.c **** 		Gyro.z=BMI088.Gyro[2];
- 709              		.loc 1 74 3 is_stmt 1 view .LVU282
-  74:Robot/RoboTask/ins/INS_task.c **** 		Gyro.z=BMI088.Gyro[2];
- 710              		.loc 1 74 9 is_stmt 0 view .LVU283
- 711 01fe C3ED010A 		vstr.32	s1, [r3, #4]
-  75:Robot/RoboTask/ins/INS_task.c **** 
-ARM GAS  D:\temp\TMP\ccitzH6G.s 			page 20
+ 862              		.loc 1 180 29 view .LVU293
+ 863 0138 C7EE276A 		vdiv.f32	s13, s14, s15
+ 180:Robot/RoboTask/ins/INS_task.c **** 			// INS.Pitch=mahony.roll;
+ 864              		.loc 1 180 11 view .LVU294
+ 865 013c C3ED1E6A 		vstr.32	s13, [r3, #120]
+ 185:Robot/RoboTask/ins/INS_task.c **** 		}
+ 866              		.loc 1 185 4 is_stmt 1 view .LVU295
+ 185:Robot/RoboTask/ins/INS_task.c **** 		}
+ 867              		.loc 1 185 32 is_stmt 0 view .LVU296
+ 868 0140 424A     		ldr	r2, .L37+40
+ 869 0142 D2F8B421 		ldr	r2, [r2, #436]	@ float
+ 185:Robot/RoboTask/ins/INS_task.c **** 		}
+ 870              		.loc 1 185 22 view .LVU297
+ 871 0146 DA67     		str	r2, [r3, #124]	@ float
+ 872              	.L29:
+ 192:Robot/RoboTask/ins/INS_task.c **** 		// IMU_Temperature_Ctrl();
+ 873              		.loc 1 192 3 is_stmt 1 view .LVU298
+ 874 0148 0120     		movs	r0, #1
+ 875 014a FFF7FEFF 		bl	osDelay
+ 876              	.LVL36:
+ 877              	.LBE5:
+ 107:Robot/RoboTask/ins/INS_task.c **** 	 {  
+ 878              		.loc 1 107 8 view .LVU299
+ 879              	.L30:
+ 107:Robot/RoboTask/ins/INS_task.c **** 	 {  
+ 880              		.loc 1 107 3 view .LVU300
+ 881              	.LBB8:
+ 109:Robot/RoboTask/ins/INS_task.c ****     
+ 882              		.loc 1 109 3 view .LVU301
+ 109:Robot/RoboTask/ins/INS_task.c ****     
+ 883              		.loc 1 109 12 is_stmt 0 view .LVU302
+ 884 014e 4048     		ldr	r0, .L37+44
+ 885 0150 FFF7FEFF 		bl	DWT_GetDeltaT
+ 886              	.LVL37:
+ 109:Robot/RoboTask/ins/INS_task.c ****     
+ 887              		.loc 1 109 10 view .LVU303
+ 888 0154 344B     		ldr	r3, .L37+4
+ 889 0156 83ED000A 		vstr.32	s0, [r3]
+ 111:Robot/RoboTask/ins/INS_task.c **** 
+ 890              		.loc 1 111 3 is_stmt 1 view .LVU304
+ 111:Robot/RoboTask/ins/INS_task.c **** 
+ 891              		.loc 1 111 13 is_stmt 0 view .LVU305
+ 892 015a 394D     		ldr	r5, .L37+28
+ 893 015c 85ED020A 		vstr.32	s0, [r5, #8]
+ 113:Robot/RoboTask/ins/INS_task.c **** 
+ 894              		.loc 1 113 3 is_stmt 1 view .LVU306
+ 895 0160 3C4E     		ldr	r6, .L37+48
+ 896 0162 3046     		mov	r0, r6
+ 897 0164 FFF7FEFF 		bl	BMI088_Read
+ 898              	.LVL38:
+ 115:Robot/RoboTask/ins/INS_task.c **** 		INS.Accel[Y_AXIS] = BMI088.Accel[Y_AXIS];
+ 899              		.loc 1 115 3 view .LVU307
+ 115:Robot/RoboTask/ins/INS_task.c **** 		INS.Accel[Y_AXIS] = BMI088.Accel[Y_AXIS];
+ 900              		.loc 1 115 35 is_stmt 0 view .LVU308
+ 901 0168 D6ED001A 		vldr.32	s3, [r6]
+ 115:Robot/RoboTask/ins/INS_task.c **** 		INS.Accel[Y_AXIS] = BMI088.Accel[Y_AXIS];
+ 902              		.loc 1 115 21 view .LVU309
+ARM GAS  D:\temp\TMP\cc65bfxy.s 			page 23
 
 
- 712              		.loc 1 75 3 is_stmt 1 view .LVU284
-  75:Robot/RoboTask/ins/INS_task.c **** 
- 713              		.loc 1 75 9 is_stmt 0 view .LVU285
- 714 0202 83ED021A 		vstr.32	s2, [r3, #8]
-  80:Robot/RoboTask/ins/INS_task.c **** 		mahony_update(&mahony);
- 715              		.loc 1 80 3 is_stmt 1 view .LVU286
- 716 0206 2846     		mov	r0, r5
- 717 0208 FFF7FEFF 		bl	mahony_input
- 718              	.LVL11:
-  81:Robot/RoboTask/ins/INS_task.c **** 		mahony_output(&mahony);
- 719              		.loc 1 81 3 view .LVU287
- 720 020c 2846     		mov	r0, r5
- 721 020e FFF7FEFF 		bl	mahony_update
- 722              	.LVL12:
-  82:Robot/RoboTask/ins/INS_task.c **** 		RotationMatrix_update(&mahony);
- 723              		.loc 1 82 3 view .LVU288
- 724 0212 2846     		mov	r0, r5
- 725 0214 FFF7FEFF 		bl	mahony_output
- 726              	.LVL13:
-  83:Robot/RoboTask/ins/INS_task.c **** 					
- 727              		.loc 1 83 3 view .LVU289
- 728 0218 2846     		mov	r0, r5
- 729 021a FFF7FEFF 		bl	RotationMatrix_update
- 730              	.LVL14:
-  85:Robot/RoboTask/ins/INS_task.c **** 		INS.q[1]=mahony.q1;
- 731              		.loc 1 85 3 view .LVU290
-  85:Robot/RoboTask/ins/INS_task.c **** 		INS.q[1]=mahony.q1;
- 732              		.loc 1 85 18 is_stmt 0 view .LVU291
- 733 021e 2B6B     		ldr	r3, [r5, #48]	@ float
-  85:Robot/RoboTask/ins/INS_task.c **** 		INS.q[1]=mahony.q1;
- 734              		.loc 1 85 11 view .LVU292
- 735 0220 2360     		str	r3, [r4]	@ float
-  86:Robot/RoboTask/ins/INS_task.c **** 		INS.q[2]=mahony.q2;
- 736              		.loc 1 86 3 is_stmt 1 view .LVU293
-  86:Robot/RoboTask/ins/INS_task.c **** 		INS.q[2]=mahony.q2;
- 737              		.loc 1 86 18 is_stmt 0 view .LVU294
- 738 0222 6B6B     		ldr	r3, [r5, #52]	@ float
-  86:Robot/RoboTask/ins/INS_task.c **** 		INS.q[2]=mahony.q2;
- 739              		.loc 1 86 11 view .LVU295
- 740 0224 6360     		str	r3, [r4, #4]	@ float
-  87:Robot/RoboTask/ins/INS_task.c **** 		INS.q[3]=mahony.q3;
- 741              		.loc 1 87 3 is_stmt 1 view .LVU296
-  87:Robot/RoboTask/ins/INS_task.c **** 		INS.q[3]=mahony.q3;
- 742              		.loc 1 87 18 is_stmt 0 view .LVU297
- 743 0226 AB6B     		ldr	r3, [r5, #56]	@ float
-  87:Robot/RoboTask/ins/INS_task.c **** 		INS.q[3]=mahony.q3;
- 744              		.loc 1 87 11 view .LVU298
- 745 0228 A360     		str	r3, [r4, #8]	@ float
-  88:Robot/RoboTask/ins/INS_task.c **** 		
- 746              		.loc 1 88 3 is_stmt 1 view .LVU299
-  88:Robot/RoboTask/ins/INS_task.c **** 		
- 747              		.loc 1 88 18 is_stmt 0 view .LVU300
- 748 022a EB6B     		ldr	r3, [r5, #60]	@ float
-  88:Robot/RoboTask/ins/INS_task.c **** 		
- 749              		.loc 1 88 11 view .LVU301
- 750 022c E360     		str	r3, [r4, #12]	@ float
-  91:Robot/RoboTask/ins/INS_task.c **** 		EarthFrameToBodyFrame(gravity, gravity_b, INS.q);
-ARM GAS  D:\temp\TMP\ccitzH6G.s 			page 21
+ 903 016c 2D4C     		ldr	r4, .L37
+ 904 016e C4ED071A 		vstr.32	s3, [r4, #28]
+ 116:Robot/RoboTask/ins/INS_task.c **** 		INS.Accel[Z_AXIS] = BMI088.Accel[Z_AXIS];
+ 905              		.loc 1 116 3 is_stmt 1 view .LVU310
+ 116:Robot/RoboTask/ins/INS_task.c **** 		INS.Accel[Z_AXIS] = BMI088.Accel[Z_AXIS];
+ 906              		.loc 1 116 35 is_stmt 0 view .LVU311
+ 907 0172 96ED012A 		vldr.32	s4, [r6, #4]
+ 116:Robot/RoboTask/ins/INS_task.c **** 		INS.Accel[Z_AXIS] = BMI088.Accel[Z_AXIS];
+ 908              		.loc 1 116 21 view .LVU312
+ 909 0176 84ED082A 		vstr.32	s4, [r4, #32]
+ 117:Robot/RoboTask/ins/INS_task.c **** 
+ 910              		.loc 1 117 3 is_stmt 1 view .LVU313
+ 117:Robot/RoboTask/ins/INS_task.c **** 
+ 911              		.loc 1 117 35 is_stmt 0 view .LVU314
+ 912 017a D6ED022A 		vldr.32	s5, [r6, #8]
+ 117:Robot/RoboTask/ins/INS_task.c **** 
+ 913              		.loc 1 117 21 view .LVU315
+ 914 017e C4ED092A 		vstr.32	s5, [r4, #36]
+ 119:Robot/RoboTask/ins/INS_task.c **** 		Accel.y=BMI088.Accel[1];
+ 915              		.loc 1 119 3 is_stmt 1 view .LVU316
+ 119:Robot/RoboTask/ins/INS_task.c **** 		Accel.y=BMI088.Accel[1];
+ 916              		.loc 1 119 10 is_stmt 0 view .LVU317
+ 917 0182 354F     		ldr	r7, .L37+52
+ 918 0184 C7ED001A 		vstr.32	s3, [r7]
+ 120:Robot/RoboTask/ins/INS_task.c **** 		Accel.z=BMI088.Accel[2];
+ 919              		.loc 1 120 3 is_stmt 1 view .LVU318
+ 120:Robot/RoboTask/ins/INS_task.c **** 		Accel.z=BMI088.Accel[2];
+ 920              		.loc 1 120 10 is_stmt 0 view .LVU319
+ 921 0188 87ED012A 		vstr.32	s4, [r7, #4]
+ 121:Robot/RoboTask/ins/INS_task.c **** 
+ 922              		.loc 1 121 3 is_stmt 1 view .LVU320
+ 121:Robot/RoboTask/ins/INS_task.c **** 
+ 923              		.loc 1 121 10 is_stmt 0 view .LVU321
+ 924 018c C7ED022A 		vstr.32	s5, [r7, #8]
+ 123:Robot/RoboTask/ins/INS_task.c **** 		INS.Gyro[Y_AXIS] = BMI088.Gyro[Y_AXIS];
+ 925              		.loc 1 123 3 is_stmt 1 view .LVU322
+ 123:Robot/RoboTask/ins/INS_task.c **** 		INS.Gyro[Y_AXIS] = BMI088.Gyro[Y_AXIS];
+ 926              		.loc 1 123 33 is_stmt 0 view .LVU323
+ 927 0190 96ED030A 		vldr.32	s0, [r6, #12]
+ 123:Robot/RoboTask/ins/INS_task.c **** 		INS.Gyro[Y_AXIS] = BMI088.Gyro[Y_AXIS];
+ 928              		.loc 1 123 20 view .LVU324
+ 929 0194 84ED040A 		vstr.32	s0, [r4, #16]
+ 124:Robot/RoboTask/ins/INS_task.c **** 		INS.Gyro[Z_AXIS] = BMI088.Gyro[Z_AXIS];
+ 930              		.loc 1 124 3 is_stmt 1 view .LVU325
+ 124:Robot/RoboTask/ins/INS_task.c **** 		INS.Gyro[Z_AXIS] = BMI088.Gyro[Z_AXIS];
+ 931              		.loc 1 124 33 is_stmt 0 view .LVU326
+ 932 0198 D6ED040A 		vldr.32	s1, [r6, #16]
+ 124:Robot/RoboTask/ins/INS_task.c **** 		INS.Gyro[Z_AXIS] = BMI088.Gyro[Z_AXIS];
+ 933              		.loc 1 124 20 view .LVU327
+ 934 019c C4ED050A 		vstr.32	s1, [r4, #20]
+ 125:Robot/RoboTask/ins/INS_task.c **** 
+ 935              		.loc 1 125 3 is_stmt 1 view .LVU328
+ 125:Robot/RoboTask/ins/INS_task.c **** 
+ 936              		.loc 1 125 33 is_stmt 0 view .LVU329
+ 937 01a0 96ED051A 		vldr.32	s2, [r6, #20]
+ 125:Robot/RoboTask/ins/INS_task.c **** 
+ 938              		.loc 1 125 20 view .LVU330
+ARM GAS  D:\temp\TMP\cc65bfxy.s 			page 24
 
 
- 751              		.loc 1 91 3 is_stmt 1 view .LVU302
-  92:Robot/RoboTask/ins/INS_task.c **** 		for (uint8_t i = 0; i < 3; i++) // 同样过一个低通滤波
- 752              		.loc 1 92 3 view .LVU303
- 753 022e 2246     		mov	r2, r4
- 754 0230 01A9     		add	r1, sp, #4
- 755 0232 1F48     		ldr	r0, .L33+64
- 756 0234 FFF7FEFF 		bl	EarthFrameToBodyFrame
- 757              	.LVL15:
-  93:Robot/RoboTask/ins/INS_task.c **** 		{
- 758              		.loc 1 93 3 view .LVU304
- 759              	.LBB4:
-  93:Robot/RoboTask/ins/INS_task.c **** 		{
- 760              		.loc 1 93 8 view .LVU305
-  93:Robot/RoboTask/ins/INS_task.c **** 		{
- 761              		.loc 1 93 16 is_stmt 0 view .LVU306
- 762 0238 0023     		movs	r3, #0
-  93:Robot/RoboTask/ins/INS_task.c **** 		{
- 763              		.loc 1 93 3 view .LVU307
- 764 023a 0EE7     		b	.L8
- 765              	.LVL16:
- 766              	.L31:
-  93:Robot/RoboTask/ins/INS_task.c **** 		{
- 767              		.loc 1 93 3 view .LVU308
- 768              	.LBE4:
- 132:Robot/RoboTask/ins/INS_task.c **** 			{
- 769              		.loc 1 132 9 is_stmt 1 view .LVU309
- 132:Robot/RoboTask/ins/INS_task.c **** 			{
- 770              		.loc 1 132 12 is_stmt 0 view .LVU310
- 771 023c DFED1D6A 		vldr.32	s13, .L33+68
- 772 0240 F4EEE67A 		vcmpe.f32	s15, s13
- 773 0244 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
- 774 0248 8DD5     		bpl	.L20
- 134:Robot/RoboTask/ins/INS_task.c **** 			}
- 775              		.loc 1 134 6 is_stmt 1 view .LVU311
- 134:Robot/RoboTask/ins/INS_task.c **** 			}
- 776              		.loc 1 134 9 is_stmt 0 view .LVU312
- 777 024a 094B     		ldr	r3, .L33
- 778 024c D3ED217A 		vldr.32	s15, [r3, #132]
- 134:Robot/RoboTask/ins/INS_task.c **** 			}
- 779              		.loc 1 134 23 view .LVU313
- 780 0250 F7EE006A 		vmov.f32	s13, #1.0e+0
- 781 0254 77EEA67A 		vadd.f32	s15, s15, s13
- 782 0258 C3ED217A 		vstr.32	s15, [r3, #132]
- 783 025c 83E7     		b	.L20
- 784              	.L30:
- 141:Robot/RoboTask/ins/INS_task.c **** 		}
- 785              		.loc 1 141 3 is_stmt 1 view .LVU314
- 141:Robot/RoboTask/ins/INS_task.c **** 		}
- 786              		.loc 1 141 11 is_stmt 0 view .LVU315
- 787 025e B7EE007A 		vmov.f32	s14, #1.0e+0
- 788 0262 77EE877A 		vadd.f32	s15, s15, s14
- 789 0266 064B     		ldr	r3, .L33+16
- 790 0268 C3ED007A 		vstr.32	s15, [r3]
- 791 026c 94E7     		b	.L22
- 792              	.L34:
- 793 026e 00BF     		.align	2
- 794              	.L33:
-ARM GAS  D:\temp\TMP\ccitzH6G.s 			page 22
+ 939 01a4 84ED061A 		vstr.32	s2, [r4, #24]
+ 127:Robot/RoboTask/ins/INS_task.c **** 		Gyro.y=BMI088.Gyro[1];
+ 940              		.loc 1 127 3 is_stmt 1 view .LVU331
+ 127:Robot/RoboTask/ins/INS_task.c **** 		Gyro.y=BMI088.Gyro[1];
+ 941              		.loc 1 127 9 is_stmt 0 view .LVU332
+ 942 01a8 2C4E     		ldr	r6, .L37+56
+ 943 01aa 86ED000A 		vstr.32	s0, [r6]
+ 128:Robot/RoboTask/ins/INS_task.c **** 		Gyro.z=BMI088.Gyro[2];
+ 944              		.loc 1 128 3 is_stmt 1 view .LVU333
+ 128:Robot/RoboTask/ins/INS_task.c **** 		Gyro.z=BMI088.Gyro[2];
+ 945              		.loc 1 128 9 is_stmt 0 view .LVU334
+ 946 01ae C6ED010A 		vstr.32	s1, [r6, #4]
+ 129:Robot/RoboTask/ins/INS_task.c **** 
+ 947              		.loc 1 129 3 is_stmt 1 view .LVU335
+ 129:Robot/RoboTask/ins/INS_task.c **** 
+ 948              		.loc 1 129 9 is_stmt 0 view .LVU336
+ 949 01b2 86ED021A 		vstr.32	s2, [r6, #8]
+ 132:Robot/RoboTask/ins/INS_task.c **** 
+ 950              		.loc 1 132 3 is_stmt 1 view .LVU337
+ 951 01b6 95ED023A 		vldr.32	s6, [r5, #8]
+ 952 01ba FFF7FEFF 		bl	IMU_QuaternionEKF_Update
+ 953              	.LVL39:
+ 134:Robot/RoboTask/ins/INS_task.c **** 		mahony_update(&mahony);
+ 954              		.loc 1 134 3 view .LVU338
+ 955 01be D7ED001A 		vldr.32	s3, [r7]
+ 956 01c2 97ED012A 		vldr.32	s4, [r7, #4]
+ 957 01c6 D7ED022A 		vldr.32	s5, [r7, #8]
+ 958 01ca 96ED000A 		vldr.32	s0, [r6]
+ 959 01ce D6ED010A 		vldr.32	s1, [r6, #4]
+ 960 01d2 96ED021A 		vldr.32	s2, [r6, #8]
+ 961 01d6 2846     		mov	r0, r5
+ 962 01d8 FFF7FEFF 		bl	mahony_input
+ 963              	.LVL40:
+ 135:Robot/RoboTask/ins/INS_task.c **** 		mahony_output(&mahony);
+ 964              		.loc 1 135 3 view .LVU339
+ 965 01dc 2846     		mov	r0, r5
+ 966 01de FFF7FEFF 		bl	mahony_update
+ 967              	.LVL41:
+ 136:Robot/RoboTask/ins/INS_task.c **** 		RotationMatrix_update(&mahony);
+ 968              		.loc 1 136 3 view .LVU340
+ 969 01e2 2846     		mov	r0, r5
+ 970 01e4 FFF7FEFF 		bl	mahony_output
+ 971              	.LVL42:
+ 137:Robot/RoboTask/ins/INS_task.c **** 					
+ 972              		.loc 1 137 3 view .LVU341
+ 973 01e8 2846     		mov	r0, r5
+ 974 01ea FFF7FEFF 		bl	RotationMatrix_update
+ 975              	.LVL43:
+ 139:Robot/RoboTask/ins/INS_task.c **** 		INS.q[1]=mahony.q1;
+ 976              		.loc 1 139 3 view .LVU342
+ 139:Robot/RoboTask/ins/INS_task.c **** 		INS.q[1]=mahony.q1;
+ 977              		.loc 1 139 18 is_stmt 0 view .LVU343
+ 978 01ee 2B6B     		ldr	r3, [r5, #48]	@ float
+ 139:Robot/RoboTask/ins/INS_task.c **** 		INS.q[1]=mahony.q1;
+ 979              		.loc 1 139 11 view .LVU344
+ 980 01f0 2360     		str	r3, [r4]	@ float
+ 140:Robot/RoboTask/ins/INS_task.c **** 		INS.q[2]=mahony.q2;
+ARM GAS  D:\temp\TMP\cc65bfxy.s 			page 25
 
 
- 795 0270 00000000 		.word	.LANCHOR1
- 796 0274 00000000 		.word	.LANCHOR3
- 797 0278 0AD7A33C 		.word	1017370378
- 798 027c 0AD7233D 		.word	1025758986
- 799 0280 00000000 		.word	.LANCHOR7
- 800 0284 00803B45 		.word	1161527296
- 801 0288 6F12833A 		.word	981668463
- 802 028c 00000000 		.word	.LANCHOR0
- 803 0290 00003443 		.word	1127481344
- 804 0294 DB0F4940 		.word	1078530011
- 805 0298 DA0F4940 		.word	1078530010
- 806 029c 560EC940 		.word	1086918230
- 807 02a0 00000000 		.word	.LANCHOR2
- 808 02a4 00000000 		.word	BMI088
- 809 02a8 00000000 		.word	.LANCHOR4
- 810 02ac 00000000 		.word	.LANCHOR5
- 811 02b0 00000000 		.word	.LANCHOR6
- 812 02b4 DA0F49C0 		.word	-1068953638
- 813              	.LBE5:
- 814              		.cfi_endproc
- 815              	.LFE194:
- 817              		.global	forceStop
- 818              		.global	temp
- 819              		.global	stop_time
- 820              		.global	ins_time
- 821              		.global	ins_dt
- 822              		.global	INS_DWT_Count
- 823              		.global	gravity
- 824              		.global	Accel
- 825              		.global	Gyro
- 826              		.global	mahony
- 827              		.global	imu_temp_pid
- 828              		.global	INS
- 829              		.section	.bss.Accel,"aw",%nobits
- 830              		.align	2
- 831              		.set	.LANCHOR4,. + 0
- 834              	Accel:
- 835 0000 00000000 		.space	12
- 835      00000000 
- 835      00000000 
- 836              		.section	.bss.Gyro,"aw",%nobits
- 837              		.align	2
- 838              		.set	.LANCHOR5,. + 0
- 841              	Gyro:
- 842 0000 00000000 		.space	12
- 842      00000000 
- 842      00000000 
- 843              		.section	.bss.INS,"aw",%nobits
- 844              		.align	2
- 845              		.set	.LANCHOR1,. + 0
- 848              	INS:
- 849 0000 00000000 		.space	148
- 849      00000000 
- 849      00000000 
- 849      00000000 
- 849      00000000 
- 850              		.section	.bss.INS_DWT_Count,"aw",%nobits
-ARM GAS  D:\temp\TMP\ccitzH6G.s 			page 23
+ 981              		.loc 1 140 3 is_stmt 1 view .LVU345
+ 140:Robot/RoboTask/ins/INS_task.c **** 		INS.q[2]=mahony.q2;
+ 982              		.loc 1 140 18 is_stmt 0 view .LVU346
+ 983 01f2 6B6B     		ldr	r3, [r5, #52]	@ float
+ 140:Robot/RoboTask/ins/INS_task.c **** 		INS.q[2]=mahony.q2;
+ 984              		.loc 1 140 11 view .LVU347
+ 985 01f4 6360     		str	r3, [r4, #4]	@ float
+ 141:Robot/RoboTask/ins/INS_task.c **** 		INS.q[3]=mahony.q3;
+ 986              		.loc 1 141 3 is_stmt 1 view .LVU348
+ 141:Robot/RoboTask/ins/INS_task.c **** 		INS.q[3]=mahony.q3;
+ 987              		.loc 1 141 18 is_stmt 0 view .LVU349
+ 988 01f6 AB6B     		ldr	r3, [r5, #56]	@ float
+ 141:Robot/RoboTask/ins/INS_task.c **** 		INS.q[3]=mahony.q3;
+ 989              		.loc 1 141 11 view .LVU350
+ 990 01f8 A360     		str	r3, [r4, #8]	@ float
+ 142:Robot/RoboTask/ins/INS_task.c **** 
+ 991              		.loc 1 142 3 is_stmt 1 view .LVU351
+ 142:Robot/RoboTask/ins/INS_task.c **** 
+ 992              		.loc 1 142 18 is_stmt 0 view .LVU352
+ 993 01fa EB6B     		ldr	r3, [r5, #60]	@ float
+ 142:Robot/RoboTask/ins/INS_task.c **** 
+ 994              		.loc 1 142 11 view .LVU353
+ 995 01fc E360     		str	r3, [r4, #12]	@ float
+ 144:Robot/RoboTask/ins/INS_task.c **** 		
+ 996              		.loc 1 144 3 is_stmt 1 view .LVU354
+ 997 01fe 184B     		ldr	r3, .L37+60
+ 998 0200 0FCB     		ldm	r3, {r0, r1, r2, r3}
+ 999 0202 84E80F00 		stm	r4, {r0, r1, r2, r3}
+ 147:Robot/RoboTask/ins/INS_task.c **** 		EarthFrameToBodyFrame(gravity, gravity_b, INS.q);
+ 1000              		.loc 1 147 3 view .LVU355
+ 148:Robot/RoboTask/ins/INS_task.c **** 		for (uint8_t i = 0; i < 3; i++) // 同样过一个低通滤波
+ 1001              		.loc 1 148 3 view .LVU356
+ 1002 0206 2246     		mov	r2, r4
+ 1003 0208 01A9     		add	r1, sp, #4
+ 1004 020a 1648     		ldr	r0, .L37+64
+ 1005 020c FFF7FEFF 		bl	EarthFrameToBodyFrame
+ 1006              	.LVL44:
+ 149:Robot/RoboTask/ins/INS_task.c **** 		{
+ 1007              		.loc 1 149 3 view .LVU357
+ 1008              	.LBB7:
+ 149:Robot/RoboTask/ins/INS_task.c **** 		{
+ 1009              		.loc 1 149 8 view .LVU358
+ 149:Robot/RoboTask/ins/INS_task.c **** 		{
+ 1010              		.loc 1 149 16 is_stmt 0 view .LVU359
+ 1011 0210 0023     		movs	r3, #0
+ 149:Robot/RoboTask/ins/INS_task.c **** 		{
+ 1012              		.loc 1 149 3 view .LVU360
+ 1013 0212 22E7     		b	.L19
+ 1014              	.LVL45:
+ 1015              	.L35:
+ 149:Robot/RoboTask/ins/INS_task.c **** 		{
+ 1016              		.loc 1 149 3 view .LVU361
+ 1017              	.LBE7:
+ 189:Robot/RoboTask/ins/INS_task.c **** 		}
+ 1018              		.loc 1 189 3 is_stmt 1 view .LVU362
+ 189:Robot/RoboTask/ins/INS_task.c **** 		}
+ 1019              		.loc 1 189 11 is_stmt 0 view .LVU363
+ARM GAS  D:\temp\TMP\cc65bfxy.s 			page 26
 
 
- 851              		.align	2
- 852              		.set	.LANCHOR2,. + 0
- 855              	INS_DWT_Count:
- 856 0000 00000000 		.space	4
- 857              		.section	.bss.forceStop,"aw",%nobits
- 860              	forceStop:
- 861 0000 00       		.space	1
- 862              		.section	.bss.imu_temp_pid,"aw",%nobits
- 863              		.align	2
- 866              	imu_temp_pid:
- 867 0000 00000000 		.space	72
- 867      00000000 
- 867      00000000 
- 867      00000000 
- 867      00000000 
- 868              		.section	.bss.ins_dt,"aw",%nobits
- 869              		.align	2
- 870              		.set	.LANCHOR3,. + 0
- 873              	ins_dt:
- 874 0000 00000000 		.space	4
- 875              		.section	.bss.ins_time,"aw",%nobits
- 876              		.align	2
- 877              		.set	.LANCHOR7,. + 0
- 880              	ins_time:
- 881 0000 00000000 		.space	4
- 882              		.section	.bss.mahony,"aw",%nobits
- 883              		.align	2
- 884              		.set	.LANCHOR0,. + 0
- 887              	mahony:
- 888 0000 00000000 		.space	132
- 888      00000000 
- 888      00000000 
- 888      00000000 
- 888      00000000 
- 889              		.section	.bss.stop_time,"aw",%nobits
- 890              		.align	2
- 893              	stop_time:
- 894 0000 00000000 		.space	4
- 895              		.section	.bss.temp,"aw",%nobits
- 896              		.align	2
- 899              	temp:
- 900 0000 00000000 		.space	4
- 901              		.section	.data.gravity,"aw"
- 902              		.align	2
- 903              		.set	.LANCHOR6,. + 0
- 906              	gravity:
- 907 0000 00000000 		.word	0
- 908 0004 00000000 		.word	0
- 909 0008 C3F51C41 		.word	1092416963
- 910              		.text
- 911              	.Letext0:
- 912              		.file 2 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\machine\\_default_types.h"
- 913              		.file 3 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
- 914              		.file 4 "Robot/Devices/BMI088/BMI088driver.h"
- 915              		.file 5 "Robot/RoboTask/ins/INS_task.h"
- 916              		.file 6 "Robot/Algorithm/mahony/mahony_filter.h"
- 917              		.file 7 "Robot/Controller/pid.h"
-ARM GAS  D:\temp\TMP\ccitzH6G.s 			page 24
+ 1020 0214 B7EE007A 		vmov.f32	s14, #1.0e+0
+ 1021 0218 77EE877A 		vadd.f32	s15, s15, s14
+ 1022 021c 054B     		ldr	r3, .L37+16
+ 1023 021e C3ED007A 		vstr.32	s15, [r3]
+ 1024 0222 91E7     		b	.L29
+ 1025              	.L38:
+ 1026              		.align	2
+ 1027              	.L37:
+ 1028 0224 00000000 		.word	.LANCHOR1
+ 1029 0228 00000000 		.word	.LANCHOR3
+ 1030 022c 0AD7A33C 		.word	1017370378
+ 1031 0230 0AD7233D 		.word	1025758986
+ 1032 0234 00000000 		.word	.LANCHOR7
+ 1033 0238 0000FA44 		.word	1157234688
+ 1034 023c 6F12833A 		.word	981668463
+ 1035 0240 00000000 		.word	.LANCHOR0
+ 1036 0244 00003443 		.word	1127481344
+ 1037 0248 DB0F4940 		.word	1078530011
+ 1038 024c 00000000 		.word	QEKF_INS
+ 1039 0250 00000000 		.word	.LANCHOR2
+ 1040 0254 00000000 		.word	BMI088
+ 1041 0258 00000000 		.word	.LANCHOR4
+ 1042 025c 00000000 		.word	.LANCHOR5
+ 1043 0260 58010000 		.word	QEKF_INS+344
+ 1044 0264 00000000 		.word	.LANCHOR6
+ 1045              	.LBE8:
+ 1046              		.cfi_endproc
+ 1047              	.LFE197:
+ 1049              		.global	forceStop
+ 1050              		.global	temp
+ 1051              		.global	stop_time
+ 1052              		.global	ins_time
+ 1053              		.global	ins_dt
+ 1054              		.global	INS_DWT_Count
+ 1055              		.global	gravity
+ 1056              		.global	Accel
+ 1057              		.global	Gyro
+ 1058              		.global	mahony
+ 1059              		.global	INS
+ 1060              		.section	.bss.Accel,"aw",%nobits
+ 1061              		.align	2
+ 1062              		.set	.LANCHOR4,. + 0
+ 1065              	Accel:
+ 1066 0000 00000000 		.space	12
+ 1066      00000000 
+ 1066      00000000 
+ 1067              		.section	.bss.Gyro,"aw",%nobits
+ 1068              		.align	2
+ 1069              		.set	.LANCHOR5,. + 0
+ 1072              	Gyro:
+ 1073 0000 00000000 		.space	12
+ 1073      00000000 
+ 1073      00000000 
+ 1074              		.section	.bss.INS,"aw",%nobits
+ 1075              		.align	2
+ 1076              		.set	.LANCHOR1,. + 0
+ 1079              	INS:
+ARM GAS  D:\temp\TMP\cc65bfxy.s 			page 27
 
 
- 918              		.file 8 "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h"
- 919              		.file 9 "Bsp/bsp_dwt.h"
-ARM GAS  D:\temp\TMP\ccitzH6G.s 			page 25
+ 1080 0000 00000000 		.space	140
+ 1080      00000000 
+ 1080      00000000 
+ 1080      00000000 
+ 1080      00000000 
+ 1081              		.section	.bss.INS_DWT_Count,"aw",%nobits
+ 1082              		.align	2
+ 1083              		.set	.LANCHOR2,. + 0
+ 1086              	INS_DWT_Count:
+ 1087 0000 00000000 		.space	4
+ 1088              		.section	.bss.forceStop,"aw",%nobits
+ 1091              	forceStop:
+ 1092 0000 00       		.space	1
+ 1093              		.section	.bss.ins_dt,"aw",%nobits
+ 1094              		.align	2
+ 1095              		.set	.LANCHOR3,. + 0
+ 1098              	ins_dt:
+ 1099 0000 00000000 		.space	4
+ 1100              		.section	.bss.ins_time,"aw",%nobits
+ 1101              		.align	2
+ 1102              		.set	.LANCHOR7,. + 0
+ 1105              	ins_time:
+ 1106 0000 00000000 		.space	4
+ 1107              		.section	.bss.mahony,"aw",%nobits
+ 1108              		.align	2
+ 1109              		.set	.LANCHOR0,. + 0
+ 1112              	mahony:
+ 1113 0000 00000000 		.space	132
+ 1113      00000000 
+ 1113      00000000 
+ 1113      00000000 
+ 1113      00000000 
+ 1114              		.section	.bss.stop_time,"aw",%nobits
+ 1115              		.align	2
+ 1118              	stop_time:
+ 1119 0000 00000000 		.space	4
+ 1120              		.section	.bss.temp,"aw",%nobits
+ 1121              		.align	2
+ 1124              	temp:
+ 1125 0000 00000000 		.space	4
+ 1126              		.section	.data.gravity,"aw"
+ 1127              		.align	2
+ 1128              		.set	.LANCHOR6,. + 0
+ 1131              	gravity:
+ 1132 0000 00000000 		.word	0
+ 1133 0004 00000000 		.word	0
+ 1134 0008 C3F51C41 		.word	1092416963
+ 1135              		.text
+ 1136              	.Letext0:
+ 1137              		.file 2 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 1138              		.file 3 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
+ 1139              		.file 4 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h723xx.h"
+ 1140              		.file 5 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h"
+ 1141              		.file 6 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_dma.h"
+ 1142              		.file 7 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_spi.h"
+ 1143              		.file 8 "Robot/Devices/BMI088/BMI088driver.h"
+ 1144              		.file 9 "Robot/RoboTask/ins/INS_task.h"
+ARM GAS  D:\temp\TMP\cc65bfxy.s 			page 28
+
+
+ 1145              		.file 10 "Middlewares/ST/ARM/DSP/Inc/arm_math.h"
+ 1146              		.file 11 "Robot/Controller/controller.h"
+ 1147              		.file 12 "Robot/Algorithm/kalman/kalman_filter.h"
+ 1148              		.file 13 "Robot/Algorithm/EKF/QuaternionEKF.h"
+ 1149              		.file 14 "Robot/Algorithm/mahony/mahony_filter.h"
+ 1150              		.file 15 "Core/Inc/spi.h"
+ 1151              		.file 16 "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h"
+ 1152              		.file 17 "Bsp/bsp_dwt.h"
+ 1153              		.file 18 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\math.h"
+ 1154              		.file 19 "Robot/Lib/user_lib.h"
+ARM GAS  D:\temp\TMP\cc65bfxy.s 			page 29
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 INS_task.c
-D:\temp\TMP\ccitzH6G.s:19     .text.INS_Init:00000000 $t
-D:\temp\TMP\ccitzH6G.s:25     .text.INS_Init:00000000 INS_Init
-D:\temp\TMP\ccitzH6G.s:54     .text.INS_Init:0000001c $d
-D:\temp\TMP\ccitzH6G.s:63     .text.BodyFrameToEarthFrame:00000000 $t
-D:\temp\TMP\ccitzH6G.s:69     .text.BodyFrameToEarthFrame:00000000 BodyFrameToEarthFrame
-D:\temp\TMP\ccitzH6G.s:231    .text.EarthFrameToBodyFrame:00000000 $t
-D:\temp\TMP\ccitzH6G.s:237    .text.EarthFrameToBodyFrame:00000000 EarthFrameToBodyFrame
-D:\temp\TMP\ccitzH6G.s:399    .text.INS_task:00000000 $t
-D:\temp\TMP\ccitzH6G.s:405    .text.INS_task:00000000 INS_task
-D:\temp\TMP\ccitzH6G.s:795    .text.INS_task:00000270 $d
-D:\temp\TMP\ccitzH6G.s:860    .bss.forceStop:00000000 forceStop
-D:\temp\TMP\ccitzH6G.s:899    .bss.temp:00000000 temp
-D:\temp\TMP\ccitzH6G.s:893    .bss.stop_time:00000000 stop_time
-D:\temp\TMP\ccitzH6G.s:880    .bss.ins_time:00000000 ins_time
-D:\temp\TMP\ccitzH6G.s:873    .bss.ins_dt:00000000 ins_dt
-D:\temp\TMP\ccitzH6G.s:855    .bss.INS_DWT_Count:00000000 INS_DWT_Count
-D:\temp\TMP\ccitzH6G.s:906    .data.gravity:00000000 gravity
-D:\temp\TMP\ccitzH6G.s:834    .bss.Accel:00000000 Accel
-D:\temp\TMP\ccitzH6G.s:841    .bss.Gyro:00000000 Gyro
-D:\temp\TMP\ccitzH6G.s:887    .bss.mahony:00000000 mahony
-D:\temp\TMP\ccitzH6G.s:866    .bss.imu_temp_pid:00000000 imu_temp_pid
-D:\temp\TMP\ccitzH6G.s:848    .bss.INS:00000000 INS
-D:\temp\TMP\ccitzH6G.s:830    .bss.Accel:00000000 $d
-D:\temp\TMP\ccitzH6G.s:837    .bss.Gyro:00000000 $d
-D:\temp\TMP\ccitzH6G.s:844    .bss.INS:00000000 $d
-D:\temp\TMP\ccitzH6G.s:851    .bss.INS_DWT_Count:00000000 $d
-D:\temp\TMP\ccitzH6G.s:861    .bss.forceStop:00000000 $d
-D:\temp\TMP\ccitzH6G.s:863    .bss.imu_temp_pid:00000000 $d
-D:\temp\TMP\ccitzH6G.s:869    .bss.ins_dt:00000000 $d
-D:\temp\TMP\ccitzH6G.s:876    .bss.ins_time:00000000 $d
-D:\temp\TMP\ccitzH6G.s:883    .bss.mahony:00000000 $d
-D:\temp\TMP\ccitzH6G.s:890    .bss.stop_time:00000000 $d
-D:\temp\TMP\ccitzH6G.s:896    .bss.temp:00000000 $d
-D:\temp\TMP\ccitzH6G.s:902    .data.gravity:00000000 $d
+D:\temp\TMP\cc65bfxy.s:19     .text.InitQuaternion:00000000 $t
+D:\temp\TMP\cc65bfxy.s:24     .text.InitQuaternion:00000000 InitQuaternion
+D:\temp\TMP\cc65bfxy.s:232    .text.InitQuaternion:000000fc $d
+D:\temp\TMP\cc65bfxy.s:239    .text.INS_Init:00000000 $t
+D:\temp\TMP\cc65bfxy.s:245    .text.INS_Init:00000000 INS_Init
+D:\temp\TMP\cc65bfxy.s:322    .text.INS_Init:00000068 $d
+D:\temp\TMP\cc65bfxy.s:333    .text.BodyFrameToEarthFrame:00000000 $t
+D:\temp\TMP\cc65bfxy.s:339    .text.BodyFrameToEarthFrame:00000000 BodyFrameToEarthFrame
+D:\temp\TMP\cc65bfxy.s:501    .text.EarthFrameToBodyFrame:00000000 $t
+D:\temp\TMP\cc65bfxy.s:507    .text.EarthFrameToBodyFrame:00000000 EarthFrameToBodyFrame
+D:\temp\TMP\cc65bfxy.s:669    .text.INS_task:00000000 $t
+D:\temp\TMP\cc65bfxy.s:675    .text.INS_task:00000000 INS_task
+D:\temp\TMP\cc65bfxy.s:1028   .text.INS_task:00000224 $d
+D:\temp\TMP\cc65bfxy.s:1091   .bss.forceStop:00000000 forceStop
+D:\temp\TMP\cc65bfxy.s:1124   .bss.temp:00000000 temp
+D:\temp\TMP\cc65bfxy.s:1118   .bss.stop_time:00000000 stop_time
+D:\temp\TMP\cc65bfxy.s:1105   .bss.ins_time:00000000 ins_time
+D:\temp\TMP\cc65bfxy.s:1098   .bss.ins_dt:00000000 ins_dt
+D:\temp\TMP\cc65bfxy.s:1086   .bss.INS_DWT_Count:00000000 INS_DWT_Count
+D:\temp\TMP\cc65bfxy.s:1131   .data.gravity:00000000 gravity
+D:\temp\TMP\cc65bfxy.s:1065   .bss.Accel:00000000 Accel
+D:\temp\TMP\cc65bfxy.s:1072   .bss.Gyro:00000000 Gyro
+D:\temp\TMP\cc65bfxy.s:1112   .bss.mahony:00000000 mahony
+D:\temp\TMP\cc65bfxy.s:1079   .bss.INS:00000000 INS
+D:\temp\TMP\cc65bfxy.s:1061   .bss.Accel:00000000 $d
+D:\temp\TMP\cc65bfxy.s:1068   .bss.Gyro:00000000 $d
+D:\temp\TMP\cc65bfxy.s:1075   .bss.INS:00000000 $d
+D:\temp\TMP\cc65bfxy.s:1082   .bss.INS_DWT_Count:00000000 $d
+D:\temp\TMP\cc65bfxy.s:1092   .bss.forceStop:00000000 $d
+D:\temp\TMP\cc65bfxy.s:1094   .bss.ins_dt:00000000 $d
+D:\temp\TMP\cc65bfxy.s:1101   .bss.ins_time:00000000 $d
+D:\temp\TMP\cc65bfxy.s:1108   .bss.mahony:00000000 $d
+D:\temp\TMP\cc65bfxy.s:1115   .bss.stop_time:00000000 $d
+D:\temp\TMP\cc65bfxy.s:1121   .bss.temp:00000000 $d
+D:\temp\TMP\cc65bfxy.s:1127   .data.gravity:00000000 $d
 
 UNDEFINED SYMBOLS
+BMI088_Read
+DWT_Delay
+Norm3d
+Dot3d
+acosf
+Cross3d
+cosf
+sinf
+BMI088
+BMI088_init
 mahony_init
+IMU_QuaternionEKF_Init
+hspi2
 osDelay
 DWT_GetDeltaT
-BMI088_Read
+IMU_QuaternionEKF_Update
 mahony_input
 mahony_update
+ARM GAS  D:\temp\TMP\cc65bfxy.s 			page 30
+
+
 mahony_output
 RotationMatrix_update
-BMI088
+QEKF_INS

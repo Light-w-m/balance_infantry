@@ -14,8 +14,10 @@
   */
 	
 #include "INS_task.h"
+#include "controller.h"
 #include "QuaternionEKF.h"
 #include "bsp_dwt.h"
+#include "user_lib.h"
 #include "mahony_filter.h"
 #include "gpio.h"
 #include "pid.h"
@@ -25,7 +27,8 @@
 
 INS_t INS;
 extern IMU_Data_t BMI088;
-PidTypeDef imu_temp_pid;
+static PIDInstance TempCtrl = {0};
+static float RefTemp = 40; // 恒温设定温度
 
 struct MAHONY_FILTER_t mahony;
 Axis3f Gyro,Accel;
@@ -40,11 +43,62 @@ int stop_time;
 float temp;
 uint8_t forceStop = 0;
 
+static void IMUPWMSet(uint16_t pwm)
+{
+    __HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_4, pwm);
+}
+
+/**
+ * @brief 温度控制
+ *
+ */
+static void IMU_Temperature_Ctrl(void)
+{
+    PIDCalculate(&TempCtrl, BMI088.Temperature, RefTemp);
+    IMUPWMSet(float_constrain(float_rounding(TempCtrl.Output), 0, UINT32_MAX));
+}
+
+// 使用加速度计的数据初始化Roll和Pitch,而Yaw置0,这样可以避免在初始时候的姿态估计误差
+static void InitQuaternion(float *init_q4)
+{
+    float acc_init[3] = {0};
+    float gravity_norm[3] = {0, 0, 1}; // 导航系重力加速度矢量,归一化后为(0,0,1)
+    float axis_rot[3] = {0};           // 旋转轴
+    // 读取100次加速度计数据,取平均值作为初始值
+    for (uint8_t i = 0; i < 100; ++i)
+    {
+        BMI088_Read(&BMI088);
+        acc_init[X_AXIS] += BMI088.Accel[X_AXIS];
+        acc_init[Y_AXIS] += BMI088.Accel[Y_AXIS];
+        acc_init[Z_AXIS] += BMI088.Accel[Z_AXIS];
+        DWT_Delay(0.001);
+    }
+    for (uint8_t i = 0; i < 3; ++i)
+        acc_init[i] /= 100;
+    Norm3d(acc_init);
+    // 计算原始加速度矢量和导航系重力加速度矢量的夹角
+    float angle = acosf(Dot3d(acc_init, gravity_norm));
+    Cross3d(acc_init, gravity_norm, axis_rot);
+    Norm3d(axis_rot);
+    init_q4[0] = cosf(angle / 2.0f);
+    for (uint8_t i = 0; i < 2; ++i)
+        init_q4[i + 1] = axis_rot[i] * sinf(angle / 2.0f); // 轴角公式,第三轴为0(没有z轴分量)
+}
+
 void INS_Init(void)
 { 
+	while (BMI088_init(&hspi2,2) != BMI088_NO_ERROR)
+    {
+        /* code */
+    }
 	mahony_init(&mahony,1.0f,0.0f,0.001f);
    	INS.AccelLPF = 0.0089f;
+
+	float init_quaternion[4] = {0};
+    InitQuaternion(init_quaternion);
+    IMU_QuaternionEKF_Init(init_quaternion, 10, 0.001, 1000000, 1, 0);
 }
+
 
 void INS_task(void)
 {
@@ -75,7 +129,7 @@ void INS_task(void)
 		Gyro.z=BMI088.Gyro[2];
 
 		//核心函数，EKF更新四元数
-		// IMU_QuaternionEKF_Update(INS.Gyro[X_AXIS], INS.Gyro[Y_AXIS], INS.Gyro[Z_AXIS], INS.Accel[X_AXIS], INS.Accel[Y_AXIS], INS.Accel[Z_AXIS], mahony.dt);
+		IMU_QuaternionEKF_Update(INS.Gyro[X_AXIS], INS.Gyro[Y_AXIS], INS.Gyro[Z_AXIS], INS.Accel[X_AXIS], INS.Accel[Y_AXIS], INS.Accel[Z_AXIS], mahony.dt);
 
 		mahony_input(&mahony,Gyro,Accel);
 		mahony_update(&mahony);
@@ -86,6 +140,8 @@ void INS_task(void)
 		INS.q[1]=mahony.q1;
 		INS.q[2]=mahony.q2;
 		INS.q[3]=mahony.q3;
+
+		memcpy(INS.q, QEKF_INS.q, sizeof(QEKF_INS.q));
 		
 		// 将重力从导航坐标系n转换到机体系b,随后根据加速度计数据计算运动加速度
 		float gravity_b[3];
@@ -113,7 +169,7 @@ void INS_task(void)
 			INS.MotionAccel_n[2]=0.0f;//z轴
 		}
 		
-		if(ins_time>3000.0f)
+		if(ins_time>2000.0f)
 		{
 			INS.v_n=INS.v_n+INS.MotionAccel_n[1]*0.001f;
 		  	INS.x_n=INS.x_n+INS.v_n*0.001f;
@@ -122,19 +178,11 @@ void INS_task(void)
 			INS.Pitch=mahony.roll*180.0f/PI;
 			INS.Roll=mahony.pitch*180.0f/PI;
 			INS.Yaw=mahony.yaw*180.0f/PI;
+			// INS.Pitch=mahony.roll;
+			// INS.Roll=mahony.pitch;
+			// INS.Yaw=mahony.yaw;
 		
-			//INS.YawTotalAngle=INS.YawTotalAngle+INS.Gyro[2]*0.001f;
-			
-			if (INS.Yaw - INS.YawAngleLast > 3.1415926f)
-			{
-					INS.YawRoundCount--;
-			}
-			else if (INS.Yaw - INS.YawAngleLast < -3.1415926f)
-			{
-					INS.YawRoundCount++;
-			}
-			INS.YawTotalAngle = (6.283f* INS.YawRoundCount + INS.Yaw) * 180.0f / PI;
-			INS.YawAngleLast = INS.Yaw*180.0f/PI;
+			INS.YawTotalAngle = QEKF_INS.YawTotalAngle;
 		}
 		else
 		{
@@ -142,48 +190,9 @@ void INS_task(void)
 		}
 			
 		osDelay(1);
+		// IMU_Temperature_Ctrl();
 	}
 } 
-
-/**
-************************************************************************
-* @brief:      	IMU_TempCtrlTask(void const * argument)
-* @param:       argument - 任务参数
-* @retval:     	void
-* @details:    	IMU温度控制任务函数
-************************************************************************
-**/
-// void IMU_TempCtrlTask(void const * argument)
-// {
-// 	osDelay(500);
-//     HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_4);
-// 	while(BMI088_init(&hspi2,2))
-// 	{
-
-// 	}
-
-// 	PID_init(&imu_temp_pid, PID_DELTA, (float[]){KP,KI,KD}, MAX_OUT, 0.0f);
-
-// 	for(;;)
-// 	{
-// 		osSemaphoreWait(imuBinarySem01Handle, osWaitForever);
-
-// 		BMI088_Read(&BMI088);
-// 		temp = BMI088.Temperature;
-
-// 		float out = PID_Calc(&imu_temp_pid, temp, DES_TEMP);
-
-// 		if (out > MAX_OUT) out = MAX_OUT;
-//         if (out < 0) out = 0.f;
-        
-//         if (forceStop == 1)
-//         {
-//             out = 0.0f;
-//         }
-
-// 		htim3.Instance->CCR4 = (uint16_t)out;
-// 	}
-// }
 
 
 /**

@@ -1,6 +1,6 @@
 /**
  * @file chassis_def.h
- * @author your name (you@domain.com)
+ * @author Light
  * @brief 用于包含各种宏定义与全局结构体
  * @version 0.1
  * @date 2025-12-11
@@ -12,6 +12,8 @@
 #ifndef CHASSIS_DEF_H
 #define CHASSIS_DEF_H
 
+#include "stdbool.h"
+#include "stdint.h"
 #include "DJI3508.h"
 #include "DM8009.h"
 
@@ -25,8 +27,11 @@
             *_p = (max);          \
     } while(0)
 
+/**********************control parameters*******************/
+//内部参数配置，宏定义判断是否启动
+
 /**********************physical parameters*******************/
-#define GRAVITY 9.81f       // 重力加速度
+#define GRAVITY 9.791f         // 重力加速度--福建
 
 #define BODY_MASS 0.0f          //  载体重量
 #define WHEEL_MASS 0.0f         //  轮重量
@@ -37,6 +42,8 @@
 #define TAKE_OFF_FN_THRESHOLD (3.0f)
 // 触地状态切换时间阈值，当时间接触或离地时间超过这个值时切换触地状态
 #define TOUCH_TOGGLE_THRESHOLD (100)
+
+#define CHASSIS_TIME 1         //延迟时间
 
 /***********************pid parameters*******************/
 #define LEG_PID_KP  0.0f
@@ -70,6 +77,19 @@
 #define X3_OFFSET (0.0f)    // 目标x_dot偏移量
 #define X4_OFFSET (0.0f)    // 目标phi偏移量
 #define X5_OFFSET (0.0f)    // 目标phi_dot偏移量
+  
+/**********************Step definitions*******************/
+#define NORMAL_STEP        0  // 正常状态
+#define JUMP_STEP_SQUST    1  // 跳跃状态——蹲下
+#define JUMP_STEP_JUMP     2  // 跳跃状态——跳跃
+#define JUMP_STEP_RECOVERY 3  // 跳跃状态——收腿
+
+#define MAX_STEP_TIME           5000  // 最大步骤时间
+
+#define NORMAL_STEP_TIME        0  // 正常状态
+#define JUMP_STEP_TIME_SQUST    50  // 跳跃状态——蹲下
+#define JUMP_STEP_TIME_JUMP     50  // 跳跃状态——跳跃
+#define JUMP_STEP_TIME_RECOVERY 200  // 跳跃状态——收腿
 
 /**************************structural***********************/
 typedef enum 
@@ -124,6 +144,8 @@ typedef struct
         uint8_t right_flag;     //右腿离地检测标志
         uint8_t left_flag;      //左腿离地检测标志
         uint8_t recover_flag;   //倒地自起完成标志
+        bool is_take_off;       //离地标志
+        uint8_t jump_flag;      //跳跃标志
     } flag;
 
 } chassis_t;

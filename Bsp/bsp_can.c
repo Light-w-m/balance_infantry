@@ -2,23 +2,77 @@
 #include "memory.h"
 #include "stdlib.h"
 #include "bsp_dwt.h"
-#include "chassisR_task.h"
 
-// extern chassis_t chassis_move;
+void FDCAN1_Config(void)
+{
+    
+  	FDCAN_FilterTypeDef sFilterConfig;
+  /* Configure Rx filter */	
+	sFilterConfig.IdType = FDCAN_STANDARD_ID;//扩展ID不接收
+	sFilterConfig.FilterIndex = 0;
+	sFilterConfig.FilterType = FDCAN_FILTER_MASK;
+	sFilterConfig.FilterConfig = FDCAN_FILTER_TO_RXFIFO0;
+	sFilterConfig.FilterID1 = 0x00000000; // 
+	sFilterConfig.FilterID2 = 0x00000000; // 
+   	HAL_FDCAN_ConfigFilter(&hfdcan1, &sFilterConfig);
+	HAL_FDCAN_ConfigGlobalFilter(&hfdcan1, FDCAN_REJECT, FDCAN_REJECT, FDCAN_FILTER_REMOTE, FDCAN_FILTER_REMOTE);
+	/* Start the FDCAN module */
+	HAL_FDCAN_Start(&hfdcan1);
+	/* 开启RX FIFO0的新数据中断 */
+	HAL_FDCAN_ActivateNotification(&hfdcan1, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0);
+}
 
-FDCAN_RxHeaderTypeDef RxHeader1;
-uint8_t g_Can1RxData[64];
+uint8_t canx_send_data(FDCAN_HandleTypeDef *hcan, uint16_t id, uint8_t *data, uint32_t len)
+{
+	FDCAN_TxHeaderTypeDef TxHeader;
 
+	TxHeader.Identifier = id;                 // CAN ID
+	TxHeader.IdType =  FDCAN_STANDARD_ID ;        
+	TxHeader.TxFrameType = FDCAN_DATA_FRAME;
+	TxHeader.DataLength = FDCAN_DLC_BYTES_8;     // 发送长度：8byte									
+	TxHeader.ErrorStateIndicator =  FDCAN_ESI_ACTIVE;
+	TxHeader.BitRateSwitch = FDCAN_BRS_OFF;//比特率切换关闭，不适用于经典CAN
+	TxHeader.FDFormat =  FDCAN_CLASSIC_CAN;            // CANFD
+	TxHeader.TxEventFifoControl =  FDCAN_NO_TX_EVENTS;  
+	TxHeader.MessageMarker = 0;//消息标记
+
+	HAL_FDCAN_AddMessageToTxFifoQ(hcan, &TxHeader, data);
+	return 0;
+}
+
+
+/* can instance ptrs storage, used for recv callback */
+// 在CAN产生接收中断会遍历数组,选出hcan和rxid与发生中断的实例相同的那个,调用其回调函数
+// @todo: 后续为每个CAN总线单独添加一个can_instance指针数组,提高回调查找的性能
 static CANInstance *can_instance[CAN_MX_REGISTER_CNT] = {NULL};
 static uint8_t idx; // 全局CAN实例索引,每次有新的模块注册会自增
 
+/* ----------------two static function called by CANRegister()-------------------- */
+
+/**
+ * @brief 添加过滤器以实现对特定id的报文的接收,会被CANRegister()调用
+ *        给CAN添加过滤器后,BxCAN会根据接收到的报文的id进行消息过滤,符合规则的id会被填入FIFO触发中断
+ *        对于FDCAN，设置使用特定ID模式过滤。
+ *
+ * @note f407的bxCAN有28个过滤器,这里将其配置为前14个过滤器给CAN1使用,后14个被CAN2使用
+ *       初始化时,奇数id的模块会被分配到FIFO0,偶数id的模块会被分配到FIFO1
+ *       注册到CAN1的模块使用过滤器0-13,CAN2使用过滤器14-27
+ *       FDCAN的消息RAM是所有FDCAN外设共用的。
+ *       H723系列FDCAN过滤器数量完全在CubeMX中自定义，因此先做一次检查，再添加即可。
+ *
+ * @attention 你不需要完全理解这个函数的作用,因为它主要是用于初始化,在开发过程中不需要关心底层的实现
+ *            享受开发的乐趣吧!如果你真的想知道这个函数在干什么,请联系作者或自己查阅资料(请直接查阅官方的reference manual)
+ *            FDCAN的教程较少，但是添加FDCAN的人已经发了一篇CSDN讲解了，可以参考一下
+ *
+ * @param _instance can instance owned by specific module
+ */
 static void CANAddFilter(CANInstance *_instance)
 {
-	
+
 #ifdef FDCAN
-	static uint8_t can1_filter_idx = 0, can2_filter_idx = 0;
+	static uint8_t can2_filter_idx = 0;
 	//检查是否超出过滤器设定数量上限
-	if(can1_filter_idx >= hfdcan1.Init.StdFiltersNbr || can2_filter_idx >= hfdcan2.Init.StdFiltersNbr)
+	if(can2_filter_idx > hfdcan2.Init.StdFiltersNbr )
 	{
 		while(1)
 		{
@@ -27,11 +81,7 @@ static void CANAddFilter(CANInstance *_instance)
 	}
 	uint8_t *filter_idx_p;
 
-	if(_instance->can_handle==&hfdcan1)
-	{
-		filter_idx_p=&can1_filter_idx;
-	}
-	else if(_instance->can_handle==&hfdcan2)
+	if(_instance->can_handle==&hfdcan2)
 	{
 		filter_idx_p=&can2_filter_idx;
 	}
@@ -46,12 +96,10 @@ static void CANAddFilter(CANInstance *_instance)
 	FDCAN_FilterTypeDef fdcan_filter_conf;
 	fdcan_filter_conf.FilterIndex=(*filter_idx_p)++;
 	//使用单个ID模式
-	// fdcan_filter_conf.FilterType=FDCAN_FILTER_DUAL;
-	fdcan_filter_conf.FilterType=FDCAN_FILTER_MASK;
+	fdcan_filter_conf.FilterType=FDCAN_FILTER_DUAL;
 	fdcan_filter_conf.FilterConfig=(_instance->tx_id & 1) ? FDCAN_FILTER_TO_RXFIFO0 : FDCAN_FILTER_TO_RXFIFO1;//奇数id的模块会被分配到FIFO0,偶数id的模块会被分配到FIFO1
 	fdcan_filter_conf.FilterID1=_instance->rx_id;
-	// fdcan_filter_conf.FilterID2=_instance->rx_id;
-	fdcan_filter_conf.FilterID2=0x7FF;
+	fdcan_filter_conf.FilterID2=_instance->rx_id;
 	fdcan_filter_conf.IdType=FDCAN_STANDARD_ID;
 	fdcan_filter_conf.IsCalibrationMsg=0;
 	//fdcan_filter_conf.RxBufferIndex=0;
@@ -59,8 +107,17 @@ static void CANAddFilter(CANInstance *_instance)
 	HAL_FDCAN_ConfigFilter(_instance->can_handle, &fdcan_filter_conf);
 
 #endif
+
 }
 
+/**
+ * @brief 在第一个CAN实例初始化的时候会自动调用此函数,启动CAN服务
+ *
+ * @note 此函数会启动CAN1并开启中断
+ *       FDCAN的情况下，我们采用FIFO接收方式（而不是buffer），FIFO和buffer还有queue接收方式请自行查阅H723手册
+ *       FDCAN比bxCAN多了一个全局过滤器，这里配置为全部拒绝，只接受指定ID。
+ *       
+ */
 void CANServiceInit()
 {
 #ifdef FDCAN
@@ -71,13 +128,6 @@ void CANServiceInit()
 			|FDCAN_IT_RX_FIFO1_WATERMARK|FDCAN_IT_RX_FIFO1_MESSAGE_LOST;
 
 
-	//HAL_FDCAN_ConfigClockCalibration()
-	HAL_FDCAN_ConfigRxFifoOverwrite(&hfdcan1,FDCAN_RX_FIFO0,FDCAN_RX_FIFO_OVERWRITE);
-	HAL_FDCAN_ConfigRxFifoOverwrite(&hfdcan1,FDCAN_RX_FIFO1,FDCAN_RX_FIFO_OVERWRITE);
-	HAL_FDCAN_ConfigGlobalFilter(&hfdcan1, FDCAN_REJECT, FDCAN_REJECT, FDCAN_REJECT_REMOTE, FDCAN_REJECT_REMOTE);//全局过滤器设置
-	HAL_FDCAN_Start(&hfdcan1);
-	HAL_FDCAN_ActivateNotification(&hfdcan1,FDCAN_RXActiveITs, 0);
-
 	HAL_FDCAN_ConfigRxFifoOverwrite(&hfdcan2,FDCAN_RX_FIFO0,FDCAN_RX_FIFO_OVERWRITE);
 	HAL_FDCAN_ConfigRxFifoOverwrite(&hfdcan2,FDCAN_RX_FIFO1,FDCAN_RX_FIFO_OVERWRITE);
 	HAL_FDCAN_ConfigGlobalFilter(&hfdcan2, FDCAN_REJECT, FDCAN_REJECT, FDCAN_REJECT_REMOTE, FDCAN_REJECT_REMOTE);
@@ -87,6 +137,8 @@ void CANServiceInit()
 #endif
 
 }
+
+/* ----------------------- two extern callable function -----------------------*/
 
 CANInstance *CANRegister(CAN_Init_Config_s *config)
 {
@@ -142,6 +194,7 @@ CANInstance *CANRegister(CAN_Init_Config_s *config)
     return instance; // 返回can实例指针
 }
 
+// static uint32_t busy_count;
 /* @todo 目前似乎封装过度,应该添加一个指向tx_buff的指针,tx_buff不应该由CAN instance保存 */
 /* 如果让CANinstance保存txbuff,会增加一次复制的开销 */
 uint8_t CANTransmit(CANInstance *_instance, float timeout)
@@ -185,24 +238,9 @@ void CANSetDLC(CANInstance *_instance, uint8_t length)
     _instance->txconf.DataLength = length;
 }
 
-uint8_t canx_send_data(hcan_t* hcan, uint16_t id, uint8_t *data, uint32_t len)
-{
-	FDCAN_TxHeaderTypeDef TxHeader;
+/* -----------------------belows are callback definitions--------------------------*/
 
-	TxHeader.Identifier = id;                 			// CAN ID
-	TxHeader.IdType =  FDCAN_STANDARD_ID ;        
-	TxHeader.TxFrameType = FDCAN_DATA_FRAME;
-	TxHeader.DataLength = FDCAN_DLC_BYTES_8;     		// 发送长度：8byte				
-	TxHeader.ErrorStateIndicator =  FDCAN_ESI_ACTIVE;
-	TxHeader.BitRateSwitch = FDCAN_BRS_OFF;				//比特率切换关闭，不适用于经典CAN
-	TxHeader.FDFormat =  FDCAN_CLASSIC_CAN;            	// CANFD
-	TxHeader.TxEventFifoControl =  FDCAN_NO_TX_EVENTS;  
-	TxHeader.MessageMarker = 0;//消息标记
-
-	HAL_FDCAN_AddMessageToTxFifoQ(hcan, &TxHeader, data);
-	return 0;
-}
-
+//对于FDCAN，回调函数和处理方式完全不同，因此直接用两套逻辑处理
 #ifdef FDCAN
 /**
  * @brief 此函数会被下面两个函数调用,用于处理FIFO0和FIFO1溢出中断(说明收到了新的数据)
@@ -248,24 +286,25 @@ static void FDCANFIFOxCallback(FDCAN_HandleTypeDef *_hfdcan, uint32_t fifox)
     }
 }
 
-#endif
-
-/*********************************回调********************* */
 
 void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 {
-	/* 检查Rx FIFO 0中是否有消息丢失 */
-	if ((RxFifo0ITs & FDCAN_IT_RX_FIFO0_MESSAGE_LOST) != 0)
-	{
-		//报错
-	}
-	/* 检查是否有新消息写入Rx FIFO 0或到达一定阈值 */
-	if ((RxFifo0ITs & FDCAN_IT_RX_FIFO0_NEW_MESSAGE)||(RxFifo0ITs & FDCAN_IT_RX_FIFO0_FULL)||(RxFifo0ITs & FDCAN_IT_RX_FIFO0_WATERMARK))
-	{
-		FDCANFIFOxCallback(hfdcan, FDCAN_RX_FIFO0); // 调用我们自己写的函数来处理消息
-	}
-}
+	if (RxFifo0ITs & FDCAN_IT_RX_FIFO0_NEW_MESSAGE)
+    {
+        FDCAN_RxHeaderTypeDef rxHeader;
+        uint8_t rx_data[8];
 
+        while (HAL_FDCAN_GetRxFifoFillLevel(hfdcan, FDCAN_RX_FIFO0) > 0)
+        {
+            HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &rxHeader, rx_data);
+
+            if (rxHeader.IdType == FDCAN_STANDARD_ID && rxHeader.RxFrameType == FDCAN_DATA_FRAME)
+            {
+                
+            }
+        }
+    }	
+}
 void HAL_FDCAN_RxFifo1Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo1ITs)
 {
 	/* 检查Rx FIFO 1中是否有消息丢失 */
@@ -279,3 +318,4 @@ void HAL_FDCAN_RxFifo1Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo1ITs)
 		FDCANFIFOxCallback(hfdcan, FDCAN_RX_FIFO1); // 调用我们自己写的函数来处理消息
 	}
 }
+#endif

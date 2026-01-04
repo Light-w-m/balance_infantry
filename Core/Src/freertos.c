@@ -60,9 +60,9 @@ osThreadId CHASSISR_TASKHandle;
 /* USER CODE END FunctionPrototypes */
 
 void StartDefaultTask(void const * argument);
-void INS_Task(void const * argument);
-void UART_receive(void const * argument);
-void ChassisR_task(void const * argument);
+void ins_task(void const * argument);
+void uart_receive(void const * argument);
+void chassisr_task(void const * argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -114,15 +114,15 @@ void MX_FREERTOS_Init(void) {
   defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
   /* definition and creation of INS_TASK */
-  osThreadDef(INS_TASK, INS_Task, osPriorityRealtime, 0, 512);
+  osThreadDef(INS_TASK, ins_task, osPriorityRealtime, 0, 512);
   INS_TASKHandle = osThreadCreate(osThread(INS_TASK), NULL);
 
   /* definition and creation of UART_RECEIVE */
-  osThreadDef(UART_RECEIVE, UART_receive, osPriorityRealtime, 0, 512);
+  osThreadDef(UART_RECEIVE, uart_receive, osPriorityRealtime, 0, 512);
   UART_RECEIVEHandle = osThreadCreate(osThread(UART_RECEIVE), NULL);
 
   /* definition and creation of CHASSISR_TASK */
-  osThreadDef(CHASSISR_TASK, ChassisR_task, osPriorityAboveNormal, 0, 512);
+  osThreadDef(CHASSISR_TASK, chassisr_task, osPriorityAboveNormal, 0, 512);
   CHASSISR_TASKHandle = osThreadCreate(osThread(CHASSISR_TASK), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
@@ -149,61 +149,61 @@ void StartDefaultTask(void const * argument)
   /* USER CODE END StartDefaultTask */
 }
 
-/* USER CODE BEGIN Header_INS_Task */
+/* USER CODE BEGIN Header_ins_task */
 /**
 * @brief Function implementing the INS_TASK thread.
 * @param argument: Not used
 * @retval None
 */
-/* USER CODE END Header_INS_Task */
-void INS_Task(void const * argument)
+/* USER CODE END Header_ins_task */
+void ins_task(void const * argument)
 {
-  /* USER CODE BEGIN INS_Task */
+  /* USER CODE BEGIN ins_task */
   /* Infinite loop */
   for(;;)
   {
-    // INS_task();
+    INS_task();
     osDelay(1);
   }
-  /* USER CODE END INS_Task */
+  /* USER CODE END ins_task */
 }
 
-/* USER CODE BEGIN Header_UART_receive */
+/* USER CODE BEGIN Header_uart_receive */
 /**
 * @brief Function implementing the UART_RECEIVE thread.
 * @param argument: Not used
 * @retval None
 */
-/* USER CODE END Header_UART_receive */
-void UART_receive(void const * argument)
+/* USER CODE END Header_uart_receive */
+void uart_receive(void const * argument)
 {
-  /* USER CODE BEGIN UART_receive */
+  /* USER CODE BEGIN uart_receive */
   /* Infinite loop */
   for(;;)
   {
     // UartReceive_Task();
     osDelay(1);
   }
-  /* USER CODE END UART_receive */
+  /* USER CODE END uart_receive */
 }
 
-/* USER CODE BEGIN Header_ChassisR_Task */
+/* USER CODE BEGIN Header_chassisr_task */
 /**
 * @brief Function implementing the CHASSISR_TASK thread.
 * @param argument: Not used
 * @retval None
 */
-/* USER CODE END Header_ChassisR_Task */
-void ChassisR_task(void const * argument)
+/* USER CODE END Header_chassisr_task */
+void chassisr_task(void const * argument)
 {
-  /* USER CODE BEGIN ChassisR_Task */
+  /* USER CODE BEGIN chassisr_task */
   /* Infinite loop */
   for(;;)
   {
     ChassisR_Task();
     osDelay(1);
   }
-  /* USER CODE END ChassisR_Task */
+  /* USER CODE END chassisr_task */
 }
 
 /* Private application code --------------------------------------------------*/

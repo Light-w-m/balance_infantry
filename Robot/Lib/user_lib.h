@@ -120,6 +120,11 @@ void ramp_init(ramp_function_source_t *ramp_source_type, float frame_period, flo
 //斜波函数计算
 float ramp_calc(ramp_function_source_t *ramp_source_type, float input);
 
+float *Norm3d(float *v);
+float NormOf3d(float *v);
+float Dot3d(float *v1, float *v2);
+void Cross3d(float *v1, float *v2, float *res);
+
 //绝对限制
 float abs_limit(float num, float Limit);
 //判断符号位

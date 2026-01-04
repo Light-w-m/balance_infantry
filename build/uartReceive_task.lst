@@ -1,4 +1,4 @@
-ARM GAS  D:\temp\TMP\ccLXsDHo.s 			page 1
+ARM GAS  D:\temp\TMP\ccZvKPwn.s 			page 1
 
 
    1              		.cpu cortex-m7
@@ -58,7 +58,7 @@ ARM GAS  D:\temp\TMP\ccLXsDHo.s 			page 1
   43              	.L2:
   10:Robot/RoboTask/emulator/uartReceive_task.c ****     char tx_buff[128];
   44              		.loc 1 10 5 discriminator 1 view .LVU1
-ARM GAS  D:\temp\TMP\ccLXsDHo.s 			page 2
+ARM GAS  D:\temp\TMP\ccZvKPwn.s 			page 2
 
 
   11:Robot/RoboTask/emulator/uartReceive_task.c ****     uint16_t len;
@@ -70,99 +70,83 @@ ARM GAS  D:\temp\TMP\ccLXsDHo.s 			page 1
   15:Robot/RoboTask/emulator/uartReceive_task.c ****         /* code */
   16:Robot/RoboTask/emulator/uartReceive_task.c ****         len = snprintf(tx_buff,sizeof(tx_buff), "%.4f, %.4f, %.4f\r\n",
   47              		.loc 1 16 9 discriminator 1 view .LVU4
-  17:Robot/RoboTask/emulator/uartReceive_task.c ****                  INS.Pitch * 180.0f/PI, INS.Roll * 180.0f/PI, INS.Yaw * 180.0f/PI);
+  17:Robot/RoboTask/emulator/uartReceive_task.c ****                  INS.Pitch, INS.Roll, INS.Yaw);
   48              		.loc 1 17 21 is_stmt 0 discriminator 1 view .LVU5
-  49 0004 184B     		ldr	r3, .L4
-  50 0006 D3ED1D6A 		vldr.32	s13, [r3, #116]
-  51              		.loc 1 17 28 discriminator 1 view .LVU6
-  52 000a DFED185A 		vldr.32	s11, .L4+4
-  53 000e 66EEA56A 		vmul.f32	s13, s13, s11
-  54              		.loc 1 17 36 discriminator 1 view .LVU7
-  55 0012 DFED177A 		vldr.32	s15, .L4+8
-  56 0016 86EEA77A 		vdiv.f32	s14, s13, s15
-  57              		.loc 1 17 44 discriminator 1 view .LVU8
-  58 001a D3ED1C6A 		vldr.32	s13, [r3, #112]
-  59              		.loc 1 17 50 discriminator 1 view .LVU9
-  60 001e 66EEA56A 		vmul.f32	s13, s13, s11
-  61              		.loc 1 17 58 discriminator 1 view .LVU10
-  62 0022 86EEA76A 		vdiv.f32	s12, s13, s15
-  63              		.loc 1 17 66 discriminator 1 view .LVU11
-  64 0026 D3ED1E6A 		vldr.32	s13, [r3, #120]
-  65              		.loc 1 17 71 discriminator 1 view .LVU12
-  66 002a 66EEA56A 		vmul.f32	s13, s13, s11
-  67              		.loc 1 17 79 discriminator 1 view .LVU13
-  68 002e 86EEA75A 		vdiv.f32	s10, s13, s15
-  16:Robot/RoboTask/emulator/uartReceive_task.c ****                  INS.Pitch * 180.0f/PI, INS.Roll * 180.0f/PI, INS.Yaw * 180.0f/PI);
-  69              		.loc 1 16 15 discriminator 1 view .LVU14
-  70 0032 B7EEC55A 		vcvt.f64.f32	d5, s10
-  71 0036 8DED045B 		vstr.64	d5, [sp, #16]
-  72 003a B7EEC66A 		vcvt.f64.f32	d6, s12
-  73 003e 8DED026B 		vstr.64	d6, [sp, #8]
-  74 0042 B7EEC77A 		vcvt.f64.f32	d7, s14
-  75 0046 8DED007B 		vstr.64	d7, [sp]
-  76 004a 0A4A     		ldr	r2, .L4+12
-  77 004c 8021     		movs	r1, #128
-  78 004e 06A8     		add	r0, sp, #24
-  79 0050 FFF7FEFF 		bl	snprintf
-  80              	.LVL0:
+  49 0004 104B     		ldr	r3, .L4
+  50 0006 93ED1D7A 		vldr.32	s14, [r3, #116]
+  51              		.loc 1 17 32 discriminator 1 view .LVU6
+  52 000a 93ED1C6A 		vldr.32	s12, [r3, #112]
+  53              		.loc 1 17 42 discriminator 1 view .LVU7
+  54 000e 93ED1E5A 		vldr.32	s10, [r3, #120]
+  16:Robot/RoboTask/emulator/uartReceive_task.c ****                  INS.Pitch, INS.Roll, INS.Yaw);
+  55              		.loc 1 16 15 discriminator 1 view .LVU8
+  56 0012 B7EEC55A 		vcvt.f64.f32	d5, s10
+  57 0016 8DED045B 		vstr.64	d5, [sp, #16]
+  58 001a B7EEC66A 		vcvt.f64.f32	d6, s12
+  59 001e 8DED026B 		vstr.64	d6, [sp, #8]
+  60 0022 B7EEC77A 		vcvt.f64.f32	d7, s14
+  61 0026 8DED007B 		vstr.64	d7, [sp]
+  62 002a 084A     		ldr	r2, .L4+4
+  63 002c 8021     		movs	r1, #128
+  64 002e 06A8     		add	r0, sp, #24
+  65 0030 FFF7FEFF 		bl	snprintf
+  66              	.LVL0:
   18:Robot/RoboTask/emulator/uartReceive_task.c **** 
   19:Robot/RoboTask/emulator/uartReceive_task.c ****         // len = snprintf(tx_buff,sizeof(tx_buff), "%.4f, %.4f, %.4f, %.4f, %.4f, %.4f\r\n",
   20:Robot/RoboTask/emulator/uartReceive_task.c ****         //          INS.Gyro[0], INS.Gyro[1], INS.Gyro[2],
   21:Robot/RoboTask/emulator/uartReceive_task.c ****         //          INS.Accel[0], INS.Accel[1], INS.Accel[2]);
   22:Robot/RoboTask/emulator/uartReceive_task.c **** 
   23:Robot/RoboTask/emulator/uartReceive_task.c ****         HAL_UART_Transmit(&huart7, (uint8_t *)tx_buff, len, 10);
-  81              		.loc 1 23 9 is_stmt 1 discriminator 1 view .LVU15
-  82 0054 0A23     		movs	r3, #10
-  83 0056 82B2     		uxth	r2, r0
-  84 0058 06A9     		add	r1, sp, #24
-  85 005a 0748     		ldr	r0, .L4+16
-  86              	.LVL1:
-  87              		.loc 1 23 9 is_stmt 0 discriminator 1 view .LVU16
-ARM GAS  D:\temp\TMP\ccLXsDHo.s 			page 3
-
-
-  88 005c FFF7FEFF 		bl	HAL_UART_Transmit
-  89              	.LVL2:
+  67              		.loc 1 23 9 is_stmt 1 discriminator 1 view .LVU9
+  68 0034 0A23     		movs	r3, #10
+  69 0036 82B2     		uxth	r2, r0
+  70 0038 06A9     		add	r1, sp, #24
+  71 003a 0548     		ldr	r0, .L4+8
+  72              	.LVL1:
+  73              		.loc 1 23 9 is_stmt 0 discriminator 1 view .LVU10
+  74 003c FFF7FEFF 		bl	HAL_UART_Transmit
+  75              	.LVL2:
   24:Robot/RoboTask/emulator/uartReceive_task.c **** 
   25:Robot/RoboTask/emulator/uartReceive_task.c ****         osDelay(10);
-  90              		.loc 1 25 9 is_stmt 1 discriminator 1 view .LVU17
-  91 0060 0A20     		movs	r0, #10
-  92 0062 FFF7FEFF 		bl	osDelay
-  93              	.LVL3:
+  76              		.loc 1 25 9 is_stmt 1 discriminator 1 view .LVU11
+  77 0040 0A20     		movs	r0, #10
+  78 0042 FFF7FEFF 		bl	osDelay
+  79              	.LVL3:
   13:Robot/RoboTask/emulator/uartReceive_task.c ****     {
-  94              		.loc 1 13 11 discriminator 1 view .LVU18
-  95 0066 CDE7     		b	.L2
-  96              	.L5:
-  97              		.align	2
-  98              	.L4:
-  99 0068 00000000 		.word	INS
- 100 006c 00003443 		.word	1127481344
- 101 0070 DB0F4940 		.word	1078530011
- 102 0074 00000000 		.word	.LC0
- 103 0078 00000000 		.word	huart7
- 104              		.cfi_endproc
- 105              	.LFE196:
- 107              		.text
- 108              	.Letext0:
- 109              		.file 2 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\machine\\_default_types.h"
- 110              		.file 3 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
- 111              		.file 4 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h723xx.h"
- 112              		.file 5 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h"
- 113              		.file 6 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_dma.h"
- 114              		.file 7 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h"
- 115              		.file 8 "Robot/RoboTask/ins/INS_task.h"
- 116              		.file 9 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\stdio.h"
- 117              		.file 10 "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h"
- 118              		.file 11 "Core/Inc/usart.h"
-ARM GAS  D:\temp\TMP\ccLXsDHo.s 			page 4
+  80              		.loc 1 13 11 discriminator 1 view .LVU12
+  81 0046 DDE7     		b	.L2
+  82              	.L5:
+  83              		.align	2
+  84              	.L4:
+ARM GAS  D:\temp\TMP\ccZvKPwn.s 			page 3
+
+
+  85 0048 00000000 		.word	INS
+  86 004c 00000000 		.word	.LC0
+  87 0050 00000000 		.word	huart7
+  88              		.cfi_endproc
+  89              	.LFE196:
+  91              		.text
+  92              	.Letext0:
+  93              		.file 2 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\machine\\_default_types.h"
+  94              		.file 3 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
+  95              		.file 4 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h723xx.h"
+  96              		.file 5 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h"
+  97              		.file 6 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_dma.h"
+  98              		.file 7 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h"
+  99              		.file 8 "Robot/RoboTask/ins/INS_task.h"
+ 100              		.file 9 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\stdio.h"
+ 101              		.file 10 "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h"
+ 102              		.file 11 "Core/Inc/usart.h"
+ARM GAS  D:\temp\TMP\ccZvKPwn.s 			page 4
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 uartReceive_task.c
-D:\temp\TMP\ccLXsDHo.s:19     .rodata.UartReceive_Task.str1.4:00000000 $d
-D:\temp\TMP\ccLXsDHo.s:23     .text.UartReceive_Task:00000000 $t
-D:\temp\TMP\ccLXsDHo.s:29     .text.UartReceive_Task:00000000 UartReceive_Task
-D:\temp\TMP\ccLXsDHo.s:99     .text.UartReceive_Task:00000068 $d
+D:\temp\TMP\ccZvKPwn.s:19     .rodata.UartReceive_Task.str1.4:00000000 $d
+D:\temp\TMP\ccZvKPwn.s:23     .text.UartReceive_Task:00000000 $t
+D:\temp\TMP\ccZvKPwn.s:29     .text.UartReceive_Task:00000000 UartReceive_Task
+D:\temp\TMP\ccZvKPwn.s:85     .text.UartReceive_Task:00000048 $d
 
 UNDEFINED SYMBOLS
 snprintf

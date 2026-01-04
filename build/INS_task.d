@@ -33,12 +33,11 @@ build/INS_task.o: Robot/RoboTask/ins/INS_task.c \
  Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h \
  Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h \
  Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h \
- Robot/Algorithm/EKF/QuaternionEKF.h \
- Robot/Algorithm/kalman/kalman_filter.h \
+ Robot/Controller/controller.h Bsp/bsp_dwt.h \
  Middlewares/ST/ARM/DSP/Inc/arm_math.h \
- Drivers/CMSIS/Include/cmsis_compiler.h Bsp/bsp_dwt.h \
- Robot/Algorithm/mahony/mahony_filter.h Core/Inc/gpio.h Core/Inc/main.h \
- Robot/Controller/pid.h Core/Inc/spi.h Core/Inc/tim.h \
+ Drivers/CMSIS/Include/cmsis_compiler.h \
+ Robot/Algorithm/EKF/QuaternionEKF.h \
+ Robot/Algorithm/kalman/kalman_filter.h Robot/Lib/user_lib.h \
  Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h \
  Core/Inc/FreeRTOSConfig.h \
@@ -55,7 +54,9 @@ build/INS_task.o: Robot/RoboTask/ins/INS_task.c \
  Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
- Middlewares/Third_Party/FreeRTOS/Source/include/timers.h
+ Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
+ Robot/Algorithm/mahony/mahony_filter.h Core/Inc/gpio.h Core/Inc/main.h \
+ Robot/Controller/pid.h Core/Inc/spi.h Core/Inc/tim.h
 Robot/RoboTask/ins/INS_task.h:
 Robot/Devices/BMI088/BMI088driver.h:
 Core/Inc/main.h:
@@ -94,17 +95,13 @@ Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h:
 Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h:
 Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h:
 Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h:
-Robot/Algorithm/EKF/QuaternionEKF.h:
-Robot/Algorithm/kalman/kalman_filter.h:
+Robot/Controller/controller.h:
+Bsp/bsp_dwt.h:
 Middlewares/ST/ARM/DSP/Inc/arm_math.h:
 Drivers/CMSIS/Include/cmsis_compiler.h:
-Bsp/bsp_dwt.h:
-Robot/Algorithm/mahony/mahony_filter.h:
-Core/Inc/gpio.h:
-Core/Inc/main.h:
-Robot/Controller/pid.h:
-Core/Inc/spi.h:
-Core/Inc/tim.h:
+Robot/Algorithm/EKF/QuaternionEKF.h:
+Robot/Algorithm/kalman/kalman_filter.h:
+Robot/Lib/user_lib.h:
 Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h:
 Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
 Core/Inc/FreeRTOSConfig.h:
@@ -122,3 +119,9 @@ Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h:
 Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:
 Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h:
 Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
+Robot/Algorithm/mahony/mahony_filter.h:
+Core/Inc/gpio.h:
+Core/Inc/main.h:
+Robot/Controller/pid.h:
+Core/Inc/spi.h:
+Core/Inc/tim.h:

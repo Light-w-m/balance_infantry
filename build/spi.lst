@@ -1,4 +1,4 @@
-ARM GAS  D:\temp\TMP\ccCs82m8.s 			page 1
+ARM GAS  D:\temp\TMP\ccuGVWO5.s 			page 1
 
 
    1              		.cpu cortex-m7
@@ -58,7 +58,7 @@ ARM GAS  D:\temp\TMP\ccCs82m8.s 			page 1
   29:Core/Src/spi.c **** DMA_HandleTypeDef hdma_spi2_tx;
   30:Core/Src/spi.c **** 
   31:Core/Src/spi.c **** /* SPI2 init function */
-ARM GAS  D:\temp\TMP\ccCs82m8.s 			page 2
+ARM GAS  D:\temp\TMP\ccuGVWO5.s 			page 2
 
 
   32:Core/Src/spi.c **** void MX_SPI2_Init(void)
@@ -118,7 +118,7 @@ ARM GAS  D:\temp\TMP\ccCs82m8.s 			page 1
   65 0026 8261     		str	r2, [r0, #24]
   49:Core/Src/spi.c ****   hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_32;
   66              		.loc 1 49 3 is_stmt 1 view .LVU15
-ARM GAS  D:\temp\TMP\ccCs82m8.s 			page 3
+ARM GAS  D:\temp\TMP\ccuGVWO5.s 			page 3
 
 
   67              		.loc 1 49 32 is_stmt 0 view .LVU16
@@ -178,7 +178,7 @@ ARM GAS  D:\temp\TMP\ccCs82m8.s 			page 1
  108 0046 4365     		str	r3, [r0, #84]
   63:Core/Src/spi.c ****   hspi2.Init.IOSwap = SPI_IO_SWAP_DISABLE;
  109              		.loc 1 63 3 is_stmt 1 view .LVU43
-ARM GAS  D:\temp\TMP\ccCs82m8.s 			page 4
+ARM GAS  D:\temp\TMP\ccuGVWO5.s 			page 4
 
 
  110              		.loc 1 63 21 is_stmt 0 view .LVU44
@@ -238,7 +238,7 @@ ARM GAS  D:\temp\TMP\ccCs82m8.s 			page 1
  153              		.cfi_offset 4, -24
  154              		.cfi_offset 5, -20
  155              		.cfi_offset 6, -16
-ARM GAS  D:\temp\TMP\ccCs82m8.s 			page 5
+ARM GAS  D:\temp\TMP\ccuGVWO5.s 			page 5
 
 
  156              		.cfi_offset 7, -12
@@ -298,7 +298,7 @@ ARM GAS  D:\temp\TMP\ccCs82m8.s 			page 1
   99:Core/Src/spi.c ****     /**SPI2 GPIO Configuration
  100:Core/Src/spi.c ****     PC1     ------> SPI2_MOSI
  101:Core/Src/spi.c ****     PC2_C     ------> SPI2_MISO
-ARM GAS  D:\temp\TMP\ccCs82m8.s 			page 6
+ARM GAS  D:\temp\TMP\ccuGVWO5.s 			page 6
 
 
  102:Core/Src/spi.c ****     PB13     ------> SPI2_SCK
@@ -319,7 +319,7 @@ ARM GAS  D:\temp\TMP\ccCs82m8.s 			page 1
  117:Core/Src/spi.c **** 
  118:Core/Src/spi.c ****     /* SPI2 DMA Init */
  119:Core/Src/spi.c ****     /* SPI2_RX Init */
- 120:Core/Src/spi.c ****     hdma_spi2_rx.Instance = DMA1_Stream0;
+ 120:Core/Src/spi.c ****     hdma_spi2_rx.Instance = DMA1_Stream2;
  121:Core/Src/spi.c ****     hdma_spi2_rx.Init.Request = DMA_REQUEST_SPI2_RX;
  122:Core/Src/spi.c ****     hdma_spi2_rx.Init.Direction = DMA_PERIPH_TO_MEMORY;
  123:Core/Src/spi.c ****     hdma_spi2_rx.Init.PeriphInc = DMA_PINC_DISABLE;
@@ -358,7 +358,7 @@ ARM GAS  D:\temp\TMP\ccCs82m8.s 			page 1
  156:Core/Src/spi.c ****     HAL_NVIC_SetPriority(SPI2_IRQn, 5, 0);
  157:Core/Src/spi.c ****     HAL_NVIC_EnableIRQ(SPI2_IRQn);
  158:Core/Src/spi.c ****   /* USER CODE BEGIN SPI2_MspInit 1 */
-ARM GAS  D:\temp\TMP\ccCs82m8.s 			page 7
+ARM GAS  D:\temp\TMP\ccuGVWO5.s 			page 7
 
 
  159:Core/Src/spi.c **** 
@@ -418,7 +418,7 @@ ARM GAS  D:\temp\TMP\ccCs82m8.s 			page 1
  226 0056 019A     		ldr	r2, [sp, #4]
  227              	.LBE2:
   95:Core/Src/spi.c **** 
-ARM GAS  D:\temp\TMP\ccCs82m8.s 			page 8
+ARM GAS  D:\temp\TMP\ccuGVWO5.s 			page 8
 
 
  228              		.loc 1 95 5 view .LVU73
@@ -478,7 +478,7 @@ ARM GAS  D:\temp\TMP\ccCs82m8.s 			page 1
  266 0090 CDF8D080 		str	r8, [sp, #208]
  106:Core/Src/spi.c ****     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
  267              		.loc 1 106 5 is_stmt 1 view .LVU90
-ARM GAS  D:\temp\TMP\ccCs82m8.s 			page 9
+ARM GAS  D:\temp\TMP\ccuGVWO5.s 			page 9
 
 
  106:Core/Src/spi.c ****     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
@@ -538,7 +538,7 @@ ARM GAS  D:\temp\TMP\ccCs82m8.s 			page 1
  120:Core/Src/spi.c ****     hdma_spi2_rx.Init.Request = DMA_REQUEST_SPI2_RX;
  305              		.loc 1 120 5 view .LVU108
  120:Core/Src/spi.c ****     hdma_spi2_rx.Init.Request = DMA_REQUEST_SPI2_RX;
-ARM GAS  D:\temp\TMP\ccCs82m8.s 			page 10
+ARM GAS  D:\temp\TMP\ccuGVWO5.s 			page 10
 
 
  306              		.loc 1 120 27 is_stmt 0 view .LVU109
@@ -598,7 +598,7 @@ ARM GAS  D:\temp\TMP\ccCs82m8.s 			page 1
  130:Core/Src/spi.c ****     {
  341              		.loc 1 130 9 is_stmt 0 view .LVU129
  342 00e2 FFF7FEFF 		bl	HAL_DMA_Init
-ARM GAS  D:\temp\TMP\ccCs82m8.s 			page 11
+ARM GAS  D:\temp\TMP\ccuGVWO5.s 			page 11
 
 
  343              	.LVL9:
@@ -658,7 +658,7 @@ ARM GAS  D:\temp\TMP\ccCs82m8.s 			page 1
  144:Core/Src/spi.c ****     hdma_spi2_tx.Init.Mode = DMA_NORMAL;
  379              		.loc 1 144 40 is_stmt 0 view .LVU148
  380 0108 8361     		str	r3, [r0, #24]
-ARM GAS  D:\temp\TMP\ccCs82m8.s 			page 12
+ARM GAS  D:\temp\TMP\ccuGVWO5.s 			page 12
 
 
  145:Core/Src/spi.c ****     hdma_spi2_tx.Init.Priority = DMA_PRIORITY_HIGH;
@@ -718,7 +718,7 @@ ARM GAS  D:\temp\TMP\ccCs82m8.s 			page 1
  419 0132 FFF7FEFF 		bl	Error_Handler
  420              	.LVL13:
  421 0136 82E7     		b	.L9
-ARM GAS  D:\temp\TMP\ccCs82m8.s 			page 13
+ARM GAS  D:\temp\TMP\ccuGVWO5.s 			page 13
 
 
  422              	.L15:
@@ -741,7 +741,7 @@ ARM GAS  D:\temp\TMP\ccCs82m8.s 			page 1
  437 014c 00080258 		.word	1476528128
  438 0150 00040258 		.word	1476527104
  439 0154 00000000 		.word	.LANCHOR1
- 440 0158 10000240 		.word	1073872912
+ 440 0158 40000240 		.word	1073872960
  441 015c 00000000 		.word	.LANCHOR2
  442 0160 28000240 		.word	1073872936
  443              		.cfi_endproc
@@ -778,7 +778,7 @@ ARM GAS  D:\temp\TMP\ccCs82m8.s 			page 1
  470 000a 10B5     		push	{r4, lr}
  471              	.LCFI5:
  472              		.cfi_def_cfa_offset 8
-ARM GAS  D:\temp\TMP\ccCs82m8.s 			page 14
+ARM GAS  D:\temp\TMP\ccuGVWO5.s 			page 14
 
 
  473              		.cfi_offset 4, -8
@@ -838,7 +838,7 @@ ARM GAS  D:\temp\TMP\ccCs82m8.s 			page 1
  190:Core/Src/spi.c ****   /* USER CODE BEGIN SPI2_MspDeInit 1 */
  191:Core/Src/spi.c **** 
  192:Core/Src/spi.c ****   /* USER CODE END SPI2_MspDeInit 1 */
-ARM GAS  D:\temp\TMP\ccCs82m8.s 			page 15
+ARM GAS  D:\temp\TMP\ccuGVWO5.s 			page 15
 
 
  193:Core/Src/spi.c ****   }
@@ -898,31 +898,31 @@ ARM GAS  D:\temp\TMP\ccCs82m8.s 			page 1
  552              		.file 9 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_spi.h"
  553              		.file 10 "Core/Inc/spi.h"
  554              		.file 11 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_cortex.h"
-ARM GAS  D:\temp\TMP\ccCs82m8.s 			page 16
+ARM GAS  D:\temp\TMP\ccuGVWO5.s 			page 16
 
 
  555              		.file 12 "Core/Inc/main.h"
  556              		.file 13 "<built-in>"
-ARM GAS  D:\temp\TMP\ccCs82m8.s 			page 17
+ARM GAS  D:\temp\TMP\ccuGVWO5.s 			page 17
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 spi.c
-D:\temp\TMP\ccCs82m8.s:19     .text.MX_SPI2_Init:00000000 $t
-D:\temp\TMP\ccCs82m8.s:25     .text.MX_SPI2_Init:00000000 MX_SPI2_Init
-D:\temp\TMP\ccCs82m8.s:130    .text.MX_SPI2_Init:00000058 $d
-D:\temp\TMP\ccCs82m8.s:136    .text.HAL_SPI_MspInit:00000000 $t
-D:\temp\TMP\ccCs82m8.s:142    .text.HAL_SPI_MspInit:00000000 HAL_SPI_MspInit
-D:\temp\TMP\ccCs82m8.s:435    .text.HAL_SPI_MspInit:00000144 $d
-D:\temp\TMP\ccCs82m8.s:447    .text.HAL_SPI_MspDeInit:00000000 $t
-D:\temp\TMP\ccCs82m8.s:453    .text.HAL_SPI_MspDeInit:00000000 HAL_SPI_MspDeInit
-D:\temp\TMP\ccCs82m8.s:512    .text.HAL_SPI_MspDeInit:00000044 $d
-D:\temp\TMP\ccCs82m8.s:534    .bss.hdma_spi2_tx:00000000 hdma_spi2_tx
-D:\temp\TMP\ccCs82m8.s:527    .bss.hdma_spi2_rx:00000000 hdma_spi2_rx
-D:\temp\TMP\ccCs82m8.s:541    .bss.hspi2:00000000 hspi2
-D:\temp\TMP\ccCs82m8.s:523    .bss.hdma_spi2_rx:00000000 $d
-D:\temp\TMP\ccCs82m8.s:530    .bss.hdma_spi2_tx:00000000 $d
-D:\temp\TMP\ccCs82m8.s:537    .bss.hspi2:00000000 $d
+D:\temp\TMP\ccuGVWO5.s:19     .text.MX_SPI2_Init:00000000 $t
+D:\temp\TMP\ccuGVWO5.s:25     .text.MX_SPI2_Init:00000000 MX_SPI2_Init
+D:\temp\TMP\ccuGVWO5.s:130    .text.MX_SPI2_Init:00000058 $d
+D:\temp\TMP\ccuGVWO5.s:136    .text.HAL_SPI_MspInit:00000000 $t
+D:\temp\TMP\ccuGVWO5.s:142    .text.HAL_SPI_MspInit:00000000 HAL_SPI_MspInit
+D:\temp\TMP\ccuGVWO5.s:435    .text.HAL_SPI_MspInit:00000144 $d
+D:\temp\TMP\ccuGVWO5.s:447    .text.HAL_SPI_MspDeInit:00000000 $t
+D:\temp\TMP\ccuGVWO5.s:453    .text.HAL_SPI_MspDeInit:00000000 HAL_SPI_MspDeInit
+D:\temp\TMP\ccuGVWO5.s:512    .text.HAL_SPI_MspDeInit:00000044 $d
+D:\temp\TMP\ccuGVWO5.s:534    .bss.hdma_spi2_tx:00000000 hdma_spi2_tx
+D:\temp\TMP\ccuGVWO5.s:527    .bss.hdma_spi2_rx:00000000 hdma_spi2_rx
+D:\temp\TMP\ccuGVWO5.s:541    .bss.hspi2:00000000 hspi2
+D:\temp\TMP\ccuGVWO5.s:523    .bss.hdma_spi2_rx:00000000 $d
+D:\temp\TMP\ccuGVWO5.s:530    .bss.hdma_spi2_tx:00000000 $d
+D:\temp\TMP\ccuGVWO5.s:537    .bss.hspi2:00000000 $d
 
 UNDEFINED SYMBOLS
 HAL_SPI_Init
