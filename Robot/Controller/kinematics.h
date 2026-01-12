@@ -2,8 +2,10 @@
 #define __KINEMATICS_H
 
 #include "arm_math.h"
+#include "ins_task.h"
 #include "stdint.h"
 #include "stdbool.h"
+#include "chassis_def.h"
 
 #ifndef PI
 #define PI 3.14159265358979323846f

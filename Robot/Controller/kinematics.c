@@ -11,8 +11,6 @@
  */
 
 #include "kinematics.h"
-#include "ins_task.h"
-#include "chassis_def.h"
 
 // 三项式拟合系数
 float a11[4];
