@@ -33,7 +33,7 @@ build/uartReceive_task.o: Robot/RoboTask/emulator/uartReceive_task.c \
  Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h \
  Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h \
  Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h \
- Robot/RoboTask/ins/INS_task.h Robot/Devices/BMI088/BMI088driver.h \
+ Robot/RoboTask/ins/ins_task.h Robot/Devices/BMI088/BMI088driver.h \
  Core/Inc/main.h \
  Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h \
@@ -92,7 +92,7 @@ Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h:
 Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h:
 Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h:
 Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h:
-Robot/RoboTask/ins/INS_task.h:
+Robot/RoboTask/ins/ins_task.h:
 Robot/Devices/BMI088/BMI088driver.h:
 Core/Inc/main.h:
 Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h:

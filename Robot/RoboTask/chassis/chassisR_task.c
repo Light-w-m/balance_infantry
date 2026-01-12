@@ -14,9 +14,9 @@
 #include "kinematics.h"
 #include "kalman_filter.h"
 #include "pid.h"
-#include "DJI3508.h"
-#include "DM8009.h"
-#include "INS_task.h"
+#include "djimotor.h"
+#include "dmmotor.h"
+#include "ins_task.h"
 
 // #define CHASSIS_CONTROL_TIME_MS 2
 Leg_t legR;
@@ -81,7 +81,8 @@ static void ChassisR_Init(chassis_t* chassis, PidTypeDef* length_pid)
             .outer_loop_type = SPEED_LOOP,
             .close_loop_type = SPEED_LOOP | CURRENT_LOOP,
         },
-        .motor_type = M3508,
+        // .motor_type = M3508,
+        .motor_type = GM6020,
     };
 
     const static float leg_pid_R[3] = {LEG_PID_KP, LEG_PID_KI, LEG_PID_KD}; //P I D
@@ -170,8 +171,9 @@ static void JumpR_Loop(chassis_t* chassis, Leg_t* leg, PidTypeDef* pid)
  * @param ins 
  * @param pid 
  */
+#ifdef ControlOperation
 static void ChasssisR_Control(
-    chassis_t* chassis, Leg_t* leg, Excessive_t* excessive, Period_t* period, INS_t* ins, PidTypeDef* length_pid, float lqr_k[2][6])
+    chassis_t* chassis, Leg_t* leg, LegState_t* leg_state , Excessive_t* excessive, Period_t* period, INS_t* ins, PidTypeDef* length_pid, float lqr_k[2][6])
 {
     chassis->flag.is_take_off = legR.is_take_off || legL.is_take_off;
 
@@ -187,26 +189,26 @@ static void ChasssisR_Control(
     chassis->leg_tp = PID_Calc(&Tp_Pid, chassis->theta_err, 0.0f);
 
     // 状态向量更新--方便调试查看
-    legR_state.theta     = X0_OFFSET + (leg->rod.theta - 0.0f);
-    legR_state.theta_dot = X1_OFFSET + (leg->rod.d_theta - 0.0f);
-    legR_state.x         = X2_OFFSET + (chassis->state.x_filter - chassis->state.x_set);
-    legR_state.x_dot     = X3_OFFSET + (chassis->state.v_filter - chassis->state.v_set);
-    legR_state.phi       = X4_OFFSET + (chassis->myPithR - chassis->phi_set);
-    legR_state.phi_dot   = X5_OFFSET + (chassis->myPithGyroR - 0.0f);
+    leg_state->theta     = X0_OFFSET + (leg->rod.theta - 0.0f);
+    leg_state->theta_dot = X1_OFFSET + (leg->rod.d_theta - 0.0f);
+    leg_state->x         = X2_OFFSET + (chassis->state.x_filter - chassis->state.x_set);
+    leg_state->x_dot     = X3_OFFSET + (chassis->state.v_filter - chassis->state.v_set);
+    leg_state->phi       = X4_OFFSET + (chassis->myPithR - chassis->phi_set);
+    leg_state->phi_dot   = X5_OFFSET + (chassis->myPithGyroR - 0.0f);
 
-    leg->rod.T = (    lqr_k[0][0] * legR_state.theta
-                    + lqr_k[0][1] * legR_state.theta_dot
-                    + lqr_k[0][2] * legR_state.x
-                    + lqr_k[0][3] * legR_state.x_dot
-                    + lqr_k[0][4] * legR_state.phi
-                    + lqr_k[0][5] * legR_state.phi_dot);
+    leg->rod.T = (    lqr_k[0][0] * leg_state->theta
+                    + lqr_k[0][1] * leg_state->theta_dot
+                    + lqr_k[0][2] * leg_state->x
+                    + lqr_k[0][3] * leg_state->x_dot
+                    + lqr_k[0][4] * leg_state->phi
+                    + lqr_k[0][5] * leg_state->phi_dot);
 
-    leg->rod.Tp = (   lqr_k[1][0] * legR_state.theta
-                    + lqr_k[1][1] * legR_state.theta_dot
-                    + lqr_k[1][2] * legR_state.x
-                    + lqr_k[1][3] * legR_state.x_dot
-                    + lqr_k[1][4] * legR_state.phi
-                    + lqr_k[1][5] * legR_state.phi_dot);
+    leg->rod.Tp = (   lqr_k[1][0] * leg_state->theta
+                    + lqr_k[1][1] * leg_state->theta_dot
+                    + lqr_k[1][2] * leg_state->x
+                    + lqr_k[1][3] * leg_state->x_dot
+                    + lqr_k[1][4] * leg_state->phi
+                    + lqr_k[1][5] * leg_state->phi_dot);
 
     leg->rod.Tp = leg->rod.Tp + chassis->leg_tp;        //髋关节输出力矩
     // leg->rod.T = leg->rod.T - chassis->turn_T;          //轮毂关节输出力矩
@@ -214,8 +216,7 @@ static void ChasssisR_Control(
     //输出限幅
     SATURATE(&leg->rod.T, -3.0f, 3.0f);
 
-    chassis->leg_set = 0.0f;
-
+    // chassis->leg_set = 0.0f;
     leg->rod.F0 = BODY_MASS * GRAVITY / arm_cos_f32(leg->rod.theta) / 2 
                     + PID_Calc(length_pid, leg->rod.L0, chassis->leg_set);
 
@@ -244,6 +245,41 @@ static void ChasssisR_Control(
     SATURATE(&leg->joint.T1, -0.0f, 0.0f);
     SATURATE(&leg->joint.T2, -0.0f, 0.0f);
 }
+#endif
+
+/**
+ * @brief 位控调试模式
+ * 
+ */
+#ifdef ControlDebug
+static void ChassisR_Debug(chassis_t* chassis, Leg_t* leg, Excessive_t* excessive)
+{
+    leg->joint.T1 = 0.0f;
+    leg->joint.T2 = 0.0f;
+
+    InverseKinematics(leg, excessive);
+
+    leg->joint.Phi1_set = PI/2.0f - leg->joint.Phi1;
+    leg->joint.Phi4_set = -PI/2.0f + leg->joint.Phi4;
+
+    //输出角度限幅
+    // SATURATE(&leg->joint.Phi1, -0.0f, 0.0f);
+    // SATURATE(&leg->joint.Phi4, -0.0f, 0.0f);
+}
+#endif
+
+/**
+ * @brief 根据裁判系统和电容剩余容量对输出进行限制并设置电机参考值
+ *
+ */
+static void LimitChassisOutputR(chassis_t* chassis, Leg_t* leg)
+{
+    // 功率限制 待添加
+
+
+    // 完成功率限制后进行电机参考输入设定
+    DJIMotorSetRef(chassis->wheel_motor[0], leg->rod.T);
+}
 
 /**
  * @brief 底盘任务
@@ -261,20 +297,31 @@ void ChassisR_Task(void)
 
     while (1)
     {
-        DJIMotorControl();
+        #ifdef ControlOperation
         /* code */
         ChassisR_Feedback_Update(&chassis_move, &legR,&INS);
-        ChasssisR_Control(&chassis_move, &legR, &excessiveR, &periods, &INS, &LegR_pid, LQR_K);
+        ChasssisR_Control(&chassis_move, &legR, &legR_state, &excessiveR, &periods, &INS, &LegR_pid, LQR_K);
+        #endif
 
         if (chassis_move.flag.start_flag == 1)
         {
+            #ifdef ControlOperation
             /* code */
             Mit_Ctrl(&hfdcan1, 0x01, 0.0f, 0.0f, 0.0f, 0.0f, legR.joint.T1);
             osDelay(CHASSIS_TIME);
             Mit_Ctrl(&hfdcan1, 0x02, 0.0f, 0.0f, 0.0f, 0.0f, legR.joint.T2);
             osDelay(CHASSIS_TIME);
             // 3508控制
-            DJIMotorSetRef(chassis_move.wheel_motor[0], legR.rod.T);
+            // DJIMotorSetRef(chassis_move.wheel_motor[0], legR.rod.T);
+            LimitChassisOutputR(&chassis_move, &legR);
+            #endif
+
+            #ifdef ControlDebug
+            Mit_Ctrl(&hfdcan1, 0x01, legR.joint.Phi1_set, 0.0f, 10.0f, 4.0f, 0.0f);
+            osDelay(CHASSIS_TIME);
+            Mit_Ctrl(&hfdcan1, 0x02, legR.joint.Phi4_set, 0.0f, 10.0f, 4.0f, 0.0f);
+            osDelay(CHASSIS_TIME);
+            #endif
         }
         else if (chassis_move.flag.start_flag == 0)
         {
@@ -283,7 +330,8 @@ void ChassisR_Task(void)
             Mit_Ctrl(&hfdcan1, 0x02, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
             osDelay(CHASSIS_TIME);
             // 3508控制
-            DJIMotorSetRef(chassis_move.wheel_motor[0], 0.0f);
+            DJIMotorStop(chassis_move.wheel_motor[0]);
+            // DJIMotorSetRef(chassis_move.wheel_motor[0], 0.0f);
         }
         
     }

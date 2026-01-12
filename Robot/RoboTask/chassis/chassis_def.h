@@ -14,8 +14,8 @@
 
 #include "stdbool.h"
 #include "stdint.h"
-#include "DJI3508.h"
-#include "DM8009.h"
+#include "djimotor.h"
+#include "dmmotor.h"
 
 // 限幅
 #define SATURATE(in, min, max)    \
@@ -30,13 +30,16 @@
 /**********************control parameters*******************/
 //内部参数配置，宏定义判断是否启动
 
+//两种控制模式不可同时进行
+#define ControlOperation    //正常控制模式--正解
+// #define ControlDebug        //调试模式--逆解
 /**********************physical parameters*******************/
 #define GRAVITY 9.791f         // 重力加速度--福建
 
-#define BODY_MASS 0.0f          //  载体重量
-#define WHEEL_MASS 0.0f         //  轮重量
-#define WHEEL_RADIUS 0.0f       //  轮子半径
-#define WHEEL_DISTANCE 0.0f     // 轮子间距
+#define BODY_MASS       0.0f       // 载体重量
+#define WHEEL_MASS      0.0f       // 轮重量
+#define WHEEL_RADIUS    0.0f       // 轮子半径
+#define WHEEL_DISTANCE  0.0f       // 轮子间距
 
 // 支持力阈值，当支持力小于这个值时认为离地
 #define TAKE_OFF_FN_THRESHOLD (3.0f)
@@ -44,6 +47,15 @@
 #define TOUCH_TOGGLE_THRESHOLD (100)
 
 #define CHASSIS_TIME 1         //延迟时间
+
+/***********************length parameters****************/
+#define LEG1 0.21f
+#define LEG2 0.25f
+#define LEG3 0.25f
+#define LEG4 0.21f
+
+#define MAX_LEG_LENGTH 0.0f
+#define MIN_LEG_LENGTH 0.0f
 
 /***********************pid parameters*******************/
 #define LEG_PID_KP  0.0f

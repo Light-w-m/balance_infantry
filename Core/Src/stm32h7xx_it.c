@@ -22,6 +22,7 @@
 #include "stm32h7xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "Robot_def.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -41,7 +42,10 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-
+#ifdef INS_OF_HIPNUC
+extern uint16_t uart_rx_index;
+extern uint8_t new_data_flag;
+#endif
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -277,7 +281,19 @@ void USART1_IRQHandler(void)
   /* USER CODE END USART1_IRQn 0 */
   HAL_UART_IRQHandler(&huart1);
   /* USER CODE BEGIN USART1_IRQn 1 */
-
+  #ifdef INS_OF_HIPNUC
+  if (__HAL_UART_GET_FLAG(&huart1, UART_FLAG_IDLE) != RESET)
+    {
+        // 清除IDLE标志
+        __HAL_UART_CLEAR_IDLEFLAG(&huart1);
+        
+        // 设置新数据标志
+        if (uart_rx_index > 0)
+        {
+            new_data_flag = 1;
+        }
+    }
+    #endif
   /* USER CODE END USART1_IRQn 1 */
 }
 

@@ -3,9 +3,9 @@
 #include "kinematics.h"
 #include "kalman_filter.h"
 #include "pid.h"
-#include "DJI3508.h"
-#include "DM8009.h"
-#include "INS_task.h"
+#include "djimotor.h"
+#include "dmmotor.h"
+#include "ins_task.h"
 
 Leg_t legL;
 LegState_t legL_state;
@@ -181,7 +181,6 @@ void ChassisL_Task(void)
 
     while (1)
     {
-        DJIMotorControl();
         /* code */
         ChassisL_Feedback_Update(&chassis_move, &legL,&INS);
         ChasssisL_Control(&chassis_move, &legL, &excessiveL, &INS, &LegL_pid, LQR_K);

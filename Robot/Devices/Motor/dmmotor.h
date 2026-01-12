@@ -1,5 +1,5 @@
-#ifndef DM8009_H
-#define DM8009_H
+#ifndef DMMOTOR_H
+#define DMMOTOR_H
 
 #include "fdcan.h"
 #include "bsp_can.h"

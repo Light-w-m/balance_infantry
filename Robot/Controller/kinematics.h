@@ -2,20 +2,12 @@
 #define __KINEMATICS_H
 
 #include "arm_math.h"
-#include "INS_task.h"
 #include "stdint.h"
 #include "stdbool.h"
-#include "chassis_def.h"
 
 #ifndef PI
 #define PI 3.14159265358979323846f
 #endif
-
-#define LEG1 0.21f
-#define LEG2 0.25f
-#define LEG3 0.25f
-#define LEG4 0.21f
-
 
 typedef struct 
 {
@@ -49,12 +41,17 @@ typedef struct
     struct joint
     {
         float T1, T2;           //髋关节输出扭矩
-        float Phi1, Phi4;   
+        float Phi1, Phi4;
+
+        #ifdef ControlDebug
+        // 位控调试时使用
+        float Phi1_set, Phi4_set;
+        #endif   
     } joint;    //关节参数
 
     struct wheel
     {
-
+        
     } wheel;
 
     float j11, j12, j21, j22;   //雅可比矩阵
@@ -87,5 +84,7 @@ void ForwardKinematics(Leg_t* leg,Excessive_t* excessive, INS_t* ins, float dt);
 void InverseKinematics(Leg_t* leg,Excessive_t* excessive);
 void JacobianMatrix(Leg_t* leg,Excessive_t* excessive);
 uint8_t GroundDetect(Leg_t* leg, Period_t* period, INS_t* ins);
+void CoordinateLength(float *LengthL, float *LengthR, float diff, float add);
+float DeviationCalc(float diff, float real, float target);
 
 #endif // !__KINEMATICS_H

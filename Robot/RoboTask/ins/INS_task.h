@@ -79,8 +79,8 @@ typedef struct
 } IMU_Param_t;
 
 
-extern void INS_Init(void);
-extern void INS_task(void);
+void HIPNUC_Init(void);
+void INS_task(void);
 
 void BodyFrameToEarthFrame(const float *vecBF, float *vecEF, float *q);
 void EarthFrameToBodyFrame(const float *vecEF, float *vecBF, float *q);

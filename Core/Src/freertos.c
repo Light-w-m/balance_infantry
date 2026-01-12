@@ -25,9 +25,11 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "INS_task.h"
+#include "ins_task.h"
 #include "chassisR_task.h"
-#include "uartReceive_task.h"
+#include "chassisL_task.h"
+#include "vofa_task.h"
+#include "Robot.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -51,8 +53,9 @@
 /* USER CODE END Variables */
 osThreadId defaultTaskHandle;
 osThreadId INS_TASKHandle;
-osThreadId UART_RECEIVEHandle;
+osThreadId VOFADEBUGHandle;
 osThreadId CHASSISR_TASKHandle;
+osThreadId MOTORTASKHandle;
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -60,9 +63,10 @@ osThreadId CHASSISR_TASKHandle;
 /* USER CODE END FunctionPrototypes */
 
 void StartDefaultTask(void const * argument);
-void ins_task(void const * argument);
-void uart_receive(void const * argument);
-void chassisr_task(void const * argument);
+void StartINSTASK(void const * argument);
+void StartVofaDebug(void const * argument);
+void StartCHASSISRTASK(void const * argument);
+void StartMotorTask(void const * argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -114,16 +118,20 @@ void MX_FREERTOS_Init(void) {
   defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
   /* definition and creation of INS_TASK */
-  osThreadDef(INS_TASK, ins_task, osPriorityRealtime, 0, 512);
+  osThreadDef(INS_TASK, StartINSTASK, osPriorityAboveNormal, 0, 1024);
   INS_TASKHandle = osThreadCreate(osThread(INS_TASK), NULL);
 
-  /* definition and creation of UART_RECEIVE */
-  osThreadDef(UART_RECEIVE, uart_receive, osPriorityRealtime, 0, 512);
-  UART_RECEIVEHandle = osThreadCreate(osThread(UART_RECEIVE), NULL);
+  /* definition and creation of VOFADEBUG */
+  osThreadDef(VOFADEBUG, StartVofaDebug, osPriorityNormal, 0, 256);
+  VOFADEBUGHandle = osThreadCreate(osThread(VOFADEBUG), NULL);
 
   /* definition and creation of CHASSISR_TASK */
-  osThreadDef(CHASSISR_TASK, chassisr_task, osPriorityAboveNormal, 0, 512);
+  osThreadDef(CHASSISR_TASK, StartCHASSISRTASK, osPriorityNormal, 0, 512);
   CHASSISR_TASKHandle = osThreadCreate(osThread(CHASSISR_TASK), NULL);
+
+  /* definition and creation of MOTORTASK */
+  osThreadDef(MOTORTASK, StartMotorTask, osPriorityNormal, 0, 256);
+  MOTORTASKHandle = osThreadCreate(osThread(MOTORTASK), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -149,61 +157,79 @@ void StartDefaultTask(void const * argument)
   /* USER CODE END StartDefaultTask */
 }
 
-/* USER CODE BEGIN Header_ins_task */
+/* USER CODE BEGIN Header_StartINSTASK */
 /**
 * @brief Function implementing the INS_TASK thread.
 * @param argument: Not used
 * @retval None
 */
-/* USER CODE END Header_ins_task */
-void ins_task(void const * argument)
+/* USER CODE END Header_StartINSTASK */
+void StartINSTASK(void const * argument)
 {
-  /* USER CODE BEGIN ins_task */
+  /* USER CODE BEGIN StartINSTASK */
   /* Infinite loop */
   for(;;)
   {
     INS_task();
     osDelay(1);
   }
-  /* USER CODE END ins_task */
+  /* USER CODE END StartINSTASK */
 }
 
-/* USER CODE BEGIN Header_uart_receive */
+/* USER CODE BEGIN Header_StartVofaDebug */
 /**
-* @brief Function implementing the UART_RECEIVE thread.
+* @brief Function implementing the VOFADEBUG thread.
 * @param argument: Not used
 * @retval None
 */
-/* USER CODE END Header_uart_receive */
-void uart_receive(void const * argument)
+/* USER CODE END Header_StartVofaDebug */
+void StartVofaDebug(void const * argument)
 {
-  /* USER CODE BEGIN uart_receive */
+  /* USER CODE BEGIN StartVofaDebug */
   /* Infinite loop */
   for(;;)
   {
-    // UartReceive_Task();
     osDelay(1);
   }
-  /* USER CODE END uart_receive */
+  /* USER CODE END StartVofaDebug */
 }
 
-/* USER CODE BEGIN Header_chassisr_task */
+/* USER CODE BEGIN Header_StartCHASSISRTASK */
 /**
 * @brief Function implementing the CHASSISR_TASK thread.
 * @param argument: Not used
 * @retval None
 */
-/* USER CODE END Header_chassisr_task */
-void chassisr_task(void const * argument)
+/* USER CODE END Header_StartCHASSISRTASK */
+void StartCHASSISRTASK(void const * argument)
 {
-  /* USER CODE BEGIN chassisr_task */
+  /* USER CODE BEGIN StartCHASSISRTASK */
   /* Infinite loop */
   for(;;)
   {
     ChassisR_Task();
     osDelay(1);
   }
-  /* USER CODE END chassisr_task */
+  /* USER CODE END StartCHASSISRTASK */
+}
+
+/* USER CODE BEGIN Header_StartMotorTask */
+/**
+* @brief Function implementing the MOTORTASK thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartMotorTask */
+void StartMotorTask(void const * argument)
+{
+  /* USER CODE BEGIN StartMotorTask */
+  /* Infinite loop */
+  for(;;)
+  {
+    MotorTask();
+    osDelay(1);
+  }
+  /* USER CODE END StartMotorTask */
 }
 
 /* Private application code --------------------------------------------------*/

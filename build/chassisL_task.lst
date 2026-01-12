@@ -1,4 +1,4 @@
-ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 1
+ARM GAS  D:\temp\TMP\cc2pm9Og.s 			page 1
 
 
    1              		.cpu cortex-m7
@@ -32,9 +32,9 @@ ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 1
    3:Robot/RoboTask/chassis/chassisL_task.c **** #include "kinematics.h"
    4:Robot/RoboTask/chassis/chassisL_task.c **** #include "kalman_filter.h"
    5:Robot/RoboTask/chassis/chassisL_task.c **** #include "pid.h"
-   6:Robot/RoboTask/chassis/chassisL_task.c **** #include "DJI3508.h"
-   7:Robot/RoboTask/chassis/chassisL_task.c **** #include "DM8009.h"
-   8:Robot/RoboTask/chassis/chassisL_task.c **** #include "INS_task.h"
+   6:Robot/RoboTask/chassis/chassisL_task.c **** #include "djimotor.h"
+   7:Robot/RoboTask/chassis/chassisL_task.c **** #include "dmmotor.h"
+   8:Robot/RoboTask/chassis/chassisL_task.c **** #include "ins_task.h"
    9:Robot/RoboTask/chassis/chassisL_task.c **** 
   10:Robot/RoboTask/chassis/chassisL_task.c **** Leg_t legL;
   11:Robot/RoboTask/chassis/chassisL_task.c **** LegState_t legL_state;
@@ -58,7 +58,7 @@ ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 1
   29:Robot/RoboTask/chassis/chassisL_task.c ****     // 两个轮电机的参数一样,改tx_id和反转标志位即可
   30:Robot/RoboTask/chassis/chassisL_task.c ****     Motor_Init_Config_s chassis_motor_config = {
   31:Robot/RoboTask/chassis/chassisL_task.c ****         .can_init_config.can_handle = &hcan2,
-ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 2
+ARM GAS  D:\temp\TMP\cc2pm9Og.s 			page 2
 
 
   32:Robot/RoboTask/chassis/chassisL_task.c ****         .controller_param_init_config = {
@@ -118,7 +118,7 @@ ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 1
   86:Robot/RoboTask/chassis/chassisL_task.c ****  * @param chassis 
   87:Robot/RoboTask/chassis/chassisL_task.c ****  * @param ins 
   88:Robot/RoboTask/chassis/chassisL_task.c ****  * @param  
-ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 3
+ARM GAS  D:\temp\TMP\cc2pm9Og.s 			page 3
 
 
   89:Robot/RoboTask/chassis/chassisL_task.c ****  */
@@ -178,7 +178,7 @@ ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 1
   68              		.loc 1 102 5 is_stmt 1 view .LVU21
  103:Robot/RoboTask/chassis/chassisL_task.c ****     {
  104:Robot/RoboTask/chassis/chassisL_task.c **** 
-ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 4
+ARM GAS  D:\temp\TMP\cc2pm9Og.s 			page 4
 
 
  105:Robot/RoboTask/chassis/chassisL_task.c ****     }
@@ -238,7 +238,7 @@ ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 1
  117 0016 0493     		str	r3, [sp, #16]	@ float
  118 0018 284B     		ldr	r3, .L8
  119 001a 0793     		str	r3, [sp, #28]	@ float
-ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 5
+ARM GAS  D:\temp\TMP\cc2pm9Og.s 			page 5
 
 
  120 001c 0722     		movs	r2, #7
@@ -298,7 +298,7 @@ ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 1
  163              		.loc 1 70 5 is_stmt 1 view .LVU40
  164 0070 DFED170A 		vldr.32	s1, .L8+20
  165 0074 9FED170A 		vldr.32	s0, .L8+24
-ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 6
+ARM GAS  D:\temp\TMP\cc2pm9Og.s 			page 6
 
 
  166 0078 174A     		ldr	r2, .L8+28
@@ -358,7 +358,7 @@ ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 1
  209              	.L5:
   73:Robot/RoboTask/chassis/chassisL_task.c ****     {
  210              		.loc 1 73 25 is_stmt 1 discriminator 1 view .LVU52
-ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 7
+ARM GAS  D:\temp\TMP\cc2pm9Og.s 			page 7
 
 
   73:Robot/RoboTask/chassis/chassisL_task.c ****     {
@@ -418,7 +418,7 @@ ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 1
  124:Robot/RoboTask/chassis/chassisL_task.c **** static void ChasssisL_Control(
  125:Robot/RoboTask/chassis/chassisL_task.c ****     chassis_t* chassis, Leg_t* leg, Excessive_t* excessive, INS_t* ins, PidTypeDef* length_pid, flo
  126:Robot/RoboTask/chassis/chassisL_task.c **** {
-ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 8
+ARM GAS  D:\temp\TMP\cc2pm9Og.s 			page 8
 
 
  247              		.loc 1 126 1 is_stmt 1 view -0
@@ -478,7 +478,7 @@ ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 1
  294 0032 77EE877A 		vadd.f32	s15, s15, s14
  295              		.loc 1 133 26 view .LVU66
  296 0036 594B     		ldr	r3, .L19+8
-ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 9
+ARM GAS  D:\temp\TMP\cc2pm9Og.s 			page 9
 
 
  297 0038 C3ED007A 		vstr.32	s15, [r3]
@@ -538,7 +538,7 @@ ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 1
  140:Robot/RoboTask/chassis/chassisL_task.c ****     leg->rod.T = (    lqr_k[0][0] * legL_state.theta
  345              		.loc 1 140 5 is_stmt 1 view .LVU93
  346              		.loc 1 140 31 is_stmt 0 view .LVU94
-ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 10
+ARM GAS  D:\temp\TMP\cc2pm9Og.s 			page 10
 
 
  347 0090 95ED007A 		vldr.32	s14, [r5]
@@ -598,7 +598,7 @@ ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 1
  392 00e8 77EE857A 		vadd.f32	s15, s15, s10
  149:Robot/RoboTask/chassis/chassisL_task.c ****                     + lqr_k[1][2] * legL_state.x
  393              		.loc 1 149 31 view .LVU118
-ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 11
+ARM GAS  D:\temp\TMP\cc2pm9Og.s 			page 11
 
 
  394 00ec 95ED085A 		vldr.32	s10, [r5, #32]
@@ -658,7 +658,7 @@ ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 1
  438              	.LBE3:
  439              		.loc 1 158 5 discriminator 6 view .LVU139
  159:Robot/RoboTask/chassis/chassisL_task.c **** 
-ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 12
+ARM GAS  D:\temp\TMP\cc2pm9Og.s 			page 12
 
 
  160:Robot/RoboTask/chassis/chassisL_task.c ****     chassis->leg_set = 0.0f;
@@ -718,7 +718,7 @@ ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 1
  485 0186 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
  486 018a D8DD     		ble	.L13
  158:Robot/RoboTask/chassis/chassisL_task.c **** 
-ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 13
+ARM GAS  D:\temp\TMP\cc2pm9Og.s 			page 13
 
 
  487              		.loc 1 158 5 discriminator 4 view .LVU152
@@ -777,8 +777,8 @@ ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 1
  530              		.loc 1 175 10 view .LVU157
  175:Robot/RoboTask/chassis/chassisL_task.c ****     while(INS.ins_flag == 0) //等待INS初始化完成
  531              		.loc 1 175 14 is_stmt 0 view .LVU158
- 532 000c 3E4B     		ldr	r3, .L29
-ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 14
+ 532 000c 3D4B     		ldr	r3, .L29
+ARM GAS  D:\temp\TMP\cc2pm9Og.s 			page 14
 
 
  533 000e 93F88830 		ldrb	r3, [r3, #136]	@ zero_extendqisi2
@@ -790,8 +790,8 @@ ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 1
  179:Robot/RoboTask/chassis/chassisL_task.c **** 
  180:Robot/RoboTask/chassis/chassisL_task.c ****     ChassisL_Init(&chassis_move, &LegL_pid);
  537              		.loc 1 180 5 is_stmt 1 view .LVU160
- 538 0016 3D49     		ldr	r1, .L29+4
- 539 0018 3D48     		ldr	r0, .L29+8
+ 538 0016 3C49     		ldr	r1, .L29+4
+ 539 0018 3C48     		ldr	r0, .L29+8
  540 001a FFF7FEFF 		bl	ChassisL_Init
  541              	.LVL30:
  542 001e 2CE0     		b	.L24
@@ -799,19 +799,18 @@ ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 1
  181:Robot/RoboTask/chassis/chassisL_task.c **** 
  182:Robot/RoboTask/chassis/chassisL_task.c ****     while (1)
  183:Robot/RoboTask/chassis/chassisL_task.c ****     {
- 184:Robot/RoboTask/chassis/chassisL_task.c ****         DJIMotorControl();
- 185:Robot/RoboTask/chassis/chassisL_task.c ****         /* code */
- 186:Robot/RoboTask/chassis/chassisL_task.c ****         ChassisL_Feedback_Update(&chassis_move, &legL,&INS);
- 187:Robot/RoboTask/chassis/chassisL_task.c ****         ChasssisL_Control(&chassis_move, &legL, &excessiveL, &INS, &LegL_pid, LQR_K);
- 188:Robot/RoboTask/chassis/chassisL_task.c **** 
- 189:Robot/RoboTask/chassis/chassisL_task.c ****         if (chassis_move.flag.start_flag == 1)
- 190:Robot/RoboTask/chassis/chassisL_task.c ****         {
- 191:Robot/RoboTask/chassis/chassisL_task.c ****             /* code */
- 192:Robot/RoboTask/chassis/chassisL_task.c ****             Mit_Ctrl(&hfdcan1, 0x03, 0.0f, 0.0f, 0.0f, 0.0f, legL.joint.T1);
- 544              		.loc 1 192 13 view .LVU161
+ 184:Robot/RoboTask/chassis/chassisL_task.c ****         /* code */
+ 185:Robot/RoboTask/chassis/chassisL_task.c ****         ChassisL_Feedback_Update(&chassis_move, &legL,&INS);
+ 186:Robot/RoboTask/chassis/chassisL_task.c ****         ChasssisL_Control(&chassis_move, &legL, &excessiveL, &INS, &LegL_pid, LQR_K);
+ 187:Robot/RoboTask/chassis/chassisL_task.c **** 
+ 188:Robot/RoboTask/chassis/chassisL_task.c ****         if (chassis_move.flag.start_flag == 1)
+ 189:Robot/RoboTask/chassis/chassisL_task.c ****         {
+ 190:Robot/RoboTask/chassis/chassisL_task.c ****             /* code */
+ 191:Robot/RoboTask/chassis/chassisL_task.c ****             Mit_Ctrl(&hfdcan1, 0x03, 0.0f, 0.0f, 0.0f, 0.0f, legL.joint.T1);
+ 544              		.loc 1 191 13 view .LVU161
  545 0020 2C46     		mov	r4, r5
- 546 0022 9FED3C8A 		vldr.32	s16, .L29+12
- 547 0026 3C4D     		ldr	r5, .L29+16
+ 546 0022 9FED3B8A 		vldr.32	s16, .L29+12
+ 547 0026 3B4D     		ldr	r5, .L29+16
  548 0028 94ED122A 		vldr.32	s4, [r4, #72]
  549 002c F0EE481A 		vmov.f32	s3, s16
  550 0030 B0EE481A 		vmov.f32	s2, s16
@@ -821,13 +820,13 @@ ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 1
  554 003e 2846     		mov	r0, r5
  555 0040 FFF7FEFF 		bl	Mit_Ctrl
  556              	.LVL31:
- 193:Robot/RoboTask/chassis/chassisL_task.c ****             osDelay(CHASSIS_TIME);
- 557              		.loc 1 193 13 view .LVU162
+ 192:Robot/RoboTask/chassis/chassisL_task.c ****             osDelay(CHASSIS_TIME);
+ 557              		.loc 1 192 13 view .LVU162
  558 0044 0120     		movs	r0, #1
  559 0046 FFF7FEFF 		bl	osDelay
  560              	.LVL32:
- 194:Robot/RoboTask/chassis/chassisL_task.c ****             Mit_Ctrl(&hfdcan1, 0x04, 0.0f, 0.0f, 0.0f, 0.0f, legL.joint.T1);
- 561              		.loc 1 194 13 view .LVU163
+ 193:Robot/RoboTask/chassis/chassisL_task.c ****             Mit_Ctrl(&hfdcan1, 0x04, 0.0f, 0.0f, 0.0f, 0.0f, legL.joint.T1);
+ 561              		.loc 1 193 13 view .LVU163
  562 004a 94ED122A 		vldr.32	s4, [r4, #72]
  563 004e F0EE481A 		vmov.f32	s3, s16
  564 0052 B0EE481A 		vmov.f32	s2, s16
@@ -837,225 +836,221 @@ ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 1
  568 0060 2846     		mov	r0, r5
  569 0062 FFF7FEFF 		bl	Mit_Ctrl
  570              	.LVL33:
- 195:Robot/RoboTask/chassis/chassisL_task.c ****             osDelay(CHASSIS_TIME);
-ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 15
+ 194:Robot/RoboTask/chassis/chassisL_task.c ****             osDelay(CHASSIS_TIME);
+ 571              		.loc 1 194 13 view .LVU164
+ARM GAS  D:\temp\TMP\cc2pm9Og.s 			page 15
 
 
- 571              		.loc 1 195 13 view .LVU164
  572 0066 0120     		movs	r0, #1
  573 0068 FFF7FEFF 		bl	osDelay
  574              	.LVL34:
- 196:Robot/RoboTask/chassis/chassisL_task.c ****             // 3508控制
- 197:Robot/RoboTask/chassis/chassisL_task.c ****             DJIMotorSetRef(chassis_move.wheel_motor[1], legL.rod.T);
- 575              		.loc 1 197 13 view .LVU165
+ 195:Robot/RoboTask/chassis/chassisL_task.c ****             // 3508控制
+ 196:Robot/RoboTask/chassis/chassisL_task.c ****             DJIMotorSetRef(chassis_move.wheel_motor[1], legL.rod.T);
+ 575              		.loc 1 196 13 view .LVU165
  576 006c 94ED110A 		vldr.32	s0, [r4, #68]
- 577 0070 274B     		ldr	r3, .L29+8
+ 577 0070 264B     		ldr	r3, .L29+8
  578 0072 D3F80401 		ldr	r0, [r3, #260]
  579 0076 FFF7FEFF 		bl	DJIMotorSetRef
  580              	.LVL35:
  581              	.L24:
  182:Robot/RoboTask/chassis/chassisL_task.c ****     {
  582              		.loc 1 182 5 view .LVU166
- 184:Robot/RoboTask/chassis/chassisL_task.c ****         /* code */
- 583              		.loc 1 184 9 view .LVU167
- 584 007a FFF7FEFF 		bl	DJIMotorControl
- 585              	.LVL36:
- 186:Robot/RoboTask/chassis/chassisL_task.c ****         ChasssisL_Control(&chassis_move, &legL, &excessiveL, &INS, &LegL_pid, LQR_K);
- 586              		.loc 1 186 9 view .LVU168
- 587 007e 224E     		ldr	r6, .L29
- 588 0080 264D     		ldr	r5, .L29+20
- 589 0082 234C     		ldr	r4, .L29+8
- 590 0084 3246     		mov	r2, r6
- 591 0086 2946     		mov	r1, r5
- 592 0088 2046     		mov	r0, r4
- 593 008a FFF7FEFF 		bl	ChassisL_Feedback_Update
- 594              	.LVL37:
- 187:Robot/RoboTask/chassis/chassisL_task.c **** 
- 595              		.loc 1 187 9 view .LVU169
- 596 008e 244B     		ldr	r3, .L29+24
- 597 0090 0193     		str	r3, [sp, #4]
- 598 0092 1E4B     		ldr	r3, .L29+4
- 599 0094 0093     		str	r3, [sp]
- 600 0096 3346     		mov	r3, r6
- 601 0098 224A     		ldr	r2, .L29+28
- 602 009a 2946     		mov	r1, r5
- 603 009c 2046     		mov	r0, r4
- 604 009e FFF7FEFF 		bl	ChasssisL_Control
- 605              	.LVL38:
- 189:Robot/RoboTask/chassis/chassisL_task.c ****         {
- 606              		.loc 1 189 9 view .LVU170
- 189:Robot/RoboTask/chassis/chassisL_task.c ****         {
- 607              		.loc 1 189 30 is_stmt 0 view .LVU171
- 608 00a2 94F85C31 		ldrb	r3, [r4, #348]	@ zero_extendqisi2
- 189:Robot/RoboTask/chassis/chassisL_task.c ****         {
- 609              		.loc 1 189 12 view .LVU172
- 610 00a6 012B     		cmp	r3, #1
- 611 00a8 BAD0     		beq	.L28
- 198:Robot/RoboTask/chassis/chassisL_task.c ****         }
- 199:Robot/RoboTask/chassis/chassisL_task.c ****         else if (chassis_move.flag.start_flag == 0)
- 612              		.loc 1 199 14 is_stmt 1 view .LVU173
- 613              		.loc 1 199 17 is_stmt 0 view .LVU174
- 614 00aa 002B     		cmp	r3, #0
- 615 00ac E5D1     		bne	.L24
- 200:Robot/RoboTask/chassis/chassisL_task.c ****         {
-ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 16
+ 185:Robot/RoboTask/chassis/chassisL_task.c ****         ChasssisL_Control(&chassis_move, &legL, &excessiveL, &INS, &LegL_pid, LQR_K);
+ 583              		.loc 1 185 9 view .LVU167
+ 584 007a 224E     		ldr	r6, .L29
+ 585 007c 264D     		ldr	r5, .L29+20
+ 586 007e 234C     		ldr	r4, .L29+8
+ 587 0080 3246     		mov	r2, r6
+ 588 0082 2946     		mov	r1, r5
+ 589 0084 2046     		mov	r0, r4
+ 590 0086 FFF7FEFF 		bl	ChassisL_Feedback_Update
+ 591              	.LVL36:
+ 186:Robot/RoboTask/chassis/chassisL_task.c **** 
+ 592              		.loc 1 186 9 view .LVU168
+ 593 008a 244B     		ldr	r3, .L29+24
+ 594 008c 0193     		str	r3, [sp, #4]
+ 595 008e 1E4B     		ldr	r3, .L29+4
+ 596 0090 0093     		str	r3, [sp]
+ 597 0092 3346     		mov	r3, r6
+ 598 0094 224A     		ldr	r2, .L29+28
+ 599 0096 2946     		mov	r1, r5
+ 600 0098 2046     		mov	r0, r4
+ 601 009a FFF7FEFF 		bl	ChasssisL_Control
+ 602              	.LVL37:
+ 188:Robot/RoboTask/chassis/chassisL_task.c ****         {
+ 603              		.loc 1 188 9 view .LVU169
+ 188:Robot/RoboTask/chassis/chassisL_task.c ****         {
+ 604              		.loc 1 188 30 is_stmt 0 view .LVU170
+ 605 009e 94F85C31 		ldrb	r3, [r4, #348]	@ zero_extendqisi2
+ 188:Robot/RoboTask/chassis/chassisL_task.c ****         {
+ 606              		.loc 1 188 12 view .LVU171
+ 607 00a2 012B     		cmp	r3, #1
+ 608 00a4 BCD0     		beq	.L28
+ 197:Robot/RoboTask/chassis/chassisL_task.c ****         }
+ 198:Robot/RoboTask/chassis/chassisL_task.c ****         else if (chassis_move.flag.start_flag == 0)
+ 609              		.loc 1 198 14 is_stmt 1 view .LVU172
+ 610              		.loc 1 198 17 is_stmt 0 view .LVU173
+ 611 00a6 002B     		cmp	r3, #0
+ 612 00a8 E7D1     		bne	.L24
+ 199:Robot/RoboTask/chassis/chassisL_task.c ****         {
+ 200:Robot/RoboTask/chassis/chassisL_task.c ****             Mit_Ctrl(&hfdcan1, 0x03, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+ 613              		.loc 1 200 13 is_stmt 1 view .LVU174
+ 614 00aa 9FED198A 		vldr.32	s16, .L29+12
+ 615 00ae 194C     		ldr	r4, .L29+16
+ 616 00b0 B0EE482A 		vmov.f32	s4, s16
+ARM GAS  D:\temp\TMP\cc2pm9Og.s 			page 16
 
 
- 201:Robot/RoboTask/chassis/chassisL_task.c ****             Mit_Ctrl(&hfdcan1, 0x03, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
- 616              		.loc 1 201 13 is_stmt 1 view .LVU175
- 617 00ae 9FED198A 		vldr.32	s16, .L29+12
- 618 00b2 194C     		ldr	r4, .L29+16
- 619 00b4 B0EE482A 		vmov.f32	s4, s16
- 620 00b8 F0EE481A 		vmov.f32	s3, s16
- 621 00bc B0EE481A 		vmov.f32	s2, s16
- 622 00c0 F0EE480A 		vmov.f32	s1, s16
- 623 00c4 B0EE480A 		vmov.f32	s0, s16
- 624 00c8 0321     		movs	r1, #3
- 625 00ca 2046     		mov	r0, r4
- 626 00cc FFF7FEFF 		bl	Mit_Ctrl
- 627              	.LVL39:
- 202:Robot/RoboTask/chassis/chassisL_task.c ****             osDelay(CHASSIS_TIME);
- 628              		.loc 1 202 13 view .LVU176
- 629 00d0 0120     		movs	r0, #1
- 630 00d2 FFF7FEFF 		bl	osDelay
- 631              	.LVL40:
- 203:Robot/RoboTask/chassis/chassisL_task.c ****             Mit_Ctrl(&hfdcan1, 0x04, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
- 632              		.loc 1 203 13 view .LVU177
- 633 00d6 B0EE482A 		vmov.f32	s4, s16
- 634 00da F0EE481A 		vmov.f32	s3, s16
- 635 00de B0EE481A 		vmov.f32	s2, s16
- 636 00e2 F0EE480A 		vmov.f32	s1, s16
- 637 00e6 B0EE480A 		vmov.f32	s0, s16
- 638 00ea 0421     		movs	r1, #4
- 639 00ec 2046     		mov	r0, r4
- 640 00ee FFF7FEFF 		bl	Mit_Ctrl
- 641              	.LVL41:
- 204:Robot/RoboTask/chassis/chassisL_task.c ****             osDelay(CHASSIS_TIME);
- 642              		.loc 1 204 13 view .LVU178
- 643 00f2 0120     		movs	r0, #1
- 644 00f4 FFF7FEFF 		bl	osDelay
- 645              	.LVL42:
- 205:Robot/RoboTask/chassis/chassisL_task.c ****             // 3508控制
- 206:Robot/RoboTask/chassis/chassisL_task.c ****             DJIMotorSetRef(chassis_move.wheel_motor[1], 0.0f);
- 646              		.loc 1 206 13 view .LVU179
- 647 00f8 B0EE480A 		vmov.f32	s0, s16
- 648 00fc 044B     		ldr	r3, .L29+8
- 649 00fe D3F80401 		ldr	r0, [r3, #260]
- 650 0102 FFF7FEFF 		bl	DJIMotorSetRef
- 651              	.LVL43:
- 652 0106 B8E7     		b	.L24
- 653              	.L30:
- 654              		.align	2
- 655              	.L29:
- 656 0108 00000000 		.word	INS
- 657 010c 00000000 		.word	.LANCHOR2
- 658 0110 00000000 		.word	chassis_move
- 659 0114 00000000 		.word	0
- 660 0118 00000000 		.word	hfdcan1
- 661 011c 00000000 		.word	.LANCHOR3
- 662 0120 00000000 		.word	LQR_K
- 663 0124 00000000 		.word	.LANCHOR4
- 664              		.cfi_endproc
- 665              	.LFE197:
- 667              		.global	LegL_pid
-ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 17
+ 617 00b4 F0EE481A 		vmov.f32	s3, s16
+ 618 00b8 B0EE481A 		vmov.f32	s2, s16
+ 619 00bc F0EE480A 		vmov.f32	s1, s16
+ 620 00c0 B0EE480A 		vmov.f32	s0, s16
+ 621 00c4 0321     		movs	r1, #3
+ 622 00c6 2046     		mov	r0, r4
+ 623 00c8 FFF7FEFF 		bl	Mit_Ctrl
+ 624              	.LVL38:
+ 201:Robot/RoboTask/chassis/chassisL_task.c ****             osDelay(CHASSIS_TIME);
+ 625              		.loc 1 201 13 view .LVU175
+ 626 00cc 0120     		movs	r0, #1
+ 627 00ce FFF7FEFF 		bl	osDelay
+ 628              	.LVL39:
+ 202:Robot/RoboTask/chassis/chassisL_task.c ****             Mit_Ctrl(&hfdcan1, 0x04, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+ 629              		.loc 1 202 13 view .LVU176
+ 630 00d2 B0EE482A 		vmov.f32	s4, s16
+ 631 00d6 F0EE481A 		vmov.f32	s3, s16
+ 632 00da B0EE481A 		vmov.f32	s2, s16
+ 633 00de F0EE480A 		vmov.f32	s1, s16
+ 634 00e2 B0EE480A 		vmov.f32	s0, s16
+ 635 00e6 0421     		movs	r1, #4
+ 636 00e8 2046     		mov	r0, r4
+ 637 00ea FFF7FEFF 		bl	Mit_Ctrl
+ 638              	.LVL40:
+ 203:Robot/RoboTask/chassis/chassisL_task.c ****             osDelay(CHASSIS_TIME);
+ 639              		.loc 1 203 13 view .LVU177
+ 640 00ee 0120     		movs	r0, #1
+ 641 00f0 FFF7FEFF 		bl	osDelay
+ 642              	.LVL41:
+ 204:Robot/RoboTask/chassis/chassisL_task.c ****             // 3508控制
+ 205:Robot/RoboTask/chassis/chassisL_task.c ****             DJIMotorSetRef(chassis_move.wheel_motor[1], 0.0f);
+ 643              		.loc 1 205 13 view .LVU178
+ 644 00f4 B0EE480A 		vmov.f32	s0, s16
+ 645 00f8 044B     		ldr	r3, .L29+8
+ 646 00fa D3F80401 		ldr	r0, [r3, #260]
+ 647 00fe FFF7FEFF 		bl	DJIMotorSetRef
+ 648              	.LVL42:
+ 649 0102 BAE7     		b	.L24
+ 650              	.L30:
+ 651              		.align	2
+ 652              	.L29:
+ 653 0104 00000000 		.word	INS
+ 654 0108 00000000 		.word	.LANCHOR2
+ 655 010c 00000000 		.word	chassis_move
+ 656 0110 00000000 		.word	0
+ 657 0114 00000000 		.word	hfdcan1
+ 658 0118 00000000 		.word	.LANCHOR3
+ 659 011c 00000000 		.word	LQR_K
+ 660 0120 00000000 		.word	.LANCHOR4
+ 661              		.cfi_endproc
+ 662              	.LFE197:
+ 664              		.global	LegL_pid
+ 665              		.global	excessiveL
+ 666              		.global	legL_state
+ 667              		.global	legL
+ 668              		.section	.bss.LegL_pid,"aw",%nobits
+ 669              		.align	2
+ARM GAS  D:\temp\TMP\cc2pm9Og.s 			page 17
 
 
- 668              		.global	excessiveL
- 669              		.global	legL_state
- 670              		.global	legL
- 671              		.section	.bss.LegL_pid,"aw",%nobits
- 672              		.align	2
- 673              		.set	.LANCHOR2,. + 0
- 676              	LegL_pid:
- 677 0000 00000000 		.space	72
- 677      00000000 
- 677      00000000 
- 677      00000000 
- 677      00000000 
- 678              		.section	.bss.excessiveL,"aw",%nobits
- 679              		.align	2
- 680              		.set	.LANCHOR4,. + 0
- 683              	excessiveL:
- 684 0000 00000000 		.space	8
- 684      00000000 
- 685              		.section	.bss.legL,"aw",%nobits
- 686              		.align	2
- 687              		.set	.LANCHOR3,. + 0
- 690              	legL:
- 691 0000 00000000 		.space	120
- 691      00000000 
- 691      00000000 
- 691      00000000 
- 691      00000000 
- 692              		.section	.bss.legL_state,"aw",%nobits
- 693              		.align	2
- 694              		.set	.LANCHOR1,. + 0
- 697              	legL_state:
- 698 0000 00000000 		.space	24
- 698      00000000 
- 698      00000000 
- 698      00000000 
- 698      00000000 
- 699              		.section	.rodata.leg_pid_L.0,"a"
- 700              		.align	2
- 701              		.set	.LANCHOR0,. + 0
- 704              	leg_pid_L.0:
- 705 0000 00000000 		.space	12
- 705      00000000 
- 705      00000000 
- 706              		.text
- 707              	.Letext0:
- 708              		.file 2 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\machine\\_default_types.h"
- 709              		.file 3 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
- 710              		.file 4 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h723xx.h"
- 711              		.file 5 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h"
- 712              		.file 6 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h"
- 713              		.file 7 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_fdcan.h"
- 714              		.file 8 "Core/Inc/fdcan.h"
- 715              		.file 9 "Bsp/bsp_can.h"
- 716              		.file 10 "Robot/Controller/controller.h"
- 717              		.file 11 "Robot/Devices/motor_def.h"
- 718              		.file 12 "Robot/daemon/daemon.h"
- 719              		.file 13 "Robot/Devices/Motor/DJI3508.h"
-ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 18
+ 670              		.set	.LANCHOR2,. + 0
+ 673              	LegL_pid:
+ 674 0000 00000000 		.space	72
+ 674      00000000 
+ 674      00000000 
+ 674      00000000 
+ 674      00000000 
+ 675              		.section	.bss.excessiveL,"aw",%nobits
+ 676              		.align	2
+ 677              		.set	.LANCHOR4,. + 0
+ 680              	excessiveL:
+ 681 0000 00000000 		.space	8
+ 681      00000000 
+ 682              		.section	.bss.legL,"aw",%nobits
+ 683              		.align	2
+ 684              		.set	.LANCHOR3,. + 0
+ 687              	legL:
+ 688 0000 00000000 		.space	120
+ 688      00000000 
+ 688      00000000 
+ 688      00000000 
+ 688      00000000 
+ 689              		.section	.bss.legL_state,"aw",%nobits
+ 690              		.align	2
+ 691              		.set	.LANCHOR1,. + 0
+ 694              	legL_state:
+ 695 0000 00000000 		.space	24
+ 695      00000000 
+ 695      00000000 
+ 695      00000000 
+ 695      00000000 
+ 696              		.section	.rodata.leg_pid_L.0,"a"
+ 697              		.align	2
+ 698              		.set	.LANCHOR0,. + 0
+ 701              	leg_pid_L.0:
+ 702 0000 00000000 		.space	12
+ 702      00000000 
+ 702      00000000 
+ 703              		.text
+ 704              	.Letext0:
+ 705              		.file 2 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 706              		.file 3 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
+ 707              		.file 4 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h723xx.h"
+ 708              		.file 5 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h"
+ 709              		.file 6 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h"
+ 710              		.file 7 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_fdcan.h"
+ 711              		.file 8 "Core/Inc/fdcan.h"
+ 712              		.file 9 "Bsp/bsp_can.h"
+ 713              		.file 10 "Robot/Controller/controller.h"
+ 714              		.file 11 "Robot/Devices/motor_def.h"
+ 715              		.file 12 "Robot/daemon/daemon.h"
+ 716              		.file 13 "Robot/Devices/Motor/djimotor.h"
+ 717              		.file 14 "Robot/Devices/Motor/dmmotor.h"
+ 718              		.file 15 "Robot/RoboTask/chassis/chassis_def.h"
+ 719              		.file 16 "Robot/RoboTask/ins/ins_task.h"
+ 720              		.file 17 "Robot/Controller/kinematics.h"
+ 721              		.file 18 "Robot/Controller/pid.h"
+ARM GAS  D:\temp\TMP\cc2pm9Og.s 			page 18
 
 
- 720              		.file 14 "Robot/Devices/Motor/DM8009.h"
- 721              		.file 15 "Robot/RoboTask/chassis/chassis_def.h"
- 722              		.file 16 "Robot/RoboTask/ins/INS_task.h"
- 723              		.file 17 "Robot/Controller/kinematics.h"
- 724              		.file 18 "Robot/Controller/pid.h"
- 725              		.file 19 "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h"
- 726              		.file 20 "Middlewares/ST/ARM/DSP/Inc/arm_math.h"
- 727              		.file 21 "<built-in>"
-ARM GAS  D:\temp\TMP\ccMzAyOy.s 			page 19
+ 722              		.file 19 "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h"
+ 723              		.file 20 "Middlewares/ST/ARM/DSP/Inc/arm_math.h"
+ 724              		.file 21 "<built-in>"
+ARM GAS  D:\temp\TMP\cc2pm9Og.s 			page 19
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 chassisL_task.c
-D:\temp\TMP\ccMzAyOy.s:19     .text.ChassisL_Feedback_Update:00000000 $t
-D:\temp\TMP\ccMzAyOy.s:24     .text.ChassisL_Feedback_Update:00000000 ChassisL_Feedback_Update
-D:\temp\TMP\ccMzAyOy.s:75     .text.ChassisL_Feedback_Update:00000038 $d
-D:\temp\TMP\ccMzAyOy.s:80     .text.ChassisL_Init:00000000 $t
-D:\temp\TMP\ccMzAyOy.s:85     .text.ChassisL_Init:00000000 ChassisL_Init
-D:\temp\TMP\ccMzAyOy.s:226    .text.ChassisL_Init:000000bc $d
-D:\temp\TMP\ccMzAyOy.s:239    .text.ChasssisL_Control:00000000 $t
-D:\temp\TMP\ccMzAyOy.s:244    .text.ChasssisL_Control:00000000 ChasssisL_Control
-D:\temp\TMP\ccMzAyOy.s:493    .text.ChasssisL_Control:00000194 $d
-D:\temp\TMP\ccMzAyOy.s:501    .text.ChassisL_Task:00000000 $t
-D:\temp\TMP\ccMzAyOy.s:507    .text.ChassisL_Task:00000000 ChassisL_Task
-D:\temp\TMP\ccMzAyOy.s:656    .text.ChassisL_Task:00000108 $d
-D:\temp\TMP\ccMzAyOy.s:676    .bss.LegL_pid:00000000 LegL_pid
-D:\temp\TMP\ccMzAyOy.s:683    .bss.excessiveL:00000000 excessiveL
-D:\temp\TMP\ccMzAyOy.s:697    .bss.legL_state:00000000 legL_state
-D:\temp\TMP\ccMzAyOy.s:690    .bss.legL:00000000 legL
-D:\temp\TMP\ccMzAyOy.s:672    .bss.LegL_pid:00000000 $d
-D:\temp\TMP\ccMzAyOy.s:679    .bss.excessiveL:00000000 $d
-D:\temp\TMP\ccMzAyOy.s:686    .bss.legL:00000000 $d
-D:\temp\TMP\ccMzAyOy.s:693    .bss.legL_state:00000000 $d
-D:\temp\TMP\ccMzAyOy.s:700    .rodata.leg_pid_L.0:00000000 $d
-D:\temp\TMP\ccMzAyOy.s:704    .rodata.leg_pid_L.0:00000000 leg_pid_L.0
+D:\temp\TMP\cc2pm9Og.s:19     .text.ChassisL_Feedback_Update:00000000 $t
+D:\temp\TMP\cc2pm9Og.s:24     .text.ChassisL_Feedback_Update:00000000 ChassisL_Feedback_Update
+D:\temp\TMP\cc2pm9Og.s:75     .text.ChassisL_Feedback_Update:00000038 $d
+D:\temp\TMP\cc2pm9Og.s:80     .text.ChassisL_Init:00000000 $t
+D:\temp\TMP\cc2pm9Og.s:85     .text.ChassisL_Init:00000000 ChassisL_Init
+D:\temp\TMP\cc2pm9Og.s:226    .text.ChassisL_Init:000000bc $d
+D:\temp\TMP\cc2pm9Og.s:239    .text.ChasssisL_Control:00000000 $t
+D:\temp\TMP\cc2pm9Og.s:244    .text.ChasssisL_Control:00000000 ChasssisL_Control
+D:\temp\TMP\cc2pm9Og.s:493    .text.ChasssisL_Control:00000194 $d
+D:\temp\TMP\cc2pm9Og.s:501    .text.ChassisL_Task:00000000 $t
+D:\temp\TMP\cc2pm9Og.s:507    .text.ChassisL_Task:00000000 ChassisL_Task
+D:\temp\TMP\cc2pm9Og.s:653    .text.ChassisL_Task:00000104 $d
+D:\temp\TMP\cc2pm9Og.s:673    .bss.LegL_pid:00000000 LegL_pid
+D:\temp\TMP\cc2pm9Og.s:680    .bss.excessiveL:00000000 excessiveL
+D:\temp\TMP\cc2pm9Og.s:694    .bss.legL_state:00000000 legL_state
+D:\temp\TMP\cc2pm9Og.s:687    .bss.legL:00000000 legL
+D:\temp\TMP\cc2pm9Og.s:669    .bss.LegL_pid:00000000 $d
+D:\temp\TMP\cc2pm9Og.s:676    .bss.excessiveL:00000000 $d
+D:\temp\TMP\cc2pm9Og.s:683    .bss.legL:00000000 $d
+D:\temp\TMP\cc2pm9Og.s:690    .bss.legL_state:00000000 $d
+D:\temp\TMP\cc2pm9Og.s:697    .rodata.leg_pid_L.0:00000000 $d
+D:\temp\TMP\cc2pm9Og.s:701    .rodata.leg_pid_L.0:00000000 leg_pid_L.0
 
 UNDEFINED SYMBOLS
 memset
@@ -1074,7 +1069,6 @@ PID_Calc
 JacobianMatrix
 Mit_Ctrl
 DJIMotorSetRef
-DJIMotorControl
 INS
 chassis_move
 LQR_K

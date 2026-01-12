@@ -4,7 +4,7 @@
 #include "memory.h"
 #include "stdlib.h"
 #include "daemon.h"
-// #include "bsp_log.h"
+#include "chassis_def.h"
 
 #define REMOTE_CONTROL_FRAME_SIZE 18u // 遥控器接收的buffer大小
 

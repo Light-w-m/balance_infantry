@@ -1,4 +1,4 @@
-#include "DM8009.h"
+#include "dmmotor.h"
 
 float Hex_To_Float(uint32_t *Byte,int num)//十六进制到浮点数
 {

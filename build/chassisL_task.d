@@ -51,12 +51,12 @@ build/chassisL_task.o: Robot/RoboTask/chassis/chassisL_task.c \
  Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h \
  Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h \
  Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h \
- Robot/RoboTask/chassis/chassis_def.h Robot/Devices/Motor/DJI3508.h \
+ Robot/RoboTask/chassis/chassis_def.h Robot/Devices/Motor/djimotor.h \
  Bsp/bsp_can.h Robot/Controller/controller.h Core/Inc/main.h \
  Bsp/bsp_dwt.h Middlewares/ST/ARM/DSP/Inc/arm_math.h \
  Drivers/CMSIS/Include/cmsis_compiler.h Robot/Devices/motor_def.h \
- Robot/daemon/daemon.h Robot/Devices/Motor/DM8009.h \
- Robot/Controller/kinematics.h Robot/RoboTask/ins/INS_task.h \
+ Robot/daemon/daemon.h Robot/Devices/Motor/dmmotor.h \
+ Robot/Controller/kinematics.h Robot/RoboTask/ins/ins_task.h \
  Robot/Devices/BMI088/BMI088driver.h Robot/RoboTask/chassis/chassis_def.h \
  Robot/Algorithm/kalman/kalman_filter.h Robot/Controller/pid.h
 Robot/RoboTask/chassis/chassisL_task.h:
@@ -115,7 +115,7 @@ Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h:
 Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h:
 Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h:
 Robot/RoboTask/chassis/chassis_def.h:
-Robot/Devices/Motor/DJI3508.h:
+Robot/Devices/Motor/djimotor.h:
 Bsp/bsp_can.h:
 Robot/Controller/controller.h:
 Core/Inc/main.h:
@@ -124,9 +124,9 @@ Middlewares/ST/ARM/DSP/Inc/arm_math.h:
 Drivers/CMSIS/Include/cmsis_compiler.h:
 Robot/Devices/motor_def.h:
 Robot/daemon/daemon.h:
-Robot/Devices/Motor/DM8009.h:
+Robot/Devices/Motor/dmmotor.h:
 Robot/Controller/kinematics.h:
-Robot/RoboTask/ins/INS_task.h:
+Robot/RoboTask/ins/ins_task.h:
 Robot/Devices/BMI088/BMI088driver.h:
 Robot/RoboTask/chassis/chassis_def.h:
 Robot/Algorithm/kalman/kalman_filter.h:

@@ -11,6 +11,7 @@
  */
 
 #include "kinematics.h"
+#include "ins_task.h"
 #include "chassis_def.h"
 
 // 三项式拟合系数
@@ -221,6 +222,51 @@ uint8_t GroundDetect(Leg_t* leg, Period_t* period, INS_t* ins)
     
 }
 
+/**
+ * @brief 双腿腿长协调控制，维持腿长目标在范围内，同时尽可能达到两腿目标差值
+ * 
+ * @param LengthL 
+ * @param LengthR 
+ * @param diff 
+ * @param add 差值补偿
+ */
+void CoordinateLength(float *LengthL, float *LengthR, float diff, float add)
+{
+    *LengthL = *LengthL + diff * 0.5f + add;
+    *LengthR = *LengthR - diff * 0.5f - add;
+
+    // (保证指向不同的地址)
+    float *short_leg = *LengthL < *LengthR ? LengthL : LengthR;
+    float *long_leg = *LengthL < *LengthR ? LengthR : LengthL;
+
+    float temp = 0;
+    temp = MIN_LEG_LENGTH - *short_leg;
+    if (temp > 0)
+    {
+        /* code */
+        *short_leg += temp;
+        *long_leg += temp;
+    }
+    if (*long_leg > MAX_LEG_LENGTH)
+    {
+        /* code */
+        *long_leg = MAX_LEG_LENGTH;
+    }    
+}
+
+/**
+ * @brief 通过当前底盘姿态和目标roll角计算两腿长度期望差值
+ * 
+ * @param diff 左右腿差值
+ * @param real 当前roll角
+ * @param target 目标roll角
+ * @return float 
+ */
+float DeviationCalc(float diff, float real, float target)
+{
+    return WHEEL_DISTANCE * tanf(target) - 
+           cosf(real) / cosf(target) * (WHEEL_DISTANCE * tanf(real) - diff);
+}
 
 // 限幅
 float constrainValue(float value, float min, float max)

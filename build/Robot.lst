@@ -1,4 +1,4 @@
-ARM GAS  D:\temp\TMP\ccx33ZZy.s 			page 1
+ARM GAS  D:\temp\TMP\ccLkUuNd.s 			page 1
 
 
    1              		.cpu cortex-m7
@@ -18,14 +18,14 @@ ARM GAS  D:\temp\TMP\ccx33ZZy.s 			page 1
   15              		.text
   16              	.Ltext0:
   17              		.cfi_sections	.debug_frame
-  18              		.section	.text.Robot_Init,"ax",%progbits
+  18              		.section	.text.RobotInit,"ax",%progbits
   19              		.align	1
-  20              		.global	Robot_Init
+  20              		.global	RobotInit
   21              		.syntax unified
   22              		.thumb
   23              		.thumb_func
-  25              	Robot_Init:
-  26              	.LFB144:
+  25              	RobotInit:
+  26              	.LFB188:
   27              		.file 1 "Robot/RoboTask/Robot.c"
    1:Robot/RoboTask/Robot.c **** /**
    2:Robot/RoboTask/Robot.c ****  * @file Robot.c
@@ -38,14 +38,16 @@ ARM GAS  D:\temp\TMP\ccx33ZZy.s 			page 1
    9:Robot/RoboTask/Robot.c ****  */
   10:Robot/RoboTask/Robot.c **** 
   11:Robot/RoboTask/Robot.c **** #include "Robot.h"
-  12:Robot/RoboTask/Robot.c **** #include "INS_task.h"
-  13:Robot/RoboTask/Robot.c **** #include "bsp_can.h"
-  14:Robot/RoboTask/Robot.c **** #include "BMI088driver.h"
-  15:Robot/RoboTask/Robot.c **** #include "bsp_dwt.h"
-  16:Robot/RoboTask/Robot.c **** 
-  17:Robot/RoboTask/Robot.c **** void Robot_Init(void)
-  18:Robot/RoboTask/Robot.c **** {
-  28              		.loc 1 18 1 view -0
+  12:Robot/RoboTask/Robot.c **** #include "Robot_def.h"
+  13:Robot/RoboTask/Robot.c **** #include "INS_task.h"
+  14:Robot/RoboTask/Robot.c **** #include "djimotor.h"
+  15:Robot/RoboTask/Robot.c **** #include "bsp_can.h"
+  16:Robot/RoboTask/Robot.c **** #include "BMI088driver.h"
+  17:Robot/RoboTask/Robot.c **** #include "bsp_dwt.h"
+  18:Robot/RoboTask/Robot.c **** 
+  19:Robot/RoboTask/Robot.c **** void RobotInit(void)
+  20:Robot/RoboTask/Robot.c **** {
+  28              		.loc 1 20 1 view -0
   29              		.cfi_startproc
   30              		@ args = 0, pretend = 0, frame = 0
   31              		@ frame_needed = 0, uses_anonymous_args = 0
@@ -54,41 +56,77 @@ ARM GAS  D:\temp\TMP\ccx33ZZy.s 			page 1
   34              		.cfi_def_cfa_offset 8
   35              		.cfi_offset 3, -8
   36              		.cfi_offset 14, -4
-  19:Robot/RoboTask/Robot.c ****     
-  20:Robot/RoboTask/Robot.c ****     DWT_Init(480); 
-  37              		.loc 1 20 5 view .LVU1
+  21:Robot/RoboTask/Robot.c ****     
+  22:Robot/RoboTask/Robot.c ****     DWT_Init(480); 
+ARM GAS  D:\temp\TMP\ccLkUuNd.s 			page 2
+
+
+  37              		.loc 1 22 5 view .LVU1
   38 0002 4FF4F070 		mov	r0, #480
-ARM GAS  D:\temp\TMP\ccx33ZZy.s 			page 2
-
-
   39 0006 FFF7FEFF 		bl	DWT_Init
   40              	.LVL0:
-  21:Robot/RoboTask/Robot.c ****     // while (BMI088_init(&hspi2,2) != BMI088_NO_ERROR)
-  22:Robot/RoboTask/Robot.c ****     // {
-  23:Robot/RoboTask/Robot.c ****     //     /* code */
-  24:Robot/RoboTask/Robot.c ****     // }
-  25:Robot/RoboTask/Robot.c **** 
-  26:Robot/RoboTask/Robot.c ****     FDCAN1_Config();
-  41              		.loc 1 26 5 view .LVU2
+  23:Robot/RoboTask/Robot.c ****     #ifdef INS_OF_HIPNUC
+  24:Robot/RoboTask/Robot.c ****     HIPNUC_Init();
+  25:Robot/RoboTask/Robot.c ****     #endif
+  26:Robot/RoboTask/Robot.c **** 
+  27:Robot/RoboTask/Robot.c ****     FDCAN1_Config();
+  41              		.loc 1 27 5 view .LVU2
   42 000a FFF7FEFF 		bl	FDCAN1_Config
   43              	.LVL1:
-  27:Robot/RoboTask/Robot.c **** }...
-  44              		.loc 1 27 1 is_stmt 0 view .LVU3
+  28:Robot/RoboTask/Robot.c **** }
+  44              		.loc 1 28 1 is_stmt 0 view .LVU3
   45 000e 08BD     		pop	{r3, pc}
   46              		.cfi_endproc
-  47              	.LFE144:
-  49              		.text
-  50              	.Letext0:
-  51              		.file 2 "Bsp/bsp_dwt.h"
-  52              		.file 3 "Bsp/bsp_can.h"
-ARM GAS  D:\temp\TMP\ccx33ZZy.s 			page 3
+  47              	.LFE188:
+  49              		.section	.text.MotorTask,"ax",%progbits
+  50              		.align	1
+  51              		.global	MotorTask
+  52              		.syntax unified
+  53              		.thumb
+  54              		.thumb_func
+  56              	MotorTask:
+  57              	.LFB189:
+  29:Robot/RoboTask/Robot.c **** 
+  30:Robot/RoboTask/Robot.c **** /**
+  31:Robot/RoboTask/Robot.c ****  * @brief 以1khz的频率运行
+  32:Robot/RoboTask/Robot.c ****  * 
+  33:Robot/RoboTask/Robot.c ****  */
+  34:Robot/RoboTask/Robot.c **** void MotorTask(void)
+  35:Robot/RoboTask/Robot.c **** {
+  58              		.loc 1 35 1 is_stmt 1 view -0
+  59              		.cfi_startproc
+  60              		@ args = 0, pretend = 0, frame = 0
+  61              		@ frame_needed = 0, uses_anonymous_args = 0
+  62 0000 08B5     		push	{r3, lr}
+  63              	.LCFI1:
+  64              		.cfi_def_cfa_offset 8
+  65              		.cfi_offset 3, -8
+  66              		.cfi_offset 14, -4
+  36:Robot/RoboTask/Robot.c ****     DJIMotorControl();
+  67              		.loc 1 36 5 view .LVU5
+  68 0002 FFF7FEFF 		bl	DJIMotorControl
+  69              	.LVL2:
+  37:Robot/RoboTask/Robot.c **** }...
+  70              		.loc 1 37 1 is_stmt 0 view .LVU6
+  71 0006 08BD     		pop	{r3, pc}
+  72              		.cfi_endproc
+  73              	.LFE189:
+  75              		.text
+  76              	.Letext0:
+  77              		.file 2 "Robot/Devices/Motor/djimotor.h"
+  78              		.file 3 "Bsp/bsp_dwt.h"
+  79              		.file 4 "Bsp/bsp_can.h"
+ARM GAS  D:\temp\TMP\ccLkUuNd.s 			page 3
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 Robot.c
-D:\temp\TMP\ccx33ZZy.s:19     .text.Robot_Init:00000000 $t
-D:\temp\TMP\ccx33ZZy.s:25     .text.Robot_Init:00000000 Robot_Init
+D:\temp\TMP\ccLkUuNd.s:19     .text.RobotInit:00000000 $t
+D:\temp\TMP\ccLkUuNd.s:25     .text.RobotInit:00000000 RobotInit
+D:\temp\TMP\ccLkUuNd.s:50     .text.MotorTask:00000000 $t
+D:\temp\TMP\ccLkUuNd.s:56     .text.MotorTask:00000000 MotorTask
 
 UNDEFINED SYMBOLS
 DWT_Init
 FDCAN1_Config
+DJIMotorControl

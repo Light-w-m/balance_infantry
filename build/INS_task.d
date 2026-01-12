@@ -1,5 +1,5 @@
-build/INS_task.o: Robot/RoboTask/ins/INS_task.c \
- Robot/RoboTask/ins/INS_task.h Robot/Devices/BMI088/BMI088driver.h \
+build/ins_task.o: Robot/RoboTask/ins/ins_task.c \
+ Robot/RoboTask/ins/ins_task.h Robot/Devices/BMI088/BMI088driver.h \
  Core/Inc/main.h Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h \
  Core/Inc/stm32h7xx_hal_conf.h \
  Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h \
@@ -33,8 +33,9 @@ build/INS_task.o: Robot/RoboTask/ins/INS_task.c \
  Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h \
  Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h \
  Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h \
- Robot/Controller/controller.h Bsp/bsp_dwt.h \
- Middlewares/ST/ARM/DSP/Inc/arm_math.h \
+ Robot/RoboTask/Robot_def.h Robot/Devices/Hipnuc/hipnuc_dec.h \
+ Robot/Devices/Hipnuc/hipnuc_def.h Robot/Controller/controller.h \
+ Bsp/bsp_dwt.h Middlewares/ST/ARM/DSP/Inc/arm_math.h \
  Drivers/CMSIS/Include/cmsis_compiler.h \
  Robot/Algorithm/EKF/QuaternionEKF.h \
  Robot/Algorithm/kalman/kalman_filter.h Robot/Lib/user_lib.h \
@@ -56,8 +57,8 @@ build/INS_task.o: Robot/RoboTask/ins/INS_task.c \
  Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
  Robot/Algorithm/mahony/mahony_filter.h Core/Inc/gpio.h Core/Inc/main.h \
- Robot/Controller/pid.h Core/Inc/spi.h Core/Inc/tim.h
-Robot/RoboTask/ins/INS_task.h:
+ Robot/Controller/pid.h Core/Inc/spi.h Core/Inc/tim.h Core/Inc/usart.h
+Robot/RoboTask/ins/ins_task.h:
 Robot/Devices/BMI088/BMI088driver.h:
 Core/Inc/main.h:
 Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h:
@@ -95,6 +96,9 @@ Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h:
 Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h:
 Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h:
 Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h:
+Robot/RoboTask/Robot_def.h:
+Robot/Devices/Hipnuc/hipnuc_dec.h:
+Robot/Devices/Hipnuc/hipnuc_def.h:
 Robot/Controller/controller.h:
 Bsp/bsp_dwt.h:
 Middlewares/ST/ARM/DSP/Inc/arm_math.h:
@@ -125,3 +129,4 @@ Core/Inc/main.h:
 Robot/Controller/pid.h:
 Core/Inc/spi.h:
 Core/Inc/tim.h:
+Core/Inc/usart.h:

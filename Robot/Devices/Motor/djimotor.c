@@ -1,4 +1,4 @@
-#include "DJI3508.h"
+#include "djimotor.h"
 #include "general_def.h"
 #include "bsp_dwt.h"
 

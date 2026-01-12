@@ -24,7 +24,7 @@ typedef struct
     float yaw;
     float quaternion[4];       //四元数--q0,q1,q2,q3
     
-} imu_data_t;
+} hi91_t;
 
 /* HI83 bitmap masks */
 #define HI83_BMAP_ACC_B              (1u << 0)
@@ -100,7 +100,7 @@ typedef struct
     uint16_t len;
     int nbyte;
     uint8_t buf[HIPNUC_MAX_RAW_SIZE];       /* Message raw buffer */
-    imu_data_t hi91;                        /* Decoded 0x91 packet data */
+    hi91_t hi91;                        /* Decoded 0x91 packet data */
     hi83_t hi83;
 } hipnuc_raw_t;
 

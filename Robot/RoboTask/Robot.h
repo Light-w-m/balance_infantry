@@ -5,6 +5,7 @@
 
 // extern SPI_HandleTypeDef hspi2;
 
-void Robot_Init(void);
+void RobotInit(void);
+void MotorTask(void);
 
 #endif // ROBOT_H

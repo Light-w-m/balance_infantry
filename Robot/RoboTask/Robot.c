@@ -9,19 +9,29 @@
  */
 
 #include "Robot.h"
+#include "Robot_def.h"
 #include "INS_task.h"
+#include "djimotor.h"
 #include "bsp_can.h"
 #include "BMI088driver.h"
 #include "bsp_dwt.h"
 
-void Robot_Init(void)
+void RobotInit(void)
 {
     
     DWT_Init(480); 
-    // while (BMI088_init(&hspi2,2) != BMI088_NO_ERROR)
-    // {
-    //     /* code */
-    // }
+    #ifdef INS_OF_HIPNUC
+    HIPNUC_Init();
+    #endif
 
     FDCAN1_Config();
+}
+
+/**
+ * @brief 以1khz的频率运行
+ * 
+ */
+void MotorTask(void)
+{
+    DJIMotorControl();
 }

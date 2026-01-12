@@ -1,4 +1,4 @@
-ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
+ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 1
 
 
    1              		.cpu cortex-m7
@@ -14,7 +14,7 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
   11              		.eabi_attribute 30, 1
   12              		.eabi_attribute 34, 1
   13              		.eabi_attribute 18, 4
-  14              		.file	"DM8009.c"
+  14              		.file	"dmmotor.c"
   15              		.text
   16              	.Ltext0:
   17              		.cfi_sections	.debug_frame
@@ -27,19 +27,19 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
   25              	Hex_To_Float:
   26              	.LVL0:
   27              	.LFB144:
-  28              		.file 1 "Robot/Devices/Motor/DM8009.c"
-   1:Robot/Devices/Motor/DM8009.c **** #include "DM8009.h"
-   2:Robot/Devices/Motor/DM8009.c **** 
-   3:Robot/Devices/Motor/DM8009.c **** float Hex_To_Float(uint32_t *Byte,int num)//十六进制到浮点数
-   4:Robot/Devices/Motor/DM8009.c **** {
+  28              		.file 1 "Robot/Devices/Motor/dmmotor.c"
+   1:Robot/Devices/Motor/dmmotor.c **** #include "dmmotor.h"
+   2:Robot/Devices/Motor/dmmotor.c **** 
+   3:Robot/Devices/Motor/dmmotor.c **** float Hex_To_Float(uint32_t *Byte,int num)//十六进制到浮点数
+   4:Robot/Devices/Motor/dmmotor.c **** {
   29              		.loc 1 4 1 view -0
   30              		.cfi_startproc
   31              		@ args = 0, pretend = 0, frame = 0
   32              		@ frame_needed = 0, uses_anonymous_args = 0
   33              		@ link register save eliminated.
-   5:Robot/Devices/Motor/DM8009.c **** 	return *((float*)Byte);
+   5:Robot/Devices/Motor/dmmotor.c **** 	return *((float*)Byte);
   34              		.loc 1 5 2 view .LVU1
-   6:Robot/Devices/Motor/DM8009.c **** }
+   6:Robot/Devices/Motor/dmmotor.c **** }
   35              		.loc 1 6 1 is_stmt 0 view .LVU2
   36 0000 90ED000A 		vldr.32	s0, [r0]
   37 0004 7047     		bx	lr
@@ -54,11 +54,11 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
   48              	FloatTohex:
   49              	.LVL1:
   50              	.LFB145:
-   7:Robot/Devices/Motor/DM8009.c **** 
-   8:Robot/Devices/Motor/DM8009.c **** uint32_t FloatTohex(float HEX)//浮点数到十六进制转换
-   9:Robot/Devices/Motor/DM8009.c **** {
+   7:Robot/Devices/Motor/dmmotor.c **** 
+   8:Robot/Devices/Motor/dmmotor.c **** uint32_t FloatTohex(float HEX)//浮点数到十六进制转换
+   9:Robot/Devices/Motor/dmmotor.c **** {
   51              		.loc 1 9 1 is_stmt 1 view -0
-ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 2
+ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 2
 
 
   52              		.cfi_startproc
@@ -70,11 +70,11 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
   58              	.LCFI0:
   59              		.cfi_def_cfa_offset 8
   60 0002 8DED010A 		vstr.32	s0, [sp, #4]
-  10:Robot/Devices/Motor/DM8009.c **** 	return *( uint32_t *)&HEX;
+  10:Robot/Devices/Motor/dmmotor.c **** 	return *( uint32_t *)&HEX;
   61              		.loc 1 10 2 is_stmt 1 view .LVU5
   62              		.loc 1 10 9 is_stmt 0 view .LVU6
   63 0006 0198     		ldr	r0, [sp, #4]
-  11:Robot/Devices/Motor/DM8009.c **** }
+  11:Robot/Devices/Motor/dmmotor.c **** }
   64              		.loc 1 11 1 view .LVU7
   65 0008 02B0     		add	sp, sp, #8
   66              	.LCFI1:
@@ -92,37 +92,37 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
   80              	float_to_uint:
   81              	.LVL2:
   82              	.LFB146:
-  12:Robot/Devices/Motor/DM8009.c **** 
-  13:Robot/Devices/Motor/DM8009.c **** /**
-  14:Robot/Devices/Motor/DM8009.c **** ************************************************************************
-  15:Robot/Devices/Motor/DM8009.c **** * @brief:      	float_to_uint: 浮点数转换为无符号整数函数
-  16:Robot/Devices/Motor/DM8009.c **** * @param[in]:   x_float:	待转换的浮点数
-  17:Robot/Devices/Motor/DM8009.c **** * @param[in]:   x_min:		范围最小值
-  18:Robot/Devices/Motor/DM8009.c **** * @param[in]:   x_max:		范围最大值
-  19:Robot/Devices/Motor/DM8009.c **** * @param[in]:   bits: 		目标无符号整数的位数
-  20:Robot/Devices/Motor/DM8009.c **** * @retval:     	无符号整数结果
-  21:Robot/Devices/Motor/DM8009.c **** * @details:    	将给定的浮点数 x 在指定范围 [x_min, x_max] 内进行线性映射，映�
-  22:Robot/Devices/Motor/DM8009.c **** ************************************************************************
-  23:Robot/Devices/Motor/DM8009.c **** **/
-  24:Robot/Devices/Motor/DM8009.c **** int float_to_uint(float x_float, float x_min, float x_max, int bits)
-  25:Robot/Devices/Motor/DM8009.c **** {
+  12:Robot/Devices/Motor/dmmotor.c **** 
+  13:Robot/Devices/Motor/dmmotor.c **** /**
+  14:Robot/Devices/Motor/dmmotor.c **** ************************************************************************
+  15:Robot/Devices/Motor/dmmotor.c **** * @brief:      	float_to_uint: 浮点数转换为无符号整数函数
+  16:Robot/Devices/Motor/dmmotor.c **** * @param[in]:   x_float:	待转换的浮点数
+  17:Robot/Devices/Motor/dmmotor.c **** * @param[in]:   x_min:		范围最小值
+  18:Robot/Devices/Motor/dmmotor.c **** * @param[in]:   x_max:		范围最大值
+  19:Robot/Devices/Motor/dmmotor.c **** * @param[in]:   bits: 		目标无符号整数的位数
+  20:Robot/Devices/Motor/dmmotor.c **** * @retval:     	无符号整数结果
+  21:Robot/Devices/Motor/dmmotor.c **** * @details:    	将给定的浮点数 x 在指定范围 [x_min, x_max] 内进行线性映射，映�
+  22:Robot/Devices/Motor/dmmotor.c **** ************************************************************************
+  23:Robot/Devices/Motor/dmmotor.c **** **/
+  24:Robot/Devices/Motor/dmmotor.c **** int float_to_uint(float x_float, float x_min, float x_max, int bits)
+  25:Robot/Devices/Motor/dmmotor.c **** {
   83              		.loc 1 25 1 is_stmt 1 view -0
   84              		.cfi_startproc
   85              		@ args = 0, pretend = 0, frame = 0
   86              		@ frame_needed = 0, uses_anonymous_args = 0
   87              		@ link register save eliminated.
-  26:Robot/Devices/Motor/DM8009.c **** 	/* Converts a float to an unsigned int, given range and number of bits */
-  27:Robot/Devices/Motor/DM8009.c **** 	float span = x_max - x_min;
+  26:Robot/Devices/Motor/dmmotor.c **** 	/* Converts a float to an unsigned int, given range and number of bits */
+  27:Robot/Devices/Motor/dmmotor.c **** 	float span = x_max - x_min;
   88              		.loc 1 27 2 view .LVU9
   89              		.loc 1 27 8 is_stmt 0 view .LVU10
   90 0000 31EE601A 		vsub.f32	s2, s2, s1
   91              	.LVL3:
-  28:Robot/Devices/Motor/DM8009.c **** 	float offset = x_min;
-ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 3
+  28:Robot/Devices/Motor/dmmotor.c **** 	float offset = x_min;
+ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 3
 
 
   92              		.loc 1 28 2 is_stmt 1 view .LVU11
-  29:Robot/Devices/Motor/DM8009.c **** 	return (int) ((x_float-offset)*((float)((1<<bits)-1))/span);
+  29:Robot/Devices/Motor/dmmotor.c **** 	return (int) ((x_float-offset)*((float)((1<<bits)-1))/span);
   93              		.loc 1 29 2 view .LVU12
   94              		.loc 1 29 24 is_stmt 0 view .LVU13
   95 0004 30EE600A 		vsub.f32	s0, s0, s1
@@ -139,7 +139,7 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  106 0016 60EE277A 		vmul.f32	s15, s0, s15
  107              		.loc 1 29 55 view .LVU18
  108 001a 87EE817A 		vdiv.f32	s14, s15, s2
-  30:Robot/Devices/Motor/DM8009.c **** }
+  30:Robot/Devices/Motor/dmmotor.c **** }
  109              		.loc 1 30 1 view .LVU19
  110 001e FDEEC77A 		vcvt.s32.f32	s15, s14
  111 0022 17EE900A 		vmov	r0, s15	@ int
@@ -157,19 +157,19 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  125              	uint_to_float:
  126              	.LVL6:
  127              	.LFB147:
-  31:Robot/Devices/Motor/DM8009.c **** /**
-  32:Robot/Devices/Motor/DM8009.c **** ************************************************************************
-  33:Robot/Devices/Motor/DM8009.c **** * @brief:      	uint_to_float: 无符号整数转换为浮点数函数
-  34:Robot/Devices/Motor/DM8009.c **** * @param[in]:   x_int: 待转换的无符号整数
-  35:Robot/Devices/Motor/DM8009.c **** * @param[in]:   x_min: 范围最小值
-  36:Robot/Devices/Motor/DM8009.c **** * @param[in]:   x_max: 范围最大值
-  37:Robot/Devices/Motor/DM8009.c **** * @param[in]:   bits:  无符号整数的位数
-  38:Robot/Devices/Motor/DM8009.c **** * @retval:     	浮点数结果
-  39:Robot/Devices/Motor/DM8009.c **** * @details:    	将给定的无符号整数 x_int 在指定范围 [x_min, x_max] 内进行线性映
-  40:Robot/Devices/Motor/DM8009.c **** ************************************************************************
-  41:Robot/Devices/Motor/DM8009.c **** **/
-  42:Robot/Devices/Motor/DM8009.c **** float uint_to_float(int x_int, float x_min, float x_max, int bits)
-  43:Robot/Devices/Motor/DM8009.c **** {
+  31:Robot/Devices/Motor/dmmotor.c **** /**
+  32:Robot/Devices/Motor/dmmotor.c **** ************************************************************************
+  33:Robot/Devices/Motor/dmmotor.c **** * @brief:      	uint_to_float: 无符号整数转换为浮点数函数
+  34:Robot/Devices/Motor/dmmotor.c **** * @param[in]:   x_int: 待转换的无符号整数
+  35:Robot/Devices/Motor/dmmotor.c **** * @param[in]:   x_min: 范围最小值
+  36:Robot/Devices/Motor/dmmotor.c **** * @param[in]:   x_max: 范围最大值
+  37:Robot/Devices/Motor/dmmotor.c **** * @param[in]:   bits:  无符号整数的位数
+  38:Robot/Devices/Motor/dmmotor.c **** * @retval:     	浮点数结果
+  39:Robot/Devices/Motor/dmmotor.c **** * @details:    	将给定的无符号整数 x_int 在指定范围 [x_min, x_max] 内进行线性映
+  40:Robot/Devices/Motor/dmmotor.c **** ************************************************************************
+  41:Robot/Devices/Motor/dmmotor.c **** **/
+  42:Robot/Devices/Motor/dmmotor.c **** float uint_to_float(int x_int, float x_min, float x_max, int bits)
+  43:Robot/Devices/Motor/dmmotor.c **** {
  128              		.loc 1 43 1 is_stmt 1 view -0
  129              		.cfi_startproc
  130              		@ args = 0, pretend = 0, frame = 0
@@ -177,18 +177,18 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  132              		@ link register save eliminated.
  133              		.loc 1 43 1 is_stmt 0 view .LVU22
  134 0000 07EE900A 		vmov	s15, r0	@ int
-  44:Robot/Devices/Motor/DM8009.c **** 	/* converts unsigned int to float, given range and number of bits */
-ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 4
+  44:Robot/Devices/Motor/dmmotor.c **** 	/* converts unsigned int to float, given range and number of bits */
+ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 4
 
 
-  45:Robot/Devices/Motor/DM8009.c **** 	float span = x_max - x_min;
+  45:Robot/Devices/Motor/dmmotor.c **** 	float span = x_max - x_min;
  135              		.loc 1 45 2 is_stmt 1 view .LVU23
  136              		.loc 1 45 8 is_stmt 0 view .LVU24
  137 0004 70EEC00A 		vsub.f32	s1, s1, s0
  138              	.LVL7:
-  46:Robot/Devices/Motor/DM8009.c **** 	float offset = x_min;
+  46:Robot/Devices/Motor/dmmotor.c **** 	float offset = x_min;
  139              		.loc 1 46 2 is_stmt 1 view .LVU25
-  47:Robot/Devices/Motor/DM8009.c **** 	return ((float)x_int)*span/((float)((1<<bits)-1)) + offset;
+  47:Robot/Devices/Motor/dmmotor.c **** 	return ((float)x_int)*span/((float)((1<<bits)-1)) + offset;
  140              		.loc 1 47 2 view .LVU26
  141              		.loc 1 47 10 is_stmt 0 view .LVU27
  142 0008 F8EEE77A 		vcvt.f32.s32	s15, s15
@@ -205,7 +205,7 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  153 001a F8EEE77A 		vcvt.f32.s32	s15, s15
  154              		.loc 1 47 28 view .LVU32
  155 001e 80EEA77A 		vdiv.f32	s14, s1, s15
-  48:Robot/Devices/Motor/DM8009.c **** }
+  48:Robot/Devices/Motor/dmmotor.c **** }
  156              		.loc 1 48 1 view .LVU33
  157 0022 37EE000A 		vadd.f32	s0, s14, s0
  158              	.LVL9:
@@ -222,33 +222,33 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  171              	joint_motor_init:
  172              	.LVL10:
  173              	.LFB148:
-  49:Robot/Devices/Motor/DM8009.c **** 
-  50:Robot/Devices/Motor/DM8009.c **** /**
-  51:Robot/Devices/Motor/DM8009.c ****  * @brief 关节电机初始化
-  52:Robot/Devices/Motor/DM8009.c ****  * 
-  53:Robot/Devices/Motor/DM8009.c ****  * @param motor 
-  54:Robot/Devices/Motor/DM8009.c ****  * @param id 
-  55:Robot/Devices/Motor/DM8009.c ****  * @param mode 
-  56:Robot/Devices/Motor/DM8009.c ****  */
-  57:Robot/Devices/Motor/DM8009.c **** void joint_motor_init(Joint_Motor_t *motor,uint16_t id,uint16_t mode)
-  58:Robot/Devices/Motor/DM8009.c **** {
+  49:Robot/Devices/Motor/dmmotor.c **** 
+  50:Robot/Devices/Motor/dmmotor.c **** /**
+  51:Robot/Devices/Motor/dmmotor.c ****  * @brief 关节电机初始化
+  52:Robot/Devices/Motor/dmmotor.c ****  * 
+  53:Robot/Devices/Motor/dmmotor.c ****  * @param motor 
+  54:Robot/Devices/Motor/dmmotor.c ****  * @param id 
+  55:Robot/Devices/Motor/dmmotor.c ****  * @param mode 
+  56:Robot/Devices/Motor/dmmotor.c ****  */
+  57:Robot/Devices/Motor/dmmotor.c **** void joint_motor_init(Joint_Motor_t *motor,uint16_t id,uint16_t mode)
+  58:Robot/Devices/Motor/dmmotor.c **** {
  174              		.loc 1 58 1 is_stmt 1 view -0
  175              		.cfi_startproc
  176              		@ args = 0, pretend = 0, frame = 0
  177              		@ frame_needed = 0, uses_anonymous_args = 0
  178              		@ link register save eliminated.
-  59:Robot/Devices/Motor/DM8009.c ****   motor->mode=mode;
-ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 5
+  59:Robot/Devices/Motor/dmmotor.c ****   motor->mode=mode;
+ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 5
 
 
  179              		.loc 1 59 3 view .LVU36
  180              		.loc 1 59 14 is_stmt 0 view .LVU37
  181 0000 0280     		strh	r2, [r0]	@ movhi
-  60:Robot/Devices/Motor/DM8009.c ****   motor->para.id=id;
+  60:Robot/Devices/Motor/dmmotor.c ****   motor->para.id=id;
  182              		.loc 1 60 3 is_stmt 1 view .LVU38
  183              		.loc 1 60 17 is_stmt 0 view .LVU39
  184 0002 4160     		str	r1, [r0, #4]
-  61:Robot/Devices/Motor/DM8009.c **** }
+  61:Robot/Devices/Motor/dmmotor.c **** }
  185              		.loc 1 61 1 view .LVU40
  186 0004 7047     		bx	lr
  187              		.cfi_endproc
@@ -262,32 +262,32 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  197              	Dm8009_Fbdata:
  198              	.LVL11:
  199              	.LFB149:
-  62:Robot/Devices/Motor/DM8009.c **** 
-  63:Robot/Devices/Motor/DM8009.c **** /**
-  64:Robot/Devices/Motor/DM8009.c **** ************************************************************************
-  65:Robot/Devices/Motor/DM8009.c **** * @brief:      	dm8009_fbdata: 获取DM8009电机反馈数据函数
-  66:Robot/Devices/Motor/DM8009.c **** * @param[in]:   motor:    指向motor_t结构的指针，包含电机相关信息和反馈数据
-  67:Robot/Devices/Motor/DM8009.c **** * @param[in]:   rx_data:  指向包含反馈数据的数组指针
-  68:Robot/Devices/Motor/DM8009.c **** * @param[in]:  	dlc: 数据长度
-  69:Robot/Devices/Motor/DM8009.c **** * @retval:     	void
-  70:Robot/Devices/Motor/DM8009.c **** * @details:    	从接收到的数据中提取DM4310电机的反馈信息，包括电机ID、
-  71:Robot/Devices/Motor/DM8009.c **** *               状态、位置、速度、扭矩相关温度参数、寄存器数据等
-  72:Robot/Devices/Motor/DM8009.c **** ************************************************************************
-  73:Robot/Devices/Motor/DM8009.c **** **/
-  74:Robot/Devices/Motor/DM8009.c **** void Dm8009_Fbdata(Joint_Motor_t *motor, uint8_t *rx_data,uint32_t dlc)
-  75:Robot/Devices/Motor/DM8009.c **** { 
+  62:Robot/Devices/Motor/dmmotor.c **** 
+  63:Robot/Devices/Motor/dmmotor.c **** /**
+  64:Robot/Devices/Motor/dmmotor.c **** ************************************************************************
+  65:Robot/Devices/Motor/dmmotor.c **** * @brief:      	dm8009_fbdata: 获取DM8009电机反馈数据函数
+  66:Robot/Devices/Motor/dmmotor.c **** * @param[in]:   motor:    指向motor_t结构的指针，包含电机相关信息和反馈数据
+  67:Robot/Devices/Motor/dmmotor.c **** * @param[in]:   rx_data:  指向包含反馈数据的数组指针
+  68:Robot/Devices/Motor/dmmotor.c **** * @param[in]:  	dlc: 数据长度
+  69:Robot/Devices/Motor/dmmotor.c **** * @retval:     	void
+  70:Robot/Devices/Motor/dmmotor.c **** * @details:    	从接收到的数据中提取DM4310电机的反馈信息，包括电机ID、
+  71:Robot/Devices/Motor/dmmotor.c **** *               状态、位置、速度、扭矩相关温度参数、寄存器数据等
+  72:Robot/Devices/Motor/dmmotor.c **** ************************************************************************
+  73:Robot/Devices/Motor/dmmotor.c **** **/
+  74:Robot/Devices/Motor/dmmotor.c **** void Dm8009_Fbdata(Joint_Motor_t *motor, uint8_t *rx_data,uint32_t dlc)
+  75:Robot/Devices/Motor/dmmotor.c **** { 
  200              		.loc 1 75 1 is_stmt 1 view -0
  201              		.cfi_startproc
  202              		@ args = 0, pretend = 0, frame = 0
  203              		@ frame_needed = 0, uses_anonymous_args = 0
-  76:Robot/Devices/Motor/DM8009.c **** 	if(dlc==FDCAN_DLC_BYTES_8)
+  76:Robot/Devices/Motor/dmmotor.c **** 	if(dlc==FDCAN_DLC_BYTES_8)
  204              		.loc 1 76 2 view .LVU42
  205              		.loc 1 76 4 is_stmt 0 view .LVU43
  206 0000 082A     		cmp	r2, #8
  207 0002 00D0     		beq	.L13
  208 0004 7047     		bx	lr
  209              	.L13:
-  75:Robot/Devices/Motor/DM8009.c **** 	if(dlc==FDCAN_DLC_BYTES_8)
+  75:Robot/Devices/Motor/dmmotor.c **** 	if(dlc==FDCAN_DLC_BYTES_8)
  210              		.loc 1 75 1 view .LVU44
  211 0006 F8B5     		push	{r3, r4, r5, r6, r7, lr}
  212              	.LCFI2:
@@ -298,13 +298,13 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  217              		.cfi_offset 6, -12
  218              		.cfi_offset 7, -8
  219              		.cfi_offset 14, -4
-ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 6
+ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 6
 
 
  220 0008 0446     		mov	r4, r0
  221 000a 0D46     		mov	r5, r1
-  77:Robot/Devices/Motor/DM8009.c **** 	{//返回的数据有8个字节
-  78:Robot/Devices/Motor/DM8009.c **** 	  motor->para.id = (rx_data[0])&0x0F;
+  77:Robot/Devices/Motor/dmmotor.c **** 	{//返回的数据有8个字节
+  78:Robot/Devices/Motor/dmmotor.c **** 	  motor->para.id = (rx_data[0])&0x0F;
  222              		.loc 1 78 4 is_stmt 1 view .LVU45
  223              		.loc 1 78 29 is_stmt 0 view .LVU46
  224 000c 0B78     		ldrb	r3, [r1]	@ zero_extendqisi2
@@ -312,7 +312,7 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  226 000e 03F00F03 		and	r3, r3, #15
  227              		.loc 1 78 19 view .LVU48
  228 0012 4360     		str	r3, [r0, #4]
-  79:Robot/Devices/Motor/DM8009.c **** 	  motor->para.state = (rx_data[0])>>4;
+  79:Robot/Devices/Motor/dmmotor.c **** 	  motor->para.state = (rx_data[0])>>4;
  229              		.loc 1 79 4 is_stmt 1 view .LVU49
  230              		.loc 1 79 32 is_stmt 0 view .LVU50
  231 0014 0B78     		ldrb	r3, [r1]	@ zero_extendqisi2
@@ -320,7 +320,7 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  233 0016 1B09     		lsrs	r3, r3, #4
  234              		.loc 1 79 22 view .LVU52
  235 0018 8360     		str	r3, [r0, #8]
-  80:Robot/Devices/Motor/DM8009.c **** 	  motor->para.p_int=(rx_data[1]<<8)|rx_data[2];
+  80:Robot/Devices/Motor/dmmotor.c **** 	  motor->para.p_int=(rx_data[1]<<8)|rx_data[2];
  236              		.loc 1 80 4 is_stmt 1 view .LVU53
  237              		.loc 1 80 30 is_stmt 0 view .LVU54
  238 001a 4B78     		ldrb	r3, [r1, #1]	@ zero_extendqisi2
@@ -331,7 +331,7 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  243 001e 40EA0320 		orr	r0, r0, r3, lsl #8
  244              		.loc 1 80 21 view .LVU57
  245 0022 E060     		str	r0, [r4, #12]
-  81:Robot/Devices/Motor/DM8009.c **** 	  motor->para.v_int=(rx_data[3]<<4)|(rx_data[4]>>4);
+  81:Robot/Devices/Motor/dmmotor.c **** 	  motor->para.v_int=(rx_data[3]<<4)|(rx_data[4]>>4);
  246              		.loc 1 81 4 is_stmt 1 view .LVU58
  247              		.loc 1 81 30 is_stmt 0 view .LVU59
  248 0024 CB78     		ldrb	r3, [r1, #3]	@ zero_extendqisi2
@@ -343,7 +343,7 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  254 002a 47EA0317 		orr	r7, r7, r3, lsl #4
  255              		.loc 1 81 21 view .LVU63
  256 002e 2761     		str	r7, [r4, #16]
-  82:Robot/Devices/Motor/DM8009.c **** 	  motor->para.t_int=((rx_data[4]&0xF)<<8)|rx_data[5];
+  82:Robot/Devices/Motor/dmmotor.c **** 	  motor->para.t_int=((rx_data[4]&0xF)<<8)|rx_data[5];
  257              		.loc 1 82 4 is_stmt 1 view .LVU64
  258              		.loc 1 82 31 is_stmt 0 view .LVU65
  259 0030 0E79     		ldrb	r6, [r1, #4]	@ zero_extendqisi2
@@ -356,9 +356,9 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  266 003a 1E43     		orrs	r6, r6, r3
  267              		.loc 1 82 21 view .LVU69
  268 003c 6661     		str	r6, [r4, #20]
-  83:Robot/Devices/Motor/DM8009.c **** 	  motor->para.pos = uint_to_float(motor->para.p_int, P_MIN, P_MAX, 16); // (-12.5,12.5)
+  83:Robot/Devices/Motor/dmmotor.c **** 	  motor->para.pos = uint_to_float(motor->para.p_int, P_MIN, P_MAX, 16); // (-12.5,12.5)
  269              		.loc 1 83 4 is_stmt 1 view .LVU70
-ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 7
+ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 7
 
 
  270              		.loc 1 83 22 is_stmt 0 view .LVU71
@@ -371,7 +371,7 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  277              	.LVL14:
  278              		.loc 1 83 20 view .LVU73
  279 004c 84ED080A 		vstr.32	s0, [r4, #32]
-  84:Robot/Devices/Motor/DM8009.c **** 	  motor->para.vel = uint_to_float(motor->para.v_int, V_MIN, V_MAX, 12); // (-30.0,30.0)
+  84:Robot/Devices/Motor/dmmotor.c **** 	  motor->para.vel = uint_to_float(motor->para.v_int, V_MIN, V_MAX, 12); // (-30.0,30.0)
  280              		.loc 1 84 4 is_stmt 1 view .LVU74
  281              		.loc 1 84 22 is_stmt 0 view .LVU75
  282 0050 0C21     		movs	r1, #12
@@ -382,7 +382,7 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  287              	.LVL15:
  288              		.loc 1 84 20 view .LVU76
  289 0060 84ED090A 		vstr.32	s0, [r4, #36]
-  85:Robot/Devices/Motor/DM8009.c **** 	  motor->para.tor = uint_to_float(motor->para.t_int, T_MIN, T_MAX, 12);  // (-10.0,10.0)
+  85:Robot/Devices/Motor/dmmotor.c **** 	  motor->para.tor = uint_to_float(motor->para.t_int, T_MIN, T_MAX, 12);  // (-10.0,10.0)
  290              		.loc 1 85 4 is_stmt 1 view .LVU77
  291              		.loc 1 85 22 is_stmt 0 view .LVU78
  292 0064 0C21     		movs	r1, #12
@@ -393,7 +393,7 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  297              	.LVL16:
  298              		.loc 1 85 20 view .LVU79
  299 0074 84ED0A0A 		vstr.32	s0, [r4, #40]
-  86:Robot/Devices/Motor/DM8009.c **** 	  motor->para.t_mos = (float)(rx_data[6]);
+  86:Robot/Devices/Motor/dmmotor.c **** 	  motor->para.t_mos = (float)(rx_data[6]);
  300              		.loc 1 86 4 is_stmt 1 view .LVU80
  301              		.loc 1 86 39 is_stmt 0 view .LVU81
  302 0078 AB79     		ldrb	r3, [r5, #6]	@ zero_extendqisi2
@@ -402,7 +402,7 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  305 007e F8EE677A 		vcvt.f32.u32	s15, s15
  306              		.loc 1 86 22 view .LVU83
  307 0082 C4ED0D7A 		vstr.32	s15, [r4, #52]
-  87:Robot/Devices/Motor/DM8009.c **** 	  motor->para.t_rotor = (float)(rx_data[7]);
+  87:Robot/Devices/Motor/dmmotor.c **** 	  motor->para.t_rotor = (float)(rx_data[7]);
  308              		.loc 1 87 4 is_stmt 1 view .LVU84
  309              		.loc 1 87 41 is_stmt 0 view .LVU85
  310 0086 EB79     		ldrb	r3, [r5, #7]	@ zero_extendqisi2
@@ -411,14 +411,14 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  313 008c F8EE677A 		vcvt.f32.u32	s15, s15
  314              		.loc 1 87 24 view .LVU87
  315 0090 C4ED0E7A 		vstr.32	s15, [r4, #56]
-  88:Robot/Devices/Motor/DM8009.c **** 	}
-  89:Robot/Devices/Motor/DM8009.c **** }
+  88:Robot/Devices/Motor/dmmotor.c **** 	}
+  89:Robot/Devices/Motor/dmmotor.c **** }
  316              		.loc 1 89 1 view .LVU88
  317 0094 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
  318              		.loc 1 89 1 view .LVU89
  319              		.cfi_endproc
  320              	.LFE149:
-ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 8
+ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 8
 
 
  322              		.section	.text.Clear_Error,"ax",%progbits
@@ -430,17 +430,17 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  329              	Clear_Error:
  330              	.LVL17:
  331              	.LFB150:
-  90:Robot/Devices/Motor/DM8009.c **** 
-  91:Robot/Devices/Motor/DM8009.c **** /**
-  92:Robot/Devices/Motor/DM8009.c ****  * @brief 清除电机错误
-  93:Robot/Devices/Motor/DM8009.c ****  * 
-  94:Robot/Devices/Motor/DM8009.c ****  * @param hcan 
-  95:Robot/Devices/Motor/DM8009.c ****  * @param motor_id 
-  96:Robot/Devices/Motor/DM8009.c ****  * @param mode_id 
-  97:Robot/Devices/Motor/DM8009.c ****  * @details     通过CAN总线向特定电机发送清除错误的命令。
-  98:Robot/Devices/Motor/DM8009.c ****  */
-  99:Robot/Devices/Motor/DM8009.c **** void Clear_Error(hcan_t* hcan, uint16_t motor_id, uint16_t mode_id)
- 100:Robot/Devices/Motor/DM8009.c **** {
+  90:Robot/Devices/Motor/dmmotor.c **** 
+  91:Robot/Devices/Motor/dmmotor.c **** /**
+  92:Robot/Devices/Motor/dmmotor.c ****  * @brief 清除电机错误
+  93:Robot/Devices/Motor/dmmotor.c ****  * 
+  94:Robot/Devices/Motor/dmmotor.c ****  * @param hcan 
+  95:Robot/Devices/Motor/dmmotor.c ****  * @param motor_id 
+  96:Robot/Devices/Motor/dmmotor.c ****  * @param mode_id 
+  97:Robot/Devices/Motor/dmmotor.c ****  * @details     通过CAN总线向特定电机发送清除错误的命令。
+  98:Robot/Devices/Motor/dmmotor.c ****  */
+  99:Robot/Devices/Motor/dmmotor.c **** void Clear_Error(hcan_t* hcan, uint16_t motor_id, uint16_t mode_id)
+ 100:Robot/Devices/Motor/dmmotor.c **** {
  332              		.loc 1 100 1 is_stmt 1 view -0
  333              		.cfi_startproc
  334              		@ args = 0, pretend = 0, frame = 8
@@ -453,53 +453,53 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  341 0002 83B0     		sub	sp, sp, #12
  342              	.LCFI4:
  343              		.cfi_def_cfa_offset 16
- 101:Robot/Devices/Motor/DM8009.c **** 	uint8_t data[8];
+ 101:Robot/Devices/Motor/dmmotor.c **** 	uint8_t data[8];
  344              		.loc 1 101 2 is_stmt 1 view .LVU92
- 102:Robot/Devices/Motor/DM8009.c **** 	uint16_t id = motor_id + mode_id;
+ 102:Robot/Devices/Motor/dmmotor.c **** 	uint16_t id = motor_id + mode_id;
  345              		.loc 1 102 2 view .LVU93
  346              		.loc 1 102 11 is_stmt 0 view .LVU94
  347 0004 1144     		add	r1, r1, r2
  348              	.LVL18:
- 103:Robot/Devices/Motor/DM8009.c **** 	
- 104:Robot/Devices/Motor/DM8009.c **** 	data[0] = 0xFF;
+ 103:Robot/Devices/Motor/dmmotor.c **** 	
+ 104:Robot/Devices/Motor/dmmotor.c **** 	data[0] = 0xFF;
  349              		.loc 1 104 2 is_stmt 1 view .LVU95
  350              		.loc 1 104 10 is_stmt 0 view .LVU96
  351 0006 FF23     		movs	r3, #255
  352 0008 8DF80030 		strb	r3, [sp]
- 105:Robot/Devices/Motor/DM8009.c **** 	data[1] = 0xFF;
+ 105:Robot/Devices/Motor/dmmotor.c **** 	data[1] = 0xFF;
  353              		.loc 1 105 2 is_stmt 1 view .LVU97
  354              		.loc 1 105 10 is_stmt 0 view .LVU98
  355 000c 8DF80130 		strb	r3, [sp, #1]
- 106:Robot/Devices/Motor/DM8009.c **** 	data[2] = 0xFF;
+ 106:Robot/Devices/Motor/dmmotor.c **** 	data[2] = 0xFF;
  356              		.loc 1 106 2 is_stmt 1 view .LVU99
  357              		.loc 1 106 10 is_stmt 0 view .LVU100
  358 0010 8DF80230 		strb	r3, [sp, #2]
- 107:Robot/Devices/Motor/DM8009.c **** 	data[3] = 0xFF;
+ 107:Robot/Devices/Motor/dmmotor.c **** 	data[3] = 0xFF;
  359              		.loc 1 107 2 is_stmt 1 view .LVU101
  360              		.loc 1 107 10 is_stmt 0 view .LVU102
  361 0014 8DF80330 		strb	r3, [sp, #3]
-ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 9
+ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 9
 
 
- 108:Robot/Devices/Motor/DM8009.c **** 	data[4] = 0xFF;
+ 108:Robot/Devices/Motor/dmmotor.c **** 	data[4] = 0xFF;
  362              		.loc 1 108 2 is_stmt 1 view .LVU103
  363              		.loc 1 108 10 is_stmt 0 view .LVU104
  364 0018 8DF80430 		strb	r3, [sp, #4]
- 109:Robot/Devices/Motor/DM8009.c **** 	data[5] = 0xFF;
+ 109:Robot/Devices/Motor/dmmotor.c **** 	data[5] = 0xFF;
  365              		.loc 1 109 2 is_stmt 1 view .LVU105
  366              		.loc 1 109 10 is_stmt 0 view .LVU106
  367 001c 8DF80530 		strb	r3, [sp, #5]
- 110:Robot/Devices/Motor/DM8009.c **** 	data[6] = 0xFF;
+ 110:Robot/Devices/Motor/dmmotor.c **** 	data[6] = 0xFF;
  368              		.loc 1 110 2 is_stmt 1 view .LVU107
  369              		.loc 1 110 10 is_stmt 0 view .LVU108
  370 0020 8DF80630 		strb	r3, [sp, #6]
- 111:Robot/Devices/Motor/DM8009.c **** 	data[7] = 0xFB;
+ 111:Robot/Devices/Motor/dmmotor.c **** 	data[7] = 0xFB;
  371              		.loc 1 111 2 is_stmt 1 view .LVU109
  372              		.loc 1 111 10 is_stmt 0 view .LVU110
  373 0024 FB23     		movs	r3, #251
  374 0026 8DF80730 		strb	r3, [sp, #7]
- 112:Robot/Devices/Motor/DM8009.c **** 	
- 113:Robot/Devices/Motor/DM8009.c **** 	canx_send_data(hcan, id, data, 8);
+ 112:Robot/Devices/Motor/dmmotor.c **** 	
+ 113:Robot/Devices/Motor/dmmotor.c **** 	canx_send_data(hcan, id, data, 8);
  375              		.loc 1 113 2 is_stmt 1 view .LVU111
  376 002a 0823     		movs	r3, #8
  377 002c 6A46     		mov	r2, sp
@@ -509,7 +509,7 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  381              		.loc 1 113 2 view .LVU113
  382 0030 FFF7FEFF 		bl	canx_send_data
  383              	.LVL20:
- 114:Robot/Devices/Motor/DM8009.c **** }
+ 114:Robot/Devices/Motor/dmmotor.c **** }
  384              		.loc 1 114 1 view .LVU114
  385 0034 03B0     		add	sp, sp, #12
  386              	.LCFI5:
@@ -527,18 +527,18 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  400              	Enable_Motor_Mode:
  401              	.LVL21:
  402              	.LFB151:
- 115:Robot/Devices/Motor/DM8009.c **** 
- 116:Robot/Devices/Motor/DM8009.c **** /**
- 117:Robot/Devices/Motor/DM8009.c ****  * @brief 电机使能
- 118:Robot/Devices/Motor/DM8009.c ****  * 
- 119:Robot/Devices/Motor/DM8009.c ****  * @param hcan 
- 120:Robot/Devices/Motor/DM8009.c ****  * @param motor_id 
- 121:Robot/Devices/Motor/DM8009.c ****  * @param mode_id 
- 122:Robot/Devices/Motor/DM8009.c ****  */
- 123:Robot/Devices/Motor/DM8009.c **** void Enable_Motor_Mode(hcan_t* hcan, uint16_t motor_id, uint16_t mode_id)
- 124:Robot/Devices/Motor/DM8009.c **** {
+ 115:Robot/Devices/Motor/dmmotor.c **** 
+ 116:Robot/Devices/Motor/dmmotor.c **** /**
+ 117:Robot/Devices/Motor/dmmotor.c ****  * @brief 电机使能
+ 118:Robot/Devices/Motor/dmmotor.c ****  * 
+ 119:Robot/Devices/Motor/dmmotor.c ****  * @param hcan 
+ 120:Robot/Devices/Motor/dmmotor.c ****  * @param motor_id 
+ 121:Robot/Devices/Motor/dmmotor.c ****  * @param mode_id 
+ 122:Robot/Devices/Motor/dmmotor.c ****  */
+ 123:Robot/Devices/Motor/dmmotor.c **** void Enable_Motor_Mode(hcan_t* hcan, uint16_t motor_id, uint16_t mode_id)
+ 124:Robot/Devices/Motor/dmmotor.c **** {
  403              		.loc 1 124 1 is_stmt 1 view -0
-ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 10
+ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 10
 
 
  404              		.cfi_startproc
@@ -552,53 +552,53 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  412 0002 83B0     		sub	sp, sp, #12
  413              	.LCFI7:
  414              		.cfi_def_cfa_offset 16
- 125:Robot/Devices/Motor/DM8009.c **** 	uint8_t data[8];
+ 125:Robot/Devices/Motor/dmmotor.c **** 	uint8_t data[8];
  415              		.loc 1 125 2 is_stmt 1 view .LVU117
- 126:Robot/Devices/Motor/DM8009.c **** 	uint16_t id = motor_id + mode_id;
+ 126:Robot/Devices/Motor/dmmotor.c **** 	uint16_t id = motor_id + mode_id;
  416              		.loc 1 126 2 view .LVU118
  417              		.loc 1 126 11 is_stmt 0 view .LVU119
  418 0004 1144     		add	r1, r1, r2
  419              	.LVL22:
- 127:Robot/Devices/Motor/DM8009.c **** 	
- 128:Robot/Devices/Motor/DM8009.c **** 	data[0] = 0xFF;
+ 127:Robot/Devices/Motor/dmmotor.c **** 	
+ 128:Robot/Devices/Motor/dmmotor.c **** 	data[0] = 0xFF;
  420              		.loc 1 128 2 is_stmt 1 view .LVU120
  421              		.loc 1 128 10 is_stmt 0 view .LVU121
  422 0006 FF23     		movs	r3, #255
  423 0008 8DF80030 		strb	r3, [sp]
- 129:Robot/Devices/Motor/DM8009.c **** 	data[1] = 0xFF;
+ 129:Robot/Devices/Motor/dmmotor.c **** 	data[1] = 0xFF;
  424              		.loc 1 129 2 is_stmt 1 view .LVU122
  425              		.loc 1 129 10 is_stmt 0 view .LVU123
  426 000c 8DF80130 		strb	r3, [sp, #1]
- 130:Robot/Devices/Motor/DM8009.c **** 	data[2] = 0xFF;
+ 130:Robot/Devices/Motor/dmmotor.c **** 	data[2] = 0xFF;
  427              		.loc 1 130 2 is_stmt 1 view .LVU124
  428              		.loc 1 130 10 is_stmt 0 view .LVU125
  429 0010 8DF80230 		strb	r3, [sp, #2]
- 131:Robot/Devices/Motor/DM8009.c **** 	data[3] = 0xFF;
+ 131:Robot/Devices/Motor/dmmotor.c **** 	data[3] = 0xFF;
  430              		.loc 1 131 2 is_stmt 1 view .LVU126
  431              		.loc 1 131 10 is_stmt 0 view .LVU127
  432 0014 8DF80330 		strb	r3, [sp, #3]
- 132:Robot/Devices/Motor/DM8009.c **** 	data[4] = 0xFF;
+ 132:Robot/Devices/Motor/dmmotor.c **** 	data[4] = 0xFF;
  433              		.loc 1 132 2 is_stmt 1 view .LVU128
  434              		.loc 1 132 10 is_stmt 0 view .LVU129
  435 0018 8DF80430 		strb	r3, [sp, #4]
- 133:Robot/Devices/Motor/DM8009.c **** 	data[5] = 0xFF;
+ 133:Robot/Devices/Motor/dmmotor.c **** 	data[5] = 0xFF;
  436              		.loc 1 133 2 is_stmt 1 view .LVU130
  437              		.loc 1 133 10 is_stmt 0 view .LVU131
  438 001c 8DF80530 		strb	r3, [sp, #5]
- 134:Robot/Devices/Motor/DM8009.c **** 	data[6] = 0xFF;
+ 134:Robot/Devices/Motor/dmmotor.c **** 	data[6] = 0xFF;
  439              		.loc 1 134 2 is_stmt 1 view .LVU132
  440              		.loc 1 134 10 is_stmt 0 view .LVU133
  441 0020 8DF80630 		strb	r3, [sp, #6]
- 135:Robot/Devices/Motor/DM8009.c **** 	data[7] = 0xFC;
+ 135:Robot/Devices/Motor/dmmotor.c **** 	data[7] = 0xFC;
  442              		.loc 1 135 2 is_stmt 1 view .LVU134
  443              		.loc 1 135 10 is_stmt 0 view .LVU135
  444 0024 FC23     		movs	r3, #252
  445 0026 8DF80730 		strb	r3, [sp, #7]
- 136:Robot/Devices/Motor/DM8009.c **** 	
- 137:Robot/Devices/Motor/DM8009.c **** 	canx_send_data(hcan, id, data, 8);
+ 136:Robot/Devices/Motor/dmmotor.c **** 	
+ 137:Robot/Devices/Motor/dmmotor.c **** 	canx_send_data(hcan, id, data, 8);
  446              		.loc 1 137 2 is_stmt 1 view .LVU136
  447 002a 0823     		movs	r3, #8
-ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 11
+ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 11
 
 
  448 002c 6A46     		mov	r2, sp
@@ -608,7 +608,7 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  452              		.loc 1 137 2 view .LVU138
  453 0030 FFF7FEFF 		bl	canx_send_data
  454              	.LVL24:
- 138:Robot/Devices/Motor/DM8009.c **** }
+ 138:Robot/Devices/Motor/dmmotor.c **** }
  455              		.loc 1 138 1 view .LVU139
  456 0034 03B0     		add	sp, sp, #12
  457              	.LCFI8:
@@ -626,16 +626,16 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  471              	Disable_Motor_Mode:
  472              	.LVL25:
  473              	.LFB152:
- 139:Robot/Devices/Motor/DM8009.c **** 
- 140:Robot/Devices/Motor/DM8009.c **** /**
- 141:Robot/Devices/Motor/DM8009.c ****  * @brief 电机失能
- 142:Robot/Devices/Motor/DM8009.c ****  * 
- 143:Robot/Devices/Motor/DM8009.c ****  * @param hcan 
- 144:Robot/Devices/Motor/DM8009.c ****  * @param motor_id 
- 145:Robot/Devices/Motor/DM8009.c ****  * @param mode_id 
- 146:Robot/Devices/Motor/DM8009.c ****  */
- 147:Robot/Devices/Motor/DM8009.c **** void Disable_Motor_Mode(hcan_t* hcan, uint16_t motor_id, uint16_t mode_id)
- 148:Robot/Devices/Motor/DM8009.c **** {
+ 139:Robot/Devices/Motor/dmmotor.c **** 
+ 140:Robot/Devices/Motor/dmmotor.c **** /**
+ 141:Robot/Devices/Motor/dmmotor.c ****  * @brief 电机失能
+ 142:Robot/Devices/Motor/dmmotor.c ****  * 
+ 143:Robot/Devices/Motor/dmmotor.c ****  * @param hcan 
+ 144:Robot/Devices/Motor/dmmotor.c ****  * @param motor_id 
+ 145:Robot/Devices/Motor/dmmotor.c ****  * @param mode_id 
+ 146:Robot/Devices/Motor/dmmotor.c ****  */
+ 147:Robot/Devices/Motor/dmmotor.c **** void Disable_Motor_Mode(hcan_t* hcan, uint16_t motor_id, uint16_t mode_id)
+ 148:Robot/Devices/Motor/dmmotor.c **** {
  474              		.loc 1 148 1 is_stmt 1 view -0
  475              		.cfi_startproc
  476              		@ args = 0, pretend = 0, frame = 8
@@ -648,53 +648,53 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  483 0002 83B0     		sub	sp, sp, #12
  484              	.LCFI10:
  485              		.cfi_def_cfa_offset 16
- 149:Robot/Devices/Motor/DM8009.c **** 	uint8_t data[8];
+ 149:Robot/Devices/Motor/dmmotor.c **** 	uint8_t data[8];
  486              		.loc 1 149 2 is_stmt 1 view .LVU142
- 150:Robot/Devices/Motor/DM8009.c **** 	uint16_t id = motor_id + mode_id;
+ 150:Robot/Devices/Motor/dmmotor.c **** 	uint16_t id = motor_id + mode_id;
  487              		.loc 1 150 2 view .LVU143
  488              		.loc 1 150 11 is_stmt 0 view .LVU144
  489 0004 1144     		add	r1, r1, r2
  490              	.LVL26:
- 151:Robot/Devices/Motor/DM8009.c **** 	
- 152:Robot/Devices/Motor/DM8009.c **** 	data[0] = 0xFF;
+ 151:Robot/Devices/Motor/dmmotor.c **** 	
+ 152:Robot/Devices/Motor/dmmotor.c **** 	data[0] = 0xFF;
  491              		.loc 1 152 2 is_stmt 1 view .LVU145
-ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 12
+ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 12
 
 
  492              		.loc 1 152 10 is_stmt 0 view .LVU146
  493 0006 FF23     		movs	r3, #255
  494 0008 8DF80030 		strb	r3, [sp]
- 153:Robot/Devices/Motor/DM8009.c **** 	data[1] = 0xFF;
+ 153:Robot/Devices/Motor/dmmotor.c **** 	data[1] = 0xFF;
  495              		.loc 1 153 2 is_stmt 1 view .LVU147
  496              		.loc 1 153 10 is_stmt 0 view .LVU148
  497 000c 8DF80130 		strb	r3, [sp, #1]
- 154:Robot/Devices/Motor/DM8009.c **** 	data[2] = 0xFF;
+ 154:Robot/Devices/Motor/dmmotor.c **** 	data[2] = 0xFF;
  498              		.loc 1 154 2 is_stmt 1 view .LVU149
  499              		.loc 1 154 10 is_stmt 0 view .LVU150
  500 0010 8DF80230 		strb	r3, [sp, #2]
- 155:Robot/Devices/Motor/DM8009.c **** 	data[3] = 0xFF;
+ 155:Robot/Devices/Motor/dmmotor.c **** 	data[3] = 0xFF;
  501              		.loc 1 155 2 is_stmt 1 view .LVU151
  502              		.loc 1 155 10 is_stmt 0 view .LVU152
  503 0014 8DF80330 		strb	r3, [sp, #3]
- 156:Robot/Devices/Motor/DM8009.c **** 	data[4] = 0xFF;
+ 156:Robot/Devices/Motor/dmmotor.c **** 	data[4] = 0xFF;
  504              		.loc 1 156 2 is_stmt 1 view .LVU153
  505              		.loc 1 156 10 is_stmt 0 view .LVU154
  506 0018 8DF80430 		strb	r3, [sp, #4]
- 157:Robot/Devices/Motor/DM8009.c **** 	data[5] = 0xFF;
+ 157:Robot/Devices/Motor/dmmotor.c **** 	data[5] = 0xFF;
  507              		.loc 1 157 2 is_stmt 1 view .LVU155
  508              		.loc 1 157 10 is_stmt 0 view .LVU156
  509 001c 8DF80530 		strb	r3, [sp, #5]
- 158:Robot/Devices/Motor/DM8009.c **** 	data[6] = 0xFF;
+ 158:Robot/Devices/Motor/dmmotor.c **** 	data[6] = 0xFF;
  510              		.loc 1 158 2 is_stmt 1 view .LVU157
  511              		.loc 1 158 10 is_stmt 0 view .LVU158
  512 0020 8DF80630 		strb	r3, [sp, #6]
- 159:Robot/Devices/Motor/DM8009.c **** 	data[7] = 0xFD;
+ 159:Robot/Devices/Motor/dmmotor.c **** 	data[7] = 0xFD;
  513              		.loc 1 159 2 is_stmt 1 view .LVU159
  514              		.loc 1 159 10 is_stmt 0 view .LVU160
  515 0024 FD23     		movs	r3, #253
  516 0026 8DF80730 		strb	r3, [sp, #7]
- 160:Robot/Devices/Motor/DM8009.c **** 	
- 161:Robot/Devices/Motor/DM8009.c **** 	canx_send_data(hcan, id, data, 8);
+ 160:Robot/Devices/Motor/dmmotor.c **** 	
+ 161:Robot/Devices/Motor/dmmotor.c **** 	canx_send_data(hcan, id, data, 8);
  517              		.loc 1 161 2 is_stmt 1 view .LVU161
  518 002a 0823     		movs	r3, #8
  519 002c 6A46     		mov	r2, sp
@@ -704,7 +704,7 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  523              		.loc 1 161 2 view .LVU163
  524 0030 FFF7FEFF 		bl	canx_send_data
  525              	.LVL28:
- 162:Robot/Devices/Motor/DM8009.c **** }
+ 162:Robot/Devices/Motor/dmmotor.c **** }
  526              		.loc 1 162 1 view .LVU164
  527 0034 03B0     		add	sp, sp, #12
  528              	.LCFI11:
@@ -718,23 +718,23 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  537              		.global	Save_Pos_Zero
  538              		.syntax unified
  539              		.thumb
-ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 13
+ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 13
 
 
  540              		.thumb_func
  542              	Save_Pos_Zero:
  543              	.LVL29:
  544              	.LFB153:
- 163:Robot/Devices/Motor/DM8009.c **** 
- 164:Robot/Devices/Motor/DM8009.c **** /**
- 165:Robot/Devices/Motor/DM8009.c ****  * @brief 电机报错零点
- 166:Robot/Devices/Motor/DM8009.c ****  * 
- 167:Robot/Devices/Motor/DM8009.c ****  * @param hcan 
- 168:Robot/Devices/Motor/DM8009.c ****  * @param motor_id 
- 169:Robot/Devices/Motor/DM8009.c ****  * @param mode_id 
- 170:Robot/Devices/Motor/DM8009.c ****  */
- 171:Robot/Devices/Motor/DM8009.c **** void Save_Pos_Zero(hcan_t* hcan, uint16_t motor_id, uint16_t mode_id)
- 172:Robot/Devices/Motor/DM8009.c **** {
+ 163:Robot/Devices/Motor/dmmotor.c **** 
+ 164:Robot/Devices/Motor/dmmotor.c **** /**
+ 165:Robot/Devices/Motor/dmmotor.c ****  * @brief 电机报错零点
+ 166:Robot/Devices/Motor/dmmotor.c ****  * 
+ 167:Robot/Devices/Motor/dmmotor.c ****  * @param hcan 
+ 168:Robot/Devices/Motor/dmmotor.c ****  * @param motor_id 
+ 169:Robot/Devices/Motor/dmmotor.c ****  * @param mode_id 
+ 170:Robot/Devices/Motor/dmmotor.c ****  */
+ 171:Robot/Devices/Motor/dmmotor.c **** void Save_Pos_Zero(hcan_t* hcan, uint16_t motor_id, uint16_t mode_id)
+ 172:Robot/Devices/Motor/dmmotor.c **** {
  545              		.loc 1 172 1 is_stmt 1 view -0
  546              		.cfi_startproc
  547              		@ args = 0, pretend = 0, frame = 8
@@ -747,53 +747,53 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  554 0002 83B0     		sub	sp, sp, #12
  555              	.LCFI13:
  556              		.cfi_def_cfa_offset 16
- 173:Robot/Devices/Motor/DM8009.c **** 	uint8_t data[8];
+ 173:Robot/Devices/Motor/dmmotor.c **** 	uint8_t data[8];
  557              		.loc 1 173 2 is_stmt 1 view .LVU167
- 174:Robot/Devices/Motor/DM8009.c **** 	uint16_t id = motor_id + mode_id;
+ 174:Robot/Devices/Motor/dmmotor.c **** 	uint16_t id = motor_id + mode_id;
  558              		.loc 1 174 2 view .LVU168
  559              		.loc 1 174 11 is_stmt 0 view .LVU169
  560 0004 1144     		add	r1, r1, r2
  561              	.LVL30:
- 175:Robot/Devices/Motor/DM8009.c **** 	
- 176:Robot/Devices/Motor/DM8009.c **** 	data[0] = 0xFF;
+ 175:Robot/Devices/Motor/dmmotor.c **** 	
+ 176:Robot/Devices/Motor/dmmotor.c **** 	data[0] = 0xFF;
  562              		.loc 1 176 2 is_stmt 1 view .LVU170
  563              		.loc 1 176 10 is_stmt 0 view .LVU171
  564 0006 FF23     		movs	r3, #255
  565 0008 8DF80030 		strb	r3, [sp]
- 177:Robot/Devices/Motor/DM8009.c **** 	data[1] = 0xFF;
+ 177:Robot/Devices/Motor/dmmotor.c **** 	data[1] = 0xFF;
  566              		.loc 1 177 2 is_stmt 1 view .LVU172
  567              		.loc 1 177 10 is_stmt 0 view .LVU173
  568 000c 8DF80130 		strb	r3, [sp, #1]
- 178:Robot/Devices/Motor/DM8009.c **** 	data[2] = 0xFF;
+ 178:Robot/Devices/Motor/dmmotor.c **** 	data[2] = 0xFF;
  569              		.loc 1 178 2 is_stmt 1 view .LVU174
  570              		.loc 1 178 10 is_stmt 0 view .LVU175
  571 0010 8DF80230 		strb	r3, [sp, #2]
- 179:Robot/Devices/Motor/DM8009.c **** 	data[3] = 0xFF;
+ 179:Robot/Devices/Motor/dmmotor.c **** 	data[3] = 0xFF;
  572              		.loc 1 179 2 is_stmt 1 view .LVU176
  573              		.loc 1 179 10 is_stmt 0 view .LVU177
  574 0014 8DF80330 		strb	r3, [sp, #3]
- 180:Robot/Devices/Motor/DM8009.c **** 	data[4] = 0xFF;
+ 180:Robot/Devices/Motor/dmmotor.c **** 	data[4] = 0xFF;
  575              		.loc 1 180 2 is_stmt 1 view .LVU178
  576              		.loc 1 180 10 is_stmt 0 view .LVU179
  577 0018 8DF80430 		strb	r3, [sp, #4]
- 181:Robot/Devices/Motor/DM8009.c **** 	data[5] = 0xFF;
+ 181:Robot/Devices/Motor/dmmotor.c **** 	data[5] = 0xFF;
  578              		.loc 1 181 2 is_stmt 1 view .LVU180
-ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 14
+ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 14
 
 
  579              		.loc 1 181 10 is_stmt 0 view .LVU181
  580 001c 8DF80530 		strb	r3, [sp, #5]
- 182:Robot/Devices/Motor/DM8009.c **** 	data[6] = 0xFF;
+ 182:Robot/Devices/Motor/dmmotor.c **** 	data[6] = 0xFF;
  581              		.loc 1 182 2 is_stmt 1 view .LVU182
  582              		.loc 1 182 10 is_stmt 0 view .LVU183
  583 0020 8DF80630 		strb	r3, [sp, #6]
- 183:Robot/Devices/Motor/DM8009.c **** 	data[7] = 0xFE;
+ 183:Robot/Devices/Motor/dmmotor.c **** 	data[7] = 0xFE;
  584              		.loc 1 183 2 is_stmt 1 view .LVU184
  585              		.loc 1 183 10 is_stmt 0 view .LVU185
  586 0024 FE23     		movs	r3, #254
  587 0026 8DF80730 		strb	r3, [sp, #7]
- 184:Robot/Devices/Motor/DM8009.c **** 	
- 185:Robot/Devices/Motor/DM8009.c **** 	canx_send_data(hcan, id, data, 8);
+ 184:Robot/Devices/Motor/dmmotor.c **** 	
+ 185:Robot/Devices/Motor/dmmotor.c **** 	canx_send_data(hcan, id, data, 8);
  588              		.loc 1 185 2 is_stmt 1 view .LVU186
  589 002a 0823     		movs	r3, #8
  590 002c 6A46     		mov	r2, sp
@@ -803,7 +803,7 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  594              		.loc 1 185 2 view .LVU188
  595 0030 FFF7FEFF 		bl	canx_send_data
  596              	.LVL32:
- 186:Robot/Devices/Motor/DM8009.c **** }
+ 186:Robot/Devices/Motor/dmmotor.c **** }
  597              		.loc 1 186 1 view .LVU189
  598 0034 03B0     		add	sp, sp, #12
  599              	.LCFI14:
@@ -821,24 +821,24 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  613              	Mit_Ctrl:
  614              	.LVL33:
  615              	.LFB154:
- 187:Robot/Devices/Motor/DM8009.c **** 
- 188:Robot/Devices/Motor/DM8009.c **** /**
- 189:Robot/Devices/Motor/DM8009.c **** ************************************************************************
- 190:Robot/Devices/Motor/DM8009.c **** * @brief:      	mit_ctrl: MIT模式下的电机控制函数
- 191:Robot/Devices/Motor/DM8009.c **** * @param[in]:   hcan:			指向CAN_HandleTypeDef结构的指针，用于指定CAN总线
- 192:Robot/Devices/Motor/DM8009.c **** * @param[in]:   motor_id:	电机ID，指定目标电机
- 193:Robot/Devices/Motor/DM8009.c **** * @param[in]:   pos:			位置给定值
- 194:Robot/Devices/Motor/DM8009.c **** * @param[in]:   vel:			速度给定值
- 195:Robot/Devices/Motor/DM8009.c **** * @param[in]:   kp:				位置比例系数
- 196:Robot/Devices/Motor/DM8009.c **** * @param[in]:   kd:				位置微分系数
- 197:Robot/Devices/Motor/DM8009.c **** * @param[in]:   torq:			转矩给定值
- 198:Robot/Devices/Motor/DM8009.c **** * @retval:     	void
- 199:Robot/Devices/Motor/DM8009.c **** * @details:    	通过CAN总线向电机发送MIT模式下的控制帧。
- 200:Robot/Devices/Motor/DM8009.c **** ************************************************************************
- 201:Robot/Devices/Motor/DM8009.c **** **/
- 202:Robot/Devices/Motor/DM8009.c **** void Mit_Ctrl(hcan_t* hcan, uint16_t motor_id, float pos, float vel,float kp, float kd, float torq)
- 203:Robot/Devices/Motor/DM8009.c **** {
-ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 15
+ 187:Robot/Devices/Motor/dmmotor.c **** 
+ 188:Robot/Devices/Motor/dmmotor.c **** /**
+ 189:Robot/Devices/Motor/dmmotor.c **** ************************************************************************
+ 190:Robot/Devices/Motor/dmmotor.c **** * @brief:      	mit_ctrl: MIT模式下的电机控制函数
+ 191:Robot/Devices/Motor/dmmotor.c **** * @param[in]:   hcan:			指向CAN_HandleTypeDef结构的指针，用于指定CAN总线
+ 192:Robot/Devices/Motor/dmmotor.c **** * @param[in]:   motor_id:	电机ID，指定目标电机
+ 193:Robot/Devices/Motor/dmmotor.c **** * @param[in]:   pos:			位置给定值
+ 194:Robot/Devices/Motor/dmmotor.c **** * @param[in]:   vel:			速度给定值
+ 195:Robot/Devices/Motor/dmmotor.c **** * @param[in]:   kp:				位置比例系数
+ 196:Robot/Devices/Motor/dmmotor.c **** * @param[in]:   kd:				位置微分系数
+ 197:Robot/Devices/Motor/dmmotor.c **** * @param[in]:   torq:			转矩给定值
+ 198:Robot/Devices/Motor/dmmotor.c **** * @retval:     	void
+ 199:Robot/Devices/Motor/dmmotor.c **** * @details:    	通过CAN总线向电机发送MIT模式下的控制帧。
+ 200:Robot/Devices/Motor/dmmotor.c **** ************************************************************************
+ 201:Robot/Devices/Motor/dmmotor.c **** **/
+ 202:Robot/Devices/Motor/dmmotor.c **** void Mit_Ctrl(hcan_t* hcan, uint16_t motor_id, float pos, float vel,float kp, float kd, float torq)
+ 203:Robot/Devices/Motor/dmmotor.c **** {
+ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 15
 
 
  616              		.loc 1 203 1 is_stmt 1 view -0
@@ -874,15 +874,15 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  646 0012 B0EE419A 		vmov.f32	s18, s2
  647 0016 F0EE618A 		vmov.f32	s17, s3
  648 001a B0EE428A 		vmov.f32	s16, s4
- 204:Robot/Devices/Motor/DM8009.c **** 	uint8_t data[8];
+ 204:Robot/Devices/Motor/dmmotor.c **** 	uint8_t data[8];
  649              		.loc 1 204 2 is_stmt 1 view .LVU192
- 205:Robot/Devices/Motor/DM8009.c **** 	uint16_t pos_tmp,vel_tmp,kp_tmp,kd_tmp,tor_tmp;
+ 205:Robot/Devices/Motor/dmmotor.c **** 	uint16_t pos_tmp,vel_tmp,kp_tmp,kd_tmp,tor_tmp;
  650              		.loc 1 205 2 view .LVU193
- 206:Robot/Devices/Motor/DM8009.c **** 	uint16_t id = motor_id + MIT_MODE;
+ 206:Robot/Devices/Motor/dmmotor.c **** 	uint16_t id = motor_id + MIT_MODE;
  651              		.loc 1 206 2 view .LVU194
  652              	.LVL34:
- 207:Robot/Devices/Motor/DM8009.c **** 
- 208:Robot/Devices/Motor/DM8009.c **** 	pos_tmp = float_to_uint(pos,  P_MIN,  P_MAX,  16);
+ 207:Robot/Devices/Motor/dmmotor.c **** 
+ 208:Robot/Devices/Motor/dmmotor.c **** 	pos_tmp = float_to_uint(pos,  P_MIN,  P_MAX,  16);
  653              		.loc 1 208 2 view .LVU195
  654              		.loc 1 208 12 is_stmt 0 view .LVU196
  655 001e 1020     		movs	r0, #16
@@ -898,13 +898,13 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  665              	.LVL38:
  666              		.loc 1 208 12 view .LVU200
  667 002c 8246     		mov	r10, r0
-ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 16
+ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 16
 
 
  668              		.loc 1 208 10 view .LVU201
  669 002e 1FFA80FB 		uxth	fp, r0
  670              	.LVL39:
- 209:Robot/Devices/Motor/DM8009.c **** 	vel_tmp = float_to_uint(vel,  V_MIN,  V_MAX,  12);
+ 209:Robot/Devices/Motor/dmmotor.c **** 	vel_tmp = float_to_uint(vel,  V_MIN,  V_MAX,  12);
  671              		.loc 1 209 2 is_stmt 1 view .LVU202
  672              		.loc 1 209 12 is_stmt 0 view .LVU203
  673 0032 0C20     		movs	r0, #12
@@ -916,7 +916,7 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  679              		.loc 1 209 10 view .LVU204
  680 0044 87B2     		uxth	r7, r0
  681              	.LVL41:
- 210:Robot/Devices/Motor/DM8009.c **** 	kp_tmp  = float_to_uint(kp,   KP_MIN, KP_MAX, 12);
+ 210:Robot/Devices/Motor/dmmotor.c **** 	kp_tmp  = float_to_uint(kp,   KP_MIN, KP_MAX, 12);
  682              		.loc 1 210 2 is_stmt 1 view .LVU205
  683              		.loc 1 210 12 is_stmt 0 view .LVU206
  684 0046 DFED239A 		vldr.32	s19, .L24
@@ -932,7 +932,7 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  694              		.loc 1 210 10 view .LVU208
  695 005e 84B2     		uxth	r4, r0
  696              	.LVL44:
- 211:Robot/Devices/Motor/DM8009.c **** 	kd_tmp  = float_to_uint(kd,   KD_MIN, KD_MAX, 12);
+ 211:Robot/Devices/Motor/dmmotor.c **** 	kd_tmp  = float_to_uint(kd,   KD_MIN, KD_MAX, 12);
  697              		.loc 1 211 2 is_stmt 1 view .LVU209
  698              		.loc 1 211 12 is_stmt 0 view .LVU210
  699 0060 0C20     		movs	r0, #12
@@ -944,7 +944,7 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  705              		.loc 1 211 10 view .LVU211
  706 0072 85B2     		uxth	r5, r0
  707              	.LVL46:
- 212:Robot/Devices/Motor/DM8009.c **** 	tor_tmp = float_to_uint(torq, T_MIN,  T_MAX,  12);
+ 212:Robot/Devices/Motor/dmmotor.c **** 	tor_tmp = float_to_uint(torq, T_MIN,  T_MAX,  12);
  708              		.loc 1 212 2 is_stmt 1 view .LVU212
  709              		.loc 1 212 12 is_stmt 0 view .LVU213
  710 0074 0C20     		movs	r0, #12
@@ -953,27 +953,27 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  713 007e B0EE480A 		vmov.f32	s0, s16
  714 0082 FFF7FEFF 		bl	float_to_uint
  715              	.LVL47:
- 213:Robot/Devices/Motor/DM8009.c **** 
- 214:Robot/Devices/Motor/DM8009.c **** 	data[0] = (pos_tmp >> 8);
+ 213:Robot/Devices/Motor/dmmotor.c **** 
+ 214:Robot/Devices/Motor/dmmotor.c **** 	data[0] = (pos_tmp >> 8);
  716              		.loc 1 214 2 is_stmt 1 view .LVU214
  717              		.loc 1 214 10 is_stmt 0 view .LVU215
  718 0086 4FEA1B2B 		lsr	fp, fp, #8
-ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 17
+ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 17
 
 
  719              	.LVL48:
  720              		.loc 1 214 10 view .LVU216
  721 008a 8DF800B0 		strb	fp, [sp]
- 215:Robot/Devices/Motor/DM8009.c **** 	data[1] = pos_tmp;
+ 215:Robot/Devices/Motor/dmmotor.c **** 	data[1] = pos_tmp;
  722              		.loc 1 215 2 is_stmt 1 view .LVU217
  723              		.loc 1 215 10 is_stmt 0 view .LVU218
  724 008e 8DF801A0 		strb	r10, [sp, #1]
- 216:Robot/Devices/Motor/DM8009.c **** 	data[2] = (vel_tmp >> 4);
+ 216:Robot/Devices/Motor/dmmotor.c **** 	data[2] = (vel_tmp >> 4);
  725              		.loc 1 216 2 is_stmt 1 view .LVU219
  726              		.loc 1 216 10 is_stmt 0 view .LVU220
  727 0092 3B09     		lsrs	r3, r7, #4
  728 0094 8DF80230 		strb	r3, [sp, #2]
- 217:Robot/Devices/Motor/DM8009.c **** 	data[3] = ((vel_tmp&0xF)<<4)|(kp_tmp>>8);
+ 217:Robot/Devices/Motor/dmmotor.c **** 	data[3] = ((vel_tmp&0xF)<<4)|(kp_tmp>>8);
  729              		.loc 1 217 2 is_stmt 1 view .LVU221
  730              		.loc 1 217 30 is_stmt 0 view .LVU222
  731 0098 240A     		lsrs	r4, r4, #8
@@ -982,16 +982,16 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  734 009a 44EA0714 		orr	r4, r4, r7, lsl #4
  735              		.loc 1 217 10 view .LVU224
  736 009e 8DF80340 		strb	r4, [sp, #3]
- 218:Robot/Devices/Motor/DM8009.c **** 	data[4] = kp_tmp;
+ 218:Robot/Devices/Motor/dmmotor.c **** 	data[4] = kp_tmp;
  737              		.loc 1 218 2 is_stmt 1 view .LVU225
  738              		.loc 1 218 10 is_stmt 0 view .LVU226
  739 00a2 8DF80460 		strb	r6, [sp, #4]
- 219:Robot/Devices/Motor/DM8009.c **** 	data[5] = (kd_tmp >> 4);
+ 219:Robot/Devices/Motor/dmmotor.c **** 	data[5] = (kd_tmp >> 4);
  740              		.loc 1 219 2 is_stmt 1 view .LVU227
  741              		.loc 1 219 10 is_stmt 0 view .LVU228
  742 00a6 2B09     		lsrs	r3, r5, #4
  743 00a8 8DF80530 		strb	r3, [sp, #5]
- 220:Robot/Devices/Motor/DM8009.c **** 	data[6] = ((kd_tmp&0xF)<<4)|(tor_tmp>>8);
+ 220:Robot/Devices/Motor/dmmotor.c **** 	data[6] = ((kd_tmp&0xF)<<4)|(tor_tmp>>8);
  744              		.loc 1 220 2 is_stmt 1 view .LVU229
  745              		.loc 1 220 29 is_stmt 0 view .LVU230
  746 00ac C0F30723 		ubfx	r3, r0, #8, #8
@@ -999,12 +999,12 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  748              	.LVL50:
  749              		.loc 1 220 10 view .LVU231
  750 00b4 8DF80650 		strb	r5, [sp, #6]
- 221:Robot/Devices/Motor/DM8009.c **** 	data[7] = tor_tmp;
+ 221:Robot/Devices/Motor/dmmotor.c **** 	data[7] = tor_tmp;
  751              		.loc 1 221 2 is_stmt 1 view .LVU232
  752              		.loc 1 221 10 is_stmt 0 view .LVU233
  753 00b8 8DF80700 		strb	r0, [sp, #7]
- 222:Robot/Devices/Motor/DM8009.c **** 	
- 223:Robot/Devices/Motor/DM8009.c **** 	canx_send_data(hcan, id, data, 8);
+ 222:Robot/Devices/Motor/dmmotor.c **** 	
+ 223:Robot/Devices/Motor/dmmotor.c **** 	canx_send_data(hcan, id, data, 8);
  754              		.loc 1 223 2 is_stmt 1 view .LVU234
  755 00bc 0823     		movs	r3, #8
  756 00be 6A46     		mov	r2, sp
@@ -1014,11 +1014,11 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  760              		.loc 1 223 2 is_stmt 0 view .LVU235
  761 00c4 FFF7FEFF 		bl	canx_send_data
  762              	.LVL52:
- 224:Robot/Devices/Motor/DM8009.c **** }
+ 224:Robot/Devices/Motor/dmmotor.c **** }
  763              		.loc 1 224 1 view .LVU236
  764 00c8 03B0     		add	sp, sp, #12
  765              	.LCFI18:
-ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 18
+ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 18
 
 
  766              		.cfi_def_cfa_offset 52
@@ -1051,19 +1051,19 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  795              	Pos_Speed_Ctrl:
  796              	.LVL55:
  797              	.LFB155:
- 225:Robot/Devices/Motor/DM8009.c **** 
- 226:Robot/Devices/Motor/DM8009.c **** /**
- 227:Robot/Devices/Motor/DM8009.c **** ************************************************************************
- 228:Robot/Devices/Motor/DM8009.c **** * @brief:      	pos_speed_ctrl: 位置速度控制函数
- 229:Robot/Devices/Motor/DM8009.c **** * @param[in]:   hcan:			指向CAN_HandleTypeDef结构的指针，用于指定CAN总线
- 230:Robot/Devices/Motor/DM8009.c **** * @param[in]:   motor_id:	电机ID，指定目标电机
- 231:Robot/Devices/Motor/DM8009.c **** * @param[in]:   vel:			速度给定值
- 232:Robot/Devices/Motor/DM8009.c **** * @retval:     	void
- 233:Robot/Devices/Motor/DM8009.c **** * @details:    	通过CAN总线向电机发送位置速度控制命令
- 234:Robot/Devices/Motor/DM8009.c **** ************************************************************************
- 235:Robot/Devices/Motor/DM8009.c **** **/
- 236:Robot/Devices/Motor/DM8009.c **** void Pos_Speed_Ctrl(hcan_t* hcan,uint16_t motor_id, float pos, float vel)
- 237:Robot/Devices/Motor/DM8009.c **** {
+ 225:Robot/Devices/Motor/dmmotor.c **** 
+ 226:Robot/Devices/Motor/dmmotor.c **** /**
+ 227:Robot/Devices/Motor/dmmotor.c **** ************************************************************************
+ 228:Robot/Devices/Motor/dmmotor.c **** * @brief:      	pos_speed_ctrl: 位置速度控制函数
+ 229:Robot/Devices/Motor/dmmotor.c **** * @param[in]:   hcan:			指向CAN_HandleTypeDef结构的指针，用于指定CAN总线
+ 230:Robot/Devices/Motor/dmmotor.c **** * @param[in]:   motor_id:	电机ID，指定目标电机
+ 231:Robot/Devices/Motor/dmmotor.c **** * @param[in]:   vel:			速度给定值
+ 232:Robot/Devices/Motor/dmmotor.c **** * @retval:     	void
+ 233:Robot/Devices/Motor/dmmotor.c **** * @details:    	通过CAN总线向电机发送位置速度控制命令
+ 234:Robot/Devices/Motor/dmmotor.c **** ************************************************************************
+ 235:Robot/Devices/Motor/dmmotor.c **** **/
+ 236:Robot/Devices/Motor/dmmotor.c **** void Pos_Speed_Ctrl(hcan_t* hcan,uint16_t motor_id, float pos, float vel)
+ 237:Robot/Devices/Motor/dmmotor.c **** {
  798              		.loc 1 237 1 is_stmt 1 view -0
  799              		.cfi_startproc
  800              		@ args = 0, pretend = 0, frame = 16
@@ -1078,74 +1078,74 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  809              		.cfi_def_cfa_offset 24
  810 0004 8DED000A 		vstr.32	s0, [sp]
  811 0008 CDED010A 		vstr.32	s1, [sp, #4]
-ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 19
+ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 19
 
 
- 238:Robot/Devices/Motor/DM8009.c **** 	uint16_t id;
+ 238:Robot/Devices/Motor/dmmotor.c **** 	uint16_t id;
  812              		.loc 1 238 2 is_stmt 1 view .LVU241
- 239:Robot/Devices/Motor/DM8009.c **** 	uint8_t *pbuf, *vbuf;
+ 239:Robot/Devices/Motor/dmmotor.c **** 	uint8_t *pbuf, *vbuf;
  813              		.loc 1 239 2 view .LVU242
- 240:Robot/Devices/Motor/DM8009.c **** 	uint8_t data[8];
+ 240:Robot/Devices/Motor/dmmotor.c **** 	uint8_t data[8];
  814              		.loc 1 240 2 view .LVU243
- 241:Robot/Devices/Motor/DM8009.c **** 	
- 242:Robot/Devices/Motor/DM8009.c **** 	id = motor_id + POS_MODE;
+ 241:Robot/Devices/Motor/dmmotor.c **** 	
+ 242:Robot/Devices/Motor/dmmotor.c **** 	id = motor_id + POS_MODE;
  815              		.loc 1 242 2 view .LVU244
  816              		.loc 1 242 5 is_stmt 0 view .LVU245
  817 000c 01F58071 		add	r1, r1, #256
  818              	.LVL56:
- 243:Robot/Devices/Motor/DM8009.c **** 	pbuf=(uint8_t*)&pos;
+ 243:Robot/Devices/Motor/dmmotor.c **** 	pbuf=(uint8_t*)&pos;
  819              		.loc 1 243 2 is_stmt 1 view .LVU246
- 244:Robot/Devices/Motor/DM8009.c **** 	vbuf=(uint8_t*)&vel;
+ 244:Robot/Devices/Motor/dmmotor.c **** 	vbuf=(uint8_t*)&vel;
  820              		.loc 1 244 2 view .LVU247
- 245:Robot/Devices/Motor/DM8009.c **** 	
- 246:Robot/Devices/Motor/DM8009.c **** 	data[0] = *pbuf;
+ 245:Robot/Devices/Motor/dmmotor.c **** 	
+ 246:Robot/Devices/Motor/dmmotor.c **** 	data[0] = *pbuf;
  821              		.loc 1 246 2 view .LVU248
  822              		.loc 1 246 12 is_stmt 0 view .LVU249
  823 0010 009B     		ldr	r3, [sp]
  824              		.loc 1 246 10 view .LVU250
  825 0012 8DF80830 		strb	r3, [sp, #8]
- 247:Robot/Devices/Motor/DM8009.c **** 	data[1] = *(pbuf+1);
+ 247:Robot/Devices/Motor/dmmotor.c **** 	data[1] = *(pbuf+1);
  826              		.loc 1 247 2 is_stmt 1 view .LVU251
  827              		.loc 1 247 10 is_stmt 0 view .LVU252
  828 0016 C3F30722 		ubfx	r2, r3, #8, #8
  829 001a 8DF80920 		strb	r2, [sp, #9]
- 248:Robot/Devices/Motor/DM8009.c **** 	data[2] = *(pbuf+2);
+ 248:Robot/Devices/Motor/dmmotor.c **** 	data[2] = *(pbuf+2);
  830              		.loc 1 248 2 is_stmt 1 view .LVU253
  831              		.loc 1 248 10 is_stmt 0 view .LVU254
  832 001e C3F30742 		ubfx	r2, r3, #16, #8
  833 0022 8DF80A20 		strb	r2, [sp, #10]
- 249:Robot/Devices/Motor/DM8009.c **** 	data[3] = *(pbuf+3);
+ 249:Robot/Devices/Motor/dmmotor.c **** 	data[3] = *(pbuf+3);
  834              		.loc 1 249 2 is_stmt 1 view .LVU255
  835              		.loc 1 249 10 is_stmt 0 view .LVU256
  836 0026 C3F30763 		ubfx	r3, r3, #24, #8
  837 002a 8DF80B30 		strb	r3, [sp, #11]
- 250:Robot/Devices/Motor/DM8009.c **** 
- 251:Robot/Devices/Motor/DM8009.c **** 	data[4] = *vbuf;
+ 250:Robot/Devices/Motor/dmmotor.c **** 
+ 251:Robot/Devices/Motor/dmmotor.c **** 	data[4] = *vbuf;
  838              		.loc 1 251 2 is_stmt 1 view .LVU257
  839              		.loc 1 251 12 is_stmt 0 view .LVU258
  840 002e 019B     		ldr	r3, [sp, #4]
  841              		.loc 1 251 10 view .LVU259
  842 0030 8DF80C30 		strb	r3, [sp, #12]
- 252:Robot/Devices/Motor/DM8009.c **** 	data[5] = *(vbuf+1);
+ 252:Robot/Devices/Motor/dmmotor.c **** 	data[5] = *(vbuf+1);
  843              		.loc 1 252 2 is_stmt 1 view .LVU260
  844              		.loc 1 252 10 is_stmt 0 view .LVU261
  845 0034 C3F30722 		ubfx	r2, r3, #8, #8
  846 0038 8DF80D20 		strb	r2, [sp, #13]
- 253:Robot/Devices/Motor/DM8009.c **** 	data[6] = *(vbuf+2);
+ 253:Robot/Devices/Motor/dmmotor.c **** 	data[6] = *(vbuf+2);
  847              		.loc 1 253 2 is_stmt 1 view .LVU262
  848              		.loc 1 253 10 is_stmt 0 view .LVU263
  849 003c C3F30742 		ubfx	r2, r3, #16, #8
  850 0040 8DF80E20 		strb	r2, [sp, #14]
- 254:Robot/Devices/Motor/DM8009.c **** 	data[7] = *(vbuf+3);
+ 254:Robot/Devices/Motor/dmmotor.c **** 	data[7] = *(vbuf+3);
  851              		.loc 1 254 2 is_stmt 1 view .LVU264
-ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 20
+ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 20
 
 
  852              		.loc 1 254 10 is_stmt 0 view .LVU265
  853 0044 C3F30763 		ubfx	r3, r3, #24, #8
  854 0048 8DF80F30 		strb	r3, [sp, #15]
- 255:Robot/Devices/Motor/DM8009.c **** 	
- 256:Robot/Devices/Motor/DM8009.c **** 	canx_send_data(hcan, id, data, 8);
+ 255:Robot/Devices/Motor/dmmotor.c **** 	
+ 256:Robot/Devices/Motor/dmmotor.c **** 	canx_send_data(hcan, id, data, 8);
  855              		.loc 1 256 2 is_stmt 1 view .LVU266
  856 004c 0823     		movs	r3, #8
  857 004e 0DEB0302 		add	r2, sp, r3
@@ -1153,7 +1153,7 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  859              		.loc 1 256 2 is_stmt 0 view .LVU267
  860 0054 FFF7FEFF 		bl	canx_send_data
  861              	.LVL57:
- 257:Robot/Devices/Motor/DM8009.c **** }
+ 257:Robot/Devices/Motor/dmmotor.c **** }
  862              		.loc 1 257 1 view .LVU268
  863 0058 05B0     		add	sp, sp, #20
  864              	.LCFI22:
@@ -1174,19 +1174,19 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  881              	Speed_Ctrl:
  882              	.LVL59:
  883              	.LFB156:
- 258:Robot/Devices/Motor/DM8009.c **** 
- 259:Robot/Devices/Motor/DM8009.c **** /**
- 260:Robot/Devices/Motor/DM8009.c **** ************************************************************************
- 261:Robot/Devices/Motor/DM8009.c **** * @brief:      	speed_ctrl: 速度控制函数
- 262:Robot/Devices/Motor/DM8009.c **** * @param[in]:   hcan: 		指向CAN_HandleTypeDef结构的指针，用于指定CAN总线
- 263:Robot/Devices/Motor/DM8009.c **** * @param[in]:   motor_id: 电机ID，指定目标电机
- 264:Robot/Devices/Motor/DM8009.c **** * @param[in]:   vel: 			速度给定值
- 265:Robot/Devices/Motor/DM8009.c **** * @retval:     	void
- 266:Robot/Devices/Motor/DM8009.c **** * @details:    	通过CAN总线向电机发送速度控制命令
- 267:Robot/Devices/Motor/DM8009.c **** ************************************************************************
- 268:Robot/Devices/Motor/DM8009.c **** **/
- 269:Robot/Devices/Motor/DM8009.c **** void Speed_Ctrl(hcan_t* hcan,uint16_t motor_id, float vel)
- 270:Robot/Devices/Motor/DM8009.c **** {
+ 258:Robot/Devices/Motor/dmmotor.c **** 
+ 259:Robot/Devices/Motor/dmmotor.c **** /**
+ 260:Robot/Devices/Motor/dmmotor.c **** ************************************************************************
+ 261:Robot/Devices/Motor/dmmotor.c **** * @brief:      	speed_ctrl: 速度控制函数
+ 262:Robot/Devices/Motor/dmmotor.c **** * @param[in]:   hcan: 		指向CAN_HandleTypeDef结构的指针，用于指定CAN总线
+ 263:Robot/Devices/Motor/dmmotor.c **** * @param[in]:   motor_id: 电机ID，指定目标电机
+ 264:Robot/Devices/Motor/dmmotor.c **** * @param[in]:   vel: 			速度给定值
+ 265:Robot/Devices/Motor/dmmotor.c **** * @retval:     	void
+ 266:Robot/Devices/Motor/dmmotor.c **** * @details:    	通过CAN总线向电机发送速度控制命令
+ 267:Robot/Devices/Motor/dmmotor.c **** ************************************************************************
+ 268:Robot/Devices/Motor/dmmotor.c **** **/
+ 269:Robot/Devices/Motor/dmmotor.c **** void Speed_Ctrl(hcan_t* hcan,uint16_t motor_id, float vel)
+ 270:Robot/Devices/Motor/dmmotor.c **** {
  884              		.loc 1 270 1 is_stmt 1 view -0
  885              		.cfi_startproc
  886              		@ args = 0, pretend = 0, frame = 16
@@ -1198,49 +1198,49 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  892              		.cfi_offset 14, -4
  893 0002 85B0     		sub	sp, sp, #20
  894              	.LCFI24:
-ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 21
+ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 21
 
 
  895              		.cfi_def_cfa_offset 24
  896 0004 8DED010A 		vstr.32	s0, [sp, #4]
- 271:Robot/Devices/Motor/DM8009.c **** 	uint16_t id;
+ 271:Robot/Devices/Motor/dmmotor.c **** 	uint16_t id;
  897              		.loc 1 271 2 is_stmt 1 view .LVU273
- 272:Robot/Devices/Motor/DM8009.c **** 	uint8_t *vbuf;
+ 272:Robot/Devices/Motor/dmmotor.c **** 	uint8_t *vbuf;
  898              		.loc 1 272 2 view .LVU274
- 273:Robot/Devices/Motor/DM8009.c **** 	uint8_t data[4];
+ 273:Robot/Devices/Motor/dmmotor.c **** 	uint8_t data[4];
  899              		.loc 1 273 2 view .LVU275
- 274:Robot/Devices/Motor/DM8009.c **** 	
- 275:Robot/Devices/Motor/DM8009.c **** 	id = motor_id + SPEED_MODE;
+ 274:Robot/Devices/Motor/dmmotor.c **** 	
+ 275:Robot/Devices/Motor/dmmotor.c **** 	id = motor_id + SPEED_MODE;
  900              		.loc 1 275 2 view .LVU276
  901              		.loc 1 275 5 is_stmt 0 view .LVU277
  902 0008 01F50071 		add	r1, r1, #512
  903              	.LVL60:
- 276:Robot/Devices/Motor/DM8009.c **** 	vbuf=(uint8_t*)&vel;
+ 276:Robot/Devices/Motor/dmmotor.c **** 	vbuf=(uint8_t*)&vel;
  904              		.loc 1 276 2 is_stmt 1 view .LVU278
- 277:Robot/Devices/Motor/DM8009.c **** 	
- 278:Robot/Devices/Motor/DM8009.c **** 	data[0] = *vbuf;
+ 277:Robot/Devices/Motor/dmmotor.c **** 	
+ 278:Robot/Devices/Motor/dmmotor.c **** 	data[0] = *vbuf;
  905              		.loc 1 278 2 view .LVU279
  906              		.loc 1 278 12 is_stmt 0 view .LVU280
  907 000c 019B     		ldr	r3, [sp, #4]
  908              		.loc 1 278 10 view .LVU281
  909 000e 8DF80C30 		strb	r3, [sp, #12]
- 279:Robot/Devices/Motor/DM8009.c **** 	data[1] = *(vbuf+1);
+ 279:Robot/Devices/Motor/dmmotor.c **** 	data[1] = *(vbuf+1);
  910              		.loc 1 279 2 is_stmt 1 view .LVU282
  911              		.loc 1 279 10 is_stmt 0 view .LVU283
  912 0012 C3F30722 		ubfx	r2, r3, #8, #8
  913 0016 8DF80D20 		strb	r2, [sp, #13]
- 280:Robot/Devices/Motor/DM8009.c **** 	data[2] = *(vbuf+2);
+ 280:Robot/Devices/Motor/dmmotor.c **** 	data[2] = *(vbuf+2);
  914              		.loc 1 280 2 is_stmt 1 view .LVU284
  915              		.loc 1 280 10 is_stmt 0 view .LVU285
  916 001a C3F30742 		ubfx	r2, r3, #16, #8
  917 001e 8DF80E20 		strb	r2, [sp, #14]
- 281:Robot/Devices/Motor/DM8009.c **** 	data[3] = *(vbuf+3);
+ 281:Robot/Devices/Motor/dmmotor.c **** 	data[3] = *(vbuf+3);
  918              		.loc 1 281 2 is_stmt 1 view .LVU286
  919              		.loc 1 281 10 is_stmt 0 view .LVU287
  920 0022 C3F30763 		ubfx	r3, r3, #24, #8
  921 0026 8DF80F30 		strb	r3, [sp, #15]
- 282:Robot/Devices/Motor/DM8009.c **** 	
- 283:Robot/Devices/Motor/DM8009.c **** 	canx_send_data(hcan, id, data, 4);
+ 282:Robot/Devices/Motor/dmmotor.c **** 	
+ 283:Robot/Devices/Motor/dmmotor.c **** 	canx_send_data(hcan, id, data, 4);
  922              		.loc 1 283 2 is_stmt 1 view .LVU288
  923 002a 0423     		movs	r3, #4
  924 002c 03AA     		add	r2, sp, #12
@@ -1248,7 +1248,7 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  926              		.loc 1 283 2 is_stmt 0 view .LVU289
  927 0030 FFF7FEFF 		bl	canx_send_data
  928              	.LVL61:
- 284:Robot/Devices/Motor/DM8009.c **** }...
+ 284:Robot/Devices/Motor/dmmotor.c **** }...
  929              		.loc 1 284 1 view .LVU290
  930 0034 05B0     		add	sp, sp, #20
  931              	.LCFI25:
@@ -1258,7 +1258,7 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  935              		.loc 1 284 1 view .LVU291
  936              		.cfi_endproc
  937              	.LFE156:
-ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 22
+ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 22
 
 
  939              		.text
@@ -1270,39 +1270,39 @@ ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 1
  945              		.file 6 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h"
  946              		.file 7 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_fdcan.h"
  947              		.file 8 "Bsp/bsp_can.h"
- 948              		.file 9 "Robot/Devices/Motor/DM8009.h"
-ARM GAS  D:\temp\TMP\ccgDjABy.s 			page 23
+ 948              		.file 9 "Robot/Devices/Motor/dmmotor.h"
+ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 23
 
 
 DEFINED SYMBOLS
-                            *ABS*:00000000 DM8009.c
-D:\temp\TMP\ccgDjABy.s:19     .text.Hex_To_Float:00000000 $t
-D:\temp\TMP\ccgDjABy.s:25     .text.Hex_To_Float:00000000 Hex_To_Float
-D:\temp\TMP\ccgDjABy.s:42     .text.FloatTohex:00000000 $t
-D:\temp\TMP\ccgDjABy.s:48     .text.FloatTohex:00000000 FloatTohex
-D:\temp\TMP\ccgDjABy.s:74     .text.float_to_uint:00000000 $t
-D:\temp\TMP\ccgDjABy.s:80     .text.float_to_uint:00000000 float_to_uint
-D:\temp\TMP\ccgDjABy.s:119    .text.uint_to_float:00000000 $t
-D:\temp\TMP\ccgDjABy.s:125    .text.uint_to_float:00000000 uint_to_float
-D:\temp\TMP\ccgDjABy.s:165    .text.joint_motor_init:00000000 $t
-D:\temp\TMP\ccgDjABy.s:171    .text.joint_motor_init:00000000 joint_motor_init
-D:\temp\TMP\ccgDjABy.s:191    .text.Dm8009_Fbdata:00000000 $t
-D:\temp\TMP\ccgDjABy.s:197    .text.Dm8009_Fbdata:00000000 Dm8009_Fbdata
-D:\temp\TMP\ccgDjABy.s:323    .text.Clear_Error:00000000 $t
-D:\temp\TMP\ccgDjABy.s:329    .text.Clear_Error:00000000 Clear_Error
-D:\temp\TMP\ccgDjABy.s:394    .text.Enable_Motor_Mode:00000000 $t
-D:\temp\TMP\ccgDjABy.s:400    .text.Enable_Motor_Mode:00000000 Enable_Motor_Mode
-D:\temp\TMP\ccgDjABy.s:465    .text.Disable_Motor_Mode:00000000 $t
-D:\temp\TMP\ccgDjABy.s:471    .text.Disable_Motor_Mode:00000000 Disable_Motor_Mode
-D:\temp\TMP\ccgDjABy.s:536    .text.Save_Pos_Zero:00000000 $t
-D:\temp\TMP\ccgDjABy.s:542    .text.Save_Pos_Zero:00000000 Save_Pos_Zero
-D:\temp\TMP\ccgDjABy.s:607    .text.Mit_Ctrl:00000000 $t
-D:\temp\TMP\ccgDjABy.s:613    .text.Mit_Ctrl:00000000 Mit_Ctrl
-D:\temp\TMP\ccgDjABy.s:783    .text.Mit_Ctrl:000000d4 $d
-D:\temp\TMP\ccgDjABy.s:789    .text.Pos_Speed_Ctrl:00000000 $t
-D:\temp\TMP\ccgDjABy.s:795    .text.Pos_Speed_Ctrl:00000000 Pos_Speed_Ctrl
-D:\temp\TMP\ccgDjABy.s:875    .text.Speed_Ctrl:00000000 $t
-D:\temp\TMP\ccgDjABy.s:881    .text.Speed_Ctrl:00000000 Speed_Ctrl
+                            *ABS*:00000000 dmmotor.c
+D:\temp\TMP\ccNIFWbb.s:19     .text.Hex_To_Float:00000000 $t
+D:\temp\TMP\ccNIFWbb.s:25     .text.Hex_To_Float:00000000 Hex_To_Float
+D:\temp\TMP\ccNIFWbb.s:42     .text.FloatTohex:00000000 $t
+D:\temp\TMP\ccNIFWbb.s:48     .text.FloatTohex:00000000 FloatTohex
+D:\temp\TMP\ccNIFWbb.s:74     .text.float_to_uint:00000000 $t
+D:\temp\TMP\ccNIFWbb.s:80     .text.float_to_uint:00000000 float_to_uint
+D:\temp\TMP\ccNIFWbb.s:119    .text.uint_to_float:00000000 $t
+D:\temp\TMP\ccNIFWbb.s:125    .text.uint_to_float:00000000 uint_to_float
+D:\temp\TMP\ccNIFWbb.s:165    .text.joint_motor_init:00000000 $t
+D:\temp\TMP\ccNIFWbb.s:171    .text.joint_motor_init:00000000 joint_motor_init
+D:\temp\TMP\ccNIFWbb.s:191    .text.Dm8009_Fbdata:00000000 $t
+D:\temp\TMP\ccNIFWbb.s:197    .text.Dm8009_Fbdata:00000000 Dm8009_Fbdata
+D:\temp\TMP\ccNIFWbb.s:323    .text.Clear_Error:00000000 $t
+D:\temp\TMP\ccNIFWbb.s:329    .text.Clear_Error:00000000 Clear_Error
+D:\temp\TMP\ccNIFWbb.s:394    .text.Enable_Motor_Mode:00000000 $t
+D:\temp\TMP\ccNIFWbb.s:400    .text.Enable_Motor_Mode:00000000 Enable_Motor_Mode
+D:\temp\TMP\ccNIFWbb.s:465    .text.Disable_Motor_Mode:00000000 $t
+D:\temp\TMP\ccNIFWbb.s:471    .text.Disable_Motor_Mode:00000000 Disable_Motor_Mode
+D:\temp\TMP\ccNIFWbb.s:536    .text.Save_Pos_Zero:00000000 $t
+D:\temp\TMP\ccNIFWbb.s:542    .text.Save_Pos_Zero:00000000 Save_Pos_Zero
+D:\temp\TMP\ccNIFWbb.s:607    .text.Mit_Ctrl:00000000 $t
+D:\temp\TMP\ccNIFWbb.s:613    .text.Mit_Ctrl:00000000 Mit_Ctrl
+D:\temp\TMP\ccNIFWbb.s:783    .text.Mit_Ctrl:000000d4 $d
+D:\temp\TMP\ccNIFWbb.s:789    .text.Pos_Speed_Ctrl:00000000 $t
+D:\temp\TMP\ccNIFWbb.s:795    .text.Pos_Speed_Ctrl:00000000 Pos_Speed_Ctrl
+D:\temp\TMP\ccNIFWbb.s:875    .text.Speed_Ctrl:00000000 $t
+D:\temp\TMP\ccNIFWbb.s:881    .text.Speed_Ctrl:00000000 Speed_Ctrl
 
 UNDEFINED SYMBOLS
 canx_send_data

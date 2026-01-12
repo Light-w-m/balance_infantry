@@ -1,6 +1,6 @@
-build/DJI3508.o: Robot/Devices/Motor/DJI3508.c \
- Robot/Devices/Motor/DJI3508.h Bsp/bsp_can.h Core/Inc/fdcan.h \
- Core/Inc/main.h Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h \
+build/dmmotor.o: Robot/Devices/Motor/dmmotor.c \
+ Robot/Devices/Motor/dmmotor.h Core/Inc/fdcan.h Core/Inc/main.h \
+ Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h \
  Core/Inc/stm32h7xx_hal_conf.h \
  Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h \
  Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h \
@@ -32,13 +32,8 @@ build/DJI3508.o: Robot/Devices/Motor/DJI3508.c \
  Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h \
  Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h \
  Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h \
- Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h \
- Robot/Controller/controller.h Core/Inc/main.h Bsp/bsp_dwt.h \
- Middlewares/ST/ARM/DSP/Inc/arm_math.h \
- Drivers/CMSIS/Include/cmsis_compiler.h Robot/Devices/motor_def.h \
- Robot/daemon/daemon.h Robot/Devices/general_def.h
-Robot/Devices/Motor/DJI3508.h:
-Bsp/bsp_can.h:
+ Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h Bsp/bsp_can.h
+Robot/Devices/Motor/dmmotor.h:
 Core/Inc/fdcan.h:
 Core/Inc/main.h:
 Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h:
@@ -76,11 +71,4 @@ Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h:
 Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h:
 Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h:
 Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h:
-Robot/Controller/controller.h:
-Core/Inc/main.h:
-Bsp/bsp_dwt.h:
-Middlewares/ST/ARM/DSP/Inc/arm_math.h:
-Drivers/CMSIS/Include/cmsis_compiler.h:
-Robot/Devices/motor_def.h:
-Robot/daemon/daemon.h:
-Robot/Devices/general_def.h:
+Bsp/bsp_can.h:
