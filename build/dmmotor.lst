@@ -1,4 +1,4 @@
-ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 1
+ARM GAS  D:\temp\TMP\ccLLtqqX.s 			page 1
 
 
    1              		.cpu cortex-m7
@@ -58,7 +58,7 @@ ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 1
    8:Robot/Devices/Motor/dmmotor.c **** uint32_t FloatTohex(float HEX)//浮点数到十六进制转换
    9:Robot/Devices/Motor/dmmotor.c **** {
   51              		.loc 1 9 1 is_stmt 1 view -0
-ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 2
+ARM GAS  D:\temp\TMP\ccLLtqqX.s 			page 2
 
 
   52              		.cfi_startproc
@@ -118,7 +118,7 @@ ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 1
   90 0000 31EE601A 		vsub.f32	s2, s2, s1
   91              	.LVL3:
   28:Robot/Devices/Motor/dmmotor.c **** 	float offset = x_min;
-ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 3
+ARM GAS  D:\temp\TMP\ccLLtqqX.s 			page 3
 
 
   92              		.loc 1 28 2 is_stmt 1 view .LVU11
@@ -178,7 +178,7 @@ ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 1
  133              		.loc 1 43 1 is_stmt 0 view .LVU22
  134 0000 07EE900A 		vmov	s15, r0	@ int
   44:Robot/Devices/Motor/dmmotor.c **** 	/* converts unsigned int to float, given range and number of bits */
-ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 4
+ARM GAS  D:\temp\TMP\ccLLtqqX.s 			page 4
 
 
   45:Robot/Devices/Motor/dmmotor.c **** 	float span = x_max - x_min;
@@ -238,7 +238,7 @@ ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 1
  177              		@ frame_needed = 0, uses_anonymous_args = 0
  178              		@ link register save eliminated.
   59:Robot/Devices/Motor/dmmotor.c ****   motor->mode=mode;
-ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 5
+ARM GAS  D:\temp\TMP\ccLLtqqX.s 			page 5
 
 
  179              		.loc 1 59 3 view .LVU36
@@ -298,7 +298,7 @@ ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 1
  217              		.cfi_offset 6, -12
  218              		.cfi_offset 7, -8
  219              		.cfi_offset 14, -4
-ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 6
+ARM GAS  D:\temp\TMP\ccLLtqqX.s 			page 6
 
 
  220 0008 0446     		mov	r4, r0
@@ -358,7 +358,7 @@ ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 1
  268 003c 6661     		str	r6, [r4, #20]
   83:Robot/Devices/Motor/dmmotor.c **** 	  motor->para.pos = uint_to_float(motor->para.p_int, P_MIN, P_MAX, 16); // (-12.5,12.5)
  269              		.loc 1 83 4 is_stmt 1 view .LVU70
-ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 7
+ARM GAS  D:\temp\TMP\ccLLtqqX.s 			page 7
 
 
  270              		.loc 1 83 22 is_stmt 0 view .LVU71
@@ -418,7 +418,7 @@ ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 1
  318              		.loc 1 89 1 view .LVU89
  319              		.cfi_endproc
  320              	.LFE149:
-ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 8
+ARM GAS  D:\temp\TMP\ccLLtqqX.s 			page 8
 
 
  322              		.section	.text.Clear_Error,"ax",%progbits
@@ -478,7 +478,7 @@ ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 1
  359              		.loc 1 107 2 is_stmt 1 view .LVU101
  360              		.loc 1 107 10 is_stmt 0 view .LVU102
  361 0014 8DF80330 		strb	r3, [sp, #3]
-ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 9
+ARM GAS  D:\temp\TMP\ccLLtqqX.s 			page 9
 
 
  108:Robot/Devices/Motor/dmmotor.c **** 	data[4] = 0xFF;
@@ -538,7 +538,7 @@ ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 1
  123:Robot/Devices/Motor/dmmotor.c **** void Enable_Motor_Mode(hcan_t* hcan, uint16_t motor_id, uint16_t mode_id)
  124:Robot/Devices/Motor/dmmotor.c **** {
  403              		.loc 1 124 1 is_stmt 1 view -0
-ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 10
+ARM GAS  D:\temp\TMP\ccLLtqqX.s 			page 10
 
 
  404              		.cfi_startproc
@@ -598,7 +598,7 @@ ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 1
  137:Robot/Devices/Motor/dmmotor.c **** 	canx_send_data(hcan, id, data, 8);
  446              		.loc 1 137 2 is_stmt 1 view .LVU136
  447 002a 0823     		movs	r3, #8
-ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 11
+ARM GAS  D:\temp\TMP\ccLLtqqX.s 			page 11
 
 
  448 002c 6A46     		mov	r2, sp
@@ -658,7 +658,7 @@ ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 1
  151:Robot/Devices/Motor/dmmotor.c **** 	
  152:Robot/Devices/Motor/dmmotor.c **** 	data[0] = 0xFF;
  491              		.loc 1 152 2 is_stmt 1 view .LVU145
-ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 12
+ARM GAS  D:\temp\TMP\ccLLtqqX.s 			page 12
 
 
  492              		.loc 1 152 10 is_stmt 0 view .LVU146
@@ -718,7 +718,7 @@ ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 1
  537              		.global	Save_Pos_Zero
  538              		.syntax unified
  539              		.thumb
-ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 13
+ARM GAS  D:\temp\TMP\ccLLtqqX.s 			page 13
 
 
  540              		.thumb_func
@@ -778,7 +778,7 @@ ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 1
  577 0018 8DF80430 		strb	r3, [sp, #4]
  181:Robot/Devices/Motor/dmmotor.c **** 	data[5] = 0xFF;
  578              		.loc 1 181 2 is_stmt 1 view .LVU180
-ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 14
+ARM GAS  D:\temp\TMP\ccLLtqqX.s 			page 14
 
 
  579              		.loc 1 181 10 is_stmt 0 view .LVU181
@@ -838,7 +838,7 @@ ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 1
  201:Robot/Devices/Motor/dmmotor.c **** **/
  202:Robot/Devices/Motor/dmmotor.c **** void Mit_Ctrl(hcan_t* hcan, uint16_t motor_id, float pos, float vel,float kp, float kd, float torq)
  203:Robot/Devices/Motor/dmmotor.c **** {
-ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 15
+ARM GAS  D:\temp\TMP\ccLLtqqX.s 			page 15
 
 
  616              		.loc 1 203 1 is_stmt 1 view -0
@@ -898,7 +898,7 @@ ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 1
  665              	.LVL38:
  666              		.loc 1 208 12 view .LVU200
  667 002c 8246     		mov	r10, r0
-ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 16
+ARM GAS  D:\temp\TMP\ccLLtqqX.s 			page 16
 
 
  668              		.loc 1 208 10 view .LVU201
@@ -958,7 +958,7 @@ ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 1
  716              		.loc 1 214 2 is_stmt 1 view .LVU214
  717              		.loc 1 214 10 is_stmt 0 view .LVU215
  718 0086 4FEA1B2B 		lsr	fp, fp, #8
-ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 17
+ARM GAS  D:\temp\TMP\ccLLtqqX.s 			page 17
 
 
  719              	.LVL48:
@@ -1018,7 +1018,7 @@ ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 1
  763              		.loc 1 224 1 view .LVU236
  764 00c8 03B0     		add	sp, sp, #12
  765              	.LCFI18:
-ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 18
+ARM GAS  D:\temp\TMP\ccLLtqqX.s 			page 18
 
 
  766              		.cfi_def_cfa_offset 52
@@ -1078,7 +1078,7 @@ ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 1
  809              		.cfi_def_cfa_offset 24
  810 0004 8DED000A 		vstr.32	s0, [sp]
  811 0008 CDED010A 		vstr.32	s1, [sp, #4]
-ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 19
+ARM GAS  D:\temp\TMP\ccLLtqqX.s 			page 19
 
 
  238:Robot/Devices/Motor/dmmotor.c **** 	uint16_t id;
@@ -1138,7 +1138,7 @@ ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 1
  850 0040 8DF80E20 		strb	r2, [sp, #14]
  254:Robot/Devices/Motor/dmmotor.c **** 	data[7] = *(vbuf+3);
  851              		.loc 1 254 2 is_stmt 1 view .LVU264
-ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 20
+ARM GAS  D:\temp\TMP\ccLLtqqX.s 			page 20
 
 
  852              		.loc 1 254 10 is_stmt 0 view .LVU265
@@ -1198,7 +1198,7 @@ ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 1
  892              		.cfi_offset 14, -4
  893 0002 85B0     		sub	sp, sp, #20
  894              	.LCFI24:
-ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 21
+ARM GAS  D:\temp\TMP\ccLLtqqX.s 			page 21
 
 
  895              		.cfi_def_cfa_offset 24
@@ -1258,7 +1258,7 @@ ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 1
  935              		.loc 1 284 1 view .LVU291
  936              		.cfi_endproc
  937              	.LFE156:
-ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 22
+ARM GAS  D:\temp\TMP\ccLLtqqX.s 			page 22
 
 
  939              		.text
@@ -1271,38 +1271,38 @@ ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 1
  946              		.file 7 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_fdcan.h"
  947              		.file 8 "Bsp/bsp_can.h"
  948              		.file 9 "Robot/Devices/Motor/dmmotor.h"
-ARM GAS  D:\temp\TMP\ccNIFWbb.s 			page 23
+ARM GAS  D:\temp\TMP\ccLLtqqX.s 			page 23
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 dmmotor.c
-D:\temp\TMP\ccNIFWbb.s:19     .text.Hex_To_Float:00000000 $t
-D:\temp\TMP\ccNIFWbb.s:25     .text.Hex_To_Float:00000000 Hex_To_Float
-D:\temp\TMP\ccNIFWbb.s:42     .text.FloatTohex:00000000 $t
-D:\temp\TMP\ccNIFWbb.s:48     .text.FloatTohex:00000000 FloatTohex
-D:\temp\TMP\ccNIFWbb.s:74     .text.float_to_uint:00000000 $t
-D:\temp\TMP\ccNIFWbb.s:80     .text.float_to_uint:00000000 float_to_uint
-D:\temp\TMP\ccNIFWbb.s:119    .text.uint_to_float:00000000 $t
-D:\temp\TMP\ccNIFWbb.s:125    .text.uint_to_float:00000000 uint_to_float
-D:\temp\TMP\ccNIFWbb.s:165    .text.joint_motor_init:00000000 $t
-D:\temp\TMP\ccNIFWbb.s:171    .text.joint_motor_init:00000000 joint_motor_init
-D:\temp\TMP\ccNIFWbb.s:191    .text.Dm8009_Fbdata:00000000 $t
-D:\temp\TMP\ccNIFWbb.s:197    .text.Dm8009_Fbdata:00000000 Dm8009_Fbdata
-D:\temp\TMP\ccNIFWbb.s:323    .text.Clear_Error:00000000 $t
-D:\temp\TMP\ccNIFWbb.s:329    .text.Clear_Error:00000000 Clear_Error
-D:\temp\TMP\ccNIFWbb.s:394    .text.Enable_Motor_Mode:00000000 $t
-D:\temp\TMP\ccNIFWbb.s:400    .text.Enable_Motor_Mode:00000000 Enable_Motor_Mode
-D:\temp\TMP\ccNIFWbb.s:465    .text.Disable_Motor_Mode:00000000 $t
-D:\temp\TMP\ccNIFWbb.s:471    .text.Disable_Motor_Mode:00000000 Disable_Motor_Mode
-D:\temp\TMP\ccNIFWbb.s:536    .text.Save_Pos_Zero:00000000 $t
-D:\temp\TMP\ccNIFWbb.s:542    .text.Save_Pos_Zero:00000000 Save_Pos_Zero
-D:\temp\TMP\ccNIFWbb.s:607    .text.Mit_Ctrl:00000000 $t
-D:\temp\TMP\ccNIFWbb.s:613    .text.Mit_Ctrl:00000000 Mit_Ctrl
-D:\temp\TMP\ccNIFWbb.s:783    .text.Mit_Ctrl:000000d4 $d
-D:\temp\TMP\ccNIFWbb.s:789    .text.Pos_Speed_Ctrl:00000000 $t
-D:\temp\TMP\ccNIFWbb.s:795    .text.Pos_Speed_Ctrl:00000000 Pos_Speed_Ctrl
-D:\temp\TMP\ccNIFWbb.s:875    .text.Speed_Ctrl:00000000 $t
-D:\temp\TMP\ccNIFWbb.s:881    .text.Speed_Ctrl:00000000 Speed_Ctrl
+D:\temp\TMP\ccLLtqqX.s:19     .text.Hex_To_Float:00000000 $t
+D:\temp\TMP\ccLLtqqX.s:25     .text.Hex_To_Float:00000000 Hex_To_Float
+D:\temp\TMP\ccLLtqqX.s:42     .text.FloatTohex:00000000 $t
+D:\temp\TMP\ccLLtqqX.s:48     .text.FloatTohex:00000000 FloatTohex
+D:\temp\TMP\ccLLtqqX.s:74     .text.float_to_uint:00000000 $t
+D:\temp\TMP\ccLLtqqX.s:80     .text.float_to_uint:00000000 float_to_uint
+D:\temp\TMP\ccLLtqqX.s:119    .text.uint_to_float:00000000 $t
+D:\temp\TMP\ccLLtqqX.s:125    .text.uint_to_float:00000000 uint_to_float
+D:\temp\TMP\ccLLtqqX.s:165    .text.joint_motor_init:00000000 $t
+D:\temp\TMP\ccLLtqqX.s:171    .text.joint_motor_init:00000000 joint_motor_init
+D:\temp\TMP\ccLLtqqX.s:191    .text.Dm8009_Fbdata:00000000 $t
+D:\temp\TMP\ccLLtqqX.s:197    .text.Dm8009_Fbdata:00000000 Dm8009_Fbdata
+D:\temp\TMP\ccLLtqqX.s:323    .text.Clear_Error:00000000 $t
+D:\temp\TMP\ccLLtqqX.s:329    .text.Clear_Error:00000000 Clear_Error
+D:\temp\TMP\ccLLtqqX.s:394    .text.Enable_Motor_Mode:00000000 $t
+D:\temp\TMP\ccLLtqqX.s:400    .text.Enable_Motor_Mode:00000000 Enable_Motor_Mode
+D:\temp\TMP\ccLLtqqX.s:465    .text.Disable_Motor_Mode:00000000 $t
+D:\temp\TMP\ccLLtqqX.s:471    .text.Disable_Motor_Mode:00000000 Disable_Motor_Mode
+D:\temp\TMP\ccLLtqqX.s:536    .text.Save_Pos_Zero:00000000 $t
+D:\temp\TMP\ccLLtqqX.s:542    .text.Save_Pos_Zero:00000000 Save_Pos_Zero
+D:\temp\TMP\ccLLtqqX.s:607    .text.Mit_Ctrl:00000000 $t
+D:\temp\TMP\ccLLtqqX.s:613    .text.Mit_Ctrl:00000000 Mit_Ctrl
+D:\temp\TMP\ccLLtqqX.s:783    .text.Mit_Ctrl:000000d4 $d
+D:\temp\TMP\ccLLtqqX.s:789    .text.Pos_Speed_Ctrl:00000000 $t
+D:\temp\TMP\ccLLtqqX.s:795    .text.Pos_Speed_Ctrl:00000000 Pos_Speed_Ctrl
+D:\temp\TMP\ccLLtqqX.s:875    .text.Speed_Ctrl:00000000 $t
+D:\temp\TMP\ccLLtqqX.s:881    .text.Speed_Ctrl:00000000 Speed_Ctrl
 
 UNDEFINED SYMBOLS
 canx_send_data

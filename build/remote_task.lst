@@ -1,4 +1,4 @@
-ARM GAS  D:\temp\TMP\ccqCFBH3.s 			page 1
+ARM GAS  D:\temp\TMP\ccry4aDK.s 			page 1
 
 
    1              		.cpu cortex-m7
@@ -18,14 +18,14 @@ ARM GAS  D:\temp\TMP\ccqCFBH3.s 			page 1
   15              		.text
   16              	.Ltext0:
   17              		.cfi_sections	.debug_frame
-  18              		.section	.text.Remote_Task,"ax",%progbits
+  18              		.section	.text.RobotCMDInit,"ax",%progbits
   19              		.align	1
-  20              		.global	Remote_Task
+  20              		.global	RobotCMDInit
   21              		.syntax unified
   22              		.thumb
   23              		.thumb_func
-  25              	Remote_Task:
-  26              	.LFB191:
+  25              	RobotCMDInit:
+  26              	.LFB188:
   27              		.file 1 "Robot/RoboTask/remote/remote_task.c"
    1:Robot/RoboTask/remote/remote_task.c **** #include "remote_task.h"
    2:Robot/RoboTask/remote/remote_task.c **** #include "remote_control.h"
@@ -34,10 +34,47 @@ ARM GAS  D:\temp\TMP\ccqCFBH3.s 			page 1
    5:Robot/RoboTask/remote/remote_task.c **** extern chassis_t chassis_move;
    6:Robot/RoboTask/remote/remote_task.c **** static RC_ctrl_t *rc_data;              // 遥控器数据,初始化时返回
    7:Robot/RoboTask/remote/remote_task.c **** 
-   8:Robot/RoboTask/remote/remote_task.c **** static void DT7_Init(void)
+   8:Robot/RoboTask/remote/remote_task.c **** void RobotCMDInit(void)
    9:Robot/RoboTask/remote/remote_task.c **** {
-  10:Robot/RoboTask/remote/remote_task.c ****     rc_data = RemoteControlInit(&huart5);
+  28              		.loc 1 9 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32 0000 08B5     		push	{r3, lr}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 8
+  35              		.cfi_offset 3, -8
+  36              		.cfi_offset 14, -4
+  10:Robot/RoboTask/remote/remote_task.c ****     rc_data = RemoteControlInit(&huart5);   // 修改为对应串口,注意如果是自研板dbus�
+  37              		.loc 1 10 5 view .LVU1
+  38              		.loc 1 10 15 is_stmt 0 view .LVU2
+  39 0002 0348     		ldr	r0, .L3
+  40 0004 FFF7FEFF 		bl	RemoteControlInit
+  41              	.LVL0:
+  42              		.loc 1 10 13 view .LVU3
+  43 0008 024B     		ldr	r3, .L3+4
+  44 000a 1860     		str	r0, [r3]
   11:Robot/RoboTask/remote/remote_task.c **** }
+  45              		.loc 1 11 1 view .LVU4
+  46 000c 08BD     		pop	{r3, pc}
+  47              	.L4:
+ARM GAS  D:\temp\TMP\ccry4aDK.s 			page 2
+
+
+  48 000e 00BF     		.align	2
+  49              	.L3:
+  50 0010 00000000 		.word	huart5
+  51 0014 00000000 		.word	.LANCHOR0
+  52              		.cfi_endproc
+  53              	.LFE188:
+  55              		.section	.text.Remote_Task,"ax",%progbits
+  56              		.align	1
+  57              		.global	Remote_Task
+  58              		.syntax unified
+  59              		.thumb
+  60              		.thumb_func
+  62              	Remote_Task:
+  63              	.LFB191:
   12:Robot/RoboTask/remote/remote_task.c **** 
   13:Robot/RoboTask/remote/remote_task.c **** /**
   14:Robot/RoboTask/remote/remote_task.c ****  * @brief 机器人控制
@@ -45,7 +82,7 @@ ARM GAS  D:\temp\TMP\ccqCFBH3.s 			page 1
   16:Robot/RoboTask/remote/remote_task.c ****  */
   17:Robot/RoboTask/remote/remote_task.c **** static void RemoteControlSet(void)
   18:Robot/RoboTask/remote/remote_task.c **** {
-  19:Robot/RoboTask/remote/remote_task.c ****     chassis_move.leg_set = (float)rc_data[TEMP].rc.rocker_r1;
+  19:Robot/RoboTask/remote/remote_task.c **** 
   20:Robot/RoboTask/remote/remote_task.c **** }
   21:Robot/RoboTask/remote/remote_task.c **** 
   22:Robot/RoboTask/remote/remote_task.c **** /**
@@ -58,35 +95,53 @@ ARM GAS  D:\temp\TMP\ccqCFBH3.s 			page 1
   29:Robot/RoboTask/remote/remote_task.c **** static void EmergencyHandler()
   30:Robot/RoboTask/remote/remote_task.c **** {
   31:Robot/RoboTask/remote/remote_task.c **** 
-ARM GAS  D:\temp\TMP\ccqCFBH3.s 			page 2
-
-
   32:Robot/RoboTask/remote/remote_task.c **** }
   33:Robot/RoboTask/remote/remote_task.c **** 
   34:Robot/RoboTask/remote/remote_task.c **** void Remote_Task(void)
   35:Robot/RoboTask/remote/remote_task.c **** {
-  28              		.loc 1 35 1 view -0
-  29              		.cfi_startproc
-  30              		@ args = 0, pretend = 0, frame = 0
-  31              		@ frame_needed = 0, uses_anonymous_args = 0
-  32              		@ link register save eliminated.
-  36:Robot/RoboTask/remote/remote_task.c ****     
+  64              		.loc 1 35 1 is_stmt 1 view -0
+  65              		.cfi_startproc
+  66              		@ args = 0, pretend = 0, frame = 0
+  67              		@ frame_needed = 0, uses_anonymous_args = 0
+  68              		@ link register save eliminated.
+  36:Robot/RoboTask/remote/remote_task.c ****     RemoteControlSet();
+  69              		.loc 1 36 5 view .LVU6
   37:Robot/RoboTask/remote/remote_task.c **** }...
-  33              		.loc 1 37 1 view .LVU1
-  34 0000 7047     		bx	lr
-  35              		.cfi_endproc
-  36              	.LFE191:
-  38              		.text
-  39              	.Letext0:
-  40              		.file 2 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\machine\\_default_types.h"
-  41              		.file 3 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
-  42              		.file 4 "Robot/Remote/remote_control.h"
-ARM GAS  D:\temp\TMP\ccqCFBH3.s 			page 3
+  70              		.loc 1 37 1 is_stmt 0 view .LVU7
+  71 0000 7047     		bx	lr
+  72              		.cfi_endproc
+  73              	.LFE191:
+  75              		.section	.bss.rc_data,"aw",%nobits
+  76              		.align	2
+  77              		.set	.LANCHOR0,. + 0
+  80              	rc_data:
+  81 0000 00000000 		.space	4
+  82              		.text
+  83              	.Letext0:
+ARM GAS  D:\temp\TMP\ccry4aDK.s 			page 3
+
+
+  84              		.file 2 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\machine\\_default_types.h"
+  85              		.file 3 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
+  86              		.file 4 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h723xx.h"
+  87              		.file 5 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h"
+  88              		.file 6 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_dma.h"
+  89              		.file 7 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h"
+  90              		.file 8 "Robot/Remote/remote_control.h"
+  91              		.file 9 "Core/Inc/usart.h"
+ARM GAS  D:\temp\TMP\ccry4aDK.s 			page 4
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 remote_task.c
-D:\temp\TMP\ccqCFBH3.s:19     .text.Remote_Task:00000000 $t
-D:\temp\TMP\ccqCFBH3.s:25     .text.Remote_Task:00000000 Remote_Task
+D:\temp\TMP\ccry4aDK.s:19     .text.RobotCMDInit:00000000 $t
+D:\temp\TMP\ccry4aDK.s:25     .text.RobotCMDInit:00000000 RobotCMDInit
+D:\temp\TMP\ccry4aDK.s:50     .text.RobotCMDInit:00000010 $d
+D:\temp\TMP\ccry4aDK.s:56     .text.Remote_Task:00000000 $t
+D:\temp\TMP\ccry4aDK.s:62     .text.Remote_Task:00000000 Remote_Task
+D:\temp\TMP\ccry4aDK.s:76     .bss.rc_data:00000000 $d
+D:\temp\TMP\ccry4aDK.s:80     .bss.rc_data:00000000 rc_data
 
-NO UNDEFINED SYMBOLS
+UNDEFINED SYMBOLS
+RemoteControlInit
+huart5

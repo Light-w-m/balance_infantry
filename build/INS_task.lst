@@ -1,4 +1,4 @@
-ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 1
+ARM GAS  D:\temp\TMP\ccqm8Xmv.s 			page 1
 
 
    1              		.cpu cortex-m7
@@ -58,7 +58,7 @@ ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 1
   29:Robot/RoboTask/ins/ins_task.c **** #include "stdint.h"
   30:Robot/RoboTask/ins/ins_task.c **** #include "cmsis_os.h"
   31:Robot/RoboTask/ins/ins_task.c **** 
-ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 2
+ARM GAS  D:\temp\TMP\ccqm8Xmv.s 			page 2
 
 
   32:Robot/RoboTask/ins/ins_task.c **** INS_t INS;
@@ -118,7 +118,7 @@ ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 1
   44              		.cfi_offset 81, -20
   45 0006 8AB0     		sub	sp, sp, #40
   46              	.LCFI2:
-ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 3
+ARM GAS  D:\temp\TMP\ccqm8Xmv.s 			page 3
 
 
   47              		.cfi_def_cfa_offset 64
@@ -178,7 +178,7 @@ ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 1
   92 0046 77EE877A 		vadd.f32	s15, s15, s14
   93 004a CDED087A 		vstr.32	s15, [sp, #32]
   79:Robot/RoboTask/ins/ins_task.c ****         acc_init[Z_AXIS] += BMI088.Accel[Z_AXIS];
-ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 4
+ARM GAS  D:\temp\TMP\ccqm8Xmv.s 			page 4
 
 
   94              		.loc 1 79 9 is_stmt 1 discriminator 3 view .LVU18
@@ -238,7 +238,7 @@ ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 1
   82:Robot/RoboTask/ins/ins_task.c ****         acc_init[i] /= 100;
  138              		.loc 1 82 25 is_stmt 1 discriminator 1 view .LVU31
   82:Robot/RoboTask/ins/ins_task.c ****         acc_init[i] /= 100;
-ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 5
+ARM GAS  D:\temp\TMP\ccqm8Xmv.s 			page 5
 
 
  139              		.loc 1 82 5 is_stmt 0 discriminator 1 view .LVU32
@@ -298,7 +298,7 @@ ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 1
  186 00cc 10E0     		b	.L6
  187              	.LVL20:
  188              	.L7:
-ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 6
+ARM GAS  D:\temp\TMP\ccqm8Xmv.s 			page 6
 
 
   91:Robot/RoboTask/ins/ins_task.c ****         init_q4[i + 1] = axis_rot[i] * sinf(angle / 2.0f); // 轴角公式,第三轴为0(没有z轴
@@ -358,7 +358,7 @@ ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 1
  239              		.align	1
  240              		.global	INS_Init
  241              		.syntax unified
-ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 7
+ARM GAS  D:\temp\TMP\ccqm8Xmv.s 			page 7
 
 
  242              		.thumb
@@ -418,7 +418,7 @@ ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 1
  285 002e 124B     		ldr	r3, .L14+16
  286 0030 124A     		ldr	r2, .L14+20
  287 0032 1A64     		str	r2, [r3, #64]	@ float
-ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 8
+ARM GAS  D:\temp\TMP\ccqm8Xmv.s 			page 8
 
 
  102:Robot/RoboTask/ins/ins_task.c **** 
@@ -478,7 +478,7 @@ ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 1
  339              	BodyFrameToEarthFrame:
  340              	.LVL29:
  341              	.LFB201:
-ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 9
+ARM GAS  D:\temp\TMP\ccqm8Xmv.s 			page 9
 
 
  107:Robot/RoboTask/ins/ins_task.c **** 
@@ -538,7 +538,7 @@ ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 1
  161:Robot/RoboTask/ins/ins_task.c **** 		}
  162:Robot/RoboTask/ins/ins_task.c **** 		BodyFrameToEarthFrame(INS.MotionAccel_b, INS.MotionAccel_n, INS.q); // 转换回导航系n
  163:Robot/RoboTask/ins/ins_task.c **** 		
-ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 10
+ARM GAS  D:\temp\TMP\ccqm8Xmv.s 			page 10
 
 
  164:Robot/RoboTask/ins/ins_task.c **** 		//死区处理
@@ -598,7 +598,7 @@ ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 1
  218:Robot/RoboTask/ins/ins_task.c **** 
  219:Robot/RoboTask/ins/ins_task.c **** // 使用加速度计的数据初始化Roll和Pitch,而Yaw置0,这样可以避免在初始时候的
  220:Robot/RoboTask/ins/ins_task.c **** static void InitQuaternion(float *init_q4)
-ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 11
+ARM GAS  D:\temp\TMP\ccqm8Xmv.s 			page 11
 
 
  221:Robot/RoboTask/ins/ins_task.c **** {
@@ -658,7 +658,7 @@ ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 1
  275:Robot/RoboTask/ins/ins_task.c ****       if (HipnucInput(uart_rx_buf[i], &HIPNUC))
  276:Robot/RoboTask/ins/ins_task.c ****       {
  277:Robot/RoboTask/ins/ins_task.c ****         /* code */
-ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 12
+ARM GAS  D:\temp\TMP\ccqm8Xmv.s 			page 12
 
 
  278:Robot/RoboTask/ins/ins_task.c ****         HipnucDumpPacket(&HIPNUC, log_buf, sizeof(log_buf));
@@ -718,7 +718,7 @@ ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 1
  332:Robot/RoboTask/ins/ins_task.c **** 															+ INS.MotionAccel_b[i] * INS.AccelLPF / (INS.AccelLPF + ins_dt); 
  333:Robot/RoboTask/ins/ins_task.c **** 		}
  334:Robot/RoboTask/ins/ins_task.c **** 		BodyFrameToEarthFrame(INS.MotionAccel_b, INS.MotionAccel_n, INS.q); // 转换回导航系n
-ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 13
+ARM GAS  D:\temp\TMP\ccqm8Xmv.s 			page 13
 
 
  335:Robot/RoboTask/ins/ins_task.c **** 
@@ -778,7 +778,7 @@ ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 1
  389:Robot/RoboTask/ins/ins_task.c ****   {
  390:Robot/RoboTask/ins/ins_task.c ****     /* code */
  391:Robot/RoboTask/ins/ins_task.c ****     uart_rx_index = 0;
-ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 14
+ARM GAS  D:\temp\TMP\ccqm8Xmv.s 			page 14
 
 
  392:Robot/RoboTask/ins/ins_task.c ****   }
@@ -838,7 +838,7 @@ ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 1
  379              		.loc 1 406 70 view .LVU88
  380 0040 77EEA57A 		vadd.f32	s15, s15, s11
  408:Robot/RoboTask/ins/ins_task.c ****                        (q[1] * q[3] + q[0] * q[2]) * vecBF[2]);
-ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 15
+ARM GAS  D:\temp\TMP\ccqm8Xmv.s 			page 15
 
 
  381              		.loc 1 408 30 view .LVU89
@@ -898,7 +898,7 @@ ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 1
  428              		.loc 1 410 63 view .LVU113
  429 00a0 37EE067A 		vadd.f32	s14, s14, s12
  412:Robot/RoboTask/ins/ins_task.c ****                        (q[2] * q[3] - q[0] * q[1]) * vecBF[2]);
-ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 16
+ARM GAS  D:\temp\TMP\ccqm8Xmv.s 			page 16
 
 
  430              		.loc 1 412 30 view .LVU114
@@ -958,7 +958,7 @@ ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 1
  416:Robot/RoboTask/ins/ins_task.c ****                        (0.5f - q[1] * q[1] - q[2] * q[2]) * vecBF[2]);
  477              		.loc 1 416 37 view .LVU138
  478 0100 65EEA55A 		vmul.f32	s11, s11, s11
-ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 17
+ARM GAS  D:\temp\TMP\ccqm8Xmv.s 			page 17
 
 
  479              		.loc 1 416 30 view .LVU139
@@ -1018,7 +1018,7 @@ ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 1
  521 0008 F6EE006A 		vmov.f32	s13, #5.0e-1
  522 000c 76EEE77A 		vsub.f32	s15, s13, s15
  523              		.loc 1 427 47 view .LVU153
-ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 18
+ARM GAS  D:\temp\TMP\ccqm8Xmv.s 			page 18
 
 
  524 0010 92ED037A 		vldr.32	s14, [r2, #12]
@@ -1078,7 +1078,7 @@ ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 1
  570              		.loc 1 431 30 view .LVU177
  571 006c 25EEA77A 		vmul.f32	s14, s11, s15
  572              		.loc 1 431 40 view .LVU178
-ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 19
+ARM GAS  D:\temp\TMP\ccqm8Xmv.s 			page 19
 
 
  573 0070 D2ED004A 		vldr.32	s9, [r2]
@@ -1138,7 +1138,7 @@ ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 1
  619              		.loc 1 435 30 view .LVU202
  620 00cc 65EE877A 		vmul.f32	s15, s11, s14
  621              		.loc 1 435 40 view .LVU203
-ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 20
+ARM GAS  D:\temp\TMP\ccqm8Xmv.s 			page 20
 
 
  622 00d0 92ED005A 		vldr.32	s10, [r2]
@@ -1198,7 +1198,7 @@ ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 1
  670              		.global	INS_task
  671              		.syntax unified
  672              		.thumb
-ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 21
+ARM GAS  D:\temp\TMP\ccqm8Xmv.s 			page 21
 
 
  673              		.thumb_func
@@ -1258,7 +1258,7 @@ ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 1
  719 0032 77EEA67A 		vadd.f32	s15, s15, s13
  157:Robot/RoboTask/ins/ins_task.c **** 															+ INS.MotionAccel_b[i] * INS.AccelLPF / (INS.AccelLPF + ins_dt); 
  720              		.loc 1 157 66 discriminator 3 view .LVU234
-ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 22
+ARM GAS  D:\temp\TMP\ccqm8Xmv.s 			page 22
 
 
  721 0036 87EE276A 		vdiv.f32	s12, s14, s15
@@ -1318,7 +1318,7 @@ ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 1
  760 0076 9FED6D7A 		vldr.32	s14, .L37+8
  761 007a F4EEC77A 		vcmpe.f32	s15, s14
  762 007e F1EE10FA 		vmrs	APSR_nzcv, FPSCR
-ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 23
+ARM GAS  D:\temp\TMP\ccqm8Xmv.s 			page 23
 
 
  763 0082 01D5     		bpl	.L21
@@ -1378,7 +1378,7 @@ ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 1
  178:Robot/RoboTask/ins/ins_task.c **** 		{
  802              		.loc 1 178 14 is_stmt 0 view .LVU265
  803 00c0 5C4B     		ldr	r3, .L37+16
-ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 24
+ARM GAS  D:\temp\TMP\ccqm8Xmv.s 			page 24
 
 
  804 00c2 D3ED007A 		vldr.32	s15, [r3]
@@ -1438,7 +1438,7 @@ ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 1
  841 010c DFED4D6A 		vldr.32	s13, .L37+32
  842 0110 27EE267A 		vmul.f32	s14, s14, s13
  184:Robot/RoboTask/ins/ins_task.c **** 			INS.Roll=mahony.pitch*180.0f/PI;
-ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 25
+ARM GAS  D:\temp\TMP\ccqm8Xmv.s 			page 25
 
 
  843              		.loc 1 184 32 view .LVU283
@@ -1498,7 +1498,7 @@ ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 1
  880              		.loc 1 113 3 view .LVU300
  881              	.LBB8:
  115:Robot/RoboTask/ins/ins_task.c ****     
-ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 26
+ARM GAS  D:\temp\TMP\ccqm8Xmv.s 			page 26
 
 
  882              		.loc 1 115 3 view .LVU301
@@ -1558,7 +1558,7 @@ ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 1
  919              		.loc 1 126 3 is_stmt 1 view .LVU318
  126:Robot/RoboTask/ins/ins_task.c **** 		Accel.z=BMI088.Accel[2];
  920              		.loc 1 126 10 is_stmt 0 view .LVU319
-ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 27
+ARM GAS  D:\temp\TMP\ccqm8Xmv.s 			page 27
 
 
  921 0188 87ED012A 		vstr.32	s4, [r7, #4]
@@ -1618,7 +1618,7 @@ ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 1
  956 01c2 97ED012A 		vldr.32	s4, [r7, #4]
  957 01c6 D7ED022A 		vldr.32	s5, [r7, #8]
  958 01ca 96ED000A 		vldr.32	s0, [r6]
-ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 28
+ARM GAS  D:\temp\TMP\ccqm8Xmv.s 			page 28
 
 
  959 01ce D6ED010A 		vldr.32	s1, [r6, #4]
@@ -1678,7 +1678,7 @@ ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 1
  997 01fe 184B     		ldr	r3, .L37+60
  998 0200 0FCB     		ldm	r3, {r0, r1, r2, r3}
  999 0202 84E80F00 		stm	r4, {r0, r1, r2, r3}
-ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 29
+ARM GAS  D:\temp\TMP\ccqm8Xmv.s 			page 29
 
 
  153:Robot/RoboTask/ins/ins_task.c **** 		EarthFrameToBodyFrame(gravity, gravity_b, INS.q);
@@ -1738,7 +1738,7 @@ ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 1
  1045              	.LBE8:
  1046              		.cfi_endproc
  1047              	.LFE200:
-ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 30
+ARM GAS  D:\temp\TMP\ccqm8Xmv.s 			page 30
 
 
  1049              		.global	ins_time
@@ -1798,7 +1798,7 @@ ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 1
  1105      00000000 
  1106              		.section	.data.gravity,"aw"
  1107              		.align	2
-ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 31
+ARM GAS  D:\temp\TMP\ccqm8Xmv.s 			page 31
 
 
  1108              		.set	.LANCHOR6,. + 0
@@ -1826,40 +1826,40 @@ ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 1
  1132              		.file 17 "Bsp/bsp_dwt.h"
  1133              		.file 18 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\math.h"
  1134              		.file 19 "Robot/Lib/user_lib.h"
-ARM GAS  D:\temp\TMP\ccLn0CNW.s 			page 32
+ARM GAS  D:\temp\TMP\ccqm8Xmv.s 			page 32
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 ins_task.c
-D:\temp\TMP\ccLn0CNW.s:19     .text.InitQuaternion:00000000 $t
-D:\temp\TMP\ccLn0CNW.s:24     .text.InitQuaternion:00000000 InitQuaternion
-D:\temp\TMP\ccLn0CNW.s:232    .text.InitQuaternion:000000fc $d
-D:\temp\TMP\ccLn0CNW.s:239    .text.INS_Init:00000000 $t
-D:\temp\TMP\ccLn0CNW.s:245    .text.INS_Init:00000000 INS_Init
-D:\temp\TMP\ccLn0CNW.s:322    .text.INS_Init:00000068 $d
-D:\temp\TMP\ccLn0CNW.s:333    .text.BodyFrameToEarthFrame:00000000 $t
-D:\temp\TMP\ccLn0CNW.s:339    .text.BodyFrameToEarthFrame:00000000 BodyFrameToEarthFrame
-D:\temp\TMP\ccLn0CNW.s:501    .text.EarthFrameToBodyFrame:00000000 $t
-D:\temp\TMP\ccLn0CNW.s:507    .text.EarthFrameToBodyFrame:00000000 EarthFrameToBodyFrame
-D:\temp\TMP\ccLn0CNW.s:669    .text.INS_task:00000000 $t
-D:\temp\TMP\ccLn0CNW.s:675    .text.INS_task:00000000 INS_task
-D:\temp\TMP\ccLn0CNW.s:1028   .text.INS_task:00000224 $d
-D:\temp\TMP\ccLn0CNW.s:1097   .bss.ins_time:00000000 ins_time
-D:\temp\TMP\ccLn0CNW.s:1090   .bss.ins_dt:00000000 ins_dt
-D:\temp\TMP\ccLn0CNW.s:1083   .bss.INS_DWT_Count:00000000 INS_DWT_Count
-D:\temp\TMP\ccLn0CNW.s:1111   .data.gravity:00000000 gravity
-D:\temp\TMP\ccLn0CNW.s:1062   .bss.Accel:00000000 Accel
-D:\temp\TMP\ccLn0CNW.s:1069   .bss.Gyro:00000000 Gyro
-D:\temp\TMP\ccLn0CNW.s:1104   .bss.mahony:00000000 mahony
-D:\temp\TMP\ccLn0CNW.s:1076   .bss.INS:00000000 INS
-D:\temp\TMP\ccLn0CNW.s:1058   .bss.Accel:00000000 $d
-D:\temp\TMP\ccLn0CNW.s:1065   .bss.Gyro:00000000 $d
-D:\temp\TMP\ccLn0CNW.s:1072   .bss.INS:00000000 $d
-D:\temp\TMP\ccLn0CNW.s:1079   .bss.INS_DWT_Count:00000000 $d
-D:\temp\TMP\ccLn0CNW.s:1086   .bss.ins_dt:00000000 $d
-D:\temp\TMP\ccLn0CNW.s:1093   .bss.ins_time:00000000 $d
-D:\temp\TMP\ccLn0CNW.s:1100   .bss.mahony:00000000 $d
-D:\temp\TMP\ccLn0CNW.s:1107   .data.gravity:00000000 $d
+D:\temp\TMP\ccqm8Xmv.s:19     .text.InitQuaternion:00000000 $t
+D:\temp\TMP\ccqm8Xmv.s:24     .text.InitQuaternion:00000000 InitQuaternion
+D:\temp\TMP\ccqm8Xmv.s:232    .text.InitQuaternion:000000fc $d
+D:\temp\TMP\ccqm8Xmv.s:239    .text.INS_Init:00000000 $t
+D:\temp\TMP\ccqm8Xmv.s:245    .text.INS_Init:00000000 INS_Init
+D:\temp\TMP\ccqm8Xmv.s:322    .text.INS_Init:00000068 $d
+D:\temp\TMP\ccqm8Xmv.s:333    .text.BodyFrameToEarthFrame:00000000 $t
+D:\temp\TMP\ccqm8Xmv.s:339    .text.BodyFrameToEarthFrame:00000000 BodyFrameToEarthFrame
+D:\temp\TMP\ccqm8Xmv.s:501    .text.EarthFrameToBodyFrame:00000000 $t
+D:\temp\TMP\ccqm8Xmv.s:507    .text.EarthFrameToBodyFrame:00000000 EarthFrameToBodyFrame
+D:\temp\TMP\ccqm8Xmv.s:669    .text.INS_task:00000000 $t
+D:\temp\TMP\ccqm8Xmv.s:675    .text.INS_task:00000000 INS_task
+D:\temp\TMP\ccqm8Xmv.s:1028   .text.INS_task:00000224 $d
+D:\temp\TMP\ccqm8Xmv.s:1097   .bss.ins_time:00000000 ins_time
+D:\temp\TMP\ccqm8Xmv.s:1090   .bss.ins_dt:00000000 ins_dt
+D:\temp\TMP\ccqm8Xmv.s:1083   .bss.INS_DWT_Count:00000000 INS_DWT_Count
+D:\temp\TMP\ccqm8Xmv.s:1111   .data.gravity:00000000 gravity
+D:\temp\TMP\ccqm8Xmv.s:1062   .bss.Accel:00000000 Accel
+D:\temp\TMP\ccqm8Xmv.s:1069   .bss.Gyro:00000000 Gyro
+D:\temp\TMP\ccqm8Xmv.s:1104   .bss.mahony:00000000 mahony
+D:\temp\TMP\ccqm8Xmv.s:1076   .bss.INS:00000000 INS
+D:\temp\TMP\ccqm8Xmv.s:1058   .bss.Accel:00000000 $d
+D:\temp\TMP\ccqm8Xmv.s:1065   .bss.Gyro:00000000 $d
+D:\temp\TMP\ccqm8Xmv.s:1072   .bss.INS:00000000 $d
+D:\temp\TMP\ccqm8Xmv.s:1079   .bss.INS_DWT_Count:00000000 $d
+D:\temp\TMP\ccqm8Xmv.s:1086   .bss.ins_dt:00000000 $d
+D:\temp\TMP\ccqm8Xmv.s:1093   .bss.ins_time:00000000 $d
+D:\temp\TMP\ccqm8Xmv.s:1100   .bss.mahony:00000000 $d
+D:\temp\TMP\ccqm8Xmv.s:1107   .data.gravity:00000000 $d
 
 UNDEFINED SYMBOLS
 BMI088_Read
