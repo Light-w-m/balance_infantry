@@ -226,7 +226,7 @@ void StartMotorTask(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-    MotorTask();
+    // MotorTask();
     osDelay(1);
   }
   /* USER CODE END StartMotorTask */

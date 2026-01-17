@@ -33,7 +33,6 @@ PidTypeDef Tp_Pid;      //防劈叉补偿pd
 PidTypeDef Turn_Pid;    //转向pd
 PidTypeDef Roll_Pid;    //横滚角补偿pd
 
-
 float LQR_K[2][6] = {   // 0.15
                     {-10.922637488618983, -0.809732324787194, -0.895806613702953, -1.380810433561345, 5.734138915689102, 0.812075790166094},
                     {18.684145538958852, 1.581462861415775, 3.506607035886385, 5.054126550708173, 8.461555616678476, 0.415774368108967}
@@ -81,14 +80,13 @@ static void ChassisR_Init(chassis_t* chassis, PidTypeDef* length_pid)
             .outer_loop_type = SPEED_LOOP,
             .close_loop_type = SPEED_LOOP | CURRENT_LOOP,
         },
-        // .motor_type = M3508,
-        .motor_type = GM6020,
+        .motor_type = M3508,
     };
 
     const static float leg_pid_R[3] = {LEG_PID_KP, LEG_PID_KI, LEG_PID_KD}; //P I D
 
-    joint_motor_init(&chassis->joint_motor[0], 1, MIT_MODE);
-    joint_motor_init(&chassis->joint_motor[1], 2, MIT_MODE);
+    joint_motor_init(&chassis->joint_motor[0], 3, MIT_MODE);
+    joint_motor_init(&chassis->joint_motor[1], 4, MIT_MODE);
 
     //  @todo: 当前还没有设置电机的正反转,仍然需要手动添加reference的正负号,需要电机module的支持,待修改.
     chassis_motor_config.can_init_config.tx_id = 1;
@@ -99,12 +97,12 @@ static void ChassisR_Init(chassis_t* chassis, PidTypeDef* length_pid)
     PID_init(length_pid, PID_POSITION, leg_pid_R, LEG_PID_MAX_OUT, LEG_PID_MAX_IOUT);
 
     //电机使能
-    for (uint8_t i = 0; i < 5; i++)
+    for (uint8_t i = 0; i < 3; i++)
     {
         /* code */
         Enable_Motor_Mode(&hfdcan1, chassis->joint_motor[0].para.id, chassis->joint_motor[0].mode);
         Enable_Motor_Mode(&hfdcan1, chassis->joint_motor[1].para.id, chassis->joint_motor[1].mode);
-        DJIMotorEnable(chassis->wheel_motor[0]);
+        // DJIMotorEnable(chassis->wheel_motor[0]);
         osDelay(1);
     }
      
@@ -189,10 +187,10 @@ static void ChasssisR_Control(
     chassis->leg_tp = PID_Calc(&Tp_Pid, chassis->theta_err, 0.0f);
 
     // 状态向量更新--方便调试查看
-    leg_state->theta     = X0_OFFSET + (leg->rod.theta - 0.0f);
-    leg_state->theta_dot = X1_OFFSET + (leg->rod.d_theta - 0.0f);
-    leg_state->x         = X2_OFFSET + (chassis->state.x_filter - chassis->state.x_set);
-    leg_state->x_dot     = X3_OFFSET + (chassis->state.v_filter - chassis->state.v_set);
+    // leg_state->theta     = X0_OFFSET + (leg->rod.theta - 0.0f);
+    // leg_state->theta_dot = X1_OFFSET + (leg->rod.d_theta - 0.0f);
+    // leg_state->x         = X2_OFFSET + (chassis->state.x_filter - chassis->state.x_set);
+    // leg_state->x_dot     = X3_OFFSET + (chassis->state.v_filter - chassis->state.v_set);
     leg_state->phi       = X4_OFFSET + (chassis->myPithR - chassis->phi_set);
     leg_state->phi_dot   = X5_OFFSET + (chassis->myPithGyroR - 0.0f);
 
@@ -242,8 +240,8 @@ static void ChasssisR_Control(
     JacobianMatrix(leg, excessive);
 
     // 髋关节输出限幅
-    SATURATE(&leg->joint.T1, -0.0f, 0.0f);
-    SATURATE(&leg->joint.T2, -0.0f, 0.0f);
+    SATURATE(&leg->joint.T1, -3.0f, 3.0f);
+    SATURATE(&leg->joint.T2, -3.0f, 3.0f);
 }
 #endif
 
@@ -252,19 +250,33 @@ static void ChasssisR_Control(
  * 
  */
 #ifdef ControlDebug
-static void ChassisR_Debug(chassis_t* chassis, Leg_t* leg, Excessive_t* excessive)
+// 保证电机逆解走最短路径
+static inline float WrapToPi(float x)
 {
-    leg->joint.T1 = 0.0f;
-    leg->joint.T2 = 0.0f;
+    while (x >  PI) x -= 2.0f * PI;
+    while (x < -PI) x += 2.0f * PI;
+    return x;
+}
 
-    InverseKinematics(leg, excessive);
+static inline float ShortestAngle(float target, float current)
+{
+    return current + WrapToPi(target - current);
+}
+static void ChassisR_Debug(chassis_t* chassis, Leg_t* leg, Excessive_t* excessive,PidTypeDef* length_pid)
+{
+    // PID_Calc(length_pid, leg->rod.L0, chassis->leg_set);
+    InverseKinematics(chassis, leg, excessive);
 
-    leg->joint.Phi1_set = PI/2.0f - leg->joint.Phi1;
-    leg->joint.Phi4_set = -PI/2.0f + leg->joint.Phi4;
+    float phi1 = -PI/2.0f + leg->joint.Phi1;
+    float phi4 = -PI/2.0f + leg->joint.Phi4;
+
+    // 达妙电机，顺时针是正角度，逆时针是负角度
+    leg->joint.Phi1_set = ShortestAngle(phi1, chassis->joint_motor[0].para.pos);
+    leg->joint.Phi4_set = ShortestAngle(phi4, chassis->joint_motor[1].para.pos);
 
     //输出角度限幅
-    // SATURATE(&leg->joint.Phi1, -0.0f, 0.0f);
-    // SATURATE(&leg->joint.Phi4, -0.0f, 0.0f);
+    // SATURATE(&leg->joint.Phi1_set, 0.0f, 1.57f);
+    // SATURATE(&leg->joint.Phi4_set, -1.57f, 0.0f);
 }
 #endif
 
@@ -294,6 +306,9 @@ void ChassisR_Task(void)
 
     ChassisR_Init(&chassis_move, &LegR_pid);
     Pensation_Init(&Roll_Pid,&Tp_Pid,&Turn_Pid);
+    chassis_move.flag.start_flag = 1;
+    chassis_move.leg_set = 0.30f;
+    legR.rod.theta = PI/2.0f;
 
     while (1)
     {
@@ -302,14 +317,16 @@ void ChassisR_Task(void)
         ChassisR_Feedback_Update(&chassis_move, &legR,&INS);
         ChasssisR_Control(&chassis_move, &legR, &legR_state, &excessiveR, &periods, &INS, &LegR_pid, LQR_K);
         #endif
-
+        #ifdef ControlDebug
+        ChassisR_Debug(&chassis_move, &legR, &excessiveR, &LegR_pid);
+        #endif
         if (chassis_move.flag.start_flag == 1)
         {
             #ifdef ControlOperation
             /* code */
-            Mit_Ctrl(&hfdcan1, 0x01, 0.0f, 0.0f, 0.0f, 0.0f, legR.joint.T1);
+            Mit_Ctrl(&hfdcan1, 0x03, 0.0f, 0.0f, 0.0f, 0.0f, legR.joint.T1);
             osDelay(CHASSIS_TIME);
-            Mit_Ctrl(&hfdcan1, 0x02, 0.0f, 0.0f, 0.0f, 0.0f, legR.joint.T2);
+            Mit_Ctrl(&hfdcan1, 0x04, 0.0f, 0.0f, 0.0f, 0.0f, legR.joint.T2);
             osDelay(CHASSIS_TIME);
             // 3508控制
             // DJIMotorSetRef(chassis_move.wheel_motor[0], legR.rod.T);
@@ -317,17 +334,17 @@ void ChassisR_Task(void)
             #endif
 
             #ifdef ControlDebug
-            Mit_Ctrl(&hfdcan1, 0x01, legR.joint.Phi1_set, 0.0f, 10.0f, 4.0f, 0.0f);
+            Mit_Ctrl(&hfdcan1, 0x03, legR.joint.Phi1_set, 0.0f, 10.0f, 4.0f, 0.0f);
             osDelay(CHASSIS_TIME);
-            Mit_Ctrl(&hfdcan1, 0x02, legR.joint.Phi4_set, 0.0f, 10.0f, 4.0f, 0.0f);
+            Mit_Ctrl(&hfdcan1, 0x04, legR.joint.Phi4_set, 0.0f, 10.0f, 4.0f, 0.0f);
             osDelay(CHASSIS_TIME);
             #endif
         }
         else if (chassis_move.flag.start_flag == 0)
         {
-            Mit_Ctrl(&hfdcan1, 0x01, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+            Mit_Ctrl(&hfdcan1, 0x03, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
             osDelay(CHASSIS_TIME);
-            Mit_Ctrl(&hfdcan1, 0x02, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+            Mit_Ctrl(&hfdcan1, 0x04, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
             osDelay(CHASSIS_TIME);
             // 3508控制
             DJIMotorStop(chassis_move.wheel_motor[0]);

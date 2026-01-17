@@ -216,32 +216,7 @@ uint8_t rx_byte;
 
 static void AcquireData(void);
 
-// 使用加速度计的数据初始化Roll和Pitch,而Yaw置0,这样可以避免在初始时候的姿态估计误差
-static void InitQuaternion(float *init_q4)
-{
-    float acc_init[3] = {0};
-    float gravity_norm[3] = {0, 0, 1}; // 导航系重力加速度矢量,归一化后为(0,0,1)
-    float axis_rot[3] = {0};           // 旋转轴
-    // 读取100次加速度计数据,取平均值作为初始值
-    for (uint8_t i = 0; i < 100; ++i)
-    {
-		AcquireData();
-        acc_init[X_AXIS] += HIPNUC.hi91.acc[X_AXIS];
-        acc_init[Y_AXIS] += HIPNUC.hi91.acc[Y_AXIS];
-        acc_init[Z_AXIS] += HIPNUC.hi91.acc[Z_AXIS];
-        DWT_Delay(0.001);
-    }
-    for (uint8_t i = 0; i < 3; ++i)
-        acc_init[i] /= 100;
-    Norm3d(acc_init);
-    // 计算原始加速度矢量和导航系重力加速度矢量的夹角
-    float angle = acosf(Dot3d(acc_init, gravity_norm));
-    Cross3d(acc_init, gravity_norm, axis_rot);
-    Norm3d(axis_rot);
-    init_q4[0] = cosf(angle / 2.0f);
-    for (uint8_t i = 0; i < 2; ++i)
-        init_q4[i + 1] = axis_rot[i] * sinf(angle / 2.0f); // 轴角公式,第三轴为0(没有z轴分量)
-}
+
 
 void HIPNUC_Init(void)
 {
@@ -250,16 +225,6 @@ void HIPNUC_Init(void)
 
 	__HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);
 	HAL_UART_Receive_IT(&huart1, &rx_byte, 1);
-}
-
-static void INS_Init(void)
-{
-	mahony_init(&mahony,1.0f,0.0f,0.001f);
-   	INS.AccelLPF = 0.0089f;
-
-	float init_quaternion[4] = {0};
-	InitQuaternion(init_quaternion);
-    IMU_QuaternionEKF_Init(init_quaternion, 10, 0.001, 1000000, 1, 0);
 }
 
 static void AcquireData(void)
@@ -287,89 +252,6 @@ static void AcquireData(void)
 void INS_task(void)
 {
 	INS_Init();
-
-	while (1)
-	{
-		/* code */
-		ins_dt = DWT_GetDeltaT(&INS_DWT_Count);
-    
-		mahony.dt = ins_dt;
-
-		AcquireData();
-
-		INS.Accel[X_AXIS] = HIPNUC.hi91.acc[X_AXIS];
-		INS.Accel[Y_AXIS] = HIPNUC.hi91.acc[Y_AXIS];
-		INS.Accel[Z_AXIS] = HIPNUC.hi91.acc[Z_AXIS];
-
-		Accel.x = HIPNUC.hi91.acc[X_AXIS];
-		Accel.y = HIPNUC.hi91.acc[Y_AXIS];
-		Accel.z = HIPNUC.hi91.acc[Z_AXIS];
-
-		INS.Gyro[X_AXIS] = HIPNUC.hi91.gyro[X_AXIS];
-		INS.Gyro[Y_AXIS] = HIPNUC.hi91.gyro[Y_AXIS];
-		INS.Gyro[Z_AXIS] = HIPNUC.hi91.gyro[Z_AXIS];
-
-		Gyro.x = HIPNUC.hi91.gyro[X_AXIS];
-		Gyro.y = HIPNUC.hi91.gyro[Y_AXIS];
-		Gyro.z = HIPNUC.hi91.gyro[Z_AXIS];
-
-		mahony_input(&mahony,Gyro,Accel);
-		mahony_update(&mahony);
-		mahony_output(&mahony);
-	  	RotationMatrix_update(&mahony);
-
-		INS.q[0]=mahony.q0;
-		INS.q[1]=mahony.q1;
-		INS.q[2]=mahony.q2;
-		INS.q[3]=mahony.q3;
-
-		// 将重力从导航坐标系n转换到机体系b,随后根据加速度计数据计算运动加速度
-		float gravity_b[3];
-		EarthFrameToBodyFrame(gravity, gravity_b, INS.q);
-		for (uint8_t i = 0; i < 3; i++) // 同样过一个低通滤波
-		{
-			INS.MotionAccel_b[i] = (INS.Accel[i] - gravity_b[i]) * ins_dt / (INS.AccelLPF + ins_dt) 
-															+ INS.MotionAccel_b[i] * INS.AccelLPF / (INS.AccelLPF + ins_dt); 
-		}
-		BodyFrameToEarthFrame(INS.MotionAccel_b, INS.MotionAccel_n, INS.q); // 转换回导航系n
-
-		//死区处理
-		if(fabsf(INS.MotionAccel_n[0])<0.02f)
-		{
-			INS.MotionAccel_n[0]=0.0f;	//x轴
-		}
-		if(fabsf(INS.MotionAccel_n[1])<0.02f)
-		{
-			INS.MotionAccel_n[1]=0.0f;	//y轴
-		}
-		if(fabsf(INS.MotionAccel_n[2])<0.04f)
-		{
-			INS.MotionAccel_n[2]=0.0f;//z轴
-		}
-
-		if(ins_time>2000.0f)
-		{
-			INS.v_n = INS.v_n+INS.MotionAccel_n[1]*0.001f;
-		  	INS.x_n = INS.x_n+INS.v_n*0.001f;
-			INS.ins_flag = 1;//四元数基本收敛，加速度也基本收敛，可以开始底盘任务
-			// 获取最终数据
-			// INS.Pitch = mahony.roll*180.0f/PI;
-			// INS.Roll = mahony.pitch*180.0f/PI;
-			// INS.Yaw = mahony.yaw*180.0f/PI;
-		
-			INS.YawTotalAngle = QEKF_INS.YawTotalAngle;
-		}
-		else
-		{
-		ins_time++;
-		}
-
-		INS.Pitch = HIPNUC.hi91.pitch;
-		INS.Roll = HIPNUC.hi91.roll;
-		INS.Yaw = HIPNUC.hi91.yaw;
-			
-		osDelay(1);
-	}
 	
 }
 

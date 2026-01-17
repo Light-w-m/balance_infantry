@@ -31,8 +31,8 @@
 //内部参数配置，宏定义判断是否启动
 
 //两种控制模式不可同时进行
-#define ControlOperation    //正常控制模式--正解
-// #define ControlDebug        //调试模式--逆解
+// #define ControlOperation    //正常控制模式--正解
+#define ControlDebug        //调试模式--逆解
 /**********************physical parameters*******************/
 #define GRAVITY 9.791f         // 重力加速度--福建
 

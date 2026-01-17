@@ -2,6 +2,10 @@
 #include "memory.h"
 #include "stdlib.h"
 #include "bsp_dwt.h"
+#include "chassis_def.h"
+
+FDCAN_RxHeaderTypeDef RxHeader1;
+uint8_t g_Can1RxData[64];
 
 void FDCAN1_Config(void)
 {
@@ -286,25 +290,33 @@ static void FDCANFIFOxCallback(FDCAN_HandleTypeDef *_hfdcan, uint32_t fifox)
     }
 }
 
+extern chassis_t chassis_move;
 
 void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 {
 	if (RxFifo0ITs & FDCAN_IT_RX_FIFO0_NEW_MESSAGE)
     {
-        FDCAN_RxHeaderTypeDef rxHeader;
-        uint8_t rx_data[8];
-
+		FDCAN_RxHeaderTypeDef rxHeader;
+		uint8_t rx_data[8];
         while (HAL_FDCAN_GetRxFifoFillLevel(hfdcan, FDCAN_RX_FIFO0) > 0)
         {
             HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &rxHeader, rx_data);
 
             if (rxHeader.IdType == FDCAN_STANDARD_ID && rxHeader.RxFrameType == FDCAN_DATA_FRAME)
             {
-                
+				switch (rxHeader.Identifier)
+				{
+				case 0x13:Dm8009_Fbdata(&chassis_move.joint_motor[0], rx_data);break;
+				case 0x14:Dm8009_Fbdata(&chassis_move.joint_motor[1], rx_data);break;
+				default:
+					break;
+				}
             }
         }
     }	
 }
+
+
 void HAL_FDCAN_RxFifo1Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo1ITs)
 {
 	/* 检查Rx FIFO 1中是否有消息丢失 */

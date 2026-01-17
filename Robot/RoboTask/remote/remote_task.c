@@ -16,7 +16,7 @@ void RobotCMDInit(void)
  */
 static void RemoteControlSet(void)
 {
-
+    
 }
 
 /**

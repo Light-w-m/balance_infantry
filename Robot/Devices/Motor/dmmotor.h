@@ -72,6 +72,6 @@ void Pos_Speed_Ctrl(hcan_t* hcan,uint16_t motor_id, float pos, float vel);
 void Speed_Ctrl(hcan_t* hcan,uint16_t motor_id, float vel);
 
 void joint_motor_init(Joint_Motor_t *motor,uint16_t id,uint16_t mode);
-void Dm8009_Fbdata(Joint_Motor_t *motor, uint8_t *rx_data,uint32_t data_len);
+void Dm8009_Fbdata(Joint_Motor_t *motor, uint8_t *rx_data);
 
 #endif // !DM8009_H

@@ -1,4 +1,4 @@
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 1
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 1
 
 
    1              		.cpu cortex-m7
@@ -58,7 +58,7 @@ ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 1
   28:Robot/Controller/kinematics.c **** 
   29:Robot/Controller/kinematics.c **** /**
   30:Robot/Controller/kinematics.c ****  * @brief 线性化处理K矩
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 2
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 2
 
 
   31:Robot/Controller/kinematics.c ****  * 
@@ -118,7 +118,7 @@ ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 1
   71              		.loc 1 42 21 view .LVU20
   72 003c 66EE876A 		vmul.f32	s13, s13, s14
   73              		.loc 1 42 30 view .LVU21
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 3
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 3
 
 
   74 0040 93ED016A 		vldr.32	s12, [r3, #4]
@@ -178,7 +178,7 @@ ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 1
  126 00a4 76EE866A 		vadd.f32	s13, s13, s12
  127              		.loc 1 44 42 view .LVU48
  128 00a8 93ED026A 		vldr.32	s12, [r3, #8]
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 4
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 4
 
 
  129              		.loc 1 44 45 view .LVU49
@@ -238,7 +238,7 @@ ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 1
  181              		.loc 1 46 54 view .LVU75
  182 0110 93ED036A 		vldr.32	s12, [r3, #12]
  183              		.loc 1 46 49 view .LVU76
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 5
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 5
 
 
  184 0114 76EE866A 		vadd.f32	s13, s13, s12
@@ -298,7 +298,7 @@ ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 1
  235              		.loc 1 49 5 is_stmt 1 view .LVU102
  236              		.loc 1 49 18 is_stmt 0 view .LVU103
  237 0178 3D4B     		ldr	r3, .L3+32
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 6
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 6
 
 
  238 017a D3ED006A 		vldr.32	s13, [r3]
@@ -358,7 +358,7 @@ ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 1
  290 01de 93ED016A 		vldr.32	s12, [r3, #4]
  291              		.loc 1 51 33 view .LVU130
  292 01e2 26EE276A 		vmul.f32	s12, s12, s15
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 7
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 7
 
 
  293              		.loc 1 51 25 view .LVU131
@@ -418,7 +418,7 @@ ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 1
  340 0234 0360     		str	r3, [r0]	@ float
   59:Robot/Controller/kinematics.c ****         k[0][1] = 0;
  341              		.loc 1 59 9 is_stmt 1 view .LVU154
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 8
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 8
 
 
  342              		.loc 1 59 17 is_stmt 0 view .LVU155
@@ -478,7 +478,7 @@ ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 1
  383 025c 00000000 		.word	.LANCHOR3
  384 0260 00000000 		.word	.LANCHOR4
  385 0264 00000000 		.word	.LANCHOR5
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 9
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 9
 
 
  386 0268 00000000 		.word	.LANCHOR6
@@ -538,7 +538,7 @@ ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 1
  110:Robot/Controller/kinematics.c **** 
  111:Robot/Controller/kinematics.c ****     leg->rod.xC = LEG1*arm_cos_f32(leg->joint.Phi1) + LEG2*arm_cos_f32(excessive->Phi2);
  112:Robot/Controller/kinematics.c ****     leg->rod.yC = LEG1*arm_sin_f32(leg->joint.Phi1) + LEG2*arm_sin_f32(excessive->Phi2);
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 10
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 10
 
 
  113:Robot/Controller/kinematics.c **** 
@@ -571,1807 +571,2010 @@ ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 1
  140:Robot/Controller/kinematics.c ****  * @param leg 
  141:Robot/Controller/kinematics.c ****  * @param excessive 
  142:Robot/Controller/kinematics.c ****  */
- 143:Robot/Controller/kinematics.c **** void InverseKinematics(Leg_t* leg,Excessive_t* excessive)
+ 143:Robot/Controller/kinematics.c **** void InverseKinematics(chassis_t* chassis, Leg_t* leg,Excessive_t* excessive)
  144:Robot/Controller/kinematics.c **** {
  405              		.loc 1 144 1 is_stmt 1 view -0
  406              		.cfi_startproc
  407              		@ args = 0, pretend = 0, frame = 0
  408              		@ frame_needed = 0, uses_anonymous_args = 0
  409              		.loc 1 144 1 is_stmt 0 view .LVU178
- 410 0000 10B5     		push	{r4, lr}
+ 410 0000 38B5     		push	{r3, r4, r5, lr}
  411              	.LCFI0:
- 412              		.cfi_def_cfa_offset 8
- 413              		.cfi_offset 4, -8
- 414              		.cfi_offset 14, -4
- 415 0002 2DED088B 		vpush.64	{d8, d9, d10, d11}
- 416              	.LCFI1:
- 417              		.cfi_def_cfa_offset 40
- 418              		.cfi_offset 80, -40
- 419              		.cfi_offset 81, -36
- 420              		.cfi_offset 82, -32
- 421              		.cfi_offset 83, -28
- 422              		.cfi_offset 84, -24
- 423              		.cfi_offset 85, -20
- 424              		.cfi_offset 86, -16
- 425              		.cfi_offset 87, -12
- 426 0006 0446     		mov	r4, r0
+ 412              		.cfi_def_cfa_offset 16
+ 413              		.cfi_offset 3, -16
+ 414              		.cfi_offset 4, -12
+ 415              		.cfi_offset 5, -8
+ 416              		.cfi_offset 14, -4
+ 417 0002 2DED088B 		vpush.64	{d8, d9, d10, d11}
+ 418              	.LCFI1:
+ 419              		.cfi_def_cfa_offset 48
+ 420              		.cfi_offset 80, -48
+ 421              		.cfi_offset 81, -44
+ 422              		.cfi_offset 82, -40
+ 423              		.cfi_offset 83, -36
+ 424              		.cfi_offset 84, -32
+ 425              		.cfi_offset 85, -28
+ 426              		.cfi_offset 86, -24
+ 427              		.cfi_offset 87, -20
+ 428 0006 0546     		mov	r5, r0
+ 429 0008 0C46     		mov	r4, r1
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 11
+
+
  145:Robot/Controller/kinematics.c ****     float A1, B1, C1, D1;
- 427              		.loc 1 145 5 is_stmt 1 view .LVU179
+ 430              		.loc 1 145 5 is_stmt 1 view .LVU179
  146:Robot/Controller/kinematics.c ****     float A4, B4, C4, D4, E4, F4;
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 11
+ 431              		.loc 1 146 5 view .LVU180
+ 147:Robot/Controller/kinematics.c **** 
+ 148:Robot/Controller/kinematics.c ****     leg->rod.xC = chassis->leg_set * arm_cos_f32(leg->rod.theta);
+ 432              		.loc 1 148 5 view .LVU181
+ 433              		.loc 1 148 26 is_stmt 0 view .LVU182
+ 434 000a 90ED4B8A 		vldr.32	s16, [r0, #300]
+ 435              		.loc 1 148 38 view .LVU183
+ 436 000e 91ED0A0A 		vldr.32	s0, [r1, #40]
+ 437 0012 FFF7FEFF 		bl	arm_cos_f32
+ 438              	.LVL7:
+ 439              		.loc 1 148 36 view .LVU184
+ 440 0016 28EE008A 		vmul.f32	s16, s16, s0
+ 441              		.loc 1 148 17 view .LVU185
+ 442 001a 84ED008A 		vstr.32	s16, [r4]
+ 149:Robot/Controller/kinematics.c ****     leg->rod.yC = chassis->leg_set * arm_sin_f32(leg->rod.theta);
+ 443              		.loc 1 149 5 is_stmt 1 view .LVU186
+ 444              		.loc 1 149 26 is_stmt 0 view .LVU187
+ 445 001e 95ED4B8A 		vldr.32	s16, [r5, #300]
+ 446              		.loc 1 149 38 view .LVU188
+ 447 0022 94ED0A0A 		vldr.32	s0, [r4, #40]
+ 448 0026 FFF7FEFF 		bl	arm_sin_f32
+ 449              	.LVL8:
+ 450              		.loc 1 149 36 view .LVU189
+ 451 002a 28EE008A 		vmul.f32	s16, s16, s0
+ 452              		.loc 1 149 17 view .LVU190
+ 453 002e 84ED018A 		vstr.32	s16, [r4, #4]
+ 150:Robot/Controller/kinematics.c **** 
+ 151:Robot/Controller/kinematics.c **** 
+ 152:Robot/Controller/kinematics.c ****     //过度变量
+ 153:Robot/Controller/kinematics.c ****     A1 = LEG1+leg->rod.xC;
+ 454              		.loc 1 153 5 is_stmt 1 view .LVU191
+ 455              		.loc 1 153 23 is_stmt 0 view .LVU192
+ 456 0032 D4ED007A 		vldr.32	s15, [r4]
+ 457              		.loc 1 153 8 view .LVU193
+ 458 0036 9FED359A 		vldr.32	s18, .L7
+ 459 003a 37EE899A 		vadd.f32	s18, s15, s18
+ 460              	.LVL9:
+ 154:Robot/Controller/kinematics.c ****     B1 = LEG1*LEG1 - leg->rod.xC*leg->rod.xC;
+ 461              		.loc 1 154 5 is_stmt 1 view .LVU194
+ 462              		.loc 1 154 33 is_stmt 0 view .LVU195
+ 463 003e 27EEA76A 		vmul.f32	s12, s15, s15
+ 464              		.loc 1 154 8 view .LVU196
+ 465 0042 DFED336A 		vldr.32	s13, .L7+4
+ 466 0046 76EEC66A 		vsub.f32	s13, s13, s12
+ 467              	.LVL10:
+ 155:Robot/Controller/kinematics.c ****     C1 = LEG2*LEG2 - leg->rod.yC*leg->rod.yC;
+ 468              		.loc 1 155 5 is_stmt 1 view .LVU197
+ 469              		.loc 1 155 33 is_stmt 0 view .LVU198
+ 470 004a 28EE08AA 		vmul.f32	s20, s16, s16
+ 471              		.loc 1 155 8 view .LVU199
+ 472 004e 9FED31BA 		vldr.32	s22, .L7+8
+ 473 0052 7BEE4AAA 		vsub.f32	s21, s22, s20
+ 474              	.LVL11:
+ 156:Robot/Controller/kinematics.c ****     D1 = LEG2*LEG2 + leg->rod.yC*leg->rod.yC;
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 12
 
 
- 428              		.loc 1 146 5 view .LVU180
- 147:Robot/Controller/kinematics.c ****     //限幅
- 148:Robot/Controller/kinematics.c ****     // Leg->rod.yC = constrainValue(Leg->rod.yC, 0.05, 0.35);
- 149:Robot/Controller/kinematics.c **** 
- 150:Robot/Controller/kinematics.c ****     //过度变量
- 151:Robot/Controller/kinematics.c ****     A1 = LEG1+leg->rod.xC;
- 429              		.loc 1 151 5 view .LVU181
- 430              		.loc 1 151 23 is_stmt 0 view .LVU182
- 431 0008 D0ED007A 		vldr.32	s15, [r0]
- 432              		.loc 1 151 8 view .LVU183
- 433 000c 9FED368A 		vldr.32	s16, .L7
- 434 0010 37EE888A 		vadd.f32	s16, s15, s16
- 435              	.LVL7:
- 152:Robot/Controller/kinematics.c ****     B1 = LEG1*LEG1 - leg->rod.xC*leg->rod.xC;
- 436              		.loc 1 152 5 is_stmt 1 view .LVU184
- 437              		.loc 1 152 33 is_stmt 0 view .LVU185
- 438 0014 67EEA76A 		vmul.f32	s13, s15, s15
- 439              		.loc 1 152 8 view .LVU186
- 440 0018 9FED347A 		vldr.32	s14, .L7+4
- 441 001c 37EE667A 		vsub.f32	s14, s14, s13
- 442              	.LVL8:
- 153:Robot/Controller/kinematics.c ****     C1 = LEG2*LEG2 - leg->rod.yC*leg->rod.yC;
- 443              		.loc 1 153 5 is_stmt 1 view .LVU187
- 444              		.loc 1 153 30 is_stmt 0 view .LVU188
- 445 0020 90ED019A 		vldr.32	s18, [r0, #4]
- 446              		.loc 1 153 33 view .LVU189
- 447 0024 69EE09AA 		vmul.f32	s21, s18, s18
- 448              		.loc 1 153 8 view .LVU190
- 449 0028 DFED318A 		vldr.32	s17, .L7+8
- 450 002c 78EEEABA 		vsub.f32	s23, s17, s21
- 451              	.LVL9:
- 154:Robot/Controller/kinematics.c ****     D1 = LEG2*LEG2 + leg->rod.yC*leg->rod.yC;
- 452              		.loc 1 154 5 is_stmt 1 view .LVU191
- 453              		.loc 1 154 8 is_stmt 0 view .LVU192
- 454 0030 3AEEA80A 		vadd.f32	s0, s21, s17
- 455              	.LVL10:
- 155:Robot/Controller/kinematics.c **** 
- 156:Robot/Controller/kinematics.c ****     A4 = LEG3 + LEG4;
- 456              		.loc 1 156 5 is_stmt 1 view .LVU193
- 157:Robot/Controller/kinematics.c ****     B4 = -leg->rod.xC;
- 457              		.loc 1 157 5 view .LVU194
- 158:Robot/Controller/kinematics.c ****     C4 = LEG3 - LEG4;
- 458              		.loc 1 158 5 view .LVU195
- 159:Robot/Controller/kinematics.c ****     D4 = leg->rod.xC + LEG4;
- 459              		.loc 1 159 5 view .LVU196
- 160:Robot/Controller/kinematics.c ****     E4 = A4*A4 - B4*B4 - leg->rod.yC*leg->rod.yC;
- 460              		.loc 1 160 5 view .LVU197
- 461              		.loc 1 160 16 is_stmt 0 view .LVU198
- 462 0034 9FED2FAA 		vldr.32	s20, .L7+12
- 463 0038 3AEE66AA 		vsub.f32	s20, s20, s13
- 464              		.loc 1 160 8 view .LVU199
- 465 003c 3AEE6AAA 		vsub.f32	s20, s20, s21
- 466              	.LVL11:
- 161:Robot/Controller/kinematics.c ****     F4 = B4*B4 - C4*C4 + leg->rod.yC*leg->rod.yC;
- 467              		.loc 1 161 5 is_stmt 1 view .LVU200
- 468              		.loc 1 161 16 is_stmt 0 view .LVU201
- 469 0040 9FED2D6A 		vldr.32	s12, .L7+16
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 12
+ 475              		.loc 1 156 5 is_stmt 1 view .LVU200
+ 476              		.loc 1 156 8 is_stmt 0 view .LVU201
+ 477 0056 3AEE0B7A 		vadd.f32	s14, s20, s22
+ 478              	.LVL12:
+ 157:Robot/Controller/kinematics.c **** 
+ 158:Robot/Controller/kinematics.c ****     A4 = LEG3 + LEG4;
+ 479              		.loc 1 158 5 is_stmt 1 view .LVU202
+ 159:Robot/Controller/kinematics.c ****     B4 = -leg->rod.xC;
+ 480              		.loc 1 159 5 view .LVU203
+ 160:Robot/Controller/kinematics.c ****     C4 = LEG3 - LEG4;
+ 481              		.loc 1 160 5 view .LVU204
+ 161:Robot/Controller/kinematics.c ****     D4 = leg->rod.xC + LEG4;
+ 482              		.loc 1 161 5 view .LVU205
+ 162:Robot/Controller/kinematics.c ****     E4 = A4*A4 - B4*B4 - leg->rod.yC*leg->rod.yC;
+ 483              		.loc 1 162 5 view .LVU206
+ 484              		.loc 1 162 16 is_stmt 0 view .LVU207
+ 485 005a DFED2F9A 		vldr.32	s19, .L7+12
+ 486 005e 79EEC69A 		vsub.f32	s19, s19, s12
+ 487              		.loc 1 162 8 view .LVU208
+ 488 0062 79EECA9A 		vsub.f32	s19, s19, s20
+ 489              	.LVL13:
+ 163:Robot/Controller/kinematics.c ****     F4 = B4*B4 - C4*C4 + leg->rod.yC*leg->rod.yC;
+ 490              		.loc 1 163 5 is_stmt 1 view .LVU209
+ 491              		.loc 1 163 16 is_stmt 0 view .LVU210
+ 492 0066 9FED2D0A 		vldr.32	s0, .L7+16
+ 493 006a 36EE406A 		vsub.f32	s12, s12, s0
+ 494              		.loc 1 163 8 view .LVU211
+ 495 006e 3AEE06AA 		vadd.f32	s20, s20, s12
+ 496              	.LVL14:
+ 164:Robot/Controller/kinematics.c **** 
+ 165:Robot/Controller/kinematics.c ****     leg->joint.Phi1 = 2*atan2f(2*LEG1*leg->rod.yC+sqrt(2*LEG1*LEG1*D1+2*leg->rod.xC*leg->rod.xC*C1-
+ 497              		.loc 1 165 5 is_stmt 1 view .LVU212
+ 498              		.loc 1 165 38 is_stmt 0 view .LVU213
+ 499 0072 DFED2BBA 		vldr.32	s23, .L7+20
+ 500 0076 28EE2B8A 		vmul.f32	s16, s16, s23
+ 501 007a B7EEC88A 		vcvt.f64.f32	d8, s16
+ 502              		.loc 1 165 67 view .LVU214
+ 503 007e 9FED290A 		vldr.32	s0, .L7+24
+ 504 0082 27EE000A 		vmul.f32	s0, s14, s0
+ 505              		.loc 1 165 72 view .LVU215
+ 506 0086 37EEA77A 		vadd.f32	s14, s15, s15
+ 507              	.LVL15:
+ 508              		.loc 1 165 84 view .LVU216
+ 509 008a 67EE877A 		vmul.f32	s15, s15, s14
+ 510              	.LVL16:
+ 511              		.loc 1 165 96 view .LVU217
+ 512 008e 67EEAA7A 		vmul.f32	s15, s15, s21
+ 513              		.loc 1 165 70 view .LVU218
+ 514 0092 70EE277A 		vadd.f32	s15, s0, s15
+ 515              		.loc 1 165 102 view .LVU219
+ 516 0096 26EEA60A 		vmul.f32	s0, s13, s13
+ 517              		.loc 1 165 99 view .LVU220
+ 518 009a 37EEC00A 		vsub.f32	s0, s15, s0
+ 519              		.loc 1 165 108 view .LVU221
+ 520 009e 6AEEAA7A 		vmul.f32	s15, s21, s21
+ 521              		.loc 1 165 105 view .LVU222
+ 522 00a2 30EE670A 		vsub.f32	s0, s0, s15
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 13
 
 
- 470 0044 76EEC66A 		vsub.f32	s13, s13, s12
- 471              		.loc 1 161 8 view .LVU202
- 472 0048 7AEEA6AA 		vadd.f32	s21, s21, s13
- 473              	.LVL12:
- 162:Robot/Controller/kinematics.c **** 
- 163:Robot/Controller/kinematics.c ****     leg->joint.Phi1 = 2*atan2f(2*LEG1*leg->rod.yC+sqrt(2*LEG1*LEG1*D1+2*leg->rod.xC*leg->rod.xC*C1-
- 474              		.loc 1 163 5 is_stmt 1 view .LVU203
- 475              		.loc 1 163 38 is_stmt 0 view .LVU204
- 476 004c 9FED2BBA 		vldr.32	s22, .L7+20
- 477 0050 29EE0B9A 		vmul.f32	s18, s18, s22
- 478 0054 B7EEC99A 		vcvt.f64.f32	d9, s18
- 479              		.loc 1 163 67 view .LVU205
- 480 0058 DFED296A 		vldr.32	s13, .L7+24
- 481 005c 20EE260A 		vmul.f32	s0, s0, s13
- 482              	.LVL13:
- 483              		.loc 1 163 72 view .LVU206
- 484 0060 77EEA76A 		vadd.f32	s13, s15, s15
- 485              		.loc 1 163 84 view .LVU207
- 486 0064 67EEA67A 		vmul.f32	s15, s15, s13
- 487              	.LVL14:
- 488              		.loc 1 163 96 view .LVU208
- 489 0068 67EEAB7A 		vmul.f32	s15, s15, s23
- 490              		.loc 1 163 70 view .LVU209
- 491 006c 70EE277A 		vadd.f32	s15, s0, s15
- 492              		.loc 1 163 102 view .LVU210
- 493 0070 27EE070A 		vmul.f32	s0, s14, s14
- 494              		.loc 1 163 99 view .LVU211
- 495 0074 37EEC00A 		vsub.f32	s0, s15, s0
- 496              		.loc 1 163 108 view .LVU212
- 497 0078 6BEEAB7A 		vmul.f32	s15, s23, s23
- 498              		.loc 1 163 105 view .LVU213
- 499 007c 30EE670A 		vsub.f32	s0, s0, s15
- 500              		.loc 1 163 51 view .LVU214
- 501 0080 B7EEC00A 		vcvt.f64.f32	d0, s0
- 502 0084 FFF7FEFF 		bl	sqrt
- 503              	.LVL15:
- 504              		.loc 1 163 50 view .LVU215
- 505 0088 39EE009B 		vadd.f64	d9, d9, d0
- 506              		.loc 1 163 115 view .LVU216
- 507 008c 28EE088A 		vmul.f32	s16, s16, s16
- 508              	.LVL16:
- 509              		.loc 1 163 25 view .LVU217
- 510 0090 78EE6B0A 		vsub.f32	s1, s16, s23
- 511 0094 B7EEC90B 		vcvt.f32.f64	s0, d9
- 512 0098 FFF7FEFF 		bl	atan2f
- 513              	.LVL17:
- 514              		.loc 1 163 24 view .LVU218
- 515 009c 30EE000A 		vadd.f32	s0, s0, s0
- 516              		.loc 1 163 21 view .LVU219
- 517 00a0 84ED140A 		vstr.32	s0, [r4, #80]
- 164:Robot/Controller/kinematics.c ****     leg->joint.Phi4 = 2*atan2f(2*LEG4*leg->rod.yC-sqrt(E4*F4),D4*D4+leg->rod.yC*leg->rod.yC-LEG3*LE
- 518              		.loc 1 164 5 is_stmt 1 view .LVU220
- 519              		.loc 1 164 47 is_stmt 0 view .LVU221
- 520 00a4 94ED019A 		vldr.32	s18, [r4, #4]
- 521              		.loc 1 164 38 view .LVU222
- 522 00a8 29EE0B9A 		vmul.f32	s18, s18, s22
- 523 00ac B7EEC99A 		vcvt.f64.f32	d9, s18
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 13
-
-
- 524              		.loc 1 164 58 view .LVU223
- 525 00b0 2AEE2A0A 		vmul.f32	s0, s20, s21
- 526              		.loc 1 164 51 view .LVU224
- 527 00b4 B7EEC00A 		vcvt.f64.f32	d0, s0
- 528 00b8 FFF7FEFF 		bl	sqrt
- 529              	.LVL18:
- 530              		.loc 1 164 50 view .LVU225
- 531 00bc 39EE409B 		vsub.f64	d9, d9, d0
- 532              		.loc 1 164 77 view .LVU226
- 533 00c0 D4ED010A 		vldr.32	s1, [r4, #4]
- 534              		.loc 1 164 80 view .LVU227
- 535 00c4 60EEA00A 		vmul.f32	s1, s1, s1
- 536              		.loc 1 164 68 view .LVU228
- 537 00c8 78EE200A 		vadd.f32	s1, s16, s1
- 538              		.loc 1 164 25 view .LVU229
- 539 00cc 70EEE80A 		vsub.f32	s1, s1, s17
- 540 00d0 B7EEC90B 		vcvt.f32.f64	s0, d9
- 541 00d4 FFF7FEFF 		bl	atan2f
- 542              	.LVL19:
- 543              		.loc 1 164 24 view .LVU230
- 544 00d8 30EE000A 		vadd.f32	s0, s0, s0
- 545              		.loc 1 164 21 view .LVU231
- 546 00dc 84ED150A 		vstr.32	s0, [r4, #84]
- 165:Robot/Controller/kinematics.c **** 
- 166:Robot/Controller/kinematics.c **** }
- 547              		.loc 1 166 1 view .LVU232
- 548 00e0 BDEC088B 		vldm	sp!, {d8-d11}
- 549              	.LCFI2:
- 550              		.cfi_restore 86
- 551              		.cfi_restore 87
- 552              		.cfi_restore 84
- 553              		.cfi_restore 85
- 554              		.cfi_restore 82
- 555              		.cfi_restore 83
- 556              		.cfi_restore 80
- 557              		.cfi_restore 81
- 558              		.cfi_def_cfa_offset 8
- 559              	.LVL20:
- 560              		.loc 1 166 1 view .LVU233
- 561 00e4 10BD     		pop	{r4, pc}
- 562              	.LVL21:
- 563              	.L8:
- 564              		.loc 1 166 1 view .LVU234
- 565 00e6 00BF     		.align	2
- 566              	.L7:
- 567 00e8 3D0A573E 		.word	1045891645
- 568 00ec 33A2343D 		.word	1026859571
- 569 00f0 0000803D 		.word	1031798784
- 570 00f4 AAAD583E 		.word	1045999018
- 571 00f8 1CB7D13A 		.word	986822428
- 572 00fc 3D0AD73E 		.word	1054280253
- 573 0100 33A2B43D 		.word	1035248179
- 574              		.cfi_endproc
- 575              	.LFE190:
- 577              		.section	.text.JacobianMatrix,"ax",%progbits
- 578              		.align	1
- 579              		.global	JacobianMatrix
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 14
-
-
- 580              		.syntax unified
- 581              		.thumb
- 582              		.thumb_func
- 584              	JacobianMatrix:
- 585              	.LVL22:
- 586              	.LFB191:
+ 523              		.loc 1 165 51 view .LVU223
+ 524 00a6 B7EEC00A 		vcvt.f64.f32	d0, s0
+ 525 00aa FFF7FEFF 		bl	sqrt
+ 526              	.LVL17:
+ 527              		.loc 1 165 50 view .LVU224
+ 528 00ae 38EE008B 		vadd.f64	d8, d8, d0
+ 529              		.loc 1 165 115 view .LVU225
+ 530 00b2 29EE099A 		vmul.f32	s18, s18, s18
+ 531              	.LVL18:
+ 532              		.loc 1 165 25 view .LVU226
+ 533 00b6 79EE6A0A 		vsub.f32	s1, s18, s21
+ 534 00ba B7EEC80B 		vcvt.f32.f64	s0, d8
+ 535 00be FFF7FEFF 		bl	atan2f
+ 536              	.LVL19:
+ 537              		.loc 1 165 24 view .LVU227
+ 538 00c2 30EE000A 		vadd.f32	s0, s0, s0
+ 539              		.loc 1 165 21 view .LVU228
+ 540 00c6 84ED140A 		vstr.32	s0, [r4, #80]
+ 166:Robot/Controller/kinematics.c ****     leg->joint.Phi4 = 2*atan2f(2*LEG4*leg->rod.yC-sqrt(E4*F4),D4*D4+leg->rod.yC*leg->rod.yC-LEG3*LE
+ 541              		.loc 1 166 5 is_stmt 1 view .LVU229
+ 542              		.loc 1 166 47 is_stmt 0 view .LVU230
+ 543 00ca 94ED018A 		vldr.32	s16, [r4, #4]
+ 544              		.loc 1 166 38 view .LVU231
+ 545 00ce 68EE2BBA 		vmul.f32	s23, s16, s23
+ 546 00d2 B7EEEB8A 		vcvt.f64.f32	d8, s23
+ 547              		.loc 1 166 58 view .LVU232
+ 548 00d6 29EE8A0A 		vmul.f32	s0, s19, s20
+ 549              		.loc 1 166 51 view .LVU233
+ 550 00da B7EEC00A 		vcvt.f64.f32	d0, s0
+ 551 00de FFF7FEFF 		bl	sqrt
+ 552              	.LVL20:
+ 553              		.loc 1 166 50 view .LVU234
+ 554 00e2 38EE408B 		vsub.f64	d8, d8, d0
+ 555              		.loc 1 166 77 view .LVU235
+ 556 00e6 D4ED010A 		vldr.32	s1, [r4, #4]
+ 557              		.loc 1 166 80 view .LVU236
+ 558 00ea 60EEA00A 		vmul.f32	s1, s1, s1
+ 559              		.loc 1 166 68 view .LVU237
+ 560 00ee 79EE200A 		vadd.f32	s1, s18, s1
+ 561              		.loc 1 166 25 view .LVU238
+ 562 00f2 70EECB0A 		vsub.f32	s1, s1, s22
+ 563 00f6 B7EEC80B 		vcvt.f32.f64	s0, d8
+ 564 00fa FFF7FEFF 		bl	atan2f
+ 565              	.LVL21:
+ 566              		.loc 1 166 24 view .LVU239
+ 567 00fe 30EE000A 		vadd.f32	s0, s0, s0
+ 568              		.loc 1 166 21 view .LVU240
+ 569 0102 84ED150A 		vstr.32	s0, [r4, #84]
  167:Robot/Controller/kinematics.c **** 
- 168:Robot/Controller/kinematics.c **** /**
- 169:Robot/Controller/kinematics.c ****  * @brief 雅可比矩阵求解
- 170:Robot/Controller/kinematics.c ****  * 
- 171:Robot/Controller/kinematics.c ****  * @param leg 
- 172:Robot/Controller/kinematics.c ****  * @param excessive 
- 173:Robot/Controller/kinematics.c ****  */
- 174:Robot/Controller/kinematics.c **** void JacobianMatrix(Leg_t* leg,Excessive_t* excessive)
- 175:Robot/Controller/kinematics.c **** {
- 587              		.loc 1 175 1 is_stmt 1 view -0
- 588              		.cfi_startproc
- 589              		@ args = 0, pretend = 0, frame = 0
- 590              		@ frame_needed = 0, uses_anonymous_args = 0
- 591              		.loc 1 175 1 is_stmt 0 view .LVU236
- 592 0000 38B5     		push	{r3, r4, r5, lr}
- 593              	.LCFI3:
- 594              		.cfi_def_cfa_offset 16
- 595              		.cfi_offset 3, -16
- 596              		.cfi_offset 4, -12
- 597              		.cfi_offset 5, -8
- 598              		.cfi_offset 14, -4
- 599 0002 2DED048B 		vpush.64	{d8, d9}
- 600              	.LCFI4:
- 601              		.cfi_def_cfa_offset 32
- 602              		.cfi_offset 80, -32
- 603              		.cfi_offset 81, -28
- 604              		.cfi_offset 82, -24
- 605              		.cfi_offset 83, -20
- 606 0006 0446     		mov	r4, r0
- 607 0008 0D46     		mov	r5, r1
- 176:Robot/Controller/kinematics.c ****     leg->j11 = (LEG1*arm_sin_f32(leg->rod.phi0 - excessive->Phi3)*arm_sin_f32(leg->joint.Phi1 - exc
- 608              		.loc 1 176 5 is_stmt 1 view .LVU237
- 609              		.loc 1 176 42 is_stmt 0 view .LVU238
- 610 000a 90ED070A 		vldr.32	s0, [r0, #28]
- 611              		.loc 1 176 59 view .LVU239
- 612 000e D1ED017A 		vldr.32	s15, [r1, #4]
- 613              		.loc 1 176 22 view .LVU240
- 614 0012 30EE670A 		vsub.f32	s0, s0, s15
- 615 0016 FFF7FEFF 		bl	arm_sin_f32
- 616              	.LVL23:
- 617              		.loc 1 176 21 view .LVU241
- 618 001a 9FED4F8A 		vldr.32	s16, .L11
- 619 001e 60EE088A 		vmul.f32	s17, s0, s16
- 620              		.loc 1 176 89 view .LVU242
- 621 0022 94ED140A 		vldr.32	s0, [r4, #80]
- 622              		.loc 1 176 106 view .LVU243
- 623 0026 D5ED007A 		vldr.32	s15, [r5]
- 624              		.loc 1 176 67 view .LVU244
- 625 002a 30EE670A 		vsub.f32	s0, s0, s15
- 626 002e FFF7FEFF 		bl	arm_sin_f32
- 627              	.LVL24:
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 15
+ 168:Robot/Controller/kinematics.c ****     // leg->joint.Phi1 = PI - leg->joint.Phi1;
+ 169:Robot/Controller/kinematics.c ****     // leg->joint.Phi4 = PI + leg->joint.Phi4;
+ 170:Robot/Controller/kinematics.c **** }
+ 570              		.loc 1 170 1 view .LVU241
+ 571 0106 BDEC088B 		vldm	sp!, {d8-d11}
+ 572              	.LCFI2:
+ 573              		.cfi_restore 86
+ 574              		.cfi_restore 87
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 14
 
 
- 628              		.loc 1 176 66 view .LVU245
- 629 0032 68EE808A 		vmul.f32	s17, s17, s0
- 630              		.loc 1 176 136 view .LVU246
- 631 0036 95ED010A 		vldr.32	s0, [r5, #4]
- 632              		.loc 1 176 154 view .LVU247
- 633 003a D5ED007A 		vldr.32	s15, [r5]
- 634              		.loc 1 176 115 view .LVU248
- 635 003e 30EE670A 		vsub.f32	s0, s0, s15
- 636 0042 FFF7FEFF 		bl	arm_sin_f32
- 637              	.LVL25:
- 638              		.loc 1 176 114 view .LVU249
- 639 0046 C8EE807A 		vdiv.f32	s15, s17, s0
- 640              		.loc 1 176 14 view .LVU250
- 641 004a C4ED167A 		vstr.32	s15, [r4, #88]
- 177:Robot/Controller/kinematics.c ****     leg->j12 = (LEG1*arm_cos_f32(leg->rod.phi0 - excessive->Phi3)*arm_sin_f32(leg->joint.Phi1 - exc
- 642              		.loc 1 177 5 is_stmt 1 view .LVU251
- 643              		.loc 1 177 42 is_stmt 0 view .LVU252
- 644 004e 94ED070A 		vldr.32	s0, [r4, #28]
- 645              		.loc 1 177 59 view .LVU253
- 646 0052 D5ED017A 		vldr.32	s15, [r5, #4]
- 647              		.loc 1 177 22 view .LVU254
- 648 0056 30EE670A 		vsub.f32	s0, s0, s15
- 649 005a FFF7FEFF 		bl	arm_cos_f32
+ 575              		.cfi_restore 84
+ 576              		.cfi_restore 85
+ 577              		.cfi_restore 82
+ 578              		.cfi_restore 83
+ 579              		.cfi_restore 80
+ 580              		.cfi_restore 81
+ 581              		.cfi_def_cfa_offset 16
+ 582              	.LVL22:
+ 583              		.loc 1 170 1 view .LVU242
+ 584 010a 38BD     		pop	{r3, r4, r5, pc}
+ 585              	.LVL23:
+ 586              	.L8:
+ 587              		.loc 1 170 1 view .LVU243
+ 588              		.align	2
+ 589              	.L7:
+ 590 010c 3D0A573E 		.word	1045891645
+ 591 0110 33A2343D 		.word	1026859571
+ 592 0114 0000803D 		.word	1031798784
+ 593 0118 AAAD583E 		.word	1045999018
+ 594 011c 1CB7D13A 		.word	986822428
+ 595 0120 3D0AD73E 		.word	1054280253
+ 596 0124 33A2B43D 		.word	1035248179
+ 597              		.cfi_endproc
+ 598              	.LFE190:
+ 600              		.section	.text.JacobianMatrix,"ax",%progbits
+ 601              		.align	1
+ 602              		.global	JacobianMatrix
+ 603              		.syntax unified
+ 604              		.thumb
+ 605              		.thumb_func
+ 607              	JacobianMatrix:
+ 608              	.LVL24:
+ 609              	.LFB191:
+ 171:Robot/Controller/kinematics.c **** 
+ 172:Robot/Controller/kinematics.c **** /**
+ 173:Robot/Controller/kinematics.c ****  * @brief 雅可比矩阵求解
+ 174:Robot/Controller/kinematics.c ****  * 
+ 175:Robot/Controller/kinematics.c ****  * @param leg 
+ 176:Robot/Controller/kinematics.c ****  * @param excessive 
+ 177:Robot/Controller/kinematics.c ****  */
+ 178:Robot/Controller/kinematics.c **** void JacobianMatrix(Leg_t* leg,Excessive_t* excessive)
+ 179:Robot/Controller/kinematics.c **** {
+ 610              		.loc 1 179 1 is_stmt 1 view -0
+ 611              		.cfi_startproc
+ 612              		@ args = 0, pretend = 0, frame = 0
+ 613              		@ frame_needed = 0, uses_anonymous_args = 0
+ 614              		.loc 1 179 1 is_stmt 0 view .LVU245
+ 615 0000 38B5     		push	{r3, r4, r5, lr}
+ 616              	.LCFI3:
+ 617              		.cfi_def_cfa_offset 16
+ 618              		.cfi_offset 3, -16
+ 619              		.cfi_offset 4, -12
+ 620              		.cfi_offset 5, -8
+ 621              		.cfi_offset 14, -4
+ 622 0002 2DED048B 		vpush.64	{d8, d9}
+ 623              	.LCFI4:
+ 624              		.cfi_def_cfa_offset 32
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 15
+
+
+ 625              		.cfi_offset 80, -32
+ 626              		.cfi_offset 81, -28
+ 627              		.cfi_offset 82, -24
+ 628              		.cfi_offset 83, -20
+ 629 0006 0446     		mov	r4, r0
+ 630 0008 0D46     		mov	r5, r1
+ 180:Robot/Controller/kinematics.c ****     leg->j11 = (LEG1*arm_sin_f32(leg->rod.phi0 - excessive->Phi3)*arm_sin_f32(leg->joint.Phi1 - exc
+ 631              		.loc 1 180 5 is_stmt 1 view .LVU246
+ 632              		.loc 1 180 42 is_stmt 0 view .LVU247
+ 633 000a 90ED070A 		vldr.32	s0, [r0, #28]
+ 634              		.loc 1 180 59 view .LVU248
+ 635 000e D1ED017A 		vldr.32	s15, [r1, #4]
+ 636              		.loc 1 180 22 view .LVU249
+ 637 0012 30EE670A 		vsub.f32	s0, s0, s15
+ 638 0016 FFF7FEFF 		bl	arm_sin_f32
+ 639              	.LVL25:
+ 640              		.loc 1 180 21 view .LVU250
+ 641 001a 9FED4F8A 		vldr.32	s16, .L11
+ 642 001e 60EE088A 		vmul.f32	s17, s0, s16
+ 643              		.loc 1 180 89 view .LVU251
+ 644 0022 94ED140A 		vldr.32	s0, [r4, #80]
+ 645              		.loc 1 180 106 view .LVU252
+ 646 0026 D5ED007A 		vldr.32	s15, [r5]
+ 647              		.loc 1 180 67 view .LVU253
+ 648 002a 30EE670A 		vsub.f32	s0, s0, s15
+ 649 002e FFF7FEFF 		bl	arm_sin_f32
  650              	.LVL26:
- 651              		.loc 1 177 21 view .LVU255
- 652 005e 60EE088A 		vmul.f32	s17, s0, s16
- 653              		.loc 1 177 89 view .LVU256
- 654 0062 94ED140A 		vldr.32	s0, [r4, #80]
- 655              		.loc 1 177 106 view .LVU257
- 656 0066 D5ED007A 		vldr.32	s15, [r5]
- 657              		.loc 1 177 67 view .LVU258
- 658 006a 30EE670A 		vsub.f32	s0, s0, s15
- 659 006e FFF7FEFF 		bl	arm_sin_f32
+ 651              		.loc 1 180 66 view .LVU254
+ 652 0032 68EE808A 		vmul.f32	s17, s17, s0
+ 653              		.loc 1 180 136 view .LVU255
+ 654 0036 95ED010A 		vldr.32	s0, [r5, #4]
+ 655              		.loc 1 180 154 view .LVU256
+ 656 003a D5ED007A 		vldr.32	s15, [r5]
+ 657              		.loc 1 180 115 view .LVU257
+ 658 003e 30EE670A 		vsub.f32	s0, s0, s15
+ 659 0042 FFF7FEFF 		bl	arm_sin_f32
  660              	.LVL27:
- 661              		.loc 1 177 66 view .LVU259
- 662 0072 68EE808A 		vmul.f32	s17, s17, s0
- 663              		.loc 1 177 124 view .LVU260
- 664 0076 94ED029A 		vldr.32	s18, [r4, #8]
- 665              		.loc 1 177 149 view .LVU261
- 666 007a 95ED010A 		vldr.32	s0, [r5, #4]
- 667              		.loc 1 177 167 view .LVU262
- 668 007e D5ED007A 		vldr.32	s15, [r5]
- 669              		.loc 1 177 128 view .LVU263
- 670 0082 30EE670A 		vsub.f32	s0, s0, s15
- 671 0086 FFF7FEFF 		bl	arm_sin_f32
- 672              	.LVL28:
- 673              		.loc 1 177 127 view .LVU264
- 674 008a 29EE009A 		vmul.f32	s18, s18, s0
- 675              		.loc 1 177 114 view .LVU265
- 676 008e C8EE897A 		vdiv.f32	s15, s17, s18
- 677              		.loc 1 177 14 view .LVU266
- 678 0092 C4ED177A 		vstr.32	s15, [r4, #92]
- 178:Robot/Controller/kinematics.c ****     leg->j21 = (LEG4*arm_sin_f32(leg->rod.phi0 - excessive->Phi2)*arm_sin_f32(excessive->Phi3 - leg
- 679              		.loc 1 178 5 is_stmt 1 view .LVU267
- 680              		.loc 1 178 42 is_stmt 0 view .LVU268
- 681 0096 94ED070A 		vldr.32	s0, [r4, #28]
- 682              		.loc 1 178 59 view .LVU269
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 16
+ 661              		.loc 1 180 114 view .LVU258
+ 662 0046 C8EE807A 		vdiv.f32	s15, s17, s0
+ 663              		.loc 1 180 14 view .LVU259
+ 664 004a C4ED187A 		vstr.32	s15, [r4, #96]
+ 181:Robot/Controller/kinematics.c ****     leg->j12 = (LEG1*arm_cos_f32(leg->rod.phi0 - excessive->Phi3)*arm_sin_f32(leg->joint.Phi1 - exc
+ 665              		.loc 1 181 5 is_stmt 1 view .LVU260
+ 666              		.loc 1 181 42 is_stmt 0 view .LVU261
+ 667 004e 94ED070A 		vldr.32	s0, [r4, #28]
+ 668              		.loc 1 181 59 view .LVU262
+ 669 0052 D5ED017A 		vldr.32	s15, [r5, #4]
+ 670              		.loc 1 181 22 view .LVU263
+ 671 0056 30EE670A 		vsub.f32	s0, s0, s15
+ 672 005a FFF7FEFF 		bl	arm_cos_f32
+ 673              	.LVL28:
+ 674              		.loc 1 181 21 view .LVU264
+ 675 005e 60EE088A 		vmul.f32	s17, s0, s16
+ 676              		.loc 1 181 89 view .LVU265
+ 677 0062 94ED140A 		vldr.32	s0, [r4, #80]
+ 678              		.loc 1 181 106 view .LVU266
+ 679 0066 D5ED007A 		vldr.32	s15, [r5]
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 16
 
 
- 683 009a D5ED007A 		vldr.32	s15, [r5]
- 684              		.loc 1 178 22 view .LVU270
- 685 009e 30EE670A 		vsub.f32	s0, s0, s15
- 686 00a2 FFF7FEFF 		bl	arm_sin_f32
- 687              	.LVL29:
- 688              		.loc 1 178 21 view .LVU271
- 689 00a6 60EE088A 		vmul.f32	s17, s0, s16
- 690              		.loc 1 178 88 view .LVU272
- 691 00aa 95ED010A 		vldr.32	s0, [r5, #4]
- 692              		.loc 1 178 107 view .LVU273
- 693 00ae D4ED157A 		vldr.32	s15, [r4, #84]
- 694              		.loc 1 178 67 view .LVU274
- 695 00b2 30EE670A 		vsub.f32	s0, s0, s15
- 696 00b6 FFF7FEFF 		bl	arm_sin_f32
- 697              	.LVL30:
- 698              		.loc 1 178 66 view .LVU275
- 699 00ba 68EE808A 		vmul.f32	s17, s17, s0
- 700              		.loc 1 178 136 view .LVU276
- 701 00be 95ED010A 		vldr.32	s0, [r5, #4]
- 702              		.loc 1 178 154 view .LVU277
- 703 00c2 D5ED007A 		vldr.32	s15, [r5]
- 704              		.loc 1 178 115 view .LVU278
- 705 00c6 30EE670A 		vsub.f32	s0, s0, s15
- 706 00ca FFF7FEFF 		bl	arm_sin_f32
- 707              	.LVL31:
- 708              		.loc 1 178 114 view .LVU279
- 709 00ce C8EE807A 		vdiv.f32	s15, s17, s0
- 710              		.loc 1 178 14 view .LVU280
- 711 00d2 C4ED187A 		vstr.32	s15, [r4, #96]
- 179:Robot/Controller/kinematics.c ****     leg->j22 = (LEG4*arm_cos_f32(leg->rod.phi0 - excessive->Phi2)*arm_sin_f32(excessive->Phi3 - leg
- 712              		.loc 1 179 5 is_stmt 1 view .LVU281
- 713              		.loc 1 179 42 is_stmt 0 view .LVU282
- 714 00d6 94ED070A 		vldr.32	s0, [r4, #28]
- 715              		.loc 1 179 59 view .LVU283
- 716 00da D5ED007A 		vldr.32	s15, [r5]
- 717              		.loc 1 179 22 view .LVU284
- 718 00de 30EE670A 		vsub.f32	s0, s0, s15
- 719 00e2 FFF7FEFF 		bl	arm_cos_f32
+ 680              		.loc 1 181 67 view .LVU267
+ 681 006a 30EE670A 		vsub.f32	s0, s0, s15
+ 682 006e FFF7FEFF 		bl	arm_sin_f32
+ 683              	.LVL29:
+ 684              		.loc 1 181 66 view .LVU268
+ 685 0072 68EE808A 		vmul.f32	s17, s17, s0
+ 686              		.loc 1 181 124 view .LVU269
+ 687 0076 94ED029A 		vldr.32	s18, [r4, #8]
+ 688              		.loc 1 181 149 view .LVU270
+ 689 007a 95ED010A 		vldr.32	s0, [r5, #4]
+ 690              		.loc 1 181 167 view .LVU271
+ 691 007e D5ED007A 		vldr.32	s15, [r5]
+ 692              		.loc 1 181 128 view .LVU272
+ 693 0082 30EE670A 		vsub.f32	s0, s0, s15
+ 694 0086 FFF7FEFF 		bl	arm_sin_f32
+ 695              	.LVL30:
+ 696              		.loc 1 181 127 view .LVU273
+ 697 008a 29EE009A 		vmul.f32	s18, s18, s0
+ 698              		.loc 1 181 114 view .LVU274
+ 699 008e C8EE897A 		vdiv.f32	s15, s17, s18
+ 700              		.loc 1 181 14 view .LVU275
+ 701 0092 C4ED197A 		vstr.32	s15, [r4, #100]
+ 182:Robot/Controller/kinematics.c ****     leg->j21 = (LEG4*arm_sin_f32(leg->rod.phi0 - excessive->Phi2)*arm_sin_f32(excessive->Phi3 - leg
+ 702              		.loc 1 182 5 is_stmt 1 view .LVU276
+ 703              		.loc 1 182 42 is_stmt 0 view .LVU277
+ 704 0096 94ED070A 		vldr.32	s0, [r4, #28]
+ 705              		.loc 1 182 59 view .LVU278
+ 706 009a D5ED007A 		vldr.32	s15, [r5]
+ 707              		.loc 1 182 22 view .LVU279
+ 708 009e 30EE670A 		vsub.f32	s0, s0, s15
+ 709 00a2 FFF7FEFF 		bl	arm_sin_f32
+ 710              	.LVL31:
+ 711              		.loc 1 182 21 view .LVU280
+ 712 00a6 60EE088A 		vmul.f32	s17, s0, s16
+ 713              		.loc 1 182 88 view .LVU281
+ 714 00aa 95ED010A 		vldr.32	s0, [r5, #4]
+ 715              		.loc 1 182 107 view .LVU282
+ 716 00ae D4ED157A 		vldr.32	s15, [r4, #84]
+ 717              		.loc 1 182 67 view .LVU283
+ 718 00b2 30EE670A 		vsub.f32	s0, s0, s15
+ 719 00b6 FFF7FEFF 		bl	arm_sin_f32
  720              	.LVL32:
- 721              		.loc 1 179 21 view .LVU285
- 722 00e6 20EE088A 		vmul.f32	s16, s0, s16
- 723              		.loc 1 179 88 view .LVU286
- 724 00ea 95ED010A 		vldr.32	s0, [r5, #4]
- 725              		.loc 1 179 107 view .LVU287
- 726 00ee D4ED157A 		vldr.32	s15, [r4, #84]
- 727              		.loc 1 179 67 view .LVU288
- 728 00f2 30EE670A 		vsub.f32	s0, s0, s15
- 729 00f6 FFF7FEFF 		bl	arm_sin_f32
+ 721              		.loc 1 182 66 view .LVU284
+ 722 00ba 68EE808A 		vmul.f32	s17, s17, s0
+ 723              		.loc 1 182 136 view .LVU285
+ 724 00be 95ED010A 		vldr.32	s0, [r5, #4]
+ 725              		.loc 1 182 154 view .LVU286
+ 726 00c2 D5ED007A 		vldr.32	s15, [r5]
+ 727              		.loc 1 182 115 view .LVU287
+ 728 00c6 30EE670A 		vsub.f32	s0, s0, s15
+ 729 00ca FFF7FEFF 		bl	arm_sin_f32
  730              	.LVL33:
- 731              		.loc 1 179 66 view .LVU289
- 732 00fa 28EE008A 		vmul.f32	s16, s16, s0
- 733              		.loc 1 179 124 view .LVU290
- 734 00fe D4ED028A 		vldr.32	s17, [r4, #8]
- 735              		.loc 1 179 149 view .LVU291
- 736 0102 95ED010A 		vldr.32	s0, [r5, #4]
- 737              		.loc 1 179 167 view .LVU292
- 738 0106 D5ED007A 		vldr.32	s15, [r5]
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 17
+ 731              		.loc 1 182 114 view .LVU288
+ 732 00ce C8EE807A 		vdiv.f32	s15, s17, s0
+ 733              		.loc 1 182 14 view .LVU289
+ 734 00d2 C4ED1A7A 		vstr.32	s15, [r4, #104]
+ 183:Robot/Controller/kinematics.c ****     leg->j22 = (LEG4*arm_cos_f32(leg->rod.phi0 - excessive->Phi2)*arm_sin_f32(excessive->Phi3 - leg
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 17
 
 
- 739              		.loc 1 179 128 view .LVU293
- 740 010a 30EE670A 		vsub.f32	s0, s0, s15
- 741 010e FFF7FEFF 		bl	arm_sin_f32
- 742              	.LVL34:
- 743              		.loc 1 179 127 view .LVU294
- 744 0112 68EE808A 		vmul.f32	s17, s17, s0
- 745              		.loc 1 179 114 view .LVU295
- 746 0116 C8EE286A 		vdiv.f32	s13, s16, s17
- 747              		.loc 1 179 14 view .LVU296
- 748 011a C4ED196A 		vstr.32	s13, [r4, #100]
- 180:Robot/Controller/kinematics.c **** 
- 181:Robot/Controller/kinematics.c ****     leg->joint.T1 = leg->j11*leg->rod.F0 + leg->j12*leg->rod.Tp;
- 749              		.loc 1 181 5 is_stmt 1 view .LVU297
- 750              		.loc 1 181 24 is_stmt 0 view .LVU298
- 751 011e 94ED167A 		vldr.32	s14, [r4, #88]
- 752              		.loc 1 181 38 view .LVU299
- 753 0122 D4ED0E7A 		vldr.32	s15, [r4, #56]
- 754              		.loc 1 181 29 view .LVU300
- 755 0126 27EE277A 		vmul.f32	s14, s14, s15
- 756              		.loc 1 181 47 view .LVU301
- 757 012a 94ED176A 		vldr.32	s12, [r4, #92]
- 758              		.loc 1 181 61 view .LVU302
- 759 012e D4ED105A 		vldr.32	s11, [r4, #64]
- 760              		.loc 1 181 52 view .LVU303
- 761 0132 26EE256A 		vmul.f32	s12, s12, s11
- 762              		.loc 1 181 42 view .LVU304
- 763 0136 37EE067A 		vadd.f32	s14, s14, s12
- 764              		.loc 1 181 19 view .LVU305
- 765 013a 84ED127A 		vstr.32	s14, [r4, #72]
- 182:Robot/Controller/kinematics.c ****     leg->joint.T2 = leg->j21*leg->rod.F0 + leg->j22*leg->rod.Tp;
- 766              		.loc 1 182 5 is_stmt 1 view .LVU306
- 767              		.loc 1 182 24 is_stmt 0 view .LVU307
- 768 013e 94ED187A 		vldr.32	s14, [r4, #96]
- 769              		.loc 1 182 29 view .LVU308
- 770 0142 67EE877A 		vmul.f32	s15, s15, s14
- 771              		.loc 1 182 52 view .LVU309
- 772 0146 66EEA56A 		vmul.f32	s13, s13, s11
- 773              		.loc 1 182 42 view .LVU310
- 774 014a 77EEA67A 		vadd.f32	s15, s15, s13
- 775              		.loc 1 182 19 view .LVU311
- 776 014e C4ED137A 		vstr.32	s15, [r4, #76]
- 183:Robot/Controller/kinematics.c **** }
- 777              		.loc 1 183 1 view .LVU312
- 778 0152 BDEC048B 		vldm	sp!, {d8-d9}
- 779              	.LCFI5:
- 780              		.cfi_restore 82
- 781              		.cfi_restore 83
- 782              		.cfi_restore 80
- 783              		.cfi_restore 81
- 784              		.cfi_def_cfa_offset 16
- 785 0156 38BD     		pop	{r3, r4, r5, pc}
- 786              	.LVL35:
- 787              	.L12:
- 788              		.loc 1 183 1 view .LVU313
- 789              		.align	2
- 790              	.L11:
- 791 0158 3D0A573E 		.word	1045891645
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 18
-
-
- 792              		.cfi_endproc
- 793              	.LFE191:
- 795              		.section	.text.GroundDetect,"ax",%progbits
- 796              		.align	1
- 797              		.global	GroundDetect
- 798              		.syntax unified
- 799              		.thumb
- 800              		.thumb_func
- 802              	GroundDetect:
- 803              	.LVL36:
- 804              	.LFB192:
+ 735              		.loc 1 183 5 is_stmt 1 view .LVU290
+ 736              		.loc 1 183 42 is_stmt 0 view .LVU291
+ 737 00d6 94ED070A 		vldr.32	s0, [r4, #28]
+ 738              		.loc 1 183 59 view .LVU292
+ 739 00da D5ED007A 		vldr.32	s15, [r5]
+ 740              		.loc 1 183 22 view .LVU293
+ 741 00de 30EE670A 		vsub.f32	s0, s0, s15
+ 742 00e2 FFF7FEFF 		bl	arm_cos_f32
+ 743              	.LVL34:
+ 744              		.loc 1 183 21 view .LVU294
+ 745 00e6 20EE088A 		vmul.f32	s16, s0, s16
+ 746              		.loc 1 183 88 view .LVU295
+ 747 00ea 95ED010A 		vldr.32	s0, [r5, #4]
+ 748              		.loc 1 183 107 view .LVU296
+ 749 00ee D4ED157A 		vldr.32	s15, [r4, #84]
+ 750              		.loc 1 183 67 view .LVU297
+ 751 00f2 30EE670A 		vsub.f32	s0, s0, s15
+ 752 00f6 FFF7FEFF 		bl	arm_sin_f32
+ 753              	.LVL35:
+ 754              		.loc 1 183 66 view .LVU298
+ 755 00fa 28EE008A 		vmul.f32	s16, s16, s0
+ 756              		.loc 1 183 124 view .LVU299
+ 757 00fe D4ED028A 		vldr.32	s17, [r4, #8]
+ 758              		.loc 1 183 149 view .LVU300
+ 759 0102 95ED010A 		vldr.32	s0, [r5, #4]
+ 760              		.loc 1 183 167 view .LVU301
+ 761 0106 D5ED007A 		vldr.32	s15, [r5]
+ 762              		.loc 1 183 128 view .LVU302
+ 763 010a 30EE670A 		vsub.f32	s0, s0, s15
+ 764 010e FFF7FEFF 		bl	arm_sin_f32
+ 765              	.LVL36:
+ 766              		.loc 1 183 127 view .LVU303
+ 767 0112 68EE808A 		vmul.f32	s17, s17, s0
+ 768              		.loc 1 183 114 view .LVU304
+ 769 0116 C8EE286A 		vdiv.f32	s13, s16, s17
+ 770              		.loc 1 183 14 view .LVU305
+ 771 011a C4ED1B6A 		vstr.32	s13, [r4, #108]
  184:Robot/Controller/kinematics.c **** 
- 185:Robot/Controller/kinematics.c **** 
- 186:Robot/Controller/kinematics.c **** /**
- 187:Robot/Controller/kinematics.c ****  * @brief 离地检测
- 188:Robot/Controller/kinematics.c ****  * 
- 189:Robot/Controller/kinematics.c ****  * @param leg 
- 190:Robot/Controller/kinematics.c ****  * @param overall 
- 191:Robot/Controller/kinematics.c ****  */
- 192:Robot/Controller/kinematics.c **** uint8_t GroundDetect(Leg_t* leg, Period_t* period, INS_t* ins)
- 193:Robot/Controller/kinematics.c **** {
- 805              		.loc 1 193 1 is_stmt 1 view -0
- 806              		.cfi_startproc
- 807              		@ args = 0, pretend = 0, frame = 0
- 808              		@ frame_needed = 0, uses_anonymous_args = 0
- 809              		.loc 1 193 1 is_stmt 0 view .LVU315
- 810 0000 38B5     		push	{r3, r4, r5, lr}
- 811              	.LCFI6:
- 812              		.cfi_def_cfa_offset 16
- 813              		.cfi_offset 3, -16
- 814              		.cfi_offset 4, -12
- 815              		.cfi_offset 5, -8
- 816              		.cfi_offset 14, -4
- 817 0002 2DED048B 		vpush.64	{d8, d9}
- 818              	.LCFI7:
- 819              		.cfi_def_cfa_offset 32
- 820              		.cfi_offset 80, -32
- 821              		.cfi_offset 81, -28
- 822              		.cfi_offset 82, -24
- 823              		.cfi_offset 83, -20
- 824 0006 0446     		mov	r4, r0
- 825 0008 0D46     		mov	r5, r1
- 194:Robot/Controller/kinematics.c ****     float P;                                    //驱动轮对摆杆的力的竖直分量--用于�
- 826              		.loc 1 194 5 is_stmt 1 view .LVU316
- 195:Robot/Controller/kinematics.c ****     float dd_z_M = ins->MotionAccel_n[2];       //机体竖直方向位移--二阶导--加速度
- 827              		.loc 1 195 5 view .LVU317
- 828              		.loc 1 195 11 is_stmt 0 view .LVU318
- 829 000a 92ED0F8A 		vldr.32	s16, [r2, #60]
- 830              	.LVL37:
- 196:Robot/Controller/kinematics.c ****     float dd_z_w;                               //轮子竖直方向位移--二阶导
- 831              		.loc 1 196 5 is_stmt 1 view .LVU319
- 197:Robot/Controller/kinematics.c ****     
- 198:Robot/Controller/kinematics.c ****     dd_z_w = dd_z_M
- 832              		.loc 1 198 5 view .LVU320
- 199:Robot/Controller/kinematics.c ****             - leg->rod.dd_L0 * arm_cos_f32(leg->rod.theta)
- 833              		.loc 1 199 23 is_stmt 0 view .LVU321
- 834 000e D0ED048A 		vldr.32	s17, [r0, #16]
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 19
+ 185:Robot/Controller/kinematics.c ****     leg->joint.T1 = leg->j11*leg->rod.F0 + leg->j12*leg->rod.Tp;
+ 772              		.loc 1 185 5 is_stmt 1 view .LVU306
+ 773              		.loc 1 185 24 is_stmt 0 view .LVU307
+ 774 011e 94ED187A 		vldr.32	s14, [r4, #96]
+ 775              		.loc 1 185 38 view .LVU308
+ 776 0122 D4ED0E7A 		vldr.32	s15, [r4, #56]
+ 777              		.loc 1 185 29 view .LVU309
+ 778 0126 27EE277A 		vmul.f32	s14, s14, s15
+ 779              		.loc 1 185 47 view .LVU310
+ 780 012a 94ED196A 		vldr.32	s12, [r4, #100]
+ 781              		.loc 1 185 61 view .LVU311
+ 782 012e D4ED105A 		vldr.32	s11, [r4, #64]
+ 783              		.loc 1 185 52 view .LVU312
+ 784 0132 26EE256A 		vmul.f32	s12, s12, s11
+ 785              		.loc 1 185 42 view .LVU313
+ 786 0136 37EE067A 		vadd.f32	s14, s14, s12
+ 787              		.loc 1 185 19 view .LVU314
+ 788 013a 84ED127A 		vstr.32	s14, [r4, #72]
+ 186:Robot/Controller/kinematics.c ****     leg->joint.T2 = leg->j21*leg->rod.F0 + leg->j22*leg->rod.Tp;
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 18
 
 
- 835              		.loc 1 199 32 view .LVU322
- 836 0012 90ED0A0A 		vldr.32	s0, [r0, #40]
- 837 0016 FFF7FEFF 		bl	arm_cos_f32
- 838              	.LVL38:
- 839              		.loc 1 199 30 view .LVU323
- 840 001a 68EE808A 		vmul.f32	s17, s17, s0
- 841              		.loc 1 199 13 view .LVU324
- 842 001e 38EE688A 		vsub.f32	s16, s16, s17
- 843              	.LVL39:
- 200:Robot/Controller/kinematics.c ****             + 2 * leg->rod.d_L0 * leg->rod.d_theta * arm_sin_f32(leg->rod.theta)
- 844              		.loc 1 200 27 view .LVU325
- 845 0022 D4ED037A 		vldr.32	s15, [r4, #12]
- 846              		.loc 1 200 17 view .LVU326
- 847 0026 77EEA77A 		vadd.f32	s15, s15, s15
- 848              		.loc 1 200 43 view .LVU327
- 849 002a D4ED0B8A 		vldr.32	s17, [r4, #44]
- 850              		.loc 1 200 33 view .LVU328
- 851 002e 67EEA88A 		vmul.f32	s17, s15, s17
- 852              		.loc 1 200 54 view .LVU329
- 853 0032 94ED0A0A 		vldr.32	s0, [r4, #40]
- 854 0036 FFF7FEFF 		bl	arm_sin_f32
- 855              	.LVL40:
- 856              		.loc 1 200 52 view .LVU330
- 857 003a 68EE808A 		vmul.f32	s17, s17, s0
- 858              		.loc 1 200 13 view .LVU331
- 859 003e 38EE288A 		vadd.f32	s16, s16, s17
- 201:Robot/Controller/kinematics.c ****             + leg->rod.L0 * leg->rod.dd_theta * arm_sin_f32(leg->rod.theta)
- 860              		.loc 1 201 23 view .LVU332
- 861 0042 D4ED028A 		vldr.32	s17, [r4, #8]
- 862              		.loc 1 201 37 view .LVU333
- 863 0046 D4ED0D7A 		vldr.32	s15, [r4, #52]
- 864              		.loc 1 201 27 view .LVU334
- 865 004a 68EEA78A 		vmul.f32	s17, s17, s15
- 866              		.loc 1 201 49 view .LVU335
- 867 004e 94ED0A0A 		vldr.32	s0, [r4, #40]
- 868 0052 FFF7FEFF 		bl	arm_sin_f32
- 869              	.LVL41:
- 870              		.loc 1 201 47 view .LVU336
- 871 0056 68EE808A 		vmul.f32	s17, s17, s0
- 872              		.loc 1 201 13 view .LVU337
- 873 005a 38EE288A 		vadd.f32	s16, s16, s17
- 202:Robot/Controller/kinematics.c ****             + leg->rod.L0 * leg->rod.d_theta * leg->rod.d_theta * arm_cos_f32(leg->rod.theta);
- 874              		.loc 1 202 23 view .LVU338
- 875 005e D4ED028A 		vldr.32	s17, [r4, #8]
- 876              		.loc 1 202 37 view .LVU339
- 877 0062 D4ED0B7A 		vldr.32	s15, [r4, #44]
- 878              		.loc 1 202 27 view .LVU340
- 879 0066 68EEA78A 		vmul.f32	s17, s17, s15
- 880              		.loc 1 202 46 view .LVU341
- 881 006a 67EEA88A 		vmul.f32	s17, s15, s17
- 882              		.loc 1 202 67 view .LVU342
- 883 006e 94ED0A0A 		vldr.32	s0, [r4, #40]
- 884 0072 FFF7FEFF 		bl	arm_cos_f32
- 885              	.LVL42:
- 886              		.loc 1 202 65 view .LVU343
- 887 0076 68EE807A 		vmul.f32	s15, s17, s0
- 198:Robot/Controller/kinematics.c ****             - leg->rod.dd_L0 * arm_cos_f32(leg->rod.theta)
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 20
+ 789              		.loc 1 186 5 is_stmt 1 view .LVU315
+ 790              		.loc 1 186 24 is_stmt 0 view .LVU316
+ 791 013e 94ED1A7A 		vldr.32	s14, [r4, #104]
+ 792              		.loc 1 186 29 view .LVU317
+ 793 0142 67EE877A 		vmul.f32	s15, s15, s14
+ 794              		.loc 1 186 52 view .LVU318
+ 795 0146 66EEA56A 		vmul.f32	s13, s13, s11
+ 796              		.loc 1 186 42 view .LVU319
+ 797 014a 77EEA67A 		vadd.f32	s15, s15, s13
+ 798              		.loc 1 186 19 view .LVU320
+ 799 014e C4ED137A 		vstr.32	s15, [r4, #76]
+ 187:Robot/Controller/kinematics.c **** }
+ 800              		.loc 1 187 1 view .LVU321
+ 801 0152 BDEC048B 		vldm	sp!, {d8-d9}
+ 802              	.LCFI5:
+ 803              		.cfi_restore 82
+ 804              		.cfi_restore 83
+ 805              		.cfi_restore 80
+ 806              		.cfi_restore 81
+ 807              		.cfi_def_cfa_offset 16
+ 808 0156 38BD     		pop	{r3, r4, r5, pc}
+ 809              	.LVL37:
+ 810              	.L12:
+ 811              		.loc 1 187 1 view .LVU322
+ 812              		.align	2
+ 813              	.L11:
+ 814 0158 3D0A573E 		.word	1045891645
+ 815              		.cfi_endproc
+ 816              	.LFE191:
+ 818              		.section	.text.GroundDetect,"ax",%progbits
+ 819              		.align	1
+ 820              		.global	GroundDetect
+ 821              		.syntax unified
+ 822              		.thumb
+ 823              		.thumb_func
+ 825              	GroundDetect:
+ 826              	.LVL38:
+ 827              	.LFB192:
+ 188:Robot/Controller/kinematics.c **** 
+ 189:Robot/Controller/kinematics.c **** 
+ 190:Robot/Controller/kinematics.c **** /**
+ 191:Robot/Controller/kinematics.c ****  * @brief 离地检测
+ 192:Robot/Controller/kinematics.c ****  * 
+ 193:Robot/Controller/kinematics.c ****  * @param leg 
+ 194:Robot/Controller/kinematics.c ****  * @param overall 
+ 195:Robot/Controller/kinematics.c ****  */
+ 196:Robot/Controller/kinematics.c **** uint8_t GroundDetect(Leg_t* leg, Period_t* period, INS_t* ins)
+ 197:Robot/Controller/kinematics.c **** {
+ 828              		.loc 1 197 1 is_stmt 1 view -0
+ 829              		.cfi_startproc
+ 830              		@ args = 0, pretend = 0, frame = 0
+ 831              		@ frame_needed = 0, uses_anonymous_args = 0
+ 832              		.loc 1 197 1 is_stmt 0 view .LVU324
+ 833 0000 38B5     		push	{r3, r4, r5, lr}
+ 834              	.LCFI6:
+ 835              		.cfi_def_cfa_offset 16
+ 836              		.cfi_offset 3, -16
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 19
 
 
- 888              		.loc 1 198 12 view .LVU344
- 889 007a 38EE278A 		vadd.f32	s16, s16, s15
- 890              	.LVL43:
- 203:Robot/Controller/kinematics.c **** 
- 204:Robot/Controller/kinematics.c ****     P = leg->rod.F * cosf(leg->rod.theta) + leg->rod.Tp * sinf(leg->rod.theta) / leg->rod.L0;
- 891              		.loc 1 204 5 is_stmt 1 view .LVU345
- 892              		.loc 1 204 17 is_stmt 0 view .LVU346
- 893 007e D4ED0F8A 		vldr.32	s17, [r4, #60]
- 894              		.loc 1 204 22 view .LVU347
- 895 0082 D4ED0A9A 		vldr.32	s19, [r4, #40]
- 896 0086 B0EE690A 		vmov.f32	s0, s19
- 897 008a FFF7FEFF 		bl	cosf
- 898              	.LVL44:
- 899              		.loc 1 204 20 view .LVU348
- 900 008e 68EE808A 		vmul.f32	s17, s17, s0
- 901              		.loc 1 204 53 view .LVU349
- 902 0092 94ED109A 		vldr.32	s18, [r4, #64]
- 903              		.loc 1 204 59 view .LVU350
- 904 0096 B0EE690A 		vmov.f32	s0, s19
- 905 009a FFF7FEFF 		bl	sinf
- 906              	.LVL45:
- 907              		.loc 1 204 57 view .LVU351
- 908 009e 29EE009A 		vmul.f32	s18, s18, s0
- 909              		.loc 1 204 90 view .LVU352
- 910 00a2 D4ED027A 		vldr.32	s15, [r4, #8]
- 911              		.loc 1 204 80 view .LVU353
- 912 00a6 89EE270A 		vdiv.f32	s0, s18, s15
- 913              		.loc 1 204 7 view .LVU354
- 914 00aa 78EE808A 		vadd.f32	s17, s17, s0
- 915              	.LVL46:
- 205:Robot/Controller/kinematics.c ****     leg->FN = P + WHEEL_MASS * (dd_z_w + GRAVITY);
- 916              		.loc 1 205 5 is_stmt 1 view .LVU355
- 917              		.loc 1 205 40 is_stmt 0 view .LVU356
- 918 00ae 9FED1A0A 		vldr.32	s0, .L20
- 919 00b2 38EE000A 		vadd.f32	s0, s16, s0
- 920              		.loc 1 205 30 view .LVU357
- 921 00b6 9FED198A 		vldr.32	s16, .L20+4
- 922              	.LVL47:
- 923              		.loc 1 205 30 view .LVU358
- 924 00ba 20EE080A 		vmul.f32	s0, s0, s16
- 925              		.loc 1 205 17 view .LVU359
- 926 00be 30EE280A 		vadd.f32	s0, s0, s17
- 927              		.loc 1 205 13 view .LVU360
- 928 00c2 84ED1A0A 		vstr.32	s0, [r4, #104]
- 206:Robot/Controller/kinematics.c **** 
- 207:Robot/Controller/kinematics.c ****     if (leg->FN < TAKE_OFF_FN_THRESHOLD)
- 929              		.loc 1 207 5 is_stmt 1 view .LVU361
- 930              		.loc 1 207 8 is_stmt 0 view .LVU362
- 931 00c6 F0EE087A 		vmov.f32	s15, #3.0e+0
- 932 00ca B4EEE70A 		vcmpe.f32	s0, s15
- 933 00ce F1EE10FA 		vmrs	APSR_nzcv, FPSCR
- 934 00d2 11D5     		bpl	.L18
- 208:Robot/Controller/kinematics.c ****     {
- 209:Robot/Controller/kinematics.c ****         /* code */
- 210:Robot/Controller/kinematics.c ****         leg->touch_time = 0;
- 935              		.loc 1 210 9 is_stmt 1 view .LVU363
- 936              		.loc 1 210 25 is_stmt 0 view .LVU364
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 21
+ 837              		.cfi_offset 4, -12
+ 838              		.cfi_offset 5, -8
+ 839              		.cfi_offset 14, -4
+ 840 0002 2DED048B 		vpush.64	{d8, d9}
+ 841              	.LCFI7:
+ 842              		.cfi_def_cfa_offset 32
+ 843              		.cfi_offset 80, -32
+ 844              		.cfi_offset 81, -28
+ 845              		.cfi_offset 82, -24
+ 846              		.cfi_offset 83, -20
+ 847 0006 0446     		mov	r4, r0
+ 848 0008 0D46     		mov	r5, r1
+ 198:Robot/Controller/kinematics.c ****     float P;                                    //驱动轮对摆杆的力的竖直分量--用于�
+ 849              		.loc 1 198 5 is_stmt 1 view .LVU325
+ 199:Robot/Controller/kinematics.c ****     float dd_z_M = ins->MotionAccel_n[2];       //机体竖直方向位移--二阶导--加速度
+ 850              		.loc 1 199 5 view .LVU326
+ 851              		.loc 1 199 11 is_stmt 0 view .LVU327
+ 852 000a 92ED0F8A 		vldr.32	s16, [r2, #60]
+ 853              	.LVL39:
+ 200:Robot/Controller/kinematics.c ****     float dd_z_w;                               //轮子竖直方向位移--二阶导
+ 854              		.loc 1 200 5 is_stmt 1 view .LVU328
+ 201:Robot/Controller/kinematics.c ****     
+ 202:Robot/Controller/kinematics.c ****     dd_z_w = dd_z_M
+ 855              		.loc 1 202 5 view .LVU329
+ 203:Robot/Controller/kinematics.c ****             - leg->rod.dd_L0 * arm_cos_f32(leg->rod.theta)
+ 856              		.loc 1 203 23 is_stmt 0 view .LVU330
+ 857 000e D0ED048A 		vldr.32	s17, [r0, #16]
+ 858              		.loc 1 203 32 view .LVU331
+ 859 0012 90ED0A0A 		vldr.32	s0, [r0, #40]
+ 860 0016 FFF7FEFF 		bl	arm_cos_f32
+ 861              	.LVL40:
+ 862              		.loc 1 203 30 view .LVU332
+ 863 001a 68EE808A 		vmul.f32	s17, s17, s0
+ 864              		.loc 1 203 13 view .LVU333
+ 865 001e 38EE688A 		vsub.f32	s16, s16, s17
+ 866              	.LVL41:
+ 204:Robot/Controller/kinematics.c ****             + 2 * leg->rod.d_L0 * leg->rod.d_theta * arm_sin_f32(leg->rod.theta)
+ 867              		.loc 1 204 27 view .LVU334
+ 868 0022 D4ED037A 		vldr.32	s15, [r4, #12]
+ 869              		.loc 1 204 17 view .LVU335
+ 870 0026 77EEA77A 		vadd.f32	s15, s15, s15
+ 871              		.loc 1 204 43 view .LVU336
+ 872 002a D4ED0B8A 		vldr.32	s17, [r4, #44]
+ 873              		.loc 1 204 33 view .LVU337
+ 874 002e 67EEA88A 		vmul.f32	s17, s15, s17
+ 875              		.loc 1 204 54 view .LVU338
+ 876 0032 94ED0A0A 		vldr.32	s0, [r4, #40]
+ 877 0036 FFF7FEFF 		bl	arm_sin_f32
+ 878              	.LVL42:
+ 879              		.loc 1 204 52 view .LVU339
+ 880 003a 68EE808A 		vmul.f32	s17, s17, s0
+ 881              		.loc 1 204 13 view .LVU340
+ 882 003e 38EE288A 		vadd.f32	s16, s16, s17
+ 205:Robot/Controller/kinematics.c ****             + leg->rod.L0 * leg->rod.dd_theta * arm_sin_f32(leg->rod.theta)
+ 883              		.loc 1 205 23 view .LVU341
+ 884 0042 D4ED028A 		vldr.32	s17, [r4, #8]
+ 885              		.loc 1 205 37 view .LVU342
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 20
 
 
- 937 00d4 0023     		movs	r3, #0
- 938 00d6 6367     		str	r3, [r4, #116]
- 211:Robot/Controller/kinematics.c ****         leg->take_off_time += period->duration;
- 939              		.loc 1 211 9 is_stmt 1 view .LVU365
- 940              		.loc 1 211 37 is_stmt 0 view .LVU366
- 941 00d8 95ED017A 		vldr.32	s14, [r5, #4]
- 942              		.loc 1 211 28 view .LVU367
- 943 00dc D4ED1C7A 		vldr.32	s15, [r4, #112]	@ int
- 944 00e0 F8EE677A 		vcvt.f32.u32	s15, s15
- 945 00e4 77EE877A 		vadd.f32	s15, s15, s14
- 946 00e8 FCEEE77A 		vcvt.u32.f32	s15, s15
- 947 00ec C4ED1C7A 		vstr.32	s15, [r4, #112]	@ int
- 212:Robot/Controller/kinematics.c ****         return 1;
- 948              		.loc 1 212 9 is_stmt 1 view .LVU368
- 949              		.loc 1 212 16 is_stmt 0 view .LVU369
- 950 00f0 0120     		movs	r0, #1
- 951              	.L16:
- 213:Robot/Controller/kinematics.c ****     }
- 214:Robot/Controller/kinematics.c ****     else
- 215:Robot/Controller/kinematics.c ****     {
- 216:Robot/Controller/kinematics.c ****         leg->touch_time += period->duration;
- 217:Robot/Controller/kinematics.c ****         leg->take_off_time = 0;
- 218:Robot/Controller/kinematics.c ****         return 0;
- 219:Robot/Controller/kinematics.c ****     }
- 220:Robot/Controller/kinematics.c ****     
- 221:Robot/Controller/kinematics.c **** }
- 952              		.loc 1 221 1 view .LVU370
- 953 00f2 BDEC048B 		vldm	sp!, {d8-d9}
- 954              	.LCFI8:
- 955              		.cfi_remember_state
- 956              		.cfi_restore 82
- 957              		.cfi_restore 83
- 958              		.cfi_restore 80
- 959              		.cfi_restore 81
- 960              		.cfi_def_cfa_offset 16
- 961 00f6 38BD     		pop	{r3, r4, r5, pc}
- 962              	.LVL48:
- 963              	.L18:
- 964              	.LCFI9:
- 965              		.cfi_restore_state
- 216:Robot/Controller/kinematics.c ****         leg->take_off_time = 0;
- 966              		.loc 1 216 9 is_stmt 1 view .LVU371
- 216:Robot/Controller/kinematics.c ****         leg->take_off_time = 0;
- 967              		.loc 1 216 34 is_stmt 0 view .LVU372
- 968 00f8 95ED017A 		vldr.32	s14, [r5, #4]
- 216:Robot/Controller/kinematics.c ****         leg->take_off_time = 0;
- 969              		.loc 1 216 25 view .LVU373
- 970 00fc D4ED1D7A 		vldr.32	s15, [r4, #116]	@ int
- 971 0100 F8EE677A 		vcvt.f32.u32	s15, s15
- 972 0104 77EE877A 		vadd.f32	s15, s15, s14
- 973 0108 FCEEE77A 		vcvt.u32.f32	s15, s15
- 974 010c C4ED1D7A 		vstr.32	s15, [r4, #116]	@ int
- 217:Robot/Controller/kinematics.c ****         return 0;
- 975              		.loc 1 217 9 is_stmt 1 view .LVU374
- 217:Robot/Controller/kinematics.c ****         return 0;
- 976              		.loc 1 217 28 is_stmt 0 view .LVU375
- 977 0110 0020     		movs	r0, #0
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 22
+ 886 0046 D4ED0D7A 		vldr.32	s15, [r4, #52]
+ 887              		.loc 1 205 27 view .LVU343
+ 888 004a 68EEA78A 		vmul.f32	s17, s17, s15
+ 889              		.loc 1 205 49 view .LVU344
+ 890 004e 94ED0A0A 		vldr.32	s0, [r4, #40]
+ 891 0052 FFF7FEFF 		bl	arm_sin_f32
+ 892              	.LVL43:
+ 893              		.loc 1 205 47 view .LVU345
+ 894 0056 68EE808A 		vmul.f32	s17, s17, s0
+ 895              		.loc 1 205 13 view .LVU346
+ 896 005a 38EE288A 		vadd.f32	s16, s16, s17
+ 206:Robot/Controller/kinematics.c ****             + leg->rod.L0 * leg->rod.d_theta * leg->rod.d_theta * arm_cos_f32(leg->rod.theta);
+ 897              		.loc 1 206 23 view .LVU347
+ 898 005e D4ED028A 		vldr.32	s17, [r4, #8]
+ 899              		.loc 1 206 37 view .LVU348
+ 900 0062 D4ED0B7A 		vldr.32	s15, [r4, #44]
+ 901              		.loc 1 206 27 view .LVU349
+ 902 0066 68EEA78A 		vmul.f32	s17, s17, s15
+ 903              		.loc 1 206 46 view .LVU350
+ 904 006a 67EEA88A 		vmul.f32	s17, s15, s17
+ 905              		.loc 1 206 67 view .LVU351
+ 906 006e 94ED0A0A 		vldr.32	s0, [r4, #40]
+ 907 0072 FFF7FEFF 		bl	arm_cos_f32
+ 908              	.LVL44:
+ 909              		.loc 1 206 65 view .LVU352
+ 910 0076 68EE807A 		vmul.f32	s15, s17, s0
+ 202:Robot/Controller/kinematics.c ****             - leg->rod.dd_L0 * arm_cos_f32(leg->rod.theta)
+ 911              		.loc 1 202 12 view .LVU353
+ 912 007a 38EE278A 		vadd.f32	s16, s16, s15
+ 913              	.LVL45:
+ 207:Robot/Controller/kinematics.c **** 
+ 208:Robot/Controller/kinematics.c ****     P = leg->rod.F * cosf(leg->rod.theta) + leg->rod.Tp * sinf(leg->rod.theta) / leg->rod.L0;
+ 914              		.loc 1 208 5 is_stmt 1 view .LVU354
+ 915              		.loc 1 208 17 is_stmt 0 view .LVU355
+ 916 007e D4ED0F8A 		vldr.32	s17, [r4, #60]
+ 917              		.loc 1 208 22 view .LVU356
+ 918 0082 D4ED0A9A 		vldr.32	s19, [r4, #40]
+ 919 0086 B0EE690A 		vmov.f32	s0, s19
+ 920 008a FFF7FEFF 		bl	cosf
+ 921              	.LVL46:
+ 922              		.loc 1 208 20 view .LVU357
+ 923 008e 68EE808A 		vmul.f32	s17, s17, s0
+ 924              		.loc 1 208 53 view .LVU358
+ 925 0092 94ED109A 		vldr.32	s18, [r4, #64]
+ 926              		.loc 1 208 59 view .LVU359
+ 927 0096 B0EE690A 		vmov.f32	s0, s19
+ 928 009a FFF7FEFF 		bl	sinf
+ 929              	.LVL47:
+ 930              		.loc 1 208 57 view .LVU360
+ 931 009e 29EE009A 		vmul.f32	s18, s18, s0
+ 932              		.loc 1 208 90 view .LVU361
+ 933 00a2 D4ED027A 		vldr.32	s15, [r4, #8]
+ 934              		.loc 1 208 80 view .LVU362
+ 935 00a6 89EE270A 		vdiv.f32	s0, s18, s15
+ 936              		.loc 1 208 7 view .LVU363
+ 937 00aa 78EE808A 		vadd.f32	s17, s17, s0
+ 938              	.LVL48:
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 21
 
 
- 978 0112 2067     		str	r0, [r4, #112]
- 218:Robot/Controller/kinematics.c ****     }
- 979              		.loc 1 218 9 is_stmt 1 view .LVU376
- 218:Robot/Controller/kinematics.c ****     }
- 980              		.loc 1 218 16 is_stmt 0 view .LVU377
- 981 0114 EDE7     		b	.L16
- 982              	.L21:
- 983 0116 00BF     		.align	2
- 984              	.L20:
- 985 0118 F0A71C41 		.word	1092397040
- 986 011c 00000000 		.word	0
- 987              		.cfi_endproc
- 988              	.LFE192:
- 990              		.section	.text.CoordinateLength,"ax",%progbits
- 991              		.align	1
- 992              		.global	CoordinateLength
- 993              		.syntax unified
- 994              		.thumb
- 995              		.thumb_func
- 997              	CoordinateLength:
- 998              	.LVL49:
- 999              	.LFB193:
- 222:Robot/Controller/kinematics.c **** 
- 223:Robot/Controller/kinematics.c **** /**
- 224:Robot/Controller/kinematics.c ****  * @brief 双腿腿长协调控制，维持腿长目标在范围内，同时尽可能达到两腿�
- 225:Robot/Controller/kinematics.c ****  * 
- 226:Robot/Controller/kinematics.c ****  * @param LengthL 
- 227:Robot/Controller/kinematics.c ****  * @param LengthR 
- 228:Robot/Controller/kinematics.c ****  * @param diff 
- 229:Robot/Controller/kinematics.c ****  * @param add 差值补偿
- 230:Robot/Controller/kinematics.c ****  */
- 231:Robot/Controller/kinematics.c **** void CoordinateLength(float *LengthL, float *LengthR, float diff, float add)
- 232:Robot/Controller/kinematics.c **** {
- 1000              		.loc 1 232 1 is_stmt 1 view -0
- 1001              		.cfi_startproc
- 1002              		@ args = 0, pretend = 0, frame = 0
- 1003              		@ frame_needed = 0, uses_anonymous_args = 0
- 1004              		@ link register save eliminated.
- 233:Robot/Controller/kinematics.c ****     *LengthL = *LengthL + diff * 0.5f + add;
- 1005              		.loc 1 233 5 view .LVU379
- 1006              		.loc 1 233 16 is_stmt 0 view .LVU380
- 1007 0000 D0ED007A 		vldr.32	s15, [r0]
- 1008              		.loc 1 233 32 view .LVU381
- 1009 0004 B6EE007A 		vmov.f32	s14, #5.0e-1
- 1010 0008 20EE077A 		vmul.f32	s14, s0, s14
- 1011              		.loc 1 233 25 view .LVU382
- 1012 000c 77EE877A 		vadd.f32	s15, s15, s14
- 1013              		.loc 1 233 39 view .LVU383
- 1014 0010 77EEA07A 		vadd.f32	s15, s15, s1
- 1015              		.loc 1 233 14 view .LVU384
- 1016 0014 C0ED007A 		vstr.32	s15, [r0]
- 234:Robot/Controller/kinematics.c ****     *LengthR = *LengthR - diff * 0.5f - add;
- 1017              		.loc 1 234 5 is_stmt 1 view .LVU385
- 1018              		.loc 1 234 16 is_stmt 0 view .LVU386
- 1019 0018 91ED000A 		vldr.32	s0, [r1]
- 1020              	.LVL50:
- 1021              		.loc 1 234 25 view .LVU387
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 23
+ 209:Robot/Controller/kinematics.c ****     leg->FN = P + WHEEL_MASS * (dd_z_w + GRAVITY);
+ 939              		.loc 1 209 5 is_stmt 1 view .LVU364
+ 940              		.loc 1 209 40 is_stmt 0 view .LVU365
+ 941 00ae 9FED1A0A 		vldr.32	s0, .L20
+ 942 00b2 38EE000A 		vadd.f32	s0, s16, s0
+ 943              		.loc 1 209 30 view .LVU366
+ 944 00b6 9FED198A 		vldr.32	s16, .L20+4
+ 945              	.LVL49:
+ 946              		.loc 1 209 30 view .LVU367
+ 947 00ba 20EE080A 		vmul.f32	s0, s0, s16
+ 948              		.loc 1 209 17 view .LVU368
+ 949 00be 30EE280A 		vadd.f32	s0, s0, s17
+ 950              		.loc 1 209 13 view .LVU369
+ 951 00c2 84ED1C0A 		vstr.32	s0, [r4, #112]
+ 210:Robot/Controller/kinematics.c **** 
+ 211:Robot/Controller/kinematics.c ****     if (leg->FN < TAKE_OFF_FN_THRESHOLD)
+ 952              		.loc 1 211 5 is_stmt 1 view .LVU370
+ 953              		.loc 1 211 8 is_stmt 0 view .LVU371
+ 954 00c6 F0EE087A 		vmov.f32	s15, #3.0e+0
+ 955 00ca B4EEE70A 		vcmpe.f32	s0, s15
+ 956 00ce F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 957 00d2 11D5     		bpl	.L18
+ 212:Robot/Controller/kinematics.c ****     {
+ 213:Robot/Controller/kinematics.c ****         /* code */
+ 214:Robot/Controller/kinematics.c ****         leg->touch_time = 0;
+ 958              		.loc 1 214 9 is_stmt 1 view .LVU372
+ 959              		.loc 1 214 25 is_stmt 0 view .LVU373
+ 960 00d4 0023     		movs	r3, #0
+ 961 00d6 E367     		str	r3, [r4, #124]
+ 215:Robot/Controller/kinematics.c ****         leg->take_off_time += period->duration;
+ 962              		.loc 1 215 9 is_stmt 1 view .LVU374
+ 963              		.loc 1 215 37 is_stmt 0 view .LVU375
+ 964 00d8 95ED017A 		vldr.32	s14, [r5, #4]
+ 965              		.loc 1 215 28 view .LVU376
+ 966 00dc D4ED1E7A 		vldr.32	s15, [r4, #120]	@ int
+ 967 00e0 F8EE677A 		vcvt.f32.u32	s15, s15
+ 968 00e4 77EE877A 		vadd.f32	s15, s15, s14
+ 969 00e8 FCEEE77A 		vcvt.u32.f32	s15, s15
+ 970 00ec C4ED1E7A 		vstr.32	s15, [r4, #120]	@ int
+ 216:Robot/Controller/kinematics.c ****         return 1;
+ 971              		.loc 1 216 9 is_stmt 1 view .LVU377
+ 972              		.loc 1 216 16 is_stmt 0 view .LVU378
+ 973 00f0 0120     		movs	r0, #1
+ 974              	.L16:
+ 217:Robot/Controller/kinematics.c ****     }
+ 218:Robot/Controller/kinematics.c ****     else
+ 219:Robot/Controller/kinematics.c ****     {
+ 220:Robot/Controller/kinematics.c ****         leg->touch_time += period->duration;
+ 221:Robot/Controller/kinematics.c ****         leg->take_off_time = 0;
+ 222:Robot/Controller/kinematics.c ****         return 0;
+ 223:Robot/Controller/kinematics.c ****     }
+ 224:Robot/Controller/kinematics.c ****     
+ 225:Robot/Controller/kinematics.c **** }
+ 975              		.loc 1 225 1 view .LVU379
+ 976 00f2 BDEC048B 		vldm	sp!, {d8-d9}
+ 977              	.LCFI8:
+ 978              		.cfi_remember_state
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 22
 
 
- 1022 001c 30EE470A 		vsub.f32	s0, s0, s14
- 1023              		.loc 1 234 39 view .LVU388
- 1024 0020 70EE600A 		vsub.f32	s1, s0, s1
- 1025              	.LVL51:
- 1026              		.loc 1 234 14 view .LVU389
- 1027 0024 C1ED000A 		vstr.32	s1, [r1]
- 235:Robot/Controller/kinematics.c **** 
- 236:Robot/Controller/kinematics.c ****     // (保证指向不同的地址)
- 237:Robot/Controller/kinematics.c ****     float *short_leg = *LengthL < *LengthR ? LengthL : LengthR;
- 1028              		.loc 1 237 5 is_stmt 1 view .LVU390
- 1029              		.loc 1 237 24 is_stmt 0 view .LVU391
- 1030 0028 D0ED007A 		vldr.32	s15, [r0]
- 1031              		.loc 1 237 54 view .LVU392
- 1032 002c F4EEE70A 		vcmpe.f32	s1, s15
- 1033 0030 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
- 1034 0034 25DD     		ble	.L36
- 1035 0036 0346     		mov	r3, r0
- 1036              	.L23:
- 1037              	.LVL52:
- 238:Robot/Controller/kinematics.c ****     float *long_leg = *LengthL < *LengthR ? LengthR : LengthL;
- 1038              		.loc 1 238 5 is_stmt 1 discriminator 4 view .LVU393
- 1039              		.loc 1 238 53 is_stmt 0 discriminator 4 view .LVU394
- 1040 0038 F4EEE70A 		vcmpe.f32	s1, s15
- 1041 003c F1EE10FA 		vmrs	APSR_nzcv, FPSCR
- 1042 0040 00DD     		ble	.L25
- 1043              		.loc 1 238 53 view .LVU395
- 1044 0042 0846     		mov	r0, r1
- 1045              	.LVL53:
- 1046              	.L25:
- 239:Robot/Controller/kinematics.c **** 
- 240:Robot/Controller/kinematics.c ****     float temp = 0;
- 1047              		.loc 1 240 5 is_stmt 1 discriminator 4 view .LVU396
- 241:Robot/Controller/kinematics.c ****     temp = MIN_LEG_LENGTH - *short_leg;
- 1048              		.loc 1 241 5 discriminator 4 view .LVU397
- 1049              		.loc 1 241 29 is_stmt 0 discriminator 4 view .LVU398
- 1050 0044 93ED007A 		vldr.32	s14, [r3]
- 1051              		.loc 1 241 10 discriminator 4 view .LVU399
- 1052 0048 DFED0F7A 		vldr.32	s15, .L37
- 1053 004c 77EEC77A 		vsub.f32	s15, s15, s14
- 1054              	.LVL54:
- 242:Robot/Controller/kinematics.c ****     if (temp > 0)
- 1055              		.loc 1 242 5 is_stmt 1 discriminator 4 view .LVU400
- 1056              		.loc 1 242 8 is_stmt 0 discriminator 4 view .LVU401
- 1057 0050 F5EEC07A 		vcmpe.f32	s15, #0
- 1058 0054 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
- 1059 0058 09DD     		ble	.L27
- 243:Robot/Controller/kinematics.c ****     {
- 244:Robot/Controller/kinematics.c ****         /* code */
- 245:Robot/Controller/kinematics.c ****         *short_leg += temp;
- 1060              		.loc 1 245 9 is_stmt 1 view .LVU402
- 1061              		.loc 1 245 20 is_stmt 0 view .LVU403
- 1062 005a 37EE277A 		vadd.f32	s14, s14, s15
- 1063 005e 83ED007A 		vstr.32	s14, [r3]
- 246:Robot/Controller/kinematics.c ****         *long_leg += temp;
- 1064              		.loc 1 246 9 is_stmt 1 view .LVU404
- 1065              		.loc 1 246 19 is_stmt 0 view .LVU405
- 1066 0062 90ED007A 		vldr.32	s14, [r0]
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 24
+ 979              		.cfi_restore 82
+ 980              		.cfi_restore 83
+ 981              		.cfi_restore 80
+ 982              		.cfi_restore 81
+ 983              		.cfi_def_cfa_offset 16
+ 984 00f6 38BD     		pop	{r3, r4, r5, pc}
+ 985              	.LVL50:
+ 986              	.L18:
+ 987              	.LCFI9:
+ 988              		.cfi_restore_state
+ 220:Robot/Controller/kinematics.c ****         leg->take_off_time = 0;
+ 989              		.loc 1 220 9 is_stmt 1 view .LVU380
+ 220:Robot/Controller/kinematics.c ****         leg->take_off_time = 0;
+ 990              		.loc 1 220 34 is_stmt 0 view .LVU381
+ 991 00f8 95ED017A 		vldr.32	s14, [r5, #4]
+ 220:Robot/Controller/kinematics.c ****         leg->take_off_time = 0;
+ 992              		.loc 1 220 25 view .LVU382
+ 993 00fc D4ED1F7A 		vldr.32	s15, [r4, #124]	@ int
+ 994 0100 F8EE677A 		vcvt.f32.u32	s15, s15
+ 995 0104 77EE877A 		vadd.f32	s15, s15, s14
+ 996 0108 FCEEE77A 		vcvt.u32.f32	s15, s15
+ 997 010c C4ED1F7A 		vstr.32	s15, [r4, #124]	@ int
+ 221:Robot/Controller/kinematics.c ****         return 0;
+ 998              		.loc 1 221 9 is_stmt 1 view .LVU383
+ 221:Robot/Controller/kinematics.c ****         return 0;
+ 999              		.loc 1 221 28 is_stmt 0 view .LVU384
+ 1000 0110 0020     		movs	r0, #0
+ 1001 0112 A067     		str	r0, [r4, #120]
+ 222:Robot/Controller/kinematics.c ****     }
+ 1002              		.loc 1 222 9 is_stmt 1 view .LVU385
+ 222:Robot/Controller/kinematics.c ****     }
+ 1003              		.loc 1 222 16 is_stmt 0 view .LVU386
+ 1004 0114 EDE7     		b	.L16
+ 1005              	.L21:
+ 1006 0116 00BF     		.align	2
+ 1007              	.L20:
+ 1008 0118 F0A71C41 		.word	1092397040
+ 1009 011c 00000000 		.word	0
+ 1010              		.cfi_endproc
+ 1011              	.LFE192:
+ 1013              		.section	.text.RollCompensation,"ax",%progbits
+ 1014              		.align	1
+ 1015              		.global	RollCompensation
+ 1016              		.syntax unified
+ 1017              		.thumb
+ 1018              		.thumb_func
+ 1020              	RollCompensation:
+ 1021              	.LVL51:
+ 1022              	.LFB193:
+ 226:Robot/Controller/kinematics.c **** 
+ 227:Robot/Controller/kinematics.c **** /**
+ 228:Robot/Controller/kinematics.c ****  * @brief 翻滚角补偿，用于单边桥等特殊地形
+ 229:Robot/Controller/kinematics.c ****  * 
+ 230:Robot/Controller/kinematics.c ****  * @param LengthL 实际左腿长度
+ 231:Robot/Controller/kinematics.c ****  * @param LengthR 
+ 232:Robot/Controller/kinematics.c ****  * @param refL 期望左腿长度
+ 233:Robot/Controller/kinematics.c ****  * @param refR 期望右腿长度
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 23
 
 
- 1067 0066 77EE277A 		vadd.f32	s15, s14, s15
- 1068              	.LVL55:
- 1069              		.loc 1 246 19 view .LVU406
- 1070 006a C0ED007A 		vstr.32	s15, [r0]
- 1071              	.L27:
- 247:Robot/Controller/kinematics.c ****     }
- 248:Robot/Controller/kinematics.c ****     if (*long_leg > MAX_LEG_LENGTH)
- 1072              		.loc 1 248 5 is_stmt 1 view .LVU407
- 1073              		.loc 1 248 9 is_stmt 0 view .LVU408
- 1074 006e D0ED007A 		vldr.32	s15, [r0]
- 1075              		.loc 1 248 8 view .LVU409
- 1076 0072 F5EEC07A 		vcmpe.f32	s15, #0
- 1077 0076 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
- 1078 007a 01DD     		ble	.L22
- 249:Robot/Controller/kinematics.c ****     {
- 250:Robot/Controller/kinematics.c ****         /* code */
- 251:Robot/Controller/kinematics.c ****         *long_leg = MAX_LEG_LENGTH;
- 1079              		.loc 1 251 9 is_stmt 1 view .LVU410
- 1080              		.loc 1 251 19 is_stmt 0 view .LVU411
- 1081 007c 0023     		movs	r3, #0
- 1082              	.LVL56:
- 1083              		.loc 1 251 19 view .LVU412
- 1084 007e 0360     		str	r3, [r0]	@ float
- 1085              	.L22:
- 252:Robot/Controller/kinematics.c ****     }    
- 253:Robot/Controller/kinematics.c **** }
- 1086              		.loc 1 253 1 view .LVU413
- 1087 0080 7047     		bx	lr
- 1088              	.LVL57:
- 1089              	.L36:
- 237:Robot/Controller/kinematics.c ****     float *long_leg = *LengthL < *LengthR ? LengthR : LengthL;
- 1090              		.loc 1 237 54 view .LVU414
- 1091 0082 0B46     		mov	r3, r1
- 1092 0084 D8E7     		b	.L23
- 1093              	.L38:
- 1094 0086 00BF     		.align	2
- 1095              	.L37:
- 1096 0088 00000000 		.word	0
- 1097              		.cfi_endproc
- 1098              	.LFE193:
- 1100              		.section	.text.DeviationCalc,"ax",%progbits
- 1101              		.align	1
- 1102              		.global	DeviationCalc
- 1103              		.syntax unified
- 1104              		.thumb
- 1105              		.thumb_func
- 1107              	DeviationCalc:
- 1108              	.LVL58:
- 1109              	.LFB194:
- 254:Robot/Controller/kinematics.c **** 
- 255:Robot/Controller/kinematics.c **** /**
- 256:Robot/Controller/kinematics.c ****  * @brief 通过当前底盘姿态和目标roll角计算两腿长度期望差值
- 257:Robot/Controller/kinematics.c ****  * 
- 258:Robot/Controller/kinematics.c ****  * @param diff 左右腿差值
- 259:Robot/Controller/kinematics.c ****  * @param real 当前roll角
- 260:Robot/Controller/kinematics.c ****  * @param target 目标roll角
- 261:Robot/Controller/kinematics.c ****  * @return float 
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 25
+ 234:Robot/Controller/kinematics.c ****  * @param diff 左右腿长度差值
+ 235:Robot/Controller/kinematics.c ****  * @param theta 翻滚角
+ 236:Robot/Controller/kinematics.c ****  */
+ 237:Robot/Controller/kinematics.c **** void RollCompensation(float *LengthL,float *LengthR,float *refL,float *refR,float *diff, float thet
+ 238:Robot/Controller/kinematics.c **** {
+ 1023              		.loc 1 238 1 is_stmt 1 view -0
+ 1024              		.cfi_startproc
+ 1025              		@ args = 4, pretend = 0, frame = 0
+ 1026              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1027              		.loc 1 238 1 is_stmt 0 view .LVU388
+ 1028 0000 38B5     		push	{r3, r4, r5, lr}
+ 1029              	.LCFI10:
+ 1030              		.cfi_def_cfa_offset 16
+ 1031              		.cfi_offset 3, -16
+ 1032              		.cfi_offset 4, -12
+ 1033              		.cfi_offset 5, -8
+ 1034              		.cfi_offset 14, -4
+ 1035 0002 2DED068B 		vpush.64	{d8, d9, d10}
+ 1036              	.LCFI11:
+ 1037              		.cfi_def_cfa_offset 40
+ 1038              		.cfi_offset 80, -40
+ 1039              		.cfi_offset 81, -36
+ 1040              		.cfi_offset 82, -32
+ 1041              		.cfi_offset 83, -28
+ 1042              		.cfi_offset 84, -24
+ 1043              		.cfi_offset 85, -20
+ 1044 0006 1546     		mov	r5, r2
+ 1045 0008 1C46     		mov	r4, r3
+ 1046 000a B0EE40AA 		vmov.f32	s20, s0
+ 239:Robot/Controller/kinematics.c ****     float BD, AF, ED, EF;
+ 1047              		.loc 1 239 5 is_stmt 1 view .LVU389
+ 240:Robot/Controller/kinematics.c ****     float BC, FD;
+ 1048              		.loc 1 240 5 view .LVU390
+ 241:Robot/Controller/kinematics.c **** 
+ 242:Robot/Controller/kinematics.c ****     BD = (*LengthR - *LengthL) * cosf(theta);
+ 1049              		.loc 1 242 5 view .LVU391
+ 1050              		.loc 1 242 11 is_stmt 0 view .LVU392
+ 1051 000e 91ED008A 		vldr.32	s16, [r1]
+ 1052              		.loc 1 242 22 view .LVU393
+ 1053 0012 D0ED008A 		vldr.32	s17, [r0]
+ 1054              		.loc 1 242 20 view .LVU394
+ 1055 0016 78EE688A 		vsub.f32	s17, s16, s17
+ 1056              		.loc 1 242 34 view .LVU395
+ 1057 001a FFF7FEFF 		bl	cosf
+ 1058              	.LVL52:
+ 1059              		.loc 1 242 34 view .LVU396
+ 1060 001e B0EE409A 		vmov.f32	s18, s0
+ 1061              		.loc 1 242 8 view .LVU397
+ 1062 0022 68EE809A 		vmul.f32	s19, s17, s0
+ 1063              	.LVL53:
+ 243:Robot/Controller/kinematics.c ****     AF = 2 * WHEEL_DISTANCE * sinf(theta);
+ 1064              		.loc 1 243 5 is_stmt 1 view .LVU398
+ 1065              		.loc 1 243 31 is_stmt 0 view .LVU399
+ 1066 0026 B0EE4A0A 		vmov.f32	s0, s20
+ 1067 002a FFF7FEFF 		bl	sinf
+ 1068              	.LVL54:
+ 1069              		.loc 1 243 8 view .LVU400
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 24
 
 
- 262:Robot/Controller/kinematics.c ****  */
- 263:Robot/Controller/kinematics.c **** float DeviationCalc(float diff, float real, float target)
- 264:Robot/Controller/kinematics.c **** {
- 1110              		.loc 1 264 1 is_stmt 1 view -0
- 1111              		.cfi_startproc
- 1112              		@ args = 0, pretend = 0, frame = 0
- 1113              		@ frame_needed = 0, uses_anonymous_args = 0
- 1114              		.loc 1 264 1 is_stmt 0 view .LVU416
- 1115 0000 08B5     		push	{r3, lr}
- 1116              	.LCFI10:
- 1117              		.cfi_def_cfa_offset 8
- 1118              		.cfi_offset 3, -8
- 1119              		.cfi_offset 14, -4
- 1120 0002 2DED068B 		vpush.64	{d8, d9, d10}
- 1121              	.LCFI11:
- 1122              		.cfi_def_cfa_offset 32
- 1123              		.cfi_offset 80, -32
- 1124              		.cfi_offset 81, -28
- 1125              		.cfi_offset 82, -24
- 1126              		.cfi_offset 83, -20
- 1127              		.cfi_offset 84, -16
- 1128              		.cfi_offset 85, -12
- 1129 0006 F0EE409A 		vmov.f32	s19, s0
- 1130 000a B0EE608A 		vmov.f32	s16, s1
- 1131 000e F0EE418A 		vmov.f32	s17, s2
- 265:Robot/Controller/kinematics.c ****     return WHEEL_DISTANCE * tanf(target) - 
- 1132              		.loc 1 265 5 is_stmt 1 view .LVU417
- 1133              		.loc 1 265 29 is_stmt 0 view .LVU418
- 1134 0012 B0EE410A 		vmov.f32	s0, s2
- 1135              	.LVL59:
- 1136              		.loc 1 265 29 view .LVU419
- 1137 0016 FFF7FEFF 		bl	tanf
- 1138              	.LVL60:
- 1139              		.loc 1 265 27 view .LVU420
- 1140 001a DFED0FAA 		vldr.32	s21, .L41
- 1141 001e 20EE2A9A 		vmul.f32	s18, s0, s21
- 266:Robot/Controller/kinematics.c ****            cosf(real) / cosf(target) * (WHEEL_DISTANCE * tanf(real) - diff);
- 1142              		.loc 1 266 12 view .LVU421
- 1143 0022 B0EE480A 		vmov.f32	s0, s16
- 1144 0026 FFF7FEFF 		bl	cosf
- 1145              	.LVL61:
- 1146 002a B0EE40AA 		vmov.f32	s20, s0
- 1147              		.loc 1 266 25 view .LVU422
- 1148 002e B0EE680A 		vmov.f32	s0, s17
- 1149 0032 FFF7FEFF 		bl	cosf
- 1150              	.LVL62:
- 1151              		.loc 1 266 23 view .LVU423
- 1152 0036 CAEE008A 		vdiv.f32	s17, s20, s0
- 1153              	.LVL63:
- 1154              		.loc 1 266 58 view .LVU424
- 1155 003a B0EE480A 		vmov.f32	s0, s16
- 1156 003e FFF7FEFF 		bl	tanf
- 1157              	.LVL64:
- 1158              		.loc 1 266 56 view .LVU425
- 1159 0042 60EE2A7A 		vmul.f32	s15, s0, s21
- 1160              		.loc 1 266 69 view .LVU426
- 1161 0046 37EEE90A 		vsub.f32	s0, s15, s19
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 26
+ 1070 002e 9FED107A 		vldr.32	s14, .L24
+ 1071 0032 60EE076A 		vmul.f32	s13, s0, s14
+ 1072              	.LVL55:
+ 244:Robot/Controller/kinematics.c ****     ED = (*LengthR - *LengthL) * sinf(theta);
+ 1073              		.loc 1 244 5 is_stmt 1 view .LVU401
+ 1074              		.loc 1 244 8 is_stmt 0 view .LVU402
+ 1075 0036 68EE808A 		vmul.f32	s17, s17, s0
+ 1076              	.LVL56:
+ 245:Robot/Controller/kinematics.c ****     EF = 2 * WHEEL_DISTANCE * cosf(theta);
+ 1077              		.loc 1 245 5 is_stmt 1 view .LVU403
+ 1078              		.loc 1 245 8 is_stmt 0 view .LVU404
+ 1079 003a 29EE070A 		vmul.f32	s0, s18, s14
+ 1080              	.LVL57:
+ 246:Robot/Controller/kinematics.c **** 
+ 247:Robot/Controller/kinematics.c ****     // theta = -theta; //翻转角取反
+ 248:Robot/Controller/kinematics.c ****     BC = BD - AF;
+ 1081              		.loc 1 248 5 is_stmt 1 view .LVU405
+ 1082              		.loc 1 248 8 is_stmt 0 view .LVU406
+ 1083 003e 79EEE69A 		vsub.f32	s19, s19, s13
+ 1084              	.LVL58:
+ 249:Robot/Controller/kinematics.c ****     FD = ED + EF;
+ 1085              		.loc 1 249 5 is_stmt 1 view .LVU407
+ 1086              		.loc 1 249 8 is_stmt 0 view .LVU408
+ 1087 0042 78EE808A 		vadd.f32	s17, s17, s0
+ 1088              	.LVL59:
+ 250:Robot/Controller/kinematics.c **** 
+ 251:Robot/Controller/kinematics.c ****     float slope_tan = BC / FD;
+ 1089              		.loc 1 251 5 is_stmt 1 view .LVU409
+ 1090              		.loc 1 251 11 is_stmt 0 view .LVU410
+ 1091 0046 C9EEA87A 		vdiv.f32	s15, s19, s17
+ 1092              	.LVL60:
+ 252:Robot/Controller/kinematics.c ****     float hight = *LengthR * cosf(theta) + WHEEL_DISTANCE * sinf(theta);
+ 1093              		.loc 1 252 5 is_stmt 1 view .LVU411
+ 1094              		.loc 1 252 28 is_stmt 0 view .LVU412
+ 1095 004a 28EE098A 		vmul.f32	s16, s16, s18
+ 1096              		.loc 1 252 11 view .LVU413
+ 1097 004e 38EE268A 		vadd.f32	s16, s16, s13
+ 1098              	.LVL61:
+ 253:Robot/Controller/kinematics.c ****     *refL = hight;
+ 1099              		.loc 1 253 5 is_stmt 1 view .LVU414
+ 1100              		.loc 1 253 11 is_stmt 0 view .LVU415
+ 1101 0052 85ED008A 		vstr.32	s16, [r5]
+ 254:Robot/Controller/kinematics.c ****     *refR = hight - 2 * WHEEL_DISTANCE * slope_tan;
+ 1102              		.loc 1 254 5 is_stmt 1 view .LVU416
+ 1103              		.loc 1 254 40 is_stmt 0 view .LVU417
+ 1104 0056 67EE877A 		vmul.f32	s15, s15, s14
+ 1105              	.LVL62:
+ 1106              		.loc 1 254 19 view .LVU418
+ 1107 005a 38EE678A 		vsub.f32	s16, s16, s15
+ 1108              	.LVL63:
+ 1109              		.loc 1 254 11 view .LVU419
+ 1110 005e 84ED008A 		vstr.32	s16, [r4]
+ 1111              	.LVL64:
+ 255:Robot/Controller/kinematics.c ****     *diff = 2 * WHEEL_DISTANCE * slope_tan;
+ 1112              		.loc 1 255 5 is_stmt 1 view .LVU420
+ 1113              		.loc 1 255 11 is_stmt 0 view .LVU421
+ 1114 0062 0A9B     		ldr	r3, [sp, #40]
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 25
 
 
- 1162              		.loc 1 266 38 view .LVU427
- 1163 004a 28EE800A 		vmul.f32	s0, s17, s0
- 267:Robot/Controller/kinematics.c **** }
- 1164              		.loc 1 267 1 view .LVU428
- 1165 004e 39EE400A 		vsub.f32	s0, s18, s0
- 1166 0052 BDEC068B 		vldm	sp!, {d8-d10}
- 1167              	.LCFI12:
- 1168              		.cfi_restore 84
- 1169              		.cfi_restore 85
- 1170              		.cfi_restore 82
- 1171              		.cfi_restore 83
- 1172              		.cfi_restore 80
- 1173              		.cfi_restore 81
- 1174              		.cfi_def_cfa_offset 8
- 1175              	.LVL65:
- 1176              		.loc 1 267 1 view .LVU429
- 1177 0056 08BD     		pop	{r3, pc}
- 1178              	.L42:
- 1179              		.align	2
- 1180              	.L41:
- 1181 0058 00000000 		.word	0
- 1182              		.cfi_endproc
- 1183              	.LFE194:
- 1185              		.section	.text.constrainValue,"ax",%progbits
- 1186              		.align	1
- 1187              		.global	constrainValue
- 1188              		.syntax unified
- 1189              		.thumb
- 1190              		.thumb_func
- 1192              	constrainValue:
- 1193              	.LVL66:
- 1194              	.LFB195:
- 268:Robot/Controller/kinematics.c **** 
- 269:Robot/Controller/kinematics.c **** // 限幅
- 270:Robot/Controller/kinematics.c **** float constrainValue(float value, float min, float max)
- 271:Robot/Controller/kinematics.c **** {
- 1195              		.loc 1 271 1 is_stmt 1 view -0
- 1196              		.cfi_startproc
- 1197              		@ args = 0, pretend = 0, frame = 0
- 1198              		@ frame_needed = 0, uses_anonymous_args = 0
- 1199              		@ link register save eliminated.
- 272:Robot/Controller/kinematics.c ****     if (value < min) return min;
- 1200              		.loc 1 272 5 view .LVU431
- 1201              		.loc 1 272 8 is_stmt 0 view .LVU432
- 1202 0000 B4EEE00A 		vcmpe.f32	s0, s1
- 1203 0004 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
- 1204 0008 05D4     		bmi	.L45
- 273:Robot/Controller/kinematics.c ****     if (value > max) return max;
- 1205              		.loc 1 273 5 is_stmt 1 view .LVU433
- 1206              		.loc 1 273 8 is_stmt 0 view .LVU434
- 1207 000a B4EEC10A 		vcmpe.f32	s0, s2
- 1208 000e F1EE10FA 		vmrs	APSR_nzcv, FPSCR
- 1209 0012 03DC     		bgt	.L46
- 1210 0014 7047     		bx	lr
- 1211              	.L45:
- 272:Robot/Controller/kinematics.c ****     if (value < min) return min;
- 1212              		.loc 1 272 29 view .LVU435
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 27
+ 1115 0064 C3ED007A 		vstr.32	s15, [r3]
+ 256:Robot/Controller/kinematics.c **** }
+ 1116              		.loc 1 256 1 view .LVU422
+ 1117 0068 BDEC068B 		vldm	sp!, {d8-d10}
+ 1118              	.LCFI12:
+ 1119              		.cfi_restore 84
+ 1120              		.cfi_restore 85
+ 1121              		.cfi_restore 82
+ 1122              		.cfi_restore 83
+ 1123              		.cfi_restore 80
+ 1124              		.cfi_restore 81
+ 1125              		.cfi_def_cfa_offset 16
+ 1126              	.LVL65:
+ 1127              		.loc 1 256 1 view .LVU423
+ 1128 006c 38BD     		pop	{r3, r4, r5, pc}
+ 1129              	.LVL66:
+ 1130              	.L25:
+ 1131              		.loc 1 256 1 view .LVU424
+ 1132 006e 00BF     		.align	2
+ 1133              	.L24:
+ 1134 0070 00000000 		.word	0
+ 1135              		.cfi_endproc
+ 1136              	.LFE193:
+ 1138              		.section	.text.CoordinateLength,"ax",%progbits
+ 1139              		.align	1
+ 1140              		.global	CoordinateLength
+ 1141              		.syntax unified
+ 1142              		.thumb
+ 1143              		.thumb_func
+ 1145              	CoordinateLength:
+ 1146              	.LVL67:
+ 1147              	.LFB194:
+ 257:Robot/Controller/kinematics.c **** 
+ 258:Robot/Controller/kinematics.c **** /**
+ 259:Robot/Controller/kinematics.c ****  * @brief 双腿腿长协调控制，维持腿长目标在范围内，同时尽可能达到两腿�
+ 260:Robot/Controller/kinematics.c ****  * 
+ 261:Robot/Controller/kinematics.c ****  * @param LengthL 
+ 262:Robot/Controller/kinematics.c ****  * @param LengthR 
+ 263:Robot/Controller/kinematics.c ****  * @param diff 
+ 264:Robot/Controller/kinematics.c ****  * @param add 差值补偿
+ 265:Robot/Controller/kinematics.c ****  */
+ 266:Robot/Controller/kinematics.c **** void CoordinateLength(float *LengthL, float *LengthR, float diff, float add)
+ 267:Robot/Controller/kinematics.c **** {
+ 1148              		.loc 1 267 1 is_stmt 1 view -0
+ 1149              		.cfi_startproc
+ 1150              		@ args = 0, pretend = 0, frame = 0
+ 1151              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1152              		@ link register save eliminated.
+ 268:Robot/Controller/kinematics.c ****     *LengthL = *LengthL + diff * 0.5f + add;
+ 1153              		.loc 1 268 5 view .LVU426
+ 1154              		.loc 1 268 16 is_stmt 0 view .LVU427
+ 1155 0000 D0ED007A 		vldr.32	s15, [r0]
+ 1156              		.loc 1 268 32 view .LVU428
+ 1157 0004 B6EE007A 		vmov.f32	s14, #5.0e-1
+ 1158 0008 20EE077A 		vmul.f32	s14, s0, s14
+ 1159              		.loc 1 268 25 view .LVU429
+ 1160 000c 77EE877A 		vadd.f32	s15, s15, s14
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 26
 
 
- 1213 0016 B0EE600A 		vmov.f32	s0, s1
- 1214              	.LVL67:
- 272:Robot/Controller/kinematics.c ****     if (value < min) return min;
- 1215              		.loc 1 272 29 view .LVU436
- 1216 001a 7047     		bx	lr
- 1217              	.LVL68:
- 1218              	.L46:
- 1219              		.loc 1 273 29 view .LVU437
- 1220 001c B0EE410A 		vmov.f32	s0, s2
- 1221              	.LVL69:
- 274:Robot/Controller/kinematics.c ****     return value;
- 275:Robot/Controller/kinematics.c **** }
- 1222              		.loc 1 275 1 view .LVU438
- 1223 0020 7047     		bx	lr
- 1224              		.cfi_endproc
- 1225              	.LFE195:
- 1227              		.section	.text.safe_sqrt,"ax",%progbits
- 1228              		.align	1
- 1229              		.global	safe_sqrt
- 1230              		.syntax unified
- 1231              		.thumb
- 1232              		.thumb_func
- 1234              	safe_sqrt:
- 1235              	.LVL70:
- 1236              	.LFB196:
- 276:Robot/Controller/kinematics.c **** 
- 277:Robot/Controller/kinematics.c **** // 防止负数输入
- 278:Robot/Controller/kinematics.c **** float safe_sqrt(float x)
- 279:Robot/Controller/kinematics.c **** {
- 1237              		.loc 1 279 1 is_stmt 1 view -0
- 1238              		.cfi_startproc
- 1239              		@ args = 0, pretend = 0, frame = 0
- 1240              		@ frame_needed = 0, uses_anonymous_args = 0
- 280:Robot/Controller/kinematics.c ****     return x >= 0.0f ? sqrtf(x) : 0.0f;
- 1241              		.loc 1 280 5 view .LVU440
- 1242              		.loc 1 280 33 is_stmt 0 view .LVU441
- 1243 0000 B5EEC00A 		vcmpe.f32	s0, #0
- 1244 0004 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
- 1245 0008 02DA     		bge	.L57
- 1246 000a 9FED030A 		vldr.32	s0, .L58
- 1247              	.LVL71:
- 281:Robot/Controller/kinematics.c **** }
- 1248              		.loc 1 281 1 view .LVU442
- 1249 000e 7047     		bx	lr
- 1250              	.LVL72:
- 1251              	.L57:
- 279:Robot/Controller/kinematics.c ****     return x >= 0.0f ? sqrtf(x) : 0.0f;
- 1252              		.loc 1 279 1 discriminator 1 view .LVU443
- 1253 0010 08B5     		push	{r3, lr}
- 1254              	.LCFI13:
- 1255              		.cfi_def_cfa_offset 8
- 1256              		.cfi_offset 3, -8
- 1257              		.cfi_offset 14, -4
- 280:Robot/Controller/kinematics.c ****     return x >= 0.0f ? sqrtf(x) : 0.0f;
- 1258              		.loc 1 280 24 discriminator 1 view .LVU444
- 1259 0012 FFF7FEFF 		bl	sqrtf
- 1260              	.LVL73:
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 28
+ 1161              		.loc 1 268 39 view .LVU430
+ 1162 0010 77EEA07A 		vadd.f32	s15, s15, s1
+ 1163              		.loc 1 268 14 view .LVU431
+ 1164 0014 C0ED007A 		vstr.32	s15, [r0]
+ 269:Robot/Controller/kinematics.c ****     *LengthR = *LengthR - diff * 0.5f - add;
+ 1165              		.loc 1 269 5 is_stmt 1 view .LVU432
+ 1166              		.loc 1 269 16 is_stmt 0 view .LVU433
+ 1167 0018 91ED000A 		vldr.32	s0, [r1]
+ 1168              	.LVL68:
+ 1169              		.loc 1 269 25 view .LVU434
+ 1170 001c 30EE470A 		vsub.f32	s0, s0, s14
+ 1171              		.loc 1 269 39 view .LVU435
+ 1172 0020 70EE600A 		vsub.f32	s1, s0, s1
+ 1173              	.LVL69:
+ 1174              		.loc 1 269 14 view .LVU436
+ 1175 0024 C1ED000A 		vstr.32	s1, [r1]
+ 270:Robot/Controller/kinematics.c **** 
+ 271:Robot/Controller/kinematics.c ****     // (保证指向不同的地址)
+ 272:Robot/Controller/kinematics.c ****     float *short_leg = *LengthL < *LengthR ? LengthL : LengthR;
+ 1176              		.loc 1 272 5 is_stmt 1 view .LVU437
+ 1177              		.loc 1 272 24 is_stmt 0 view .LVU438
+ 1178 0028 D0ED007A 		vldr.32	s15, [r0]
+ 1179              		.loc 1 272 54 view .LVU439
+ 1180 002c F4EEE70A 		vcmpe.f32	s1, s15
+ 1181 0030 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 1182 0034 25DD     		ble	.L40
+ 1183 0036 0346     		mov	r3, r0
+ 1184              	.L27:
+ 1185              	.LVL70:
+ 273:Robot/Controller/kinematics.c ****     float *long_leg = *LengthL < *LengthR ? LengthR : LengthL;
+ 1186              		.loc 1 273 5 is_stmt 1 discriminator 4 view .LVU440
+ 1187              		.loc 1 273 53 is_stmt 0 discriminator 4 view .LVU441
+ 1188 0038 F4EEE70A 		vcmpe.f32	s1, s15
+ 1189 003c F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 1190 0040 00DD     		ble	.L29
+ 1191              		.loc 1 273 53 view .LVU442
+ 1192 0042 0846     		mov	r0, r1
+ 1193              	.LVL71:
+ 1194              	.L29:
+ 274:Robot/Controller/kinematics.c **** 
+ 275:Robot/Controller/kinematics.c ****     float temp = 0;
+ 1195              		.loc 1 275 5 is_stmt 1 discriminator 4 view .LVU443
+ 276:Robot/Controller/kinematics.c ****     temp = MIN_LEG_LENGTH - *short_leg;
+ 1196              		.loc 1 276 5 discriminator 4 view .LVU444
+ 1197              		.loc 1 276 29 is_stmt 0 discriminator 4 view .LVU445
+ 1198 0044 93ED007A 		vldr.32	s14, [r3]
+ 1199              		.loc 1 276 10 discriminator 4 view .LVU446
+ 1200 0048 DFED0F7A 		vldr.32	s15, .L41
+ 1201 004c 77EEC77A 		vsub.f32	s15, s15, s14
+ 1202              	.LVL72:
+ 277:Robot/Controller/kinematics.c ****     if (temp > 0)
+ 1203              		.loc 1 277 5 is_stmt 1 discriminator 4 view .LVU447
+ 1204              		.loc 1 277 8 is_stmt 0 discriminator 4 view .LVU448
+ 1205 0050 F5EEC07A 		vcmpe.f32	s15, #0
+ 1206 0054 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 1207 0058 09DD     		ble	.L31
+ 278:Robot/Controller/kinematics.c ****     {
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 27
 
 
- 1261              		.loc 1 281 1 discriminator 1 view .LVU445
- 1262 0016 08BD     		pop	{r3, pc}
- 1263              	.L59:
- 1264              		.align	2
- 1265              	.L58:
- 1266 0018 00000000 		.word	0
- 1267              		.cfi_endproc
- 1268              	.LFE196:
- 1270              		.section	.text.ForwardKinematics,"ax",%progbits
- 1271              		.align	1
- 1272              		.global	ForwardKinematics
- 1273              		.syntax unified
- 1274              		.thumb
- 1275              		.thumb_func
- 1277              	ForwardKinematics:
- 1278              	.LVL74:
- 1279              	.LFB189:
-  87:Robot/Controller/kinematics.c ****     float XD, YD, XB, YB;
- 1280              		.loc 1 87 1 is_stmt 1 view -0
- 1281              		.cfi_startproc
- 1282              		@ args = 0, pretend = 0, frame = 0
- 1283              		@ frame_needed = 0, uses_anonymous_args = 0
-  87:Robot/Controller/kinematics.c ****     float XD, YD, XB, YB;
- 1284              		.loc 1 87 1 is_stmt 0 view .LVU447
- 1285 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
- 1286              	.LCFI14:
- 1287              		.cfi_def_cfa_offset 24
- 1288              		.cfi_offset 3, -24
- 1289              		.cfi_offset 4, -20
- 1290              		.cfi_offset 5, -16
- 1291              		.cfi_offset 6, -12
- 1292              		.cfi_offset 7, -8
- 1293              		.cfi_offset 14, -4
- 1294 0002 2DED0A8B 		vpush.64	{d8, d9, d10, d11, d12}
- 1295              	.LCFI15:
- 1296              		.cfi_def_cfa_offset 64
- 1297              		.cfi_offset 80, -64
- 1298              		.cfi_offset 81, -60
- 1299              		.cfi_offset 82, -56
- 1300              		.cfi_offset 83, -52
- 1301              		.cfi_offset 84, -48
- 1302              		.cfi_offset 85, -44
- 1303              		.cfi_offset 86, -40
- 1304              		.cfi_offset 87, -36
- 1305              		.cfi_offset 88, -32
- 1306              		.cfi_offset 89, -28
- 1307 0006 0446     		mov	r4, r0
- 1308 0008 0D46     		mov	r5, r1
- 1309 000a F0EE409A 		vmov.f32	s19, s0
-  88:Robot/Controller/kinematics.c ****     float lBD;
- 1310              		.loc 1 88 5 is_stmt 1 view .LVU448
-  89:Robot/Controller/kinematics.c ****     float A0, B0, C0;
- 1311              		.loc 1 89 5 view .LVU449
-  90:Robot/Controller/kinematics.c **** 
- 1312              		.loc 1 90 5 view .LVU450
-  92:Robot/Controller/kinematics.c ****     static float PitchGyroR = 0.0f;
- 1313              		.loc 1 92 5 view .LVU451
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 29
-
-
-  93:Robot/Controller/kinematics.c ****     PitchR = ins->Pitch;
- 1314              		.loc 1 93 5 view .LVU452
-  94:Robot/Controller/kinematics.c ****     PitchGyroR = ins->Gyro[0];
- 1315              		.loc 1 94 5 view .LVU453
-  94:Robot/Controller/kinematics.c ****     PitchGyroR = ins->Gyro[0];
- 1316              		.loc 1 94 17 is_stmt 0 view .LVU454
- 1317 000e 536F     		ldr	r3, [r2, #116]	@ float
-  94:Robot/Controller/kinematics.c ****     PitchGyroR = ins->Gyro[0];
- 1318              		.loc 1 94 12 view .LVU455
- 1319 0010 6D4F     		ldr	r7, .L62
- 1320 0012 3B60     		str	r3, [r7]	@ float
-  95:Robot/Controller/kinematics.c **** 
- 1321              		.loc 1 95 5 is_stmt 1 view .LVU456
-  95:Robot/Controller/kinematics.c **** 
- 1322              		.loc 1 95 27 is_stmt 0 view .LVU457
- 1323 0014 1369     		ldr	r3, [r2, #16]	@ float
-  95:Robot/Controller/kinematics.c **** 
- 1324              		.loc 1 95 16 view .LVU458
- 1325 0016 6D4E     		ldr	r6, .L62+4
- 1326 0018 3360     		str	r3, [r6]	@ float
-  97:Robot/Controller/kinematics.c ****     YD = LEG4*arm_sin_f32(leg->joint.Phi4);
- 1327              		.loc 1 97 5 is_stmt 1 view .LVU459
-  97:Robot/Controller/kinematics.c ****     YD = LEG4*arm_sin_f32(leg->joint.Phi4);
- 1328              		.loc 1 97 15 is_stmt 0 view .LVU460
- 1329 001a 90ED150A 		vldr.32	s0, [r0, #84]
- 1330              	.LVL75:
-  97:Robot/Controller/kinematics.c ****     YD = LEG4*arm_sin_f32(leg->joint.Phi4);
- 1331              		.loc 1 97 15 view .LVU461
- 1332 001e FFF7FEFF 		bl	arm_cos_f32
- 1333              	.LVL76:
-  97:Robot/Controller/kinematics.c ****     YD = LEG4*arm_sin_f32(leg->joint.Phi4);
- 1334              		.loc 1 97 8 view .LVU462
- 1335 0022 9FED6BAA 		vldr.32	s20, .L62+8
- 1336 0026 20EE0ABA 		vmul.f32	s22, s0, s20
- 1337              	.LVL77:
-  98:Robot/Controller/kinematics.c ****     XB = LEG1*arm_cos_f32(leg->joint.Phi1);
- 1338              		.loc 1 98 5 is_stmt 1 view .LVU463
-  98:Robot/Controller/kinematics.c ****     XB = LEG1*arm_cos_f32(leg->joint.Phi1);
- 1339              		.loc 1 98 15 is_stmt 0 view .LVU464
- 1340 002a 94ED150A 		vldr.32	s0, [r4, #84]
- 1341 002e FFF7FEFF 		bl	arm_sin_f32
- 1342              	.LVL78:
-  98:Robot/Controller/kinematics.c ****     XB = LEG1*arm_cos_f32(leg->joint.Phi1);
- 1343              		.loc 1 98 8 view .LVU465
- 1344 0032 60EE0ABA 		vmul.f32	s23, s0, s20
- 1345              	.LVL79:
-  99:Robot/Controller/kinematics.c ****     YB = LEG1*arm_sin_f32(leg->joint.Phi1);
- 1346              		.loc 1 99 5 is_stmt 1 view .LVU466
-  99:Robot/Controller/kinematics.c ****     YB = LEG1*arm_sin_f32(leg->joint.Phi1);
- 1347              		.loc 1 99 15 is_stmt 0 view .LVU467
- 1348 0036 94ED140A 		vldr.32	s0, [r4, #80]
- 1349 003a FFF7FEFF 		bl	arm_cos_f32
- 1350              	.LVL80:
-  99:Robot/Controller/kinematics.c ****     YB = LEG1*arm_sin_f32(leg->joint.Phi1);
- 1351              		.loc 1 99 8 view .LVU468
- 1352 003e 60EE0AAA 		vmul.f32	s21, s0, s20
- 1353              	.LVL81:
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 30
-
-
- 100:Robot/Controller/kinematics.c **** 
- 1354              		.loc 1 100 5 is_stmt 1 view .LVU469
- 100:Robot/Controller/kinematics.c **** 
- 1355              		.loc 1 100 15 is_stmt 0 view .LVU470
- 1356 0042 94ED140A 		vldr.32	s0, [r4, #80]
- 1357 0046 FFF7FEFF 		bl	arm_sin_f32
- 1358              	.LVL82:
- 100:Robot/Controller/kinematics.c **** 
- 1359              		.loc 1 100 8 view .LVU471
- 1360 004a 60EE0A8A 		vmul.f32	s17, s0, s20
- 1361              	.LVL83:
- 102:Robot/Controller/kinematics.c **** 
- 1362              		.loc 1 102 5 is_stmt 1 view .LVU472
- 102:Robot/Controller/kinematics.c **** 
- 1363              		.loc 1 102 25 is_stmt 0 view .LVU473
- 1364 004e 3BEE6ACA 		vsub.f32	s24, s22, s21
- 102:Robot/Controller/kinematics.c **** 
- 1365              		.loc 1 102 30 view .LVU474
- 1366 0052 2CEE0C0A 		vmul.f32	s0, s24, s24
- 102:Robot/Controller/kinematics.c **** 
- 1367              		.loc 1 102 47 view .LVU475
- 1368 0056 3BEEE89A 		vsub.f32	s18, s23, s17
- 102:Robot/Controller/kinematics.c **** 
- 1369              		.loc 1 102 51 view .LVU476
- 1370 005a 69EE097A 		vmul.f32	s15, s18, s18
- 102:Robot/Controller/kinematics.c **** 
- 1371              		.loc 1 102 11 view .LVU477
- 1372 005e 30EE270A 		vadd.f32	s0, s0, s15
- 1373 0062 FFF7FEFF 		bl	safe_sqrt
- 1374              	.LVL84:
- 104:Robot/Controller/kinematics.c ****     B0 = 2*LEG2*(YD - YB);
- 1375              		.loc 1 104 5 is_stmt 1 view .LVU478
- 104:Robot/Controller/kinematics.c ****     B0 = 2*LEG2*(YD - YB);
- 1376              		.loc 1 104 8 is_stmt 0 view .LVU479
- 1377 0066 F6EE007A 		vmov.f32	s15, #5.0e-1
- 1378 006a 2CEE27CA 		vmul.f32	s24, s24, s15
- 1379              	.LVL85:
- 105:Robot/Controller/kinematics.c ****     C0 = LEG2*LEG2 + lBD * lBD - LEG3*LEG3;
- 1380              		.loc 1 105 5 is_stmt 1 view .LVU480
- 105:Robot/Controller/kinematics.c ****     C0 = LEG2*LEG2 + lBD * lBD - LEG3*LEG3;
- 1381              		.loc 1 105 8 is_stmt 0 view .LVU481
- 1382 006e 29EE279A 		vmul.f32	s18, s18, s15
- 1383              	.LVL86:
- 106:Robot/Controller/kinematics.c **** 
- 1384              		.loc 1 106 5 is_stmt 1 view .LVU482
- 106:Robot/Controller/kinematics.c **** 
- 1385              		.loc 1 106 26 is_stmt 0 view .LVU483
- 1386 0072 20EE008A 		vmul.f32	s16, s0, s0
- 106:Robot/Controller/kinematics.c **** 
- 1387              		.loc 1 106 20 view .LVU484
- 1388 0076 9FED570A 		vldr.32	s0, .L62+12
- 1389              	.LVL87:
- 106:Robot/Controller/kinematics.c **** 
- 1390              		.loc 1 106 20 view .LVU485
- 1391 007a 38EE008A 		vadd.f32	s16, s16, s0
- 106:Robot/Controller/kinematics.c **** 
- 1392              		.loc 1 106 8 view .LVU486
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 31
-
-
- 1393 007e 38EE408A 		vsub.f32	s16, s16, s0
- 1394              	.LVL88:
- 108:Robot/Controller/kinematics.c ****     excessive->Phi3 = atan2f(YB - YD + LEG2*arm_sin_f32(excessive->Phi2), XB - XD + LEG2*arm_cos_f3
- 1395              		.loc 1 108 5 is_stmt 1 view .LVU487
- 108:Robot/Controller/kinematics.c ****     excessive->Phi3 = atan2f(YB - YD + LEG2*arm_sin_f32(excessive->Phi2), XB - XD + LEG2*arm_cos_f3
- 1396              		.loc 1 108 49 is_stmt 0 view .LVU488
- 1397 0082 6CEE0C7A 		vmul.f32	s15, s24, s24
- 108:Robot/Controller/kinematics.c ****     excessive->Phi3 = atan2f(YB - YD + LEG2*arm_sin_f32(excessive->Phi2), XB - XD + LEG2*arm_cos_f3
- 1398              		.loc 1 108 57 view .LVU489
- 1399 0086 29EE090A 		vmul.f32	s0, s18, s18
- 108:Robot/Controller/kinematics.c ****     excessive->Phi3 = atan2f(YB - YD + LEG2*arm_sin_f32(excessive->Phi2), XB - XD + LEG2*arm_cos_f3
- 1400              		.loc 1 108 53 view .LVU490
- 1401 008a 77EE807A 		vadd.f32	s15, s15, s0
- 108:Robot/Controller/kinematics.c ****     excessive->Phi3 = atan2f(YB - YD + LEG2*arm_sin_f32(excessive->Phi2), XB - XD + LEG2*arm_cos_f3
- 1402              		.loc 1 108 65 view .LVU491
- 1403 008e 28EE080A 		vmul.f32	s0, s16, s16
- 108:Robot/Controller/kinematics.c ****     excessive->Phi3 = atan2f(YB - YD + LEG2*arm_sin_f32(excessive->Phi2), XB - XD + LEG2*arm_cos_f3
- 1404              		.loc 1 108 37 view .LVU492
- 1405 0092 37EEC00A 		vsub.f32	s0, s15, s0
- 1406 0096 FFF7FEFF 		bl	safe_sqrt
- 1407              	.LVL89:
- 108:Robot/Controller/kinematics.c ****     excessive->Phi3 = atan2f(YB - YD + LEG2*arm_sin_f32(excessive->Phi2), XB - XD + LEG2*arm_cos_f3
- 1408              		.loc 1 108 25 view .LVU493
- 1409 009a 7CEE080A 		vadd.f32	s1, s24, s16
- 1410 009e 30EE090A 		vadd.f32	s0, s0, s18
- 1411 00a2 FFF7FEFF 		bl	atan2f
- 1412              	.LVL90:
- 108:Robot/Controller/kinematics.c ****     excessive->Phi3 = atan2f(YB - YD + LEG2*arm_sin_f32(excessive->Phi2), XB - XD + LEG2*arm_cos_f3
- 1413              		.loc 1 108 24 view .LVU494
- 1414 00a6 30EE000A 		vadd.f32	s0, s0, s0
- 108:Robot/Controller/kinematics.c ****     excessive->Phi3 = atan2f(YB - YD + LEG2*arm_sin_f32(excessive->Phi2), XB - XD + LEG2*arm_cos_f3
- 1415              		.loc 1 108 21 view .LVU495
- 1416 00aa 85ED000A 		vstr.32	s0, [r5]
- 109:Robot/Controller/kinematics.c **** 
- 1417              		.loc 1 109 5 is_stmt 1 view .LVU496
- 109:Robot/Controller/kinematics.c **** 
- 1418              		.loc 1 109 33 is_stmt 0 view .LVU497
- 1419 00ae 78EEEB8A 		vsub.f32	s17, s17, s23
- 1420              	.LVL91:
- 109:Robot/Controller/kinematics.c **** 
- 1421              		.loc 1 109 45 view .LVU498
- 1422 00b2 FFF7FEFF 		bl	arm_sin_f32
- 1423              	.LVL92:
- 109:Robot/Controller/kinematics.c **** 
- 1424              		.loc 1 109 44 view .LVU499
- 1425 00b6 B5EE009A 		vmov.f32	s18, #2.5e-1
- 1426              	.LVL93:
- 109:Robot/Controller/kinematics.c **** 
- 1427              		.loc 1 109 44 view .LVU500
- 1428 00ba 20EE090A 		vmul.f32	s0, s0, s18
- 109:Robot/Controller/kinematics.c **** 
- 1429              		.loc 1 109 23 view .LVU501
- 1430 00be 78EE808A 		vadd.f32	s17, s17, s0
- 109:Robot/Controller/kinematics.c **** 
- 1431              		.loc 1 109 78 view .LVU502
- 1432 00c2 7AEECBAA 		vsub.f32	s21, s21, s22
- 1433              	.LVL94:
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 32
-
-
- 109:Robot/Controller/kinematics.c **** 
- 1434              		.loc 1 109 90 view .LVU503
- 1435 00c6 95ED000A 		vldr.32	s0, [r5]
- 1436 00ca FFF7FEFF 		bl	arm_cos_f32
- 1437              	.LVL95:
- 109:Robot/Controller/kinematics.c **** 
- 1438              		.loc 1 109 89 view .LVU504
- 1439 00ce 60EE090A 		vmul.f32	s1, s0, s18
- 109:Robot/Controller/kinematics.c **** 
- 1440              		.loc 1 109 23 view .LVU505
- 1441 00d2 7AEEA00A 		vadd.f32	s1, s21, s1
- 1442 00d6 B0EE680A 		vmov.f32	s0, s17
- 1443 00da FFF7FEFF 		bl	atan2f
- 1444              	.LVL96:
- 109:Robot/Controller/kinematics.c **** 
- 1445              		.loc 1 109 21 view .LVU506
- 1446 00de 85ED010A 		vstr.32	s0, [r5, #4]
- 111:Robot/Controller/kinematics.c ****     leg->rod.yC = LEG1*arm_sin_f32(leg->joint.Phi1) + LEG2*arm_sin_f32(excessive->Phi2);
- 1447              		.loc 1 111 5 is_stmt 1 view .LVU507
- 111:Robot/Controller/kinematics.c ****     leg->rod.yC = LEG1*arm_sin_f32(leg->joint.Phi1) + LEG2*arm_sin_f32(excessive->Phi2);
- 1448              		.loc 1 111 24 is_stmt 0 view .LVU508
- 1449 00e2 94ED140A 		vldr.32	s0, [r4, #80]
- 1450 00e6 FFF7FEFF 		bl	arm_cos_f32
- 1451              	.LVL97:
- 111:Robot/Controller/kinematics.c ****     leg->rod.yC = LEG1*arm_sin_f32(leg->joint.Phi1) + LEG2*arm_sin_f32(excessive->Phi2);
- 1452              		.loc 1 111 23 view .LVU509
- 1453 00ea 20EE0A8A 		vmul.f32	s16, s0, s20
- 1454              	.LVL98:
- 111:Robot/Controller/kinematics.c ****     leg->rod.yC = LEG1*arm_sin_f32(leg->joint.Phi1) + LEG2*arm_sin_f32(excessive->Phi2);
- 1455              		.loc 1 111 60 view .LVU510
- 1456 00ee 95ED000A 		vldr.32	s0, [r5]
- 1457 00f2 FFF7FEFF 		bl	arm_cos_f32
- 1458              	.LVL99:
- 111:Robot/Controller/kinematics.c ****     leg->rod.yC = LEG1*arm_sin_f32(leg->joint.Phi1) + LEG2*arm_sin_f32(excessive->Phi2);
- 1459              		.loc 1 111 59 view .LVU511
- 1460 00f6 20EE090A 		vmul.f32	s0, s0, s18
- 111:Robot/Controller/kinematics.c ****     leg->rod.yC = LEG1*arm_sin_f32(leg->joint.Phi1) + LEG2*arm_sin_f32(excessive->Phi2);
- 1461              		.loc 1 111 53 view .LVU512
- 1462 00fa 38EE008A 		vadd.f32	s16, s16, s0
- 111:Robot/Controller/kinematics.c ****     leg->rod.yC = LEG1*arm_sin_f32(leg->joint.Phi1) + LEG2*arm_sin_f32(excessive->Phi2);
- 1463              		.loc 1 111 17 view .LVU513
- 1464 00fe 84ED008A 		vstr.32	s16, [r4]
- 112:Robot/Controller/kinematics.c **** 
- 1465              		.loc 1 112 5 is_stmt 1 view .LVU514
- 112:Robot/Controller/kinematics.c **** 
- 1466              		.loc 1 112 24 is_stmt 0 view .LVU515
- 1467 0102 94ED140A 		vldr.32	s0, [r4, #80]
- 1468 0106 FFF7FEFF 		bl	arm_sin_f32
- 1469              	.LVL100:
- 112:Robot/Controller/kinematics.c **** 
- 1470              		.loc 1 112 23 view .LVU516
- 1471 010a 20EE0AAA 		vmul.f32	s20, s0, s20
- 112:Robot/Controller/kinematics.c **** 
- 1472              		.loc 1 112 60 view .LVU517
- 1473 010e 95ED000A 		vldr.32	s0, [r5]
- 1474 0112 FFF7FEFF 		bl	arm_sin_f32
- 1475              	.LVL101:
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 33
-
-
- 112:Robot/Controller/kinematics.c **** 
- 1476              		.loc 1 112 59 view .LVU518
- 1477 0116 60EE097A 		vmul.f32	s15, s0, s18
- 112:Robot/Controller/kinematics.c **** 
- 1478              		.loc 1 112 53 view .LVU519
- 1479 011a 7AEE277A 		vadd.f32	s15, s20, s15
- 112:Robot/Controller/kinematics.c **** 
- 1480              		.loc 1 112 17 view .LVU520
- 1481 011e C4ED017A 		vstr.32	s15, [r4, #4]
- 114:Robot/Controller/kinematics.c ****     leg->rod.phi0 = atan2f(leg->rod.yC, leg->rod.xC);
- 1482              		.loc 1 114 5 is_stmt 1 view .LVU521
- 114:Robot/Controller/kinematics.c ****     leg->rod.phi0 = atan2f(leg->rod.yC, leg->rod.xC);
- 1483              		.loc 1 114 37 is_stmt 0 view .LVU522
- 1484 0122 94ED000A 		vldr.32	s0, [r4]
- 114:Robot/Controller/kinematics.c ****     leg->rod.phi0 = atan2f(leg->rod.yC, leg->rod.xC);
- 1485              		.loc 1 114 40 view .LVU523
- 1486 0126 20EE000A 		vmul.f32	s0, s0, s0
- 114:Robot/Controller/kinematics.c ****     leg->rod.phi0 = atan2f(leg->rod.yC, leg->rod.xC);
- 1487              		.loc 1 114 66 view .LVU524
- 1488 012a 67EEA77A 		vmul.f32	s15, s15, s15
- 114:Robot/Controller/kinematics.c ****     leg->rod.phi0 = atan2f(leg->rod.yC, leg->rod.xC);
- 1489              		.loc 1 114 19 view .LVU525
- 1490 012e 30EE270A 		vadd.f32	s0, s0, s15
- 1491 0132 FFF7FEFF 		bl	safe_sqrt
- 1492              	.LVL102:
- 114:Robot/Controller/kinematics.c ****     leg->rod.phi0 = atan2f(leg->rod.yC, leg->rod.xC);
- 1493              		.loc 1 114 17 view .LVU526
- 1494 0136 84ED020A 		vstr.32	s0, [r4, #8]
- 115:Robot/Controller/kinematics.c **** 
- 1495              		.loc 1 115 5 is_stmt 1 view .LVU527
- 115:Robot/Controller/kinematics.c **** 
- 1496              		.loc 1 115 21 is_stmt 0 view .LVU528
- 1497 013a D4ED000A 		vldr.32	s1, [r4]
- 1498 013e 94ED010A 		vldr.32	s0, [r4, #4]
- 1499 0142 FFF7FEFF 		bl	atan2f
- 1500              	.LVL103:
- 115:Robot/Controller/kinematics.c **** 
- 1501              		.loc 1 115 19 view .LVU529
- 1502 0146 84ED070A 		vstr.32	s0, [r4, #28]
- 118:Robot/Controller/kinematics.c ****     
- 1503              		.loc 1 118 5 is_stmt 1 view .LVU530
- 118:Robot/Controller/kinematics.c ****     
- 1504              		.loc 1 118 48 is_stmt 0 view .LVU531
- 1505 014a 94ED097A 		vldr.32	s14, [r4, #36]
- 118:Robot/Controller/kinematics.c ****     
- 1506              		.loc 1 118 38 view .LVU532
- 1507 014e 30EE477A 		vsub.f32	s14, s0, s14
- 118:Robot/Controller/kinematics.c ****     
- 1508              		.loc 1 118 60 view .LVU533
- 1509 0152 C7EE297A 		vdiv.f32	s15, s14, s19
- 118:Robot/Controller/kinematics.c ****     
- 1510              		.loc 1 118 21 view .LVU534
- 1511 0156 C4ED087A 		vstr.32	s15, [r4, #32]
- 120:Robot/Controller/kinematics.c **** 
- 1512              		.loc 1 120 5 is_stmt 1 view .LVU535
- 120:Robot/Controller/kinematics.c **** 
- 1513              		.loc 1 120 24 is_stmt 0 view .LVU536
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 34
-
-
- 1514 015a 84ED090A 		vstr.32	s0, [r4, #36]
- 123:Robot/Controller/kinematics.c ****     leg->rod.d_theta = - leg->rod.d_phi0 - PitchGyroR; //状态量2
- 1515              		.loc 1 123 5 is_stmt 1 view .LVU537
- 123:Robot/Controller/kinematics.c ****     leg->rod.d_theta = - leg->rod.d_phi0 - PitchGyroR; //状态量2
- 1516              		.loc 1 123 27 is_stmt 0 view .LVU538
- 1517 015e 9FED1E7A 		vldr.32	s14, .L62+16
- 1518 0162 37EE400A 		vsub.f32	s0, s14, s0
- 123:Robot/Controller/kinematics.c ****     leg->rod.d_theta = - leg->rod.d_phi0 - PitchGyroR; //状态量2
- 1519              		.loc 1 123 43 view .LVU539
- 1520 0166 97ED007A 		vldr.32	s14, [r7]
- 1521 016a 30EE470A 		vsub.f32	s0, s0, s14
- 123:Robot/Controller/kinematics.c ****     leg->rod.d_theta = - leg->rod.d_phi0 - PitchGyroR; //状态量2
- 1522              		.loc 1 123 20 view .LVU540
- 1523 016e 84ED0A0A 		vstr.32	s0, [r4, #40]
- 124:Robot/Controller/kinematics.c ****     leg->rod.dd_theta = (leg->rod.d_theta - leg->rod.last_d_theta) / dt;
- 1524              		.loc 1 124 5 is_stmt 1 view .LVU541
- 124:Robot/Controller/kinematics.c ****     leg->rod.dd_theta = (leg->rod.d_theta - leg->rod.last_d_theta) / dt;
- 1525              		.loc 1 124 24 is_stmt 0 view .LVU542
- 1526 0172 F1EE677A 		vneg.f32	s15, s15
- 124:Robot/Controller/kinematics.c ****     leg->rod.dd_theta = (leg->rod.d_theta - leg->rod.last_d_theta) / dt;
- 1527              		.loc 1 124 42 view .LVU543
- 1528 0176 96ED007A 		vldr.32	s14, [r6]
- 1529 017a 77EEC77A 		vsub.f32	s15, s15, s14
- 124:Robot/Controller/kinematics.c ****     leg->rod.dd_theta = (leg->rod.d_theta - leg->rod.last_d_theta) / dt;
- 1530              		.loc 1 124 22 view .LVU544
- 1531 017e C4ED0B7A 		vstr.32	s15, [r4, #44]
- 125:Robot/Controller/kinematics.c ****     leg->rod.last_d_theta = leg->rod.d_theta;
- 1532              		.loc 1 125 5 is_stmt 1 view .LVU545
- 125:Robot/Controller/kinematics.c ****     leg->rod.last_d_theta = leg->rod.d_theta;
- 1533              		.loc 1 125 53 is_stmt 0 view .LVU546
- 1534 0182 94ED0C7A 		vldr.32	s14, [r4, #48]
- 125:Robot/Controller/kinematics.c ****     leg->rod.last_d_theta = leg->rod.d_theta;
- 1535              		.loc 1 125 43 view .LVU547
- 1536 0186 37EEC77A 		vsub.f32	s14, s15, s14
- 125:Robot/Controller/kinematics.c ****     leg->rod.last_d_theta = leg->rod.d_theta;
- 1537              		.loc 1 125 68 view .LVU548
- 1538 018a C7EE296A 		vdiv.f32	s13, s14, s19
- 125:Robot/Controller/kinematics.c ****     leg->rod.last_d_theta = leg->rod.d_theta;
- 1539              		.loc 1 125 23 view .LVU549
- 1540 018e C4ED0D6A 		vstr.32	s13, [r4, #52]
- 126:Robot/Controller/kinematics.c **** 
- 1541              		.loc 1 126 5 is_stmt 1 view .LVU550
- 126:Robot/Controller/kinematics.c **** 
- 1542              		.loc 1 126 27 is_stmt 0 view .LVU551
- 1543 0192 C4ED0C7A 		vstr.32	s15, [r4, #48]
- 129:Robot/Controller/kinematics.c ****     leg->rod.dd_L0 = (leg->rod.d_L0 - leg->rod.last_d_L0) / dt;
- 1544              		.loc 1 129 5 is_stmt 1 view .LVU552
- 129:Robot/Controller/kinematics.c ****     leg->rod.dd_L0 = (leg->rod.d_L0 - leg->rod.last_d_L0) / dt;
- 1545              		.loc 1 129 30 is_stmt 0 view .LVU553
- 1546 0196 D4ED026A 		vldr.32	s13, [r4, #8]
- 129:Robot/Controller/kinematics.c ****     leg->rod.dd_L0 = (leg->rod.d_L0 - leg->rod.last_d_L0) / dt;
- 1547              		.loc 1 129 44 view .LVU554
- 1548 019a 94ED057A 		vldr.32	s14, [r4, #20]
- 129:Robot/Controller/kinematics.c ****     leg->rod.dd_L0 = (leg->rod.d_L0 - leg->rod.last_d_L0) / dt;
- 1549              		.loc 1 129 34 view .LVU555
- 1550 019e 36EEC77A 		vsub.f32	s14, s13, s14
- 129:Robot/Controller/kinematics.c ****     leg->rod.dd_L0 = (leg->rod.d_L0 - leg->rod.last_d_L0) / dt;
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 35
-
-
- 1551              		.loc 1 129 54 view .LVU556
- 1552 01a2 C7EE297A 		vdiv.f32	s15, s14, s19
- 129:Robot/Controller/kinematics.c ****     leg->rod.dd_L0 = (leg->rod.d_L0 - leg->rod.last_d_L0) / dt;
- 1553              		.loc 1 129 19 view .LVU557
- 1554 01a6 C4ED037A 		vstr.32	s15, [r4, #12]
- 130:Robot/Controller/kinematics.c **** 
- 1555              		.loc 1 130 5 is_stmt 1 view .LVU558
- 130:Robot/Controller/kinematics.c **** 
- 1556              		.loc 1 130 47 is_stmt 0 view .LVU559
- 1557 01aa 94ED067A 		vldr.32	s14, [r4, #24]
- 130:Robot/Controller/kinematics.c **** 
- 1558              		.loc 1 130 37 view .LVU560
- 1559 01ae 37EEC77A 		vsub.f32	s14, s15, s14
- 130:Robot/Controller/kinematics.c **** 
- 1560              		.loc 1 130 59 view .LVU561
- 1561 01b2 87EE296A 		vdiv.f32	s12, s14, s19
- 130:Robot/Controller/kinematics.c **** 
- 1562              		.loc 1 130 20 view .LVU562
- 1563 01b6 84ED046A 		vstr.32	s12, [r4, #16]
- 132:Robot/Controller/kinematics.c ****     leg->rod.last_d_L0 = leg->rod.d_L0;
- 1564              		.loc 1 132 5 is_stmt 1 view .LVU563
- 132:Robot/Controller/kinematics.c ****     leg->rod.last_d_L0 = leg->rod.d_L0;
- 1565              		.loc 1 132 22 is_stmt 0 view .LVU564
- 1566 01ba C4ED056A 		vstr.32	s13, [r4, #20]
- 133:Robot/Controller/kinematics.c **** 
- 1567              		.loc 1 133 5 is_stmt 1 view .LVU565
- 133:Robot/Controller/kinematics.c **** 
- 1568              		.loc 1 133 24 is_stmt 0 view .LVU566
- 1569 01be C4ED067A 		vstr.32	s15, [r4, #24]
- 135:Robot/Controller/kinematics.c **** 
- 1570              		.loc 1 135 1 view .LVU567
- 1571 01c2 BDEC0A8B 		vldm	sp!, {d8-d12}
- 1572              	.LCFI16:
- 1573              		.cfi_restore 88
- 1574              		.cfi_restore 89
- 1575              		.cfi_restore 86
- 1576              		.cfi_restore 87
- 1577              		.cfi_restore 84
- 1578              		.cfi_restore 85
- 1579              		.cfi_restore 82
- 1580              		.cfi_restore 83
- 1581              		.cfi_restore 80
- 1582              		.cfi_restore 81
- 1583              		.cfi_def_cfa_offset 24
- 1584              	.LVL104:
- 135:Robot/Controller/kinematics.c **** 
- 1585              		.loc 1 135 1 view .LVU568
- 1586 01c6 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
- 1587              	.LVL105:
- 1588              	.L63:
- 135:Robot/Controller/kinematics.c **** 
- 1589              		.loc 1 135 1 view .LVU569
- 1590              		.align	2
- 1591              	.L62:
- 1592 01c8 00000000 		.word	.LANCHOR12
- 1593 01cc 00000000 		.word	.LANCHOR13
- 1594 01d0 3D0A573E 		.word	1045891645
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 36
-
-
- 1595 01d4 0000803D 		.word	1031798784
- 1596 01d8 DB0FC93F 		.word	1070141403
- 1597              		.cfi_endproc
- 1598              	.LFE189:
- 1600              		.section	.text.safe_div,"ax",%progbits
- 1601              		.align	1
- 1602              		.global	safe_div
- 1603              		.syntax unified
- 1604              		.thumb
- 1605              		.thumb_func
- 1607              	safe_div:
- 1608              	.LVL106:
- 1609              	.LFB197:
- 282:Robot/Controller/kinematics.c **** 
- 283:Robot/Controller/kinematics.c **** // 防止除以零
- 284:Robot/Controller/kinematics.c **** float safe_div(float num, float denom) 
- 285:Robot/Controller/kinematics.c **** {
- 1610              		.loc 1 285 1 is_stmt 1 view -0
- 1611              		.cfi_startproc
- 1612              		@ args = 0, pretend = 0, frame = 0
- 1613              		@ frame_needed = 0, uses_anonymous_args = 0
- 1614              		@ link register save eliminated.
- 286:Robot/Controller/kinematics.c ****     if (fabs(denom) < 1e-6f) denom = (denom < 0 ? -1e-6f : 1e-6f); // 防止分母0
- 1615              		.loc 1 286 5 view .LVU571
- 1616              		.loc 1 286 9 is_stmt 0 view .LVU572
- 1617 0000 B0EEE07A 		vabs.f32	s14, s1
- 1618              		.loc 1 286 8 view .LVU573
- 1619 0004 DFED097A 		vldr.32	s15, .L73
- 1620 0008 B4EEE77A 		vcmpe.f32	s14, s15
- 1621 000c F1EE10FA 		vmrs	APSR_nzcv, FPSCR
- 1622 0010 06D5     		bpl	.L65
- 1623              		.loc 1 286 30 is_stmt 1 discriminator 1 view .LVU574
- 1624              		.loc 1 286 58 is_stmt 0 discriminator 1 view .LVU575
- 1625 0012 F5EEC00A 		vcmpe.f32	s1, #0
- 1626 0016 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
- 1627 001a 04D4     		bmi	.L72
- 1628              		.loc 1 286 58 view .LVU576
- 1629 001c DFED030A 		vldr.32	s1, .L73
- 1630              	.LVL107:
- 1631              	.L65:
- 287:Robot/Controller/kinematics.c ****     return num / denom;
- 1632              		.loc 1 287 5 is_stmt 1 view .LVU577
+ 279:Robot/Controller/kinematics.c ****         /* code */
+ 280:Robot/Controller/kinematics.c ****         *short_leg += temp;
+ 1208              		.loc 1 280 9 is_stmt 1 view .LVU449
+ 1209              		.loc 1 280 20 is_stmt 0 view .LVU450
+ 1210 005a 37EE277A 		vadd.f32	s14, s14, s15
+ 1211 005e 83ED007A 		vstr.32	s14, [r3]
+ 281:Robot/Controller/kinematics.c ****         *long_leg += temp;
+ 1212              		.loc 1 281 9 is_stmt 1 view .LVU451
+ 1213              		.loc 1 281 19 is_stmt 0 view .LVU452
+ 1214 0062 90ED007A 		vldr.32	s14, [r0]
+ 1215 0066 77EE277A 		vadd.f32	s15, s14, s15
+ 1216              	.LVL73:
+ 1217              		.loc 1 281 19 view .LVU453
+ 1218 006a C0ED007A 		vstr.32	s15, [r0]
+ 1219              	.L31:
+ 282:Robot/Controller/kinematics.c ****     }
+ 283:Robot/Controller/kinematics.c ****     if (*long_leg > MAX_LEG_LENGTH)
+ 1220              		.loc 1 283 5 is_stmt 1 view .LVU454
+ 1221              		.loc 1 283 9 is_stmt 0 view .LVU455
+ 1222 006e D0ED007A 		vldr.32	s15, [r0]
+ 1223              		.loc 1 283 8 view .LVU456
+ 1224 0072 F5EEC07A 		vcmpe.f32	s15, #0
+ 1225 0076 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 1226 007a 01DD     		ble	.L26
+ 284:Robot/Controller/kinematics.c ****     {
+ 285:Robot/Controller/kinematics.c ****         /* code */
+ 286:Robot/Controller/kinematics.c ****         *long_leg = MAX_LEG_LENGTH;
+ 1227              		.loc 1 286 9 is_stmt 1 view .LVU457
+ 1228              		.loc 1 286 19 is_stmt 0 view .LVU458
+ 1229 007c 0023     		movs	r3, #0
+ 1230              	.LVL74:
+ 1231              		.loc 1 286 19 view .LVU459
+ 1232 007e 0360     		str	r3, [r0]	@ float
+ 1233              	.L26:
+ 287:Robot/Controller/kinematics.c ****     }    
  288:Robot/Controller/kinematics.c **** }
- 1633              		.loc 1 288 1 is_stmt 0 view .LVU578
- 1634 0020 80EE200A 		vdiv.f32	s0, s0, s1
- 1635              	.LVL108:
- 1636              		.loc 1 288 1 view .LVU579
- 1637 0024 7047     		bx	lr
- 1638              	.LVL109:
- 1639              	.L72:
- 286:Robot/Controller/kinematics.c ****     if (fabs(denom) < 1e-6f) denom = (denom < 0 ? -1e-6f : 1e-6f); // 防止分母0
- 1640              		.loc 1 286 58 view .LVU580
- 1641 0026 DFED020A 		vldr.32	s1, .L73+4
- 1642              	.LVL110:
- 286:Robot/Controller/kinematics.c ****     if (fabs(denom) < 1e-6f) denom = (denom < 0 ? -1e-6f : 1e-6f); // 防止分母0
- 1643              		.loc 1 286 58 view .LVU581
- 1644 002a F9E7     		b	.L65
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 37
+ 1234              		.loc 1 288 1 view .LVU460
+ 1235 0080 7047     		bx	lr
+ 1236              	.LVL75:
+ 1237              	.L40:
+ 272:Robot/Controller/kinematics.c ****     float *long_leg = *LengthL < *LengthR ? LengthR : LengthL;
+ 1238              		.loc 1 272 54 view .LVU461
+ 1239 0082 0B46     		mov	r3, r1
+ 1240 0084 D8E7     		b	.L27
+ 1241              	.L42:
+ 1242 0086 00BF     		.align	2
+ 1243              	.L41:
+ 1244 0088 00000000 		.word	0
+ 1245              		.cfi_endproc
+ 1246              	.LFE194:
+ 1248              		.section	.text.DeviationCalc,"ax",%progbits
+ 1249              		.align	1
+ 1250              		.global	DeviationCalc
+ 1251              		.syntax unified
+ 1252              		.thumb
+ 1253              		.thumb_func
+ 1255              	DeviationCalc:
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 28
 
 
- 1645              	.L74:
- 1646              		.align	2
- 1647              	.L73:
- 1648 002c BD378635 		.word	897988541
- 1649 0030 BD3786B5 		.word	-1249495107
- 1650              		.cfi_endproc
- 1651              	.LFE197:
- 1653              		.global	a26
- 1654              		.global	a25
- 1655              		.global	a24
- 1656              		.global	a23
- 1657              		.global	a22
- 1658              		.global	a21
- 1659              		.global	a16
- 1660              		.global	a15
- 1661              		.global	a14
- 1662              		.global	a13
- 1663              		.global	a12
- 1664              		.global	a11
- 1665              		.section	.bss.PitchGyroR.0,"aw",%nobits
- 1666              		.align	2
- 1667              		.set	.LANCHOR13,. + 0
- 1670              	PitchGyroR.0:
- 1671 0000 00000000 		.space	4
- 1672              		.section	.bss.PitchR.1,"aw",%nobits
- 1673              		.align	2
- 1674              		.set	.LANCHOR12,. + 0
- 1677              	PitchR.1:
- 1678 0000 00000000 		.space	4
- 1679              		.section	.bss.a11,"aw",%nobits
- 1680              		.align	2
- 1681              		.set	.LANCHOR0,. + 0
- 1684              	a11:
- 1685 0000 00000000 		.space	16
- 1685      00000000 
- 1685      00000000 
- 1685      00000000 
- 1686              		.section	.bss.a12,"aw",%nobits
- 1687              		.align	2
- 1688              		.set	.LANCHOR1,. + 0
- 1691              	a12:
- 1692 0000 00000000 		.space	16
- 1692      00000000 
- 1692      00000000 
- 1692      00000000 
- 1693              		.section	.bss.a13,"aw",%nobits
- 1694              		.align	2
- 1695              		.set	.LANCHOR2,. + 0
- 1698              	a13:
- 1699 0000 00000000 		.space	16
- 1699      00000000 
- 1699      00000000 
- 1699      00000000 
- 1700              		.section	.bss.a14,"aw",%nobits
- 1701              		.align	2
- 1702              		.set	.LANCHOR3,. + 0
- 1705              	a14:
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 38
+ 1256              	.LVL76:
+ 1257              	.LFB195:
+ 289:Robot/Controller/kinematics.c **** 
+ 290:Robot/Controller/kinematics.c **** /**
+ 291:Robot/Controller/kinematics.c ****  * @brief 通过当前底盘姿态和目标roll角计算两腿长度期望差值
+ 292:Robot/Controller/kinematics.c ****  * 
+ 293:Robot/Controller/kinematics.c ****  * @param diff 左右腿差值
+ 294:Robot/Controller/kinematics.c ****  * @param real 当前roll角
+ 295:Robot/Controller/kinematics.c ****  * @param target 目标roll角
+ 296:Robot/Controller/kinematics.c ****  * @return float 
+ 297:Robot/Controller/kinematics.c ****  */
+ 298:Robot/Controller/kinematics.c **** float DeviationCalc(float diff, float real, float target)
+ 299:Robot/Controller/kinematics.c **** {
+ 1258              		.loc 1 299 1 is_stmt 1 view -0
+ 1259              		.cfi_startproc
+ 1260              		@ args = 0, pretend = 0, frame = 0
+ 1261              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1262              		.loc 1 299 1 is_stmt 0 view .LVU463
+ 1263 0000 08B5     		push	{r3, lr}
+ 1264              	.LCFI13:
+ 1265              		.cfi_def_cfa_offset 8
+ 1266              		.cfi_offset 3, -8
+ 1267              		.cfi_offset 14, -4
+ 1268 0002 2DED068B 		vpush.64	{d8, d9, d10}
+ 1269              	.LCFI14:
+ 1270              		.cfi_def_cfa_offset 32
+ 1271              		.cfi_offset 80, -32
+ 1272              		.cfi_offset 81, -28
+ 1273              		.cfi_offset 82, -24
+ 1274              		.cfi_offset 83, -20
+ 1275              		.cfi_offset 84, -16
+ 1276              		.cfi_offset 85, -12
+ 1277 0006 F0EE409A 		vmov.f32	s19, s0
+ 1278 000a B0EE608A 		vmov.f32	s16, s1
+ 1279 000e F0EE418A 		vmov.f32	s17, s2
+ 300:Robot/Controller/kinematics.c ****     return WHEEL_DISTANCE * tanf(target) - 
+ 1280              		.loc 1 300 5 is_stmt 1 view .LVU464
+ 1281              		.loc 1 300 29 is_stmt 0 view .LVU465
+ 1282 0012 B0EE410A 		vmov.f32	s0, s2
+ 1283              	.LVL77:
+ 1284              		.loc 1 300 29 view .LVU466
+ 1285 0016 FFF7FEFF 		bl	tanf
+ 1286              	.LVL78:
+ 1287              		.loc 1 300 27 view .LVU467
+ 1288 001a DFED0FAA 		vldr.32	s21, .L45
+ 1289 001e 20EE2A9A 		vmul.f32	s18, s0, s21
+ 301:Robot/Controller/kinematics.c ****            cosf(real) / cosf(target) * (WHEEL_DISTANCE * tanf(real) - diff);
+ 1290              		.loc 1 301 12 view .LVU468
+ 1291 0022 B0EE480A 		vmov.f32	s0, s16
+ 1292 0026 FFF7FEFF 		bl	cosf
+ 1293              	.LVL79:
+ 1294 002a B0EE40AA 		vmov.f32	s20, s0
+ 1295              		.loc 1 301 25 view .LVU469
+ 1296 002e B0EE680A 		vmov.f32	s0, s17
+ 1297 0032 FFF7FEFF 		bl	cosf
+ 1298              	.LVL80:
+ 1299              		.loc 1 301 23 view .LVU470
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 29
 
 
- 1706 0000 00000000 		.space	16
- 1706      00000000 
- 1706      00000000 
- 1706      00000000 
- 1707              		.section	.bss.a15,"aw",%nobits
- 1708              		.align	2
- 1709              		.set	.LANCHOR4,. + 0
- 1712              	a15:
- 1713 0000 00000000 		.space	16
- 1713      00000000 
- 1713      00000000 
- 1713      00000000 
- 1714              		.section	.bss.a16,"aw",%nobits
- 1715              		.align	2
- 1716              		.set	.LANCHOR5,. + 0
- 1719              	a16:
- 1720 0000 00000000 		.space	16
- 1720      00000000 
- 1720      00000000 
- 1720      00000000 
- 1721              		.section	.bss.a21,"aw",%nobits
- 1722              		.align	2
- 1723              		.set	.LANCHOR6,. + 0
- 1726              	a21:
- 1727 0000 00000000 		.space	16
- 1727      00000000 
- 1727      00000000 
- 1727      00000000 
- 1728              		.section	.bss.a22,"aw",%nobits
- 1729              		.align	2
- 1730              		.set	.LANCHOR7,. + 0
- 1733              	a22:
- 1734 0000 00000000 		.space	16
- 1734      00000000 
- 1734      00000000 
- 1734      00000000 
- 1735              		.section	.bss.a23,"aw",%nobits
- 1736              		.align	2
- 1737              		.set	.LANCHOR8,. + 0
- 1740              	a23:
- 1741 0000 00000000 		.space	16
- 1741      00000000 
- 1741      00000000 
- 1741      00000000 
- 1742              		.section	.bss.a24,"aw",%nobits
- 1743              		.align	2
- 1744              		.set	.LANCHOR9,. + 0
- 1747              	a24:
- 1748 0000 00000000 		.space	16
- 1748      00000000 
- 1748      00000000 
- 1748      00000000 
- 1749              		.section	.bss.a25,"aw",%nobits
- 1750              		.align	2
- 1751              		.set	.LANCHOR10,. + 0
- 1754              	a25:
- 1755 0000 00000000 		.space	16
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 39
+ 1300 0036 CAEE008A 		vdiv.f32	s17, s20, s0
+ 1301              	.LVL81:
+ 1302              		.loc 1 301 58 view .LVU471
+ 1303 003a B0EE480A 		vmov.f32	s0, s16
+ 1304 003e FFF7FEFF 		bl	tanf
+ 1305              	.LVL82:
+ 1306              		.loc 1 301 56 view .LVU472
+ 1307 0042 60EE2A7A 		vmul.f32	s15, s0, s21
+ 1308              		.loc 1 301 69 view .LVU473
+ 1309 0046 37EEE90A 		vsub.f32	s0, s15, s19
+ 1310              		.loc 1 301 38 view .LVU474
+ 1311 004a 28EE800A 		vmul.f32	s0, s17, s0
+ 302:Robot/Controller/kinematics.c **** }
+ 1312              		.loc 1 302 1 view .LVU475
+ 1313 004e 39EE400A 		vsub.f32	s0, s18, s0
+ 1314 0052 BDEC068B 		vldm	sp!, {d8-d10}
+ 1315              	.LCFI15:
+ 1316              		.cfi_restore 84
+ 1317              		.cfi_restore 85
+ 1318              		.cfi_restore 82
+ 1319              		.cfi_restore 83
+ 1320              		.cfi_restore 80
+ 1321              		.cfi_restore 81
+ 1322              		.cfi_def_cfa_offset 8
+ 1323              	.LVL83:
+ 1324              		.loc 1 302 1 view .LVU476
+ 1325 0056 08BD     		pop	{r3, pc}
+ 1326              	.L46:
+ 1327              		.align	2
+ 1328              	.L45:
+ 1329 0058 00000000 		.word	0
+ 1330              		.cfi_endproc
+ 1331              	.LFE195:
+ 1333              		.section	.text.constrainValue,"ax",%progbits
+ 1334              		.align	1
+ 1335              		.global	constrainValue
+ 1336              		.syntax unified
+ 1337              		.thumb
+ 1338              		.thumb_func
+ 1340              	constrainValue:
+ 1341              	.LVL84:
+ 1342              	.LFB196:
+ 303:Robot/Controller/kinematics.c **** 
+ 304:Robot/Controller/kinematics.c **** // 限幅
+ 305:Robot/Controller/kinematics.c **** float constrainValue(float value, float min, float max)
+ 306:Robot/Controller/kinematics.c **** {
+ 1343              		.loc 1 306 1 is_stmt 1 view -0
+ 1344              		.cfi_startproc
+ 1345              		@ args = 0, pretend = 0, frame = 0
+ 1346              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1347              		@ link register save eliminated.
+ 307:Robot/Controller/kinematics.c ****     if (value < min) return min;
+ 1348              		.loc 1 307 5 view .LVU478
+ 1349              		.loc 1 307 8 is_stmt 0 view .LVU479
+ 1350 0000 B4EEE00A 		vcmpe.f32	s0, s1
+ 1351 0004 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 1352 0008 05D4     		bmi	.L49
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 30
 
 
- 1755      00000000 
- 1755      00000000 
- 1755      00000000 
- 1756              		.section	.bss.a26,"aw",%nobits
- 1757              		.align	2
- 1758              		.set	.LANCHOR11,. + 0
- 1761              	a26:
- 1762 0000 00000000 		.space	16
- 1762      00000000 
- 1762      00000000 
- 1762      00000000 
- 1763              		.text
- 1764              	.Letext0:
- 1765              		.file 2 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\machine\\_default_types.h"
- 1766              		.file 3 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
- 1767              		.file 4 "Robot/RoboTask/ins/ins_task.h"
- 1768              		.file 5 "Robot/RoboTask/chassis/chassis_def.h"
- 1769              		.file 6 "Robot/Controller/kinematics.h"
- 1770              		.file 7 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\math.h"
- 1771              		.file 8 "Middlewares/ST/ARM/DSP/Inc/arm_math.h"
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 40
+ 308:Robot/Controller/kinematics.c ****     if (value > max) return max;
+ 1353              		.loc 1 308 5 is_stmt 1 view .LVU480
+ 1354              		.loc 1 308 8 is_stmt 0 view .LVU481
+ 1355 000a B4EEC10A 		vcmpe.f32	s0, s2
+ 1356 000e F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 1357 0012 03DC     		bgt	.L50
+ 1358 0014 7047     		bx	lr
+ 1359              	.L49:
+ 307:Robot/Controller/kinematics.c ****     if (value < min) return min;
+ 1360              		.loc 1 307 29 view .LVU482
+ 1361 0016 B0EE600A 		vmov.f32	s0, s1
+ 1362              	.LVL85:
+ 307:Robot/Controller/kinematics.c ****     if (value < min) return min;
+ 1363              		.loc 1 307 29 view .LVU483
+ 1364 001a 7047     		bx	lr
+ 1365              	.LVL86:
+ 1366              	.L50:
+ 1367              		.loc 1 308 29 view .LVU484
+ 1368 001c B0EE410A 		vmov.f32	s0, s2
+ 1369              	.LVL87:
+ 309:Robot/Controller/kinematics.c ****     return value;
+ 310:Robot/Controller/kinematics.c **** }
+ 1370              		.loc 1 310 1 view .LVU485
+ 1371 0020 7047     		bx	lr
+ 1372              		.cfi_endproc
+ 1373              	.LFE196:
+ 1375              		.section	.text.safe_sqrt,"ax",%progbits
+ 1376              		.align	1
+ 1377              		.global	safe_sqrt
+ 1378              		.syntax unified
+ 1379              		.thumb
+ 1380              		.thumb_func
+ 1382              	safe_sqrt:
+ 1383              	.LVL88:
+ 1384              	.LFB197:
+ 311:Robot/Controller/kinematics.c **** 
+ 312:Robot/Controller/kinematics.c **** // 防止负数输入
+ 313:Robot/Controller/kinematics.c **** float safe_sqrt(float x)
+ 314:Robot/Controller/kinematics.c **** {
+ 1385              		.loc 1 314 1 is_stmt 1 view -0
+ 1386              		.cfi_startproc
+ 1387              		@ args = 0, pretend = 0, frame = 0
+ 1388              		@ frame_needed = 0, uses_anonymous_args = 0
+ 315:Robot/Controller/kinematics.c ****     return x >= 0.0f ? sqrtf(x) : 0.0f;
+ 1389              		.loc 1 315 5 view .LVU487
+ 1390              		.loc 1 315 33 is_stmt 0 view .LVU488
+ 1391 0000 B5EEC00A 		vcmpe.f32	s0, #0
+ 1392 0004 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 1393 0008 02DA     		bge	.L61
+ 1394 000a 9FED030A 		vldr.32	s0, .L62
+ 1395              	.LVL89:
+ 316:Robot/Controller/kinematics.c **** }
+ 1396              		.loc 1 316 1 view .LVU489
+ 1397 000e 7047     		bx	lr
+ 1398              	.LVL90:
+ 1399              	.L61:
+ 314:Robot/Controller/kinematics.c ****     return x >= 0.0f ? sqrtf(x) : 0.0f;
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 31
+
+
+ 1400              		.loc 1 314 1 discriminator 1 view .LVU490
+ 1401 0010 08B5     		push	{r3, lr}
+ 1402              	.LCFI16:
+ 1403              		.cfi_def_cfa_offset 8
+ 1404              		.cfi_offset 3, -8
+ 1405              		.cfi_offset 14, -4
+ 315:Robot/Controller/kinematics.c ****     return x >= 0.0f ? sqrtf(x) : 0.0f;
+ 1406              		.loc 1 315 24 discriminator 1 view .LVU491
+ 1407 0012 FFF7FEFF 		bl	sqrtf
+ 1408              	.LVL91:
+ 1409              		.loc 1 316 1 discriminator 1 view .LVU492
+ 1410 0016 08BD     		pop	{r3, pc}
+ 1411              	.L63:
+ 1412              		.align	2
+ 1413              	.L62:
+ 1414 0018 00000000 		.word	0
+ 1415              		.cfi_endproc
+ 1416              	.LFE197:
+ 1418              		.section	.text.ForwardKinematics,"ax",%progbits
+ 1419              		.align	1
+ 1420              		.global	ForwardKinematics
+ 1421              		.syntax unified
+ 1422              		.thumb
+ 1423              		.thumb_func
+ 1425              	ForwardKinematics:
+ 1426              	.LVL92:
+ 1427              	.LFB189:
+  87:Robot/Controller/kinematics.c ****     float XD, YD, XB, YB;
+ 1428              		.loc 1 87 1 is_stmt 1 view -0
+ 1429              		.cfi_startproc
+ 1430              		@ args = 0, pretend = 0, frame = 0
+ 1431              		@ frame_needed = 0, uses_anonymous_args = 0
+  87:Robot/Controller/kinematics.c ****     float XD, YD, XB, YB;
+ 1432              		.loc 1 87 1 is_stmt 0 view .LVU494
+ 1433 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 1434              	.LCFI17:
+ 1435              		.cfi_def_cfa_offset 24
+ 1436              		.cfi_offset 3, -24
+ 1437              		.cfi_offset 4, -20
+ 1438              		.cfi_offset 5, -16
+ 1439              		.cfi_offset 6, -12
+ 1440              		.cfi_offset 7, -8
+ 1441              		.cfi_offset 14, -4
+ 1442 0002 2DED0A8B 		vpush.64	{d8, d9, d10, d11, d12}
+ 1443              	.LCFI18:
+ 1444              		.cfi_def_cfa_offset 64
+ 1445              		.cfi_offset 80, -64
+ 1446              		.cfi_offset 81, -60
+ 1447              		.cfi_offset 82, -56
+ 1448              		.cfi_offset 83, -52
+ 1449              		.cfi_offset 84, -48
+ 1450              		.cfi_offset 85, -44
+ 1451              		.cfi_offset 86, -40
+ 1452              		.cfi_offset 87, -36
+ 1453              		.cfi_offset 88, -32
+ 1454              		.cfi_offset 89, -28
+ 1455 0006 0446     		mov	r4, r0
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 32
+
+
+ 1456 0008 0D46     		mov	r5, r1
+ 1457 000a F0EE409A 		vmov.f32	s19, s0
+  88:Robot/Controller/kinematics.c ****     float lBD;
+ 1458              		.loc 1 88 5 is_stmt 1 view .LVU495
+  89:Robot/Controller/kinematics.c ****     float A0, B0, C0;
+ 1459              		.loc 1 89 5 view .LVU496
+  90:Robot/Controller/kinematics.c **** 
+ 1460              		.loc 1 90 5 view .LVU497
+  92:Robot/Controller/kinematics.c ****     static float PitchGyroR = 0.0f;
+ 1461              		.loc 1 92 5 view .LVU498
+  93:Robot/Controller/kinematics.c ****     PitchR = ins->Pitch;
+ 1462              		.loc 1 93 5 view .LVU499
+  94:Robot/Controller/kinematics.c ****     PitchGyroR = ins->Gyro[0];
+ 1463              		.loc 1 94 5 view .LVU500
+  94:Robot/Controller/kinematics.c ****     PitchGyroR = ins->Gyro[0];
+ 1464              		.loc 1 94 17 is_stmt 0 view .LVU501
+ 1465 000e 536F     		ldr	r3, [r2, #116]	@ float
+  94:Robot/Controller/kinematics.c ****     PitchGyroR = ins->Gyro[0];
+ 1466              		.loc 1 94 12 view .LVU502
+ 1467 0010 6D4F     		ldr	r7, .L66
+ 1468 0012 3B60     		str	r3, [r7]	@ float
+  95:Robot/Controller/kinematics.c **** 
+ 1469              		.loc 1 95 5 is_stmt 1 view .LVU503
+  95:Robot/Controller/kinematics.c **** 
+ 1470              		.loc 1 95 27 is_stmt 0 view .LVU504
+ 1471 0014 1369     		ldr	r3, [r2, #16]	@ float
+  95:Robot/Controller/kinematics.c **** 
+ 1472              		.loc 1 95 16 view .LVU505
+ 1473 0016 6D4E     		ldr	r6, .L66+4
+ 1474 0018 3360     		str	r3, [r6]	@ float
+  97:Robot/Controller/kinematics.c ****     YD = LEG4*arm_sin_f32(leg->joint.Phi4);
+ 1475              		.loc 1 97 5 is_stmt 1 view .LVU506
+  97:Robot/Controller/kinematics.c ****     YD = LEG4*arm_sin_f32(leg->joint.Phi4);
+ 1476              		.loc 1 97 15 is_stmt 0 view .LVU507
+ 1477 001a 90ED150A 		vldr.32	s0, [r0, #84]
+ 1478              	.LVL93:
+  97:Robot/Controller/kinematics.c ****     YD = LEG4*arm_sin_f32(leg->joint.Phi4);
+ 1479              		.loc 1 97 15 view .LVU508
+ 1480 001e FFF7FEFF 		bl	arm_cos_f32
+ 1481              	.LVL94:
+  97:Robot/Controller/kinematics.c ****     YD = LEG4*arm_sin_f32(leg->joint.Phi4);
+ 1482              		.loc 1 97 8 view .LVU509
+ 1483 0022 9FED6BAA 		vldr.32	s20, .L66+8
+ 1484 0026 20EE0ABA 		vmul.f32	s22, s0, s20
+ 1485              	.LVL95:
+  98:Robot/Controller/kinematics.c ****     XB = LEG1*arm_cos_f32(leg->joint.Phi1);
+ 1486              		.loc 1 98 5 is_stmt 1 view .LVU510
+  98:Robot/Controller/kinematics.c ****     XB = LEG1*arm_cos_f32(leg->joint.Phi1);
+ 1487              		.loc 1 98 15 is_stmt 0 view .LVU511
+ 1488 002a 94ED150A 		vldr.32	s0, [r4, #84]
+ 1489 002e FFF7FEFF 		bl	arm_sin_f32
+ 1490              	.LVL96:
+  98:Robot/Controller/kinematics.c ****     XB = LEG1*arm_cos_f32(leg->joint.Phi1);
+ 1491              		.loc 1 98 8 view .LVU512
+ 1492 0032 60EE0ABA 		vmul.f32	s23, s0, s20
+ 1493              	.LVL97:
+  99:Robot/Controller/kinematics.c ****     YB = LEG1*arm_sin_f32(leg->joint.Phi1);
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 33
+
+
+ 1494              		.loc 1 99 5 is_stmt 1 view .LVU513
+  99:Robot/Controller/kinematics.c ****     YB = LEG1*arm_sin_f32(leg->joint.Phi1);
+ 1495              		.loc 1 99 15 is_stmt 0 view .LVU514
+ 1496 0036 94ED140A 		vldr.32	s0, [r4, #80]
+ 1497 003a FFF7FEFF 		bl	arm_cos_f32
+ 1498              	.LVL98:
+  99:Robot/Controller/kinematics.c ****     YB = LEG1*arm_sin_f32(leg->joint.Phi1);
+ 1499              		.loc 1 99 8 view .LVU515
+ 1500 003e 60EE0AAA 		vmul.f32	s21, s0, s20
+ 1501              	.LVL99:
+ 100:Robot/Controller/kinematics.c **** 
+ 1502              		.loc 1 100 5 is_stmt 1 view .LVU516
+ 100:Robot/Controller/kinematics.c **** 
+ 1503              		.loc 1 100 15 is_stmt 0 view .LVU517
+ 1504 0042 94ED140A 		vldr.32	s0, [r4, #80]
+ 1505 0046 FFF7FEFF 		bl	arm_sin_f32
+ 1506              	.LVL100:
+ 100:Robot/Controller/kinematics.c **** 
+ 1507              		.loc 1 100 8 view .LVU518
+ 1508 004a 60EE0A8A 		vmul.f32	s17, s0, s20
+ 1509              	.LVL101:
+ 102:Robot/Controller/kinematics.c **** 
+ 1510              		.loc 1 102 5 is_stmt 1 view .LVU519
+ 102:Robot/Controller/kinematics.c **** 
+ 1511              		.loc 1 102 25 is_stmt 0 view .LVU520
+ 1512 004e 3BEE6ACA 		vsub.f32	s24, s22, s21
+ 102:Robot/Controller/kinematics.c **** 
+ 1513              		.loc 1 102 30 view .LVU521
+ 1514 0052 2CEE0C0A 		vmul.f32	s0, s24, s24
+ 102:Robot/Controller/kinematics.c **** 
+ 1515              		.loc 1 102 47 view .LVU522
+ 1516 0056 3BEEE89A 		vsub.f32	s18, s23, s17
+ 102:Robot/Controller/kinematics.c **** 
+ 1517              		.loc 1 102 51 view .LVU523
+ 1518 005a 69EE097A 		vmul.f32	s15, s18, s18
+ 102:Robot/Controller/kinematics.c **** 
+ 1519              		.loc 1 102 11 view .LVU524
+ 1520 005e 30EE270A 		vadd.f32	s0, s0, s15
+ 1521 0062 FFF7FEFF 		bl	safe_sqrt
+ 1522              	.LVL102:
+ 104:Robot/Controller/kinematics.c ****     B0 = 2*LEG2*(YD - YB);
+ 1523              		.loc 1 104 5 is_stmt 1 view .LVU525
+ 104:Robot/Controller/kinematics.c ****     B0 = 2*LEG2*(YD - YB);
+ 1524              		.loc 1 104 8 is_stmt 0 view .LVU526
+ 1525 0066 F6EE007A 		vmov.f32	s15, #5.0e-1
+ 1526 006a 2CEE27CA 		vmul.f32	s24, s24, s15
+ 1527              	.LVL103:
+ 105:Robot/Controller/kinematics.c ****     C0 = LEG2*LEG2 + lBD * lBD - LEG3*LEG3;
+ 1528              		.loc 1 105 5 is_stmt 1 view .LVU527
+ 105:Robot/Controller/kinematics.c ****     C0 = LEG2*LEG2 + lBD * lBD - LEG3*LEG3;
+ 1529              		.loc 1 105 8 is_stmt 0 view .LVU528
+ 1530 006e 29EE279A 		vmul.f32	s18, s18, s15
+ 1531              	.LVL104:
+ 106:Robot/Controller/kinematics.c **** 
+ 1532              		.loc 1 106 5 is_stmt 1 view .LVU529
+ 106:Robot/Controller/kinematics.c **** 
+ 1533              		.loc 1 106 26 is_stmt 0 view .LVU530
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 34
+
+
+ 1534 0072 20EE008A 		vmul.f32	s16, s0, s0
+ 106:Robot/Controller/kinematics.c **** 
+ 1535              		.loc 1 106 20 view .LVU531
+ 1536 0076 9FED570A 		vldr.32	s0, .L66+12
+ 1537              	.LVL105:
+ 106:Robot/Controller/kinematics.c **** 
+ 1538              		.loc 1 106 20 view .LVU532
+ 1539 007a 38EE008A 		vadd.f32	s16, s16, s0
+ 106:Robot/Controller/kinematics.c **** 
+ 1540              		.loc 1 106 8 view .LVU533
+ 1541 007e 38EE408A 		vsub.f32	s16, s16, s0
+ 1542              	.LVL106:
+ 108:Robot/Controller/kinematics.c ****     excessive->Phi3 = atan2f(YB - YD + LEG2*arm_sin_f32(excessive->Phi2), XB - XD + LEG2*arm_cos_f3
+ 1543              		.loc 1 108 5 is_stmt 1 view .LVU534
+ 108:Robot/Controller/kinematics.c ****     excessive->Phi3 = atan2f(YB - YD + LEG2*arm_sin_f32(excessive->Phi2), XB - XD + LEG2*arm_cos_f3
+ 1544              		.loc 1 108 49 is_stmt 0 view .LVU535
+ 1545 0082 6CEE0C7A 		vmul.f32	s15, s24, s24
+ 108:Robot/Controller/kinematics.c ****     excessive->Phi3 = atan2f(YB - YD + LEG2*arm_sin_f32(excessive->Phi2), XB - XD + LEG2*arm_cos_f3
+ 1546              		.loc 1 108 57 view .LVU536
+ 1547 0086 29EE090A 		vmul.f32	s0, s18, s18
+ 108:Robot/Controller/kinematics.c ****     excessive->Phi3 = atan2f(YB - YD + LEG2*arm_sin_f32(excessive->Phi2), XB - XD + LEG2*arm_cos_f3
+ 1548              		.loc 1 108 53 view .LVU537
+ 1549 008a 77EE807A 		vadd.f32	s15, s15, s0
+ 108:Robot/Controller/kinematics.c ****     excessive->Phi3 = atan2f(YB - YD + LEG2*arm_sin_f32(excessive->Phi2), XB - XD + LEG2*arm_cos_f3
+ 1550              		.loc 1 108 65 view .LVU538
+ 1551 008e 28EE080A 		vmul.f32	s0, s16, s16
+ 108:Robot/Controller/kinematics.c ****     excessive->Phi3 = atan2f(YB - YD + LEG2*arm_sin_f32(excessive->Phi2), XB - XD + LEG2*arm_cos_f3
+ 1552              		.loc 1 108 37 view .LVU539
+ 1553 0092 37EEC00A 		vsub.f32	s0, s15, s0
+ 1554 0096 FFF7FEFF 		bl	safe_sqrt
+ 1555              	.LVL107:
+ 108:Robot/Controller/kinematics.c ****     excessive->Phi3 = atan2f(YB - YD + LEG2*arm_sin_f32(excessive->Phi2), XB - XD + LEG2*arm_cos_f3
+ 1556              		.loc 1 108 25 view .LVU540
+ 1557 009a 7CEE080A 		vadd.f32	s1, s24, s16
+ 1558 009e 30EE090A 		vadd.f32	s0, s0, s18
+ 1559 00a2 FFF7FEFF 		bl	atan2f
+ 1560              	.LVL108:
+ 108:Robot/Controller/kinematics.c ****     excessive->Phi3 = atan2f(YB - YD + LEG2*arm_sin_f32(excessive->Phi2), XB - XD + LEG2*arm_cos_f3
+ 1561              		.loc 1 108 24 view .LVU541
+ 1562 00a6 30EE000A 		vadd.f32	s0, s0, s0
+ 108:Robot/Controller/kinematics.c ****     excessive->Phi3 = atan2f(YB - YD + LEG2*arm_sin_f32(excessive->Phi2), XB - XD + LEG2*arm_cos_f3
+ 1563              		.loc 1 108 21 view .LVU542
+ 1564 00aa 85ED000A 		vstr.32	s0, [r5]
+ 109:Robot/Controller/kinematics.c **** 
+ 1565              		.loc 1 109 5 is_stmt 1 view .LVU543
+ 109:Robot/Controller/kinematics.c **** 
+ 1566              		.loc 1 109 33 is_stmt 0 view .LVU544
+ 1567 00ae 78EEEB8A 		vsub.f32	s17, s17, s23
+ 1568              	.LVL109:
+ 109:Robot/Controller/kinematics.c **** 
+ 1569              		.loc 1 109 45 view .LVU545
+ 1570 00b2 FFF7FEFF 		bl	arm_sin_f32
+ 1571              	.LVL110:
+ 109:Robot/Controller/kinematics.c **** 
+ 1572              		.loc 1 109 44 view .LVU546
+ 1573 00b6 B5EE009A 		vmov.f32	s18, #2.5e-1
+ 1574              	.LVL111:
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 35
+
+
+ 109:Robot/Controller/kinematics.c **** 
+ 1575              		.loc 1 109 44 view .LVU547
+ 1576 00ba 20EE090A 		vmul.f32	s0, s0, s18
+ 109:Robot/Controller/kinematics.c **** 
+ 1577              		.loc 1 109 23 view .LVU548
+ 1578 00be 78EE808A 		vadd.f32	s17, s17, s0
+ 109:Robot/Controller/kinematics.c **** 
+ 1579              		.loc 1 109 78 view .LVU549
+ 1580 00c2 7AEECBAA 		vsub.f32	s21, s21, s22
+ 1581              	.LVL112:
+ 109:Robot/Controller/kinematics.c **** 
+ 1582              		.loc 1 109 90 view .LVU550
+ 1583 00c6 95ED000A 		vldr.32	s0, [r5]
+ 1584 00ca FFF7FEFF 		bl	arm_cos_f32
+ 1585              	.LVL113:
+ 109:Robot/Controller/kinematics.c **** 
+ 1586              		.loc 1 109 89 view .LVU551
+ 1587 00ce 60EE090A 		vmul.f32	s1, s0, s18
+ 109:Robot/Controller/kinematics.c **** 
+ 1588              		.loc 1 109 23 view .LVU552
+ 1589 00d2 7AEEA00A 		vadd.f32	s1, s21, s1
+ 1590 00d6 B0EE680A 		vmov.f32	s0, s17
+ 1591 00da FFF7FEFF 		bl	atan2f
+ 1592              	.LVL114:
+ 109:Robot/Controller/kinematics.c **** 
+ 1593              		.loc 1 109 21 view .LVU553
+ 1594 00de 85ED010A 		vstr.32	s0, [r5, #4]
+ 111:Robot/Controller/kinematics.c ****     leg->rod.yC = LEG1*arm_sin_f32(leg->joint.Phi1) + LEG2*arm_sin_f32(excessive->Phi2);
+ 1595              		.loc 1 111 5 is_stmt 1 view .LVU554
+ 111:Robot/Controller/kinematics.c ****     leg->rod.yC = LEG1*arm_sin_f32(leg->joint.Phi1) + LEG2*arm_sin_f32(excessive->Phi2);
+ 1596              		.loc 1 111 24 is_stmt 0 view .LVU555
+ 1597 00e2 94ED140A 		vldr.32	s0, [r4, #80]
+ 1598 00e6 FFF7FEFF 		bl	arm_cos_f32
+ 1599              	.LVL115:
+ 111:Robot/Controller/kinematics.c ****     leg->rod.yC = LEG1*arm_sin_f32(leg->joint.Phi1) + LEG2*arm_sin_f32(excessive->Phi2);
+ 1600              		.loc 1 111 23 view .LVU556
+ 1601 00ea 20EE0A8A 		vmul.f32	s16, s0, s20
+ 1602              	.LVL116:
+ 111:Robot/Controller/kinematics.c ****     leg->rod.yC = LEG1*arm_sin_f32(leg->joint.Phi1) + LEG2*arm_sin_f32(excessive->Phi2);
+ 1603              		.loc 1 111 60 view .LVU557
+ 1604 00ee 95ED000A 		vldr.32	s0, [r5]
+ 1605 00f2 FFF7FEFF 		bl	arm_cos_f32
+ 1606              	.LVL117:
+ 111:Robot/Controller/kinematics.c ****     leg->rod.yC = LEG1*arm_sin_f32(leg->joint.Phi1) + LEG2*arm_sin_f32(excessive->Phi2);
+ 1607              		.loc 1 111 59 view .LVU558
+ 1608 00f6 20EE090A 		vmul.f32	s0, s0, s18
+ 111:Robot/Controller/kinematics.c ****     leg->rod.yC = LEG1*arm_sin_f32(leg->joint.Phi1) + LEG2*arm_sin_f32(excessive->Phi2);
+ 1609              		.loc 1 111 53 view .LVU559
+ 1610 00fa 38EE008A 		vadd.f32	s16, s16, s0
+ 111:Robot/Controller/kinematics.c ****     leg->rod.yC = LEG1*arm_sin_f32(leg->joint.Phi1) + LEG2*arm_sin_f32(excessive->Phi2);
+ 1611              		.loc 1 111 17 view .LVU560
+ 1612 00fe 84ED008A 		vstr.32	s16, [r4]
+ 112:Robot/Controller/kinematics.c **** 
+ 1613              		.loc 1 112 5 is_stmt 1 view .LVU561
+ 112:Robot/Controller/kinematics.c **** 
+ 1614              		.loc 1 112 24 is_stmt 0 view .LVU562
+ 1615 0102 94ED140A 		vldr.32	s0, [r4, #80]
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 36
+
+
+ 1616 0106 FFF7FEFF 		bl	arm_sin_f32
+ 1617              	.LVL118:
+ 112:Robot/Controller/kinematics.c **** 
+ 1618              		.loc 1 112 23 view .LVU563
+ 1619 010a 20EE0AAA 		vmul.f32	s20, s0, s20
+ 112:Robot/Controller/kinematics.c **** 
+ 1620              		.loc 1 112 60 view .LVU564
+ 1621 010e 95ED000A 		vldr.32	s0, [r5]
+ 1622 0112 FFF7FEFF 		bl	arm_sin_f32
+ 1623              	.LVL119:
+ 112:Robot/Controller/kinematics.c **** 
+ 1624              		.loc 1 112 59 view .LVU565
+ 1625 0116 60EE097A 		vmul.f32	s15, s0, s18
+ 112:Robot/Controller/kinematics.c **** 
+ 1626              		.loc 1 112 53 view .LVU566
+ 1627 011a 7AEE277A 		vadd.f32	s15, s20, s15
+ 112:Robot/Controller/kinematics.c **** 
+ 1628              		.loc 1 112 17 view .LVU567
+ 1629 011e C4ED017A 		vstr.32	s15, [r4, #4]
+ 114:Robot/Controller/kinematics.c ****     leg->rod.phi0 = atan2f(leg->rod.yC, leg->rod.xC);
+ 1630              		.loc 1 114 5 is_stmt 1 view .LVU568
+ 114:Robot/Controller/kinematics.c ****     leg->rod.phi0 = atan2f(leg->rod.yC, leg->rod.xC);
+ 1631              		.loc 1 114 37 is_stmt 0 view .LVU569
+ 1632 0122 94ED000A 		vldr.32	s0, [r4]
+ 114:Robot/Controller/kinematics.c ****     leg->rod.phi0 = atan2f(leg->rod.yC, leg->rod.xC);
+ 1633              		.loc 1 114 40 view .LVU570
+ 1634 0126 20EE000A 		vmul.f32	s0, s0, s0
+ 114:Robot/Controller/kinematics.c ****     leg->rod.phi0 = atan2f(leg->rod.yC, leg->rod.xC);
+ 1635              		.loc 1 114 66 view .LVU571
+ 1636 012a 67EEA77A 		vmul.f32	s15, s15, s15
+ 114:Robot/Controller/kinematics.c ****     leg->rod.phi0 = atan2f(leg->rod.yC, leg->rod.xC);
+ 1637              		.loc 1 114 19 view .LVU572
+ 1638 012e 30EE270A 		vadd.f32	s0, s0, s15
+ 1639 0132 FFF7FEFF 		bl	safe_sqrt
+ 1640              	.LVL120:
+ 114:Robot/Controller/kinematics.c ****     leg->rod.phi0 = atan2f(leg->rod.yC, leg->rod.xC);
+ 1641              		.loc 1 114 17 view .LVU573
+ 1642 0136 84ED020A 		vstr.32	s0, [r4, #8]
+ 115:Robot/Controller/kinematics.c **** 
+ 1643              		.loc 1 115 5 is_stmt 1 view .LVU574
+ 115:Robot/Controller/kinematics.c **** 
+ 1644              		.loc 1 115 21 is_stmt 0 view .LVU575
+ 1645 013a D4ED000A 		vldr.32	s1, [r4]
+ 1646 013e 94ED010A 		vldr.32	s0, [r4, #4]
+ 1647 0142 FFF7FEFF 		bl	atan2f
+ 1648              	.LVL121:
+ 115:Robot/Controller/kinematics.c **** 
+ 1649              		.loc 1 115 19 view .LVU576
+ 1650 0146 84ED070A 		vstr.32	s0, [r4, #28]
+ 118:Robot/Controller/kinematics.c ****     
+ 1651              		.loc 1 118 5 is_stmt 1 view .LVU577
+ 118:Robot/Controller/kinematics.c ****     
+ 1652              		.loc 1 118 48 is_stmt 0 view .LVU578
+ 1653 014a 94ED097A 		vldr.32	s14, [r4, #36]
+ 118:Robot/Controller/kinematics.c ****     
+ 1654              		.loc 1 118 38 view .LVU579
+ 1655 014e 30EE477A 		vsub.f32	s14, s0, s14
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 37
+
+
+ 118:Robot/Controller/kinematics.c ****     
+ 1656              		.loc 1 118 60 view .LVU580
+ 1657 0152 C7EE297A 		vdiv.f32	s15, s14, s19
+ 118:Robot/Controller/kinematics.c ****     
+ 1658              		.loc 1 118 21 view .LVU581
+ 1659 0156 C4ED087A 		vstr.32	s15, [r4, #32]
+ 120:Robot/Controller/kinematics.c **** 
+ 1660              		.loc 1 120 5 is_stmt 1 view .LVU582
+ 120:Robot/Controller/kinematics.c **** 
+ 1661              		.loc 1 120 24 is_stmt 0 view .LVU583
+ 1662 015a 84ED090A 		vstr.32	s0, [r4, #36]
+ 123:Robot/Controller/kinematics.c ****     leg->rod.d_theta = - leg->rod.d_phi0 - PitchGyroR; //状态量2
+ 1663              		.loc 1 123 5 is_stmt 1 view .LVU584
+ 123:Robot/Controller/kinematics.c ****     leg->rod.d_theta = - leg->rod.d_phi0 - PitchGyroR; //状态量2
+ 1664              		.loc 1 123 27 is_stmt 0 view .LVU585
+ 1665 015e 9FED1E7A 		vldr.32	s14, .L66+16
+ 1666 0162 37EE400A 		vsub.f32	s0, s14, s0
+ 123:Robot/Controller/kinematics.c ****     leg->rod.d_theta = - leg->rod.d_phi0 - PitchGyroR; //状态量2
+ 1667              		.loc 1 123 43 view .LVU586
+ 1668 0166 97ED007A 		vldr.32	s14, [r7]
+ 1669 016a 30EE470A 		vsub.f32	s0, s0, s14
+ 123:Robot/Controller/kinematics.c ****     leg->rod.d_theta = - leg->rod.d_phi0 - PitchGyroR; //状态量2
+ 1670              		.loc 1 123 20 view .LVU587
+ 1671 016e 84ED0A0A 		vstr.32	s0, [r4, #40]
+ 124:Robot/Controller/kinematics.c ****     leg->rod.dd_theta = (leg->rod.d_theta - leg->rod.last_d_theta) / dt;
+ 1672              		.loc 1 124 5 is_stmt 1 view .LVU588
+ 124:Robot/Controller/kinematics.c ****     leg->rod.dd_theta = (leg->rod.d_theta - leg->rod.last_d_theta) / dt;
+ 1673              		.loc 1 124 24 is_stmt 0 view .LVU589
+ 1674 0172 F1EE677A 		vneg.f32	s15, s15
+ 124:Robot/Controller/kinematics.c ****     leg->rod.dd_theta = (leg->rod.d_theta - leg->rod.last_d_theta) / dt;
+ 1675              		.loc 1 124 42 view .LVU590
+ 1676 0176 96ED007A 		vldr.32	s14, [r6]
+ 1677 017a 77EEC77A 		vsub.f32	s15, s15, s14
+ 124:Robot/Controller/kinematics.c ****     leg->rod.dd_theta = (leg->rod.d_theta - leg->rod.last_d_theta) / dt;
+ 1678              		.loc 1 124 22 view .LVU591
+ 1679 017e C4ED0B7A 		vstr.32	s15, [r4, #44]
+ 125:Robot/Controller/kinematics.c ****     leg->rod.last_d_theta = leg->rod.d_theta;
+ 1680              		.loc 1 125 5 is_stmt 1 view .LVU592
+ 125:Robot/Controller/kinematics.c ****     leg->rod.last_d_theta = leg->rod.d_theta;
+ 1681              		.loc 1 125 53 is_stmt 0 view .LVU593
+ 1682 0182 94ED0C7A 		vldr.32	s14, [r4, #48]
+ 125:Robot/Controller/kinematics.c ****     leg->rod.last_d_theta = leg->rod.d_theta;
+ 1683              		.loc 1 125 43 view .LVU594
+ 1684 0186 37EEC77A 		vsub.f32	s14, s15, s14
+ 125:Robot/Controller/kinematics.c ****     leg->rod.last_d_theta = leg->rod.d_theta;
+ 1685              		.loc 1 125 68 view .LVU595
+ 1686 018a C7EE296A 		vdiv.f32	s13, s14, s19
+ 125:Robot/Controller/kinematics.c ****     leg->rod.last_d_theta = leg->rod.d_theta;
+ 1687              		.loc 1 125 23 view .LVU596
+ 1688 018e C4ED0D6A 		vstr.32	s13, [r4, #52]
+ 126:Robot/Controller/kinematics.c **** 
+ 1689              		.loc 1 126 5 is_stmt 1 view .LVU597
+ 126:Robot/Controller/kinematics.c **** 
+ 1690              		.loc 1 126 27 is_stmt 0 view .LVU598
+ 1691 0192 C4ED0C7A 		vstr.32	s15, [r4, #48]
+ 129:Robot/Controller/kinematics.c ****     leg->rod.dd_L0 = (leg->rod.d_L0 - leg->rod.last_d_L0) / dt;
+ 1692              		.loc 1 129 5 is_stmt 1 view .LVU599
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 38
+
+
+ 129:Robot/Controller/kinematics.c ****     leg->rod.dd_L0 = (leg->rod.d_L0 - leg->rod.last_d_L0) / dt;
+ 1693              		.loc 1 129 30 is_stmt 0 view .LVU600
+ 1694 0196 D4ED026A 		vldr.32	s13, [r4, #8]
+ 129:Robot/Controller/kinematics.c ****     leg->rod.dd_L0 = (leg->rod.d_L0 - leg->rod.last_d_L0) / dt;
+ 1695              		.loc 1 129 44 view .LVU601
+ 1696 019a 94ED057A 		vldr.32	s14, [r4, #20]
+ 129:Robot/Controller/kinematics.c ****     leg->rod.dd_L0 = (leg->rod.d_L0 - leg->rod.last_d_L0) / dt;
+ 1697              		.loc 1 129 34 view .LVU602
+ 1698 019e 36EEC77A 		vsub.f32	s14, s13, s14
+ 129:Robot/Controller/kinematics.c ****     leg->rod.dd_L0 = (leg->rod.d_L0 - leg->rod.last_d_L0) / dt;
+ 1699              		.loc 1 129 54 view .LVU603
+ 1700 01a2 C7EE297A 		vdiv.f32	s15, s14, s19
+ 129:Robot/Controller/kinematics.c ****     leg->rod.dd_L0 = (leg->rod.d_L0 - leg->rod.last_d_L0) / dt;
+ 1701              		.loc 1 129 19 view .LVU604
+ 1702 01a6 C4ED037A 		vstr.32	s15, [r4, #12]
+ 130:Robot/Controller/kinematics.c **** 
+ 1703              		.loc 1 130 5 is_stmt 1 view .LVU605
+ 130:Robot/Controller/kinematics.c **** 
+ 1704              		.loc 1 130 47 is_stmt 0 view .LVU606
+ 1705 01aa 94ED067A 		vldr.32	s14, [r4, #24]
+ 130:Robot/Controller/kinematics.c **** 
+ 1706              		.loc 1 130 37 view .LVU607
+ 1707 01ae 37EEC77A 		vsub.f32	s14, s15, s14
+ 130:Robot/Controller/kinematics.c **** 
+ 1708              		.loc 1 130 59 view .LVU608
+ 1709 01b2 87EE296A 		vdiv.f32	s12, s14, s19
+ 130:Robot/Controller/kinematics.c **** 
+ 1710              		.loc 1 130 20 view .LVU609
+ 1711 01b6 84ED046A 		vstr.32	s12, [r4, #16]
+ 132:Robot/Controller/kinematics.c ****     leg->rod.last_d_L0 = leg->rod.d_L0;
+ 1712              		.loc 1 132 5 is_stmt 1 view .LVU610
+ 132:Robot/Controller/kinematics.c ****     leg->rod.last_d_L0 = leg->rod.d_L0;
+ 1713              		.loc 1 132 22 is_stmt 0 view .LVU611
+ 1714 01ba C4ED056A 		vstr.32	s13, [r4, #20]
+ 133:Robot/Controller/kinematics.c **** 
+ 1715              		.loc 1 133 5 is_stmt 1 view .LVU612
+ 133:Robot/Controller/kinematics.c **** 
+ 1716              		.loc 1 133 24 is_stmt 0 view .LVU613
+ 1717 01be C4ED067A 		vstr.32	s15, [r4, #24]
+ 135:Robot/Controller/kinematics.c **** 
+ 1718              		.loc 1 135 1 view .LVU614
+ 1719 01c2 BDEC0A8B 		vldm	sp!, {d8-d12}
+ 1720              	.LCFI19:
+ 1721              		.cfi_restore 88
+ 1722              		.cfi_restore 89
+ 1723              		.cfi_restore 86
+ 1724              		.cfi_restore 87
+ 1725              		.cfi_restore 84
+ 1726              		.cfi_restore 85
+ 1727              		.cfi_restore 82
+ 1728              		.cfi_restore 83
+ 1729              		.cfi_restore 80
+ 1730              		.cfi_restore 81
+ 1731              		.cfi_def_cfa_offset 24
+ 1732              	.LVL122:
+ 135:Robot/Controller/kinematics.c **** 
+ 1733              		.loc 1 135 1 view .LVU615
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 39
+
+
+ 1734 01c6 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 1735              	.LVL123:
+ 1736              	.L67:
+ 135:Robot/Controller/kinematics.c **** 
+ 1737              		.loc 1 135 1 view .LVU616
+ 1738              		.align	2
+ 1739              	.L66:
+ 1740 01c8 00000000 		.word	.LANCHOR12
+ 1741 01cc 00000000 		.word	.LANCHOR13
+ 1742 01d0 3D0A573E 		.word	1045891645
+ 1743 01d4 0000803D 		.word	1031798784
+ 1744 01d8 DB0FC93F 		.word	1070141403
+ 1745              		.cfi_endproc
+ 1746              	.LFE189:
+ 1748              		.section	.text.safe_div,"ax",%progbits
+ 1749              		.align	1
+ 1750              		.global	safe_div
+ 1751              		.syntax unified
+ 1752              		.thumb
+ 1753              		.thumb_func
+ 1755              	safe_div:
+ 1756              	.LVL124:
+ 1757              	.LFB198:
+ 317:Robot/Controller/kinematics.c **** 
+ 318:Robot/Controller/kinematics.c **** // 防止除以零
+ 319:Robot/Controller/kinematics.c **** float safe_div(float num, float denom) 
+ 320:Robot/Controller/kinematics.c **** {
+ 1758              		.loc 1 320 1 is_stmt 1 view -0
+ 1759              		.cfi_startproc
+ 1760              		@ args = 0, pretend = 0, frame = 0
+ 1761              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1762              		@ link register save eliminated.
+ 321:Robot/Controller/kinematics.c ****     if (fabs(denom) < 1e-6f) denom = (denom < 0 ? -1e-6f : 1e-6f); // 防止分母0
+ 1763              		.loc 1 321 5 view .LVU618
+ 1764              		.loc 1 321 9 is_stmt 0 view .LVU619
+ 1765 0000 B0EEE07A 		vabs.f32	s14, s1
+ 1766              		.loc 1 321 8 view .LVU620
+ 1767 0004 DFED097A 		vldr.32	s15, .L77
+ 1768 0008 B4EEE77A 		vcmpe.f32	s14, s15
+ 1769 000c F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 1770 0010 06D5     		bpl	.L69
+ 1771              		.loc 1 321 30 is_stmt 1 discriminator 1 view .LVU621
+ 1772              		.loc 1 321 58 is_stmt 0 discriminator 1 view .LVU622
+ 1773 0012 F5EEC00A 		vcmpe.f32	s1, #0
+ 1774 0016 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 1775 001a 04D4     		bmi	.L76
+ 1776              		.loc 1 321 58 view .LVU623
+ 1777 001c DFED030A 		vldr.32	s1, .L77
+ 1778              	.LVL125:
+ 1779              	.L69:
+ 322:Robot/Controller/kinematics.c ****     return num / denom;
+ 1780              		.loc 1 322 5 is_stmt 1 view .LVU624
+ 323:Robot/Controller/kinematics.c **** }
+ 1781              		.loc 1 323 1 is_stmt 0 view .LVU625
+ 1782 0020 80EE200A 		vdiv.f32	s0, s0, s1
+ 1783              	.LVL126:
+ 1784              		.loc 1 323 1 view .LVU626
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 40
+
+
+ 1785 0024 7047     		bx	lr
+ 1786              	.LVL127:
+ 1787              	.L76:
+ 321:Robot/Controller/kinematics.c ****     if (fabs(denom) < 1e-6f) denom = (denom < 0 ? -1e-6f : 1e-6f); // 防止分母0
+ 1788              		.loc 1 321 58 view .LVU627
+ 1789 0026 DFED020A 		vldr.32	s1, .L77+4
+ 1790              	.LVL128:
+ 321:Robot/Controller/kinematics.c ****     if (fabs(denom) < 1e-6f) denom = (denom < 0 ? -1e-6f : 1e-6f); // 防止分母0
+ 1791              		.loc 1 321 58 view .LVU628
+ 1792 002a F9E7     		b	.L69
+ 1793              	.L78:
+ 1794              		.align	2
+ 1795              	.L77:
+ 1796 002c BD378635 		.word	897988541
+ 1797 0030 BD3786B5 		.word	-1249495107
+ 1798              		.cfi_endproc
+ 1799              	.LFE198:
+ 1801              		.global	a26
+ 1802              		.global	a25
+ 1803              		.global	a24
+ 1804              		.global	a23
+ 1805              		.global	a22
+ 1806              		.global	a21
+ 1807              		.global	a16
+ 1808              		.global	a15
+ 1809              		.global	a14
+ 1810              		.global	a13
+ 1811              		.global	a12
+ 1812              		.global	a11
+ 1813              		.section	.bss.PitchGyroR.0,"aw",%nobits
+ 1814              		.align	2
+ 1815              		.set	.LANCHOR13,. + 0
+ 1818              	PitchGyroR.0:
+ 1819 0000 00000000 		.space	4
+ 1820              		.section	.bss.PitchR.1,"aw",%nobits
+ 1821              		.align	2
+ 1822              		.set	.LANCHOR12,. + 0
+ 1825              	PitchR.1:
+ 1826 0000 00000000 		.space	4
+ 1827              		.section	.bss.a11,"aw",%nobits
+ 1828              		.align	2
+ 1829              		.set	.LANCHOR0,. + 0
+ 1832              	a11:
+ 1833 0000 00000000 		.space	16
+ 1833      00000000 
+ 1833      00000000 
+ 1833      00000000 
+ 1834              		.section	.bss.a12,"aw",%nobits
+ 1835              		.align	2
+ 1836              		.set	.LANCHOR1,. + 0
+ 1839              	a12:
+ 1840 0000 00000000 		.space	16
+ 1840      00000000 
+ 1840      00000000 
+ 1840      00000000 
+ 1841              		.section	.bss.a13,"aw",%nobits
+ 1842              		.align	2
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 41
+
+
+ 1843              		.set	.LANCHOR2,. + 0
+ 1846              	a13:
+ 1847 0000 00000000 		.space	16
+ 1847      00000000 
+ 1847      00000000 
+ 1847      00000000 
+ 1848              		.section	.bss.a14,"aw",%nobits
+ 1849              		.align	2
+ 1850              		.set	.LANCHOR3,. + 0
+ 1853              	a14:
+ 1854 0000 00000000 		.space	16
+ 1854      00000000 
+ 1854      00000000 
+ 1854      00000000 
+ 1855              		.section	.bss.a15,"aw",%nobits
+ 1856              		.align	2
+ 1857              		.set	.LANCHOR4,. + 0
+ 1860              	a15:
+ 1861 0000 00000000 		.space	16
+ 1861      00000000 
+ 1861      00000000 
+ 1861      00000000 
+ 1862              		.section	.bss.a16,"aw",%nobits
+ 1863              		.align	2
+ 1864              		.set	.LANCHOR5,. + 0
+ 1867              	a16:
+ 1868 0000 00000000 		.space	16
+ 1868      00000000 
+ 1868      00000000 
+ 1868      00000000 
+ 1869              		.section	.bss.a21,"aw",%nobits
+ 1870              		.align	2
+ 1871              		.set	.LANCHOR6,. + 0
+ 1874              	a21:
+ 1875 0000 00000000 		.space	16
+ 1875      00000000 
+ 1875      00000000 
+ 1875      00000000 
+ 1876              		.section	.bss.a22,"aw",%nobits
+ 1877              		.align	2
+ 1878              		.set	.LANCHOR7,. + 0
+ 1881              	a22:
+ 1882 0000 00000000 		.space	16
+ 1882      00000000 
+ 1882      00000000 
+ 1882      00000000 
+ 1883              		.section	.bss.a23,"aw",%nobits
+ 1884              		.align	2
+ 1885              		.set	.LANCHOR8,. + 0
+ 1888              	a23:
+ 1889 0000 00000000 		.space	16
+ 1889      00000000 
+ 1889      00000000 
+ 1889      00000000 
+ 1890              		.section	.bss.a24,"aw",%nobits
+ 1891              		.align	2
+ 1892              		.set	.LANCHOR9,. + 0
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 42
+
+
+ 1895              	a24:
+ 1896 0000 00000000 		.space	16
+ 1896      00000000 
+ 1896      00000000 
+ 1896      00000000 
+ 1897              		.section	.bss.a25,"aw",%nobits
+ 1898              		.align	2
+ 1899              		.set	.LANCHOR10,. + 0
+ 1902              	a25:
+ 1903 0000 00000000 		.space	16
+ 1903      00000000 
+ 1903      00000000 
+ 1903      00000000 
+ 1904              		.section	.bss.a26,"aw",%nobits
+ 1905              		.align	2
+ 1906              		.set	.LANCHOR11,. + 0
+ 1909              	a26:
+ 1910 0000 00000000 		.space	16
+ 1910      00000000 
+ 1910      00000000 
+ 1910      00000000 
+ 1911              		.text
+ 1912              	.Letext0:
+ 1913              		.file 2 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 1914              		.file 3 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
+ 1915              		.file 4 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h723xx.h"
+ 1916              		.file 5 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h"
+ 1917              		.file 6 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h"
+ 1918              		.file 7 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_fdcan.h"
+ 1919              		.file 8 "Robot/RoboTask/ins/ins_task.h"
+ 1920              		.file 9 "Bsp/bsp_can.h"
+ 1921              		.file 10 "Robot/Controller/controller.h"
+ 1922              		.file 11 "Robot/Devices/motor_def.h"
+ 1923              		.file 12 "Robot/daemon/daemon.h"
+ 1924              		.file 13 "Robot/Devices/Motor/djimotor.h"
+ 1925              		.file 14 "Robot/Devices/Motor/dmmotor.h"
+ 1926              		.file 15 "Robot/RoboTask/chassis/chassis_def.h"
+ 1927              		.file 16 "Robot/Controller/kinematics.h"
+ 1928              		.file 17 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\math.h"
+ 1929              		.file 18 "Middlewares/ST/ARM/DSP/Inc/arm_math.h"
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 43
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 kinematics.c
-D:\temp\TMP\ccGhRCxw.s:19     .text.Calc_LQR_K:00000000 $t
-D:\temp\TMP\ccGhRCxw.s:25     .text.Calc_LQR_K:00000000 Calc_LQR_K
-D:\temp\TMP\ccGhRCxw.s:380    .text.Calc_LQR_K:00000250 $d
-D:\temp\TMP\ccGhRCxw.s:396    .text.InverseKinematics:00000000 $t
-D:\temp\TMP\ccGhRCxw.s:402    .text.InverseKinematics:00000000 InverseKinematics
-D:\temp\TMP\ccGhRCxw.s:567    .text.InverseKinematics:000000e8 $d
-D:\temp\TMP\ccGhRCxw.s:578    .text.JacobianMatrix:00000000 $t
-D:\temp\TMP\ccGhRCxw.s:584    .text.JacobianMatrix:00000000 JacobianMatrix
-D:\temp\TMP\ccGhRCxw.s:791    .text.JacobianMatrix:00000158 $d
-D:\temp\TMP\ccGhRCxw.s:796    .text.GroundDetect:00000000 $t
-D:\temp\TMP\ccGhRCxw.s:802    .text.GroundDetect:00000000 GroundDetect
-D:\temp\TMP\ccGhRCxw.s:985    .text.GroundDetect:00000118 $d
-D:\temp\TMP\ccGhRCxw.s:991    .text.CoordinateLength:00000000 $t
-D:\temp\TMP\ccGhRCxw.s:997    .text.CoordinateLength:00000000 CoordinateLength
-D:\temp\TMP\ccGhRCxw.s:1096   .text.CoordinateLength:00000088 $d
-D:\temp\TMP\ccGhRCxw.s:1101   .text.DeviationCalc:00000000 $t
-D:\temp\TMP\ccGhRCxw.s:1107   .text.DeviationCalc:00000000 DeviationCalc
-D:\temp\TMP\ccGhRCxw.s:1181   .text.DeviationCalc:00000058 $d
-D:\temp\TMP\ccGhRCxw.s:1186   .text.constrainValue:00000000 $t
-D:\temp\TMP\ccGhRCxw.s:1192   .text.constrainValue:00000000 constrainValue
-D:\temp\TMP\ccGhRCxw.s:1228   .text.safe_sqrt:00000000 $t
-D:\temp\TMP\ccGhRCxw.s:1234   .text.safe_sqrt:00000000 safe_sqrt
-D:\temp\TMP\ccGhRCxw.s:1266   .text.safe_sqrt:00000018 $d
-D:\temp\TMP\ccGhRCxw.s:1271   .text.ForwardKinematics:00000000 $t
-D:\temp\TMP\ccGhRCxw.s:1277   .text.ForwardKinematics:00000000 ForwardKinematics
-D:\temp\TMP\ccGhRCxw.s:1592   .text.ForwardKinematics:000001c8 $d
-D:\temp\TMP\ccGhRCxw.s:1601   .text.safe_div:00000000 $t
-D:\temp\TMP\ccGhRCxw.s:1607   .text.safe_div:00000000 safe_div
-D:\temp\TMP\ccGhRCxw.s:1648   .text.safe_div:0000002c $d
-D:\temp\TMP\ccGhRCxw.s:1761   .bss.a26:00000000 a26
-D:\temp\TMP\ccGhRCxw.s:1754   .bss.a25:00000000 a25
-D:\temp\TMP\ccGhRCxw.s:1747   .bss.a24:00000000 a24
-D:\temp\TMP\ccGhRCxw.s:1740   .bss.a23:00000000 a23
-D:\temp\TMP\ccGhRCxw.s:1733   .bss.a22:00000000 a22
-D:\temp\TMP\ccGhRCxw.s:1726   .bss.a21:00000000 a21
-D:\temp\TMP\ccGhRCxw.s:1719   .bss.a16:00000000 a16
-D:\temp\TMP\ccGhRCxw.s:1712   .bss.a15:00000000 a15
-D:\temp\TMP\ccGhRCxw.s:1705   .bss.a14:00000000 a14
-D:\temp\TMP\ccGhRCxw.s:1698   .bss.a13:00000000 a13
-D:\temp\TMP\ccGhRCxw.s:1691   .bss.a12:00000000 a12
-D:\temp\TMP\ccGhRCxw.s:1684   .bss.a11:00000000 a11
-D:\temp\TMP\ccGhRCxw.s:1666   .bss.PitchGyroR.0:00000000 $d
-D:\temp\TMP\ccGhRCxw.s:1670   .bss.PitchGyroR.0:00000000 PitchGyroR.0
-D:\temp\TMP\ccGhRCxw.s:1673   .bss.PitchR.1:00000000 $d
-D:\temp\TMP\ccGhRCxw.s:1677   .bss.PitchR.1:00000000 PitchR.1
-D:\temp\TMP\ccGhRCxw.s:1680   .bss.a11:00000000 $d
-D:\temp\TMP\ccGhRCxw.s:1687   .bss.a12:00000000 $d
-D:\temp\TMP\ccGhRCxw.s:1694   .bss.a13:00000000 $d
-D:\temp\TMP\ccGhRCxw.s:1701   .bss.a14:00000000 $d
-D:\temp\TMP\ccGhRCxw.s:1708   .bss.a15:00000000 $d
-D:\temp\TMP\ccGhRCxw.s:1715   .bss.a16:00000000 $d
-D:\temp\TMP\ccGhRCxw.s:1722   .bss.a21:00000000 $d
-D:\temp\TMP\ccGhRCxw.s:1729   .bss.a22:00000000 $d
-D:\temp\TMP\ccGhRCxw.s:1736   .bss.a23:00000000 $d
-D:\temp\TMP\ccGhRCxw.s:1743   .bss.a24:00000000 $d
-ARM GAS  D:\temp\TMP\ccGhRCxw.s 			page 41
+D:\temp\TMP\ccZf6ked.s:19     .text.Calc_LQR_K:00000000 $t
+D:\temp\TMP\ccZf6ked.s:25     .text.Calc_LQR_K:00000000 Calc_LQR_K
+D:\temp\TMP\ccZf6ked.s:380    .text.Calc_LQR_K:00000250 $d
+D:\temp\TMP\ccZf6ked.s:396    .text.InverseKinematics:00000000 $t
+D:\temp\TMP\ccZf6ked.s:402    .text.InverseKinematics:00000000 InverseKinematics
+D:\temp\TMP\ccZf6ked.s:590    .text.InverseKinematics:0000010c $d
+D:\temp\TMP\ccZf6ked.s:601    .text.JacobianMatrix:00000000 $t
+D:\temp\TMP\ccZf6ked.s:607    .text.JacobianMatrix:00000000 JacobianMatrix
+D:\temp\TMP\ccZf6ked.s:814    .text.JacobianMatrix:00000158 $d
+D:\temp\TMP\ccZf6ked.s:819    .text.GroundDetect:00000000 $t
+D:\temp\TMP\ccZf6ked.s:825    .text.GroundDetect:00000000 GroundDetect
+D:\temp\TMP\ccZf6ked.s:1008   .text.GroundDetect:00000118 $d
+D:\temp\TMP\ccZf6ked.s:1014   .text.RollCompensation:00000000 $t
+D:\temp\TMP\ccZf6ked.s:1020   .text.RollCompensation:00000000 RollCompensation
+D:\temp\TMP\ccZf6ked.s:1134   .text.RollCompensation:00000070 $d
+D:\temp\TMP\ccZf6ked.s:1139   .text.CoordinateLength:00000000 $t
+D:\temp\TMP\ccZf6ked.s:1145   .text.CoordinateLength:00000000 CoordinateLength
+D:\temp\TMP\ccZf6ked.s:1244   .text.CoordinateLength:00000088 $d
+D:\temp\TMP\ccZf6ked.s:1249   .text.DeviationCalc:00000000 $t
+D:\temp\TMP\ccZf6ked.s:1255   .text.DeviationCalc:00000000 DeviationCalc
+D:\temp\TMP\ccZf6ked.s:1329   .text.DeviationCalc:00000058 $d
+D:\temp\TMP\ccZf6ked.s:1334   .text.constrainValue:00000000 $t
+D:\temp\TMP\ccZf6ked.s:1340   .text.constrainValue:00000000 constrainValue
+D:\temp\TMP\ccZf6ked.s:1376   .text.safe_sqrt:00000000 $t
+D:\temp\TMP\ccZf6ked.s:1382   .text.safe_sqrt:00000000 safe_sqrt
+D:\temp\TMP\ccZf6ked.s:1414   .text.safe_sqrt:00000018 $d
+D:\temp\TMP\ccZf6ked.s:1419   .text.ForwardKinematics:00000000 $t
+D:\temp\TMP\ccZf6ked.s:1425   .text.ForwardKinematics:00000000 ForwardKinematics
+D:\temp\TMP\ccZf6ked.s:1740   .text.ForwardKinematics:000001c8 $d
+D:\temp\TMP\ccZf6ked.s:1749   .text.safe_div:00000000 $t
+D:\temp\TMP\ccZf6ked.s:1755   .text.safe_div:00000000 safe_div
+D:\temp\TMP\ccZf6ked.s:1796   .text.safe_div:0000002c $d
+D:\temp\TMP\ccZf6ked.s:1909   .bss.a26:00000000 a26
+D:\temp\TMP\ccZf6ked.s:1902   .bss.a25:00000000 a25
+D:\temp\TMP\ccZf6ked.s:1895   .bss.a24:00000000 a24
+D:\temp\TMP\ccZf6ked.s:1888   .bss.a23:00000000 a23
+D:\temp\TMP\ccZf6ked.s:1881   .bss.a22:00000000 a22
+D:\temp\TMP\ccZf6ked.s:1874   .bss.a21:00000000 a21
+D:\temp\TMP\ccZf6ked.s:1867   .bss.a16:00000000 a16
+D:\temp\TMP\ccZf6ked.s:1860   .bss.a15:00000000 a15
+D:\temp\TMP\ccZf6ked.s:1853   .bss.a14:00000000 a14
+D:\temp\TMP\ccZf6ked.s:1846   .bss.a13:00000000 a13
+D:\temp\TMP\ccZf6ked.s:1839   .bss.a12:00000000 a12
+D:\temp\TMP\ccZf6ked.s:1832   .bss.a11:00000000 a11
+D:\temp\TMP\ccZf6ked.s:1814   .bss.PitchGyroR.0:00000000 $d
+D:\temp\TMP\ccZf6ked.s:1818   .bss.PitchGyroR.0:00000000 PitchGyroR.0
+D:\temp\TMP\ccZf6ked.s:1821   .bss.PitchR.1:00000000 $d
+D:\temp\TMP\ccZf6ked.s:1825   .bss.PitchR.1:00000000 PitchR.1
+D:\temp\TMP\ccZf6ked.s:1828   .bss.a11:00000000 $d
+D:\temp\TMP\ccZf6ked.s:1835   .bss.a12:00000000 $d
+D:\temp\TMP\ccZf6ked.s:1842   .bss.a13:00000000 $d
+D:\temp\TMP\ccZf6ked.s:1849   .bss.a14:00000000 $d
+D:\temp\TMP\ccZf6ked.s:1856   .bss.a15:00000000 $d
+D:\temp\TMP\ccZf6ked.s:1863   .bss.a16:00000000 $d
+D:\temp\TMP\ccZf6ked.s:1870   .bss.a21:00000000 $d
+ARM GAS  D:\temp\TMP\ccZf6ked.s 			page 44
 
 
-D:\temp\TMP\ccGhRCxw.s:1750   .bss.a25:00000000 $d
-D:\temp\TMP\ccGhRCxw.s:1757   .bss.a26:00000000 $d
+D:\temp\TMP\ccZf6ked.s:1877   .bss.a22:00000000 $d
+D:\temp\TMP\ccZf6ked.s:1884   .bss.a23:00000000 $d
+D:\temp\TMP\ccZf6ked.s:1891   .bss.a24:00000000 $d
+D:\temp\TMP\ccZf6ked.s:1898   .bss.a25:00000000 $d
+D:\temp\TMP\ccZf6ked.s:1905   .bss.a26:00000000 $d
 
 UNDEFINED SYMBOLS
+arm_cos_f32
+arm_sin_f32
 sqrt
 atan2f
-arm_sin_f32
-arm_cos_f32
 cosf
 sinf
 tanf

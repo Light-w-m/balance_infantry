@@ -140,12 +140,14 @@ void ForwardKinematics(Leg_t* leg,Excessive_t* excessive, INS_t* ins, float dt)
  * @param leg 
  * @param excessive 
  */
-void InverseKinematics(Leg_t* leg,Excessive_t* excessive)
+void InverseKinematics(chassis_t* chassis, Leg_t* leg,Excessive_t* excessive)
 {
     float A1, B1, C1, D1;
     float A4, B4, C4, D4, E4, F4;
-    //限幅
-    // Leg->rod.yC = constrainValue(Leg->rod.yC, 0.05, 0.35);
+
+    leg->rod.xC = chassis->leg_set * arm_cos_f32(leg->rod.theta);
+    leg->rod.yC = chassis->leg_set * arm_sin_f32(leg->rod.theta);
+
 
     //过度变量
     A1 = LEG1+leg->rod.xC;
@@ -162,7 +164,6 @@ void InverseKinematics(Leg_t* leg,Excessive_t* excessive)
 
     leg->joint.Phi1 = 2*atan2f(2*LEG1*leg->rod.yC+sqrt(2*LEG1*LEG1*D1+2*leg->rod.xC*leg->rod.xC*C1-B1*B1-C1*C1),A1*A1-C1);
     leg->joint.Phi4 = 2*atan2f(2*LEG4*leg->rod.yC-sqrt(E4*F4),D4*D4+leg->rod.yC*leg->rod.yC-LEG3*LEG3);
-
 }
 
 /**
@@ -218,6 +219,37 @@ uint8_t GroundDetect(Leg_t* leg, Period_t* period, INS_t* ins)
         return 0;
     }
     
+}
+
+/**
+ * @brief 翻滚角补偿，用于单边桥等特殊地形
+ * 
+ * @param LengthL 实际左腿长度
+ * @param LengthR 
+ * @param refL 期望左腿长度
+ * @param refR 期望右腿长度
+ * @param diff 左右腿长度差值
+ * @param theta 翻滚角
+ */
+void RollCompensation(float *LengthL,float *LengthR,float *refL,float *refR,float *diff, float theta)
+{
+    float BD, AF, ED, EF;
+    float BC, FD;
+
+    BD = (*LengthR - *LengthL) * cosf(theta);
+    AF = 2 * WHEEL_DISTANCE * sinf(theta);
+    ED = (*LengthR - *LengthL) * sinf(theta);
+    EF = 2 * WHEEL_DISTANCE * cosf(theta);
+
+    // theta = -theta; //翻转角取反
+    BC = BD - AF;
+    FD = ED + EF;
+
+    float slope_tan = BC / FD;
+    float hight = *LengthR * cosf(theta) + WHEEL_DISTANCE * sinf(theta);
+    *refL = hight;
+    *refR = hight - 2 * WHEEL_DISTANCE * slope_tan;
+    *diff = 2 * WHEEL_DISTANCE * slope_tan;
 }
 
 /**

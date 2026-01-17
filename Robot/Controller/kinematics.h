@@ -83,7 +83,7 @@ typedef struct
 
 void Calc_LQR_K(float k[2][6], float length, bool flag);
 void ForwardKinematics(Leg_t* leg,Excessive_t* excessive, INS_t* ins, float dt);
-void InverseKinematics(Leg_t* leg,Excessive_t* excessive);
+void InverseKinematics(chassis_t* chassis, Leg_t* leg,Excessive_t* excessive);
 void JacobianMatrix(Leg_t* leg,Excessive_t* excessive);
 uint8_t GroundDetect(Leg_t* leg, Period_t* period, INS_t* ins);
 void CoordinateLength(float *LengthL, float *LengthR, float diff, float add);

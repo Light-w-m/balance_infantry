@@ -3,7 +3,7 @@
 
 /**************************************** */
 
-
+void RobotCMDInit(void);
 void Remote_Task(void);
 
 #endif // !REMOTE_TASK_H
