@@ -20,16 +20,16 @@
 #define COMMUNICATION_LOSS_STATE	0x0D
 #define OVERLOAD_STATE	            0x0E
 
-#define P_MIN -12.5f
-#define P_MAX 12.5f
+#define P_MIN -3.1415926f
+#define P_MAX 3.1415926f
 #define V_MIN -30.0f
 #define V_MAX 30.0f
 #define KP_MIN 0.0f
 #define KP_MAX 500.0f
 #define KD_MIN 0.0f
 #define KD_MAX 5.0f
-#define T_MIN -10.0f
-#define T_MAX 10.0f
+#define T_MIN -30.0f
+#define T_MAX 30.0f
 
 typedef struct
 {

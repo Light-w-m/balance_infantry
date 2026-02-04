@@ -135,6 +135,7 @@ void CANServiceInit()
 	HAL_FDCAN_ConfigRxFifoOverwrite(&hfdcan2,FDCAN_RX_FIFO0,FDCAN_RX_FIFO_OVERWRITE);
 	HAL_FDCAN_ConfigRxFifoOverwrite(&hfdcan2,FDCAN_RX_FIFO1,FDCAN_RX_FIFO_OVERWRITE);
 	HAL_FDCAN_ConfigGlobalFilter(&hfdcan2, FDCAN_REJECT, FDCAN_REJECT, FDCAN_REJECT_REMOTE, FDCAN_REJECT_REMOTE);
+	HAL_FDCAN_ConfigInterruptLines(&hfdcan2, FDCAN_RXActiveITs, FDCAN_INTERRUPT_LINE1);
 	HAL_FDCAN_Start(&hfdcan2);
 	HAL_FDCAN_ActivateNotification(&hfdcan2,FDCAN_RXActiveITs, 0);
 
@@ -306,8 +307,10 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
             {
 				switch (rxHeader.Identifier)
 				{
-				case 0x13:Dm8009_Fbdata(&chassis_move.joint_motor[0], rx_data);break;
-				case 0x14:Dm8009_Fbdata(&chassis_move.joint_motor[1], rx_data);break;
+				case 0x13:Dm8009_Fbdata(&chassis_move.joint_motor[1], rx_data);break;
+				case 0x14:Dm8009_Fbdata(&chassis_move.joint_motor[0], rx_data);break;
+				case 0x11:Dm8009_Fbdata(&chassis_move.joint_motor[2], rx_data);break;
+				case 0x12:Dm8009_Fbdata(&chassis_move.joint_motor[3], rx_data);break;
 				default:
 					break;
 				}

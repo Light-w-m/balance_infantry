@@ -5,5 +5,6 @@
 #include "cmsis_os.h"
 #include "fdcan.h"
 
+void ChassisL_Task(void);
 
 #endif // !CHASSISL_TASK_H

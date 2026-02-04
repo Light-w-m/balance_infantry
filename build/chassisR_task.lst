@@ -1,4 +1,4 @@
-ARM GAS  D:\temp\TMP\ccHRiiLn.s 			page 1
+ARM GAS  D:\temp\TMP\ccbEsdae.s 			page 1
 
 
    1              		.cpu cortex-m7
@@ -18,14 +18,14 @@ ARM GAS  D:\temp\TMP\ccHRiiLn.s 			page 1
   15              		.text
   16              	.Ltext0:
   17              		.cfi_sections	.debug_frame
-  18              		.section	.text.ChassisR_Init,"ax",%progbits
+  18              		.section	.text.ChassisR_Feedback_Update,"ax",%progbits
   19              		.align	1
   20              		.syntax unified
   21              		.thumb
   22              		.thumb_func
-  24              	ChassisR_Init:
+  24              	ChassisR_Feedback_Update:
   25              	.LVL0:
-  26              	.LFB193:
+  26              	.LFB196:
   27              		.file 1 "Robot/RoboTask/chassis/chassisR_task.c"
    1:Robot/RoboTask/chassis/chassisR_task.c **** /**
    2:Robot/RoboTask/chassis/chassisR_task.c ****  * @file chassisR_task.c
@@ -47,1229 +47,1597 @@ ARM GAS  D:\temp\TMP\ccHRiiLn.s 			page 1
   18:Robot/RoboTask/chassis/chassisR_task.c **** #include "dmmotor.h"
   19:Robot/RoboTask/chassis/chassisR_task.c **** #include "ins_task.h"
   20:Robot/RoboTask/chassis/chassisR_task.c **** 
-  21:Robot/RoboTask/chassis/chassisR_task.c **** // #define CHASSIS_CONTROL_TIME_MS 2
-  22:Robot/RoboTask/chassis/chassisR_task.c **** Leg_t legR;
-  23:Robot/RoboTask/chassis/chassisR_task.c **** extern Leg_t legL;
-  24:Robot/RoboTask/chassis/chassisR_task.c **** LegState_t legR_state;
-  25:Robot/RoboTask/chassis/chassisR_task.c **** Excessive_t excessiveR;
-  26:Robot/RoboTask/chassis/chassisR_task.c **** chassis_t chassis_move;
-  27:Robot/RoboTask/chassis/chassisR_task.c **** Period_t periods;
+  21:Robot/RoboTask/chassis/chassisR_task.c **** Leg_t legR;
+  22:Robot/RoboTask/chassis/chassisR_task.c **** LegState_t legR_state;
+  23:Robot/RoboTask/chassis/chassisR_task.c **** Excessive_t excessiveR;
+  24:Robot/RoboTask/chassis/chassisR_task.c **** extern chassis_t chassis_move;
+  25:Robot/RoboTask/chassis/chassisR_task.c **** // Period_t periods;
+  26:Robot/RoboTask/chassis/chassisR_task.c **** 
+  27:Robot/RoboTask/chassis/chassisR_task.c **** extern INS_t INS;
   28:Robot/RoboTask/chassis/chassisR_task.c **** 
-  29:Robot/RoboTask/chassis/chassisR_task.c **** extern INS_t INS;
+  29:Robot/RoboTask/chassis/chassisR_task.c **** PidTypeDef LegR_pid;    //右腿腿长PID
   30:Robot/RoboTask/chassis/chassisR_task.c **** 
-  31:Robot/RoboTask/chassis/chassisR_task.c **** PidTypeDef LegR_pid;    //右腿腿长PID
-ARM GAS  D:\temp\TMP\ccHRiiLn.s 			page 2
+  31:Robot/RoboTask/chassis/chassisR_task.c **** float LQR_K_R[2][6];
+ARM GAS  D:\temp\TMP\ccbEsdae.s 			page 2
 
 
-  32:Robot/RoboTask/chassis/chassisR_task.c **** PidTypeDef Tp_Pid;      //防劈叉补偿pd
-  33:Robot/RoboTask/chassis/chassisR_task.c **** PidTypeDef Turn_Pid;    //转向pd
-  34:Robot/RoboTask/chassis/chassisR_task.c **** PidTypeDef Roll_Pid;    //横滚角补偿pd
-  35:Robot/RoboTask/chassis/chassisR_task.c **** 
-  36:Robot/RoboTask/chassis/chassisR_task.c **** float LQR_K[2][6] = {   // 0.15
-  37:Robot/RoboTask/chassis/chassisR_task.c ****                     {-10.922637488618983, -0.809732324787194, -0.895806613702953, -1.38081043356134
-  38:Robot/RoboTask/chassis/chassisR_task.c ****                     {18.684145538958852, 1.581462861415775, 3.506607035886385, 5.054126550708173, 8
-  39:Robot/RoboTask/chassis/chassisR_task.c ****                     };
-  40:Robot/RoboTask/chassis/chassisR_task.c **** int8_t TRANSITION_MATRIX[10] = {0};
-  41:Robot/RoboTask/chassis/chassisR_task.c **** 
-  42:Robot/RoboTask/chassis/chassisR_task.c **** /**
-  43:Robot/RoboTask/chassis/chassisR_task.c ****  * @brief 底盘初始化,包括PID参数初始化，电机初始化
-  44:Robot/RoboTask/chassis/chassisR_task.c ****  * 
-  45:Robot/RoboTask/chassis/chassisR_task.c ****  * @param chassis 
-  46:Robot/RoboTask/chassis/chassisR_task.c ****  * @param pid 
-  47:Robot/RoboTask/chassis/chassisR_task.c ****  */
-  48:Robot/RoboTask/chassis/chassisR_task.c **** static void ChassisR_Init(chassis_t* chassis, PidTypeDef* length_pid)
-  49:Robot/RoboTask/chassis/chassisR_task.c **** {
-  28              		.loc 1 49 1 view -0
+  32:Robot/RoboTask/chassis/chassisR_task.c **** // int8_t TRANSITION_MATRIX[10] = {0};
+  33:Robot/RoboTask/chassis/chassisR_task.c **** 
+  34:Robot/RoboTask/chassis/chassisR_task.c **** /**
+  35:Robot/RoboTask/chassis/chassisR_task.c ****  * @brief 底盘初始化,包括PID参数初始化，电机初始化
+  36:Robot/RoboTask/chassis/chassisR_task.c ****  * 
+  37:Robot/RoboTask/chassis/chassisR_task.c ****  * @param chassis 
+  38:Robot/RoboTask/chassis/chassisR_task.c ****  * @param pid 
+  39:Robot/RoboTask/chassis/chassisR_task.c ****  */
+  40:Robot/RoboTask/chassis/chassisR_task.c **** static void ChassisR_Init(chassis_t* chassis, PidTypeDef* length_pid)
+  41:Robot/RoboTask/chassis/chassisR_task.c **** {
+  42:Robot/RoboTask/chassis/chassisR_task.c ****     // 初始化转移矩阵
+  43:Robot/RoboTask/chassis/chassisR_task.c ****     // TRANSITION_MATRIX[NORMAL_STEP] = NORMAL_STEP;
+  44:Robot/RoboTask/chassis/chassisR_task.c ****     // TRANSITION_MATRIX[JUMP_STEP_SQUST] = JUMP_STEP_JUMP;
+  45:Robot/RoboTask/chassis/chassisR_task.c ****     // TRANSITION_MATRIX[JUMP_STEP_JUMP] = JUMP_STEP_RECOVERY;
+  46:Robot/RoboTask/chassis/chassisR_task.c ****     // TRANSITION_MATRIX[JUMP_STEP_RECOVERY] = NORMAL_STEP;
+  47:Robot/RoboTask/chassis/chassisR_task.c **** 
+  48:Robot/RoboTask/chassis/chassisR_task.c ****     // 两个轮电机的参数一样,改tx_id和反转标志位即可
+  49:Robot/RoboTask/chassis/chassisR_task.c ****     Motor_Init_Config_s chassis_motor_configR = {
+  50:Robot/RoboTask/chassis/chassisR_task.c ****         .can_init_config.can_handle = &hcan2,
+  51:Robot/RoboTask/chassis/chassisR_task.c ****         // .controller_param_init_config = {
+  52:Robot/RoboTask/chassis/chassisR_task.c ****         //     .current_PID = {
+  53:Robot/RoboTask/chassis/chassisR_task.c ****         //         .Kp = 0.5, // 0.4
+  54:Robot/RoboTask/chassis/chassisR_task.c ****         //         .Ki = 0,   // 0
+  55:Robot/RoboTask/chassis/chassisR_task.c ****         //         .Kd = 0,
+  56:Robot/RoboTask/chassis/chassisR_task.c ****         //         .IntegralLimit = 3000,
+  57:Robot/RoboTask/chassis/chassisR_task.c ****         //         .Improve = PID_Trapezoid_Intergral | PID_Integral_Limit | PID_Derivative_On_Meas
+  58:Robot/RoboTask/chassis/chassisR_task.c ****         //         .MaxOut = 15000,
+  59:Robot/RoboTask/chassis/chassisR_task.c ****         //     },
+  60:Robot/RoboTask/chassis/chassisR_task.c ****         // },
+  61:Robot/RoboTask/chassis/chassisR_task.c ****         .controller_setting_init_config = {
+  62:Robot/RoboTask/chassis/chassisR_task.c ****             .angle_feedback_source = MOTOR_FEED,
+  63:Robot/RoboTask/chassis/chassisR_task.c ****             .speed_feedback_source = MOTOR_FEED,
+  64:Robot/RoboTask/chassis/chassisR_task.c ****             .outer_loop_type = CURRENT_LOOP,
+  65:Robot/RoboTask/chassis/chassisR_task.c ****             .close_loop_type = CURRENT_LOOP,
+  66:Robot/RoboTask/chassis/chassisR_task.c ****         },
+  67:Robot/RoboTask/chassis/chassisR_task.c ****         .motor_type = M3508,
+  68:Robot/RoboTask/chassis/chassisR_task.c ****     };
+  69:Robot/RoboTask/chassis/chassisR_task.c **** 
+  70:Robot/RoboTask/chassis/chassisR_task.c ****     const static float leg_pid_R[3] = {LEG_PID_KP, LEG_PID_KI, LEG_PID_KD}; //P I D
+  71:Robot/RoboTask/chassis/chassisR_task.c **** 
+  72:Robot/RoboTask/chassis/chassisR_task.c ****     joint_motor_init(&chassis->joint_motor[0], 3, MIT_MODE);
+  73:Robot/RoboTask/chassis/chassisR_task.c ****     joint_motor_init(&chassis->joint_motor[1], 4, MIT_MODE);
+  74:Robot/RoboTask/chassis/chassisR_task.c **** 
+  75:Robot/RoboTask/chassis/chassisR_task.c ****     //  @todo: 当前还没有设置电机的正反转,仍然需要手动添加reference的正负�
+  76:Robot/RoboTask/chassis/chassisR_task.c ****     chassis_motor_configR.can_init_config.tx_id = 2;
+  77:Robot/RoboTask/chassis/chassisR_task.c ****     chassis_motor_configR.controller_setting_init_config.motor_reverse_flag = MOTOR_DIRECTION_REVER
+  78:Robot/RoboTask/chassis/chassisR_task.c ****     chassis->wheel_motor[0] = DJIMotorInit(&chassis_motor_configR);
+  79:Robot/RoboTask/chassis/chassisR_task.c **** 
+  80:Robot/RoboTask/chassis/chassisR_task.c ****     //腿长PID初始化
+  81:Robot/RoboTask/chassis/chassisR_task.c ****     PID_init(length_pid, PID_POSITION, leg_pid_R, LEG_PID_MAX_OUT, LEG_PID_MAX_IOUT);
+  82:Robot/RoboTask/chassis/chassisR_task.c **** 
+  83:Robot/RoboTask/chassis/chassisR_task.c ****     //电机使能
+  84:Robot/RoboTask/chassis/chassisR_task.c ****     for (uint8_t i = 0; i < 3; i++)
+  85:Robot/RoboTask/chassis/chassisR_task.c ****     {
+  86:Robot/RoboTask/chassis/chassisR_task.c ****         /* code */
+  87:Robot/RoboTask/chassis/chassisR_task.c ****         Enable_Motor_Mode(&hfdcan1, chassis->joint_motor[0].para.id, chassis->joint_motor[0].mode);
+  88:Robot/RoboTask/chassis/chassisR_task.c ****         Enable_Motor_Mode(&hfdcan1, chassis->joint_motor[1].para.id, chassis->joint_motor[1].mode);
+ARM GAS  D:\temp\TMP\ccbEsdae.s 			page 3
+
+
+  89:Robot/RoboTask/chassis/chassisR_task.c ****         DJIMotorEnable(chassis->wheel_motor[0]);
+  90:Robot/RoboTask/chassis/chassisR_task.c ****         osDelay(1);
+  91:Robot/RoboTask/chassis/chassisR_task.c ****     }
+  92:Robot/RoboTask/chassis/chassisR_task.c ****      
+  93:Robot/RoboTask/chassis/chassisR_task.c **** }
+  94:Robot/RoboTask/chassis/chassisR_task.c **** 
+  95:Robot/RoboTask/chassis/chassisR_task.c **** /**
+  96:Robot/RoboTask/chassis/chassisR_task.c ****  * @brief 输入更新
+  97:Robot/RoboTask/chassis/chassisR_task.c ****  * 
+  98:Robot/RoboTask/chassis/chassisR_task.c ****  * @param chassis 
+  99:Robot/RoboTask/chassis/chassisR_task.c ****  * @param ins 
+ 100:Robot/RoboTask/chassis/chassisR_task.c ****  * @param  
+ 101:Robot/RoboTask/chassis/chassisR_task.c ****  */
+ 102:Robot/RoboTask/chassis/chassisR_task.c **** static void ChassisR_Feedback_Update(chassis_t* chassis,Leg_t* leg, INS_t* ins, float dt)
+ 103:Robot/RoboTask/chassis/chassisR_task.c **** {
+  28              		.loc 1 103 1 view -0
   29              		.cfi_startproc
-  30              		@ args = 0, pretend = 0, frame = 176
+  30              		@ args = 0, pretend = 0, frame = 0
   31              		@ frame_needed = 0, uses_anonymous_args = 0
-  32              		.loc 1 49 1 is_stmt 0 view .LVU1
-  33 0000 70B5     		push	{r4, r5, r6, lr}
-  34              	.LCFI0:
-  35              		.cfi_def_cfa_offset 16
-  36              		.cfi_offset 4, -16
-  37              		.cfi_offset 5, -12
-  38              		.cfi_offset 6, -8
-  39              		.cfi_offset 14, -4
-  40 0002 ACB0     		sub	sp, sp, #176
-  41              	.LCFI1:
-  42              		.cfi_def_cfa_offset 192
-  43 0004 0446     		mov	r4, r0
-  44 0006 0D46     		mov	r5, r1
-  50:Robot/RoboTask/chassis/chassisR_task.c ****     // 初始化转移矩阵
-  51:Robot/RoboTask/chassis/chassisR_task.c ****     // TRANSITION_MATRIX[NORMAL_STEP] = NORMAL_STEP;
-  52:Robot/RoboTask/chassis/chassisR_task.c ****     // TRANSITION_MATRIX[JUMP_STEP_SQUST] = JUMP_STEP_JUMP;
-  53:Robot/RoboTask/chassis/chassisR_task.c ****     // TRANSITION_MATRIX[JUMP_STEP_JUMP] = JUMP_STEP_RECOVERY;
-  54:Robot/RoboTask/chassis/chassisR_task.c ****     // TRANSITION_MATRIX[JUMP_STEP_RECOVERY] = NORMAL_STEP;
-  55:Robot/RoboTask/chassis/chassisR_task.c **** 
-  56:Robot/RoboTask/chassis/chassisR_task.c ****     // 两个轮电机的参数一样,改tx_id和反转标志位即可
-  57:Robot/RoboTask/chassis/chassisR_task.c ****     Motor_Init_Config_s chassis_motor_config = {
-  45              		.loc 1 57 5 is_stmt 1 view .LVU2
-  46              		.loc 1 57 25 is_stmt 0 view .LVU3
-  47 0008 B022     		movs	r2, #176
-  48 000a 0021     		movs	r1, #0
-  49              	.LVL1:
-  50              		.loc 1 57 25 view .LVU4
-  51 000c 6846     		mov	r0, sp
-  52              	.LVL2:
-  53              		.loc 1 57 25 view .LVU5
-  54 000e FFF7FEFF 		bl	memset
-  55              	.LVL3:
-  56 0012 4FF07C53 		mov	r3, #1056964608
-  57 0016 0493     		str	r3, [sp, #16]	@ float
-  58 0018 254B     		ldr	r3, .L5
-ARM GAS  D:\temp\TMP\ccHRiiLn.s 			page 3
+  32              		@ link register save eliminated.
+ 104:Robot/RoboTask/chassis/chassisR_task.c ****     leg->joint.Phi4 = PI/2.0f + chassis->joint_motor[1].para.pos;
+  33              		.loc 1 104 5 view .LVU1
+  34              		.loc 1 104 61 is_stmt 0 view .LVU2
+  35 0000 90ED187A 		vldr.32	s14, [r0, #96]
+  36              		.loc 1 104 31 view .LVU3
+  37 0004 DFED3E6A 		vldr.32	s13, .L16
+  38 0008 37EE267A 		vadd.f32	s14, s14, s13
+  39              		.loc 1 104 21 view .LVU4
+  40 000c 81ED157A 		vstr.32	s14, [r1, #84]
+ 105:Robot/RoboTask/chassis/chassisR_task.c ****     leg->joint.Phi1 = PI/2.0f + chassis->joint_motor[0].para.pos;
+  41              		.loc 1 105 5 is_stmt 1 view .LVU5
+  42              		.loc 1 105 61 is_stmt 0 view .LVU6
+  43 0010 D0ED087A 		vldr.32	s15, [r0, #32]
+  44              		.loc 1 105 31 view .LVU7
+  45 0014 77EEA67A 		vadd.f32	s15, s15, s13
+  46              		.loc 1 105 21 view .LVU8
+  47 0018 C1ED147A 		vstr.32	s15, [r1, #80]
+ 106:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 107:Robot/RoboTask/chassis/chassisR_task.c ****     leg->joint.d_Phi4 = chassis->joint_motor[1].para.vel;
+  48              		.loc 1 107 5 is_stmt 1 view .LVU9
+  49              		.loc 1 107 53 is_stmt 0 view .LVU10
+  50 001c 436E     		ldr	r3, [r0, #100]	@ float
+  51              		.loc 1 107 23 view .LVU11
+  52 001e CB65     		str	r3, [r1, #92]	@ float
+ 108:Robot/RoboTask/chassis/chassisR_task.c ****     leg->joint.d_Phi1 = chassis->joint_motor[0].para.vel;
+  53              		.loc 1 108 5 is_stmt 1 view .LVU12
+  54              		.loc 1 108 53 is_stmt 0 view .LVU13
+  55 0020 436A     		ldr	r3, [r0, #36]	@ float
+  56              		.loc 1 108 23 view .LVU14
+  57 0022 8B65     		str	r3, [r1, #88]	@ float
+ 109:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 110:Robot/RoboTask/chassis/chassisR_task.c ****     SATURATE(&leg->joint.Phi4, -PI/3.0f, PI/2.0f);
+  58              		.loc 1 110 5 is_stmt 1 view .LVU15
+  59              		.loc 1 110 5 view .LVU16
+  60 0024 DFED376A 		vldr.32	s13, .L16+4
+  61 0028 B4EEE67A 		vcmpe.f32	s14, s13
+  62 002c F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ARM GAS  D:\temp\TMP\ccbEsdae.s 			page 4
 
 
-  59 001a 0793     		str	r3, [sp, #28]	@ float
-  60 001c 0722     		movs	r2, #7
-  61 001e 8DF82420 		strb	r2, [sp, #36]
-  62 0022 244B     		ldr	r3, .L5+4
-  63 0024 0A93     		str	r3, [sp, #40]	@ float
-  64 0026 2449     		ldr	r1, .L5+8
-  65 0028 0F91     		str	r1, [sp, #60]	@ float
-  66 002a 2449     		ldr	r1, .L5+12
-  67 002c 1291     		str	r1, [sp, #72]	@ float
-  68 002e 8DF85020 		strb	r2, [sp, #80]
-  69 0032 1593     		str	r3, [sp, #84]	@ float
-  70 0034 0223     		movs	r3, #2
-  71 0036 8DF89430 		strb	r3, [sp, #148]
-  72 003a 0321     		movs	r1, #3
-  73 003c 8DF89510 		strb	r1, [sp, #149]
-  74 0040 8DF89B30 		strb	r3, [sp, #155]
-  75 0044 1E4B     		ldr	r3, .L5+16
-  76 0046 2793     		str	r3, [sp, #156]
-  58:Robot/RoboTask/chassis/chassisR_task.c ****         .can_init_config.can_handle = &hcan2,
-  59:Robot/RoboTask/chassis/chassisR_task.c ****         .controller_param_init_config = {
-  60:Robot/RoboTask/chassis/chassisR_task.c ****             .speed_PID = {
-  61:Robot/RoboTask/chassis/chassisR_task.c ****                 .Kp = 10, // 4.5
-  62:Robot/RoboTask/chassis/chassisR_task.c ****                 .Ki = 0,  // 0
-  63:Robot/RoboTask/chassis/chassisR_task.c ****                 .Kd = 0,  // 0
-  64:Robot/RoboTask/chassis/chassisR_task.c ****                 .IntegralLimit = 3000,
-  65:Robot/RoboTask/chassis/chassisR_task.c ****                 .Improve = PID_Trapezoid_Intergral | PID_Integral_Limit | PID_Derivative_On_Measure
-  66:Robot/RoboTask/chassis/chassisR_task.c ****                 .MaxOut = 12000,
-  67:Robot/RoboTask/chassis/chassisR_task.c ****             },
-  68:Robot/RoboTask/chassis/chassisR_task.c ****             .current_PID = {
-  69:Robot/RoboTask/chassis/chassisR_task.c ****                 .Kp = 0.5, // 0.4
-  70:Robot/RoboTask/chassis/chassisR_task.c ****                 .Ki = 0,   // 0
-  71:Robot/RoboTask/chassis/chassisR_task.c ****                 .Kd = 0,
-  72:Robot/RoboTask/chassis/chassisR_task.c ****                 .IntegralLimit = 3000,
-  73:Robot/RoboTask/chassis/chassisR_task.c ****                 .Improve = PID_Trapezoid_Intergral | PID_Integral_Limit | PID_Derivative_On_Measure
-  74:Robot/RoboTask/chassis/chassisR_task.c ****                 .MaxOut = 15000,
-  75:Robot/RoboTask/chassis/chassisR_task.c ****             },
-  76:Robot/RoboTask/chassis/chassisR_task.c ****         },
-  77:Robot/RoboTask/chassis/chassisR_task.c ****         .controller_setting_init_config = {
-  78:Robot/RoboTask/chassis/chassisR_task.c ****             .angle_feedback_source = MOTOR_FEED,
-  79:Robot/RoboTask/chassis/chassisR_task.c ****             .speed_feedback_source = MOTOR_FEED,
-  80:Robot/RoboTask/chassis/chassisR_task.c ****             .outer_loop_type = SPEED_LOOP,
-  81:Robot/RoboTask/chassis/chassisR_task.c ****             .close_loop_type = SPEED_LOOP | CURRENT_LOOP,
-  82:Robot/RoboTask/chassis/chassisR_task.c ****         },
-  83:Robot/RoboTask/chassis/chassisR_task.c ****         .motor_type = M3508,
-  84:Robot/RoboTask/chassis/chassisR_task.c ****     };
-  85:Robot/RoboTask/chassis/chassisR_task.c **** 
-  86:Robot/RoboTask/chassis/chassisR_task.c ****     const static float leg_pid_R[3] = {LEG_PID_KP, LEG_PID_KI, LEG_PID_KD}; //P I D
-  77              		.loc 1 86 5 is_stmt 1 view .LVU6
-  87:Robot/RoboTask/chassis/chassisR_task.c **** 
-  88:Robot/RoboTask/chassis/chassisR_task.c ****     joint_motor_init(&chassis->joint_motor[0], 3, MIT_MODE);
-  78              		.loc 1 88 5 view .LVU7
-  79 0048 0022     		movs	r2, #0
-  80 004a 2046     		mov	r0, r4
-  81 004c FFF7FEFF 		bl	joint_motor_init
-  82              	.LVL4:
-  89:Robot/RoboTask/chassis/chassisR_task.c ****     joint_motor_init(&chassis->joint_motor[1], 4, MIT_MODE);
-  83              		.loc 1 89 5 view .LVU8
-ARM GAS  D:\temp\TMP\ccHRiiLn.s 			page 4
+  63 0030 51D5     		bpl	.L14
+  64              		.loc 1 110 5 discriminator 1 view .LVU17
+  65 0032 C1ED156A 		vstr.32	s13, [r1, #84]
+  66              	.L4:
+  67              		.loc 1 110 5 discriminator 6 view .LVU18
+ 111:Robot/RoboTask/chassis/chassisR_task.c ****     SATURATE(&leg->joint.Phi1, PI/2.0f, PI*4/3.0f);
+  68              		.loc 1 111 5 discriminator 6 view .LVU19
+  69              		.loc 1 111 5 discriminator 6 view .LVU20
+  70 0036 9FED327A 		vldr.32	s14, .L16
+  71 003a F4EEC77A 		vcmpe.f32	s15, s14
+  72 003e F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+  73 0042 52D5     		bpl	.L15
+  74              		.loc 1 111 5 discriminator 1 view .LVU21
+  75 0044 81ED147A 		vstr.32	s14, [r1, #80]
+  76              	.L8:
+  77              		.loc 1 111 5 discriminator 6 view .LVU22
+ 112:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 113:Robot/RoboTask/chassis/chassisR_task.c ****     chassis->myPithR = ins->Pitch;
+  78              		.loc 1 113 5 discriminator 6 view .LVU23
+  79              		.loc 1 113 27 is_stmt 0 discriminator 6 view .LVU24
+  80 0048 936C     		ldr	r3, [r2, #72]	@ float
+  81              		.loc 1 113 22 discriminator 6 view .LVU25
+  82 004a C0F88031 		str	r3, [r0, #384]	@ float
+ 114:Robot/RoboTask/chassis/chassisR_task.c ****     chassis->myPithGyroR = ins->Gyro[1];
+  83              		.loc 1 114 5 is_stmt 1 discriminator 6 view .LVU26
+  84              		.loc 1 114 37 is_stmt 0 discriminator 6 view .LVU27
+  85 004e 5369     		ldr	r3, [r2, #20]	@ float
+  86              		.loc 1 114 26 discriminator 6 view .LVU28
+  87 0050 C0F88431 		str	r3, [r0, #388]	@ float
+ 115:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 116:Robot/RoboTask/chassis/chassisR_task.c ****     // L0
+ 117:Robot/RoboTask/chassis/chassisR_task.c ****     leg->rod.d_L0 = leg->j11*leg->joint.d_Phi1 + leg->j12*leg->joint.d_Phi4;
+  88              		.loc 1 117 5 is_stmt 1 discriminator 6 view .LVU29
+  89              		.loc 1 117 24 is_stmt 0 discriminator 6 view .LVU30
+  90 0054 D1ED186A 		vldr.32	s13, [r1, #96]
+  91              		.loc 1 117 40 discriminator 6 view .LVU31
+  92 0058 91ED167A 		vldr.32	s14, [r1, #88]
+  93              		.loc 1 117 29 discriminator 6 view .LVU32
+  94 005c 66EE876A 		vmul.f32	s13, s13, s14
+  95              		.loc 1 117 53 discriminator 6 view .LVU33
+  96 0060 D1ED197A 		vldr.32	s15, [r1, #100]
+  97              		.loc 1 117 69 discriminator 6 view .LVU34
+  98 0064 91ED176A 		vldr.32	s12, [r1, #92]
+  99              		.loc 1 117 58 discriminator 6 view .LVU35
+ 100 0068 67EE867A 		vmul.f32	s15, s15, s12
+ 101              		.loc 1 117 48 discriminator 6 view .LVU36
+ 102 006c 76EEA76A 		vadd.f32	s13, s13, s15
+ 103              		.loc 1 117 19 discriminator 6 view .LVU37
+ 104 0070 C1ED036A 		vstr.32	s13, [r1, #12]
+ 118:Robot/RoboTask/chassis/chassisR_task.c ****     leg->rod.last_d_L0 = leg->rod.d_L0;
+ 105              		.loc 1 118 5 is_stmt 1 discriminator 6 view .LVU38
+ 106              		.loc 1 118 24 is_stmt 0 discriminator 6 view .LVU39
+ 107 0074 C1ED066A 		vstr.32	s13, [r1, #24]
+ 119:Robot/RoboTask/chassis/chassisR_task.c ****     leg->rod.dd_L0 = (leg->rod.d_L0 - leg->rod.last_d_L0) / dt;
+ 108              		.loc 1 119 5 is_stmt 1 discriminator 6 view .LVU40
+ 109              		.loc 1 119 37 is_stmt 0 discriminator 6 view .LVU41
+ 110 0078 76EEE66A 		vsub.f32	s13, s13, s13
+ARM GAS  D:\temp\TMP\ccbEsdae.s 			page 5
 
 
-  84 0050 0022     		movs	r2, #0
-  85 0052 0421     		movs	r1, #4
-  86 0054 04F14000 		add	r0, r4, #64
-  87 0058 FFF7FEFF 		bl	joint_motor_init
-  88              	.LVL5:
-  90:Robot/RoboTask/chassis/chassisR_task.c **** 
-  91:Robot/RoboTask/chassis/chassisR_task.c ****     //  @todo: 当前还没有设置电机的正反转,仍然需要手动添加reference的正负�
-  92:Robot/RoboTask/chassis/chassisR_task.c ****     chassis_motor_config.can_init_config.tx_id = 1;
-  89              		.loc 1 92 5 view .LVU9
-  90              		.loc 1 92 48 is_stmt 0 view .LVU10
-  91 005c 0123     		movs	r3, #1
-  92 005e 2893     		str	r3, [sp, #160]
-  93:Robot/RoboTask/chassis/chassisR_task.c ****     chassis_motor_config.controller_setting_init_config.motor_reverse_flag = MOTOR_DIRECTION_REVERS
-  93              		.loc 1 93 5 is_stmt 1 view .LVU11
-  94              		.loc 1 93 76 is_stmt 0 view .LVU12
-  95 0060 8DF89630 		strb	r3, [sp, #150]
-  94:Robot/RoboTask/chassis/chassisR_task.c ****     chassis->wheel_motor[0] = DJIMotorInit(&chassis_motor_config);
-  96              		.loc 1 94 5 is_stmt 1 view .LVU13
-  97              		.loc 1 94 31 is_stmt 0 view .LVU14
-  98 0064 6846     		mov	r0, sp
-  99 0066 FFF7FEFF 		bl	DJIMotorInit
- 100              	.LVL6:
- 101              		.loc 1 94 29 view .LVU15
- 102 006a C4F80001 		str	r0, [r4, #256]
-  95:Robot/RoboTask/chassis/chassisR_task.c **** 
-  96:Robot/RoboTask/chassis/chassisR_task.c ****     //腿长PID初始化
-  97:Robot/RoboTask/chassis/chassisR_task.c ****     PID_init(length_pid, PID_POSITION, leg_pid_R, LEG_PID_MAX_OUT, LEG_PID_MAX_IOUT);
- 103              		.loc 1 97 5 is_stmt 1 view .LVU16
- 104 006e DFED150A 		vldr.32	s1, .L5+20
- 105 0072 9FED150A 		vldr.32	s0, .L5+24
- 106 0076 154A     		ldr	r2, .L5+28
- 107 0078 0021     		movs	r1, #0
- 108 007a 2846     		mov	r0, r5
- 109 007c FFF7FEFF 		bl	PID_init
- 110              	.LVL7:
-  98:Robot/RoboTask/chassis/chassisR_task.c **** 
-  99:Robot/RoboTask/chassis/chassisR_task.c ****     //电机使能
- 100:Robot/RoboTask/chassis/chassisR_task.c ****     for (uint8_t i = 0; i < 3; i++)
- 111              		.loc 1 100 5 view .LVU17
- 112              	.LBB12:
- 113              		.loc 1 100 10 view .LVU18
- 114              		.loc 1 100 18 is_stmt 0 view .LVU19
- 115 0080 0025     		movs	r5, #0
- 116              	.LVL8:
- 117              		.loc 1 100 5 view .LVU20
- 118 0082 11E0     		b	.L2
- 119              	.LVL9:
- 120              	.L3:
- 101:Robot/RoboTask/chassis/chassisR_task.c ****     {
- 102:Robot/RoboTask/chassis/chassisR_task.c ****         /* code */
- 103:Robot/RoboTask/chassis/chassisR_task.c ****         Enable_Motor_Mode(&hfdcan1, chassis->joint_motor[0].para.id, chassis->joint_motor[0].mode);
- 121              		.loc 1 103 9 is_stmt 1 discriminator 3 view .LVU21
- 122 0084 124E     		ldr	r6, .L5+32
- 123 0086 2288     		ldrh	r2, [r4]
- 124 0088 A188     		ldrh	r1, [r4, #4]
- 125 008a 3046     		mov	r0, r6
- 126 008c FFF7FEFF 		bl	Enable_Motor_Mode
-ARM GAS  D:\temp\TMP\ccHRiiLn.s 			page 5
-
-
- 127              	.LVL10:
- 104:Robot/RoboTask/chassis/chassisR_task.c ****         Enable_Motor_Mode(&hfdcan1, chassis->joint_motor[1].para.id, chassis->joint_motor[1].mode);
- 128              		.loc 1 104 9 discriminator 3 view .LVU22
- 129 0090 B4F84020 		ldrh	r2, [r4, #64]
- 130 0094 B4F84410 		ldrh	r1, [r4, #68]
- 131 0098 3046     		mov	r0, r6
- 132 009a FFF7FEFF 		bl	Enable_Motor_Mode
- 133              	.LVL11:
- 105:Robot/RoboTask/chassis/chassisR_task.c ****         // DJIMotorEnable(chassis->wheel_motor[0]);
- 106:Robot/RoboTask/chassis/chassisR_task.c ****         osDelay(1);
- 134              		.loc 1 106 9 discriminator 3 view .LVU23
- 135 009e 0120     		movs	r0, #1
- 136 00a0 FFF7FEFF 		bl	osDelay
- 137              	.LVL12:
- 100:Robot/RoboTask/chassis/chassisR_task.c ****     {
- 138              		.loc 1 100 32 discriminator 3 view .LVU24
- 100:Robot/RoboTask/chassis/chassisR_task.c ****     {
- 139              		.loc 1 100 33 is_stmt 0 discriminator 3 view .LVU25
- 140 00a4 0135     		adds	r5, r5, #1
- 141              	.LVL13:
- 100:Robot/RoboTask/chassis/chassisR_task.c ****     {
- 142              		.loc 1 100 33 discriminator 3 view .LVU26
- 143 00a6 EDB2     		uxtb	r5, r5
- 144              	.LVL14:
- 145              	.L2:
- 100:Robot/RoboTask/chassis/chassisR_task.c ****     {
- 146              		.loc 1 100 25 is_stmt 1 discriminator 1 view .LVU27
- 100:Robot/RoboTask/chassis/chassisR_task.c ****     {
- 147              		.loc 1 100 5 is_stmt 0 discriminator 1 view .LVU28
- 148 00a8 022D     		cmp	r5, #2
- 149 00aa EBD9     		bls	.L3
- 150              	.LBE12:
- 107:Robot/RoboTask/chassis/chassisR_task.c ****     }
- 108:Robot/RoboTask/chassis/chassisR_task.c ****      
- 109:Robot/RoboTask/chassis/chassisR_task.c **** }
- 151              		.loc 1 109 1 view .LVU29
- 152 00ac 2CB0     		add	sp, sp, #176
- 153              	.LCFI2:
- 154              		.cfi_def_cfa_offset 16
- 155              		@ sp needed
- 156 00ae 70BD     		pop	{r4, r5, r6, pc}
- 157              	.LVL15:
- 158              	.L6:
- 159              		.loc 1 109 1 view .LVU30
- 160              		.align	2
- 161              	.L5:
- 162 00b0 00606A46 		.word	1181376512
- 163 00b4 00803B45 		.word	1161527296
- 164 00b8 00002041 		.word	1092616192
- 165 00bc 00803B46 		.word	1178304512
- 166 00c0 00000000 		.word	hfdcan2
- 167 00c4 00000000 		.word	0
- 168 00c8 0000B442 		.word	1119092736
- 169 00cc 00000000 		.word	.LANCHOR0
- 170 00d0 00000000 		.word	hfdcan1
- 171              		.cfi_endproc
- 172              	.LFE193:
-ARM GAS  D:\temp\TMP\ccHRiiLn.s 			page 6
-
-
- 174              		.section	.text.ChassisR_Debug,"ax",%progbits
- 175              		.align	1
- 176              		.syntax unified
- 177              		.thumb
- 178              		.thumb_func
- 180              	ChassisR_Debug:
- 181              	.LVL16:
- 182              	.LFB199:
- 110:Robot/RoboTask/chassis/chassisR_task.c **** 
- 111:Robot/RoboTask/chassis/chassisR_task.c **** //补偿初始化：roll补偿、防劈叉补偿、偏航角补偿
- 112:Robot/RoboTask/chassis/chassisR_task.c **** void Pensation_Init(PidTypeDef *roll,PidTypeDef *Tp,PidTypeDef *turn)
- 113:Robot/RoboTask/chassis/chassisR_task.c **** {
- 114:Robot/RoboTask/chassis/chassisR_task.c ****     const static float roll_pid[3] = {ROLL_PID_KP, ROLL_PID_KI,ROLL_PID_KD};
- 115:Robot/RoboTask/chassis/chassisR_task.c **** 	const static float tp_pid[3] = {TP_PID_KP, TP_PID_KI, TP_PID_KD};
- 116:Robot/RoboTask/chassis/chassisR_task.c **** 	const static float turn_pid[3] = {TURN_PID_KP, TURN_PID_KI, TURN_PID_KD};
- 117:Robot/RoboTask/chassis/chassisR_task.c **** 	
- 118:Robot/RoboTask/chassis/chassisR_task.c **** 	PID_init(roll, PID_POSITION, roll_pid, ROLL_PID_MAX_OUT, ROLL_PID_MAX_IOUT);
- 119:Robot/RoboTask/chassis/chassisR_task.c **** 	PID_init(Tp, PID_POSITION, tp_pid, TP_PID_MAX_OUT,TP_PID_MAX_IOUT);
- 120:Robot/RoboTask/chassis/chassisR_task.c **** 	PID_init(turn, PID_POSITION, turn_pid, TURN_PID_MAX_OUT, TURN_PID_MAX_IOUT);
- 121:Robot/RoboTask/chassis/chassisR_task.c **** }
- 122:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 111              		.loc 1 119 59 discriminator 6 view .LVU42
+ 112 007c C6EE807A 		vdiv.f32	s15, s13, s0
+ 113              		.loc 1 119 20 discriminator 6 view .LVU43
+ 114 0080 C1ED047A 		vstr.32	s15, [r1, #16]
+ 120:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 121:Robot/RoboTask/chassis/chassisR_task.c ****     // phi0
+ 122:Robot/RoboTask/chassis/chassisR_task.c ****     leg->rod.d_phi0 = leg->j21*leg->joint.d_Phi1 + leg->j22*leg->joint.d_Phi4;
+ 115              		.loc 1 122 5 is_stmt 1 discriminator 6 view .LVU44
+ 116              		.loc 1 122 26 is_stmt 0 discriminator 6 view .LVU45
+ 117 0084 D1ED1A7A 		vldr.32	s15, [r1, #104]
+ 118              		.loc 1 122 31 discriminator 6 view .LVU46
+ 119 0088 27EE277A 		vmul.f32	s14, s14, s15
+ 120              		.loc 1 122 55 discriminator 6 view .LVU47
+ 121 008c D1ED1B7A 		vldr.32	s15, [r1, #108]
+ 122              		.loc 1 122 60 discriminator 6 view .LVU48
+ 123 0090 66EE277A 		vmul.f32	s15, s12, s15
+ 124              		.loc 1 122 50 discriminator 6 view .LVU49
+ 125 0094 77EE277A 		vadd.f32	s15, s14, s15
+ 126              		.loc 1 122 21 discriminator 6 view .LVU50
+ 127 0098 C1ED087A 		vstr.32	s15, [r1, #32]
  123:Robot/RoboTask/chassis/chassisR_task.c **** 
- 124:Robot/RoboTask/chassis/chassisR_task.c **** /**
- 125:Robot/RoboTask/chassis/chassisR_task.c ****  * @brief 输入更新
- 126:Robot/RoboTask/chassis/chassisR_task.c ****  * 
- 127:Robot/RoboTask/chassis/chassisR_task.c ****  * @param chassis 
- 128:Robot/RoboTask/chassis/chassisR_task.c ****  * @param ins 
- 129:Robot/RoboTask/chassis/chassisR_task.c ****  * @param  
- 130:Robot/RoboTask/chassis/chassisR_task.c ****  */
- 131:Robot/RoboTask/chassis/chassisR_task.c **** static void ChassisR_Feedback_Update(chassis_t* chassis,Leg_t* leg, INS_t* ins)
- 132:Robot/RoboTask/chassis/chassisR_task.c **** {
- 133:Robot/RoboTask/chassis/chassisR_task.c ****     leg->joint.Phi1 = PI/2.0f + chassis->joint_motor[0].para.pos;
- 134:Robot/RoboTask/chassis/chassisR_task.c ****     leg->joint.Phi4 = PI/2.0f + chassis->joint_motor[1].para.pos;
- 135:Robot/RoboTask/chassis/chassisR_task.c **** 
- 136:Robot/RoboTask/chassis/chassisR_task.c ****     chassis->myPithR = ins->Pitch;
- 137:Robot/RoboTask/chassis/chassisR_task.c ****     chassis->myPithGyroR = ins->Gyro[1];
- 138:Robot/RoboTask/chassis/chassisR_task.c **** 
- 139:Robot/RoboTask/chassis/chassisR_task.c ****     chassis->total_yaw = ins->YawTotalAngle;
- 140:Robot/RoboTask/chassis/chassisR_task.c **** 	chassis->roll = ins->Roll;
- 141:Robot/RoboTask/chassis/chassisR_task.c ****     chassis->theta_err = 0.0f - (leg->rod.theta + legL.rod.theta);
- 142:Robot/RoboTask/chassis/chassisR_task.c **** 
- 143:Robot/RoboTask/chassis/chassisR_task.c ****     //倒地自起检测
- 144:Robot/RoboTask/chassis/chassisR_task.c ****     if(ins->Pitch<(PI/6.0f) && ins->Pitch>(-PI/6.0f))
- 145:Robot/RoboTask/chassis/chassisR_task.c ****     {
- 146:Robot/RoboTask/chassis/chassisR_task.c ****         chassis->flag.recover_flag = 0;
+ 124:Robot/RoboTask/chassis/chassisR_task.c ****     //theta
+ 125:Robot/RoboTask/chassis/chassisR_task.c ****     leg->rod.theta = PI/2 - leg->rod.phi0 - chassis->myPithR;
+ 128              		.loc 1 125 5 is_stmt 1 discriminator 6 view .LVU51
+ 129              		.loc 1 125 37 is_stmt 0 discriminator 6 view .LVU52
+ 130 009c D1ED076A 		vldr.32	s13, [r1, #28]
+ 131              		.loc 1 125 27 discriminator 6 view .LVU53
+ 132 00a0 9FED177A 		vldr.32	s14, .L16
+ 133 00a4 37EE667A 		vsub.f32	s14, s14, s13
+ 134              		.loc 1 125 52 discriminator 6 view .LVU54
+ 135 00a8 D0ED606A 		vldr.32	s13, [r0, #384]
+ 136              		.loc 1 125 43 discriminator 6 view .LVU55
+ 137 00ac 37EE667A 		vsub.f32	s14, s14, s13
+ 138              		.loc 1 125 20 discriminator 6 view .LVU56
+ 139 00b0 81ED0A7A 		vstr.32	s14, [r1, #40]
+ 126:Robot/RoboTask/chassis/chassisR_task.c ****     leg->rod.d_theta = - leg->rod.d_phi0 - chassis->myPithGyroR;
+ 140              		.loc 1 126 5 is_stmt 1 discriminator 6 view .LVU57
+ 141              		.loc 1 126 24 is_stmt 0 discriminator 6 view .LVU58
+ 142 00b4 F1EE677A 		vneg.f32	s15, s15
+ 143              		.loc 1 126 51 discriminator 6 view .LVU59
+ 144 00b8 90ED617A 		vldr.32	s14, [r0, #388]
+ 145              		.loc 1 126 42 discriminator 6 view .LVU60
+ 146 00bc 77EEC77A 		vsub.f32	s15, s15, s14
+ 147              		.loc 1 126 22 discriminator 6 view .LVU61
+ 148 00c0 C1ED0B7A 		vstr.32	s15, [r1, #44]
+ 127:Robot/RoboTask/chassis/chassisR_task.c ****     leg->rod.last_d_theta = leg->rod.d_theta;
+ 149              		.loc 1 127 5 is_stmt 1 discriminator 6 view .LVU62
+ 150              		.loc 1 127 27 is_stmt 0 discriminator 6 view .LVU63
+ 151 00c4 C1ED0C7A 		vstr.32	s15, [r1, #48]
+ 128:Robot/RoboTask/chassis/chassisR_task.c ****     leg->rod.dd_theta = (leg->rod.d_theta - leg->rod.last_d_theta) / dt;
+ 152              		.loc 1 128 5 is_stmt 1 discriminator 6 view .LVU64
+ 153              		.loc 1 128 43 is_stmt 0 discriminator 6 view .LVU65
+ 154 00c8 77EEE77A 		vsub.f32	s15, s15, s15
+ 155              		.loc 1 128 68 discriminator 6 view .LVU66
+ 156 00cc 87EE807A 		vdiv.f32	s14, s15, s0
+ 157              		.loc 1 128 23 discriminator 6 view .LVU67
+ 158 00d0 81ED0D7A 		vstr.32	s14, [r1, #52]
+ARM GAS  D:\temp\TMP\ccbEsdae.s 			page 6
+
+
+ 129:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 130:Robot/RoboTask/chassis/chassisR_task.c ****     //倒地自起检测
+ 131:Robot/RoboTask/chassis/chassisR_task.c ****     if(1)
+ 159              		.loc 1 131 5 is_stmt 1 discriminator 6 view .LVU68
+ 132:Robot/RoboTask/chassis/chassisR_task.c ****     {
+ 133:Robot/RoboTask/chassis/chassisR_task.c ****         // chassis->flag.recover_flag = 0;
+ 134:Robot/RoboTask/chassis/chassisR_task.c ****     }
+ 160              		.loc 1 134 5 discriminator 6 view .LVU69
+ 135:Robot/RoboTask/chassis/chassisR_task.c **** }
+ 161              		.loc 1 135 1 is_stmt 0 discriminator 6 view .LVU70
+ 162 00d4 7047     		bx	lr
+ 163              	.L14:
+ 110:Robot/RoboTask/chassis/chassisR_task.c ****     SATURATE(&leg->joint.Phi1, PI/2.0f, PI*4/3.0f);
+ 164              		.loc 1 110 5 is_stmt 1 discriminator 2 view .LVU71
+ 165 00d6 DFED0A6A 		vldr.32	s13, .L16
+ 166 00da B4EEE67A 		vcmpe.f32	s14, s13
+ 167 00de F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 168 00e2 A8DD     		ble	.L4
+ 110:Robot/RoboTask/chassis/chassisR_task.c ****     SATURATE(&leg->joint.Phi1, PI/2.0f, PI*4/3.0f);
+ 169              		.loc 1 110 5 discriminator 4 view .LVU72
+ 170 00e4 C1ED156A 		vstr.32	s13, [r1, #84]
+ 171 00e8 A5E7     		b	.L4
+ 172              	.L15:
+ 111:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 173              		.loc 1 111 5 discriminator 2 view .LVU73
+ 174 00ea 9FED077A 		vldr.32	s14, .L16+8
+ 175 00ee F4EEC77A 		vcmpe.f32	s15, s14
+ 176 00f2 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 177 00f6 A7DD     		ble	.L8
+ 111:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 178              		.loc 1 111 5 discriminator 4 view .LVU74
+ 179 00f8 81ED147A 		vstr.32	s14, [r1, #80]
+ 180 00fc A4E7     		b	.L8
+ 181              	.L17:
+ 182 00fe 00BF     		.align	2
+ 183              	.L16:
+ 184 0100 DB0FC93F 		.word	1070141403
+ 185 0104 920A86BF 		.word	-1081734510
+ 186 0108 920A8640 		.word	1082526354
+ 187              		.cfi_endproc
+ 188              	.LFE196:
+ 190              		.section	.text.ChassisR_Init,"ax",%progbits
+ 191              		.align	1
+ 192              		.syntax unified
+ 193              		.thumb
+ 194              		.thumb_func
+ 196              	ChassisR_Init:
+ 197              	.LVL1:
+ 198              	.LFB195:
+  41:Robot/RoboTask/chassis/chassisR_task.c ****     // 初始化转移矩阵
+ 199              		.loc 1 41 1 view -0
+ 200              		.cfi_startproc
+ 201              		@ args = 0, pretend = 0, frame = 176
+ 202              		@ frame_needed = 0, uses_anonymous_args = 0
+  41:Robot/RoboTask/chassis/chassisR_task.c ****     // 初始化转移矩阵
+ 203              		.loc 1 41 1 is_stmt 0 view .LVU76
+ 204 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ARM GAS  D:\temp\TMP\ccbEsdae.s 			page 7
+
+
+ 205              	.LCFI0:
+ 206              		.cfi_def_cfa_offset 20
+ 207              		.cfi_offset 4, -20
+ 208              		.cfi_offset 5, -16
+ 209              		.cfi_offset 6, -12
+ 210              		.cfi_offset 7, -8
+ 211              		.cfi_offset 14, -4
+ 212 0002 ADB0     		sub	sp, sp, #180
+ 213              	.LCFI1:
+ 214              		.cfi_def_cfa_offset 200
+ 215 0004 0446     		mov	r4, r0
+ 216 0006 0D46     		mov	r5, r1
+  49:Robot/RoboTask/chassis/chassisR_task.c ****         .can_init_config.can_handle = &hcan2,
+ 217              		.loc 1 49 5 is_stmt 1 view .LVU77
+  49:Robot/RoboTask/chassis/chassisR_task.c ****         .can_init_config.can_handle = &hcan2,
+ 218              		.loc 1 49 25 is_stmt 0 view .LVU78
+ 219 0008 B022     		movs	r2, #176
+ 220 000a 0021     		movs	r1, #0
+ 221              	.LVL2:
+  49:Robot/RoboTask/chassis/chassisR_task.c ****         .can_init_config.can_handle = &hcan2,
+ 222              		.loc 1 49 25 view .LVU79
+ 223 000c 6846     		mov	r0, sp
+ 224              	.LVL3:
+  49:Robot/RoboTask/chassis/chassisR_task.c ****         .can_init_config.can_handle = &hcan2,
+ 225              		.loc 1 49 25 view .LVU80
+ 226 000e FFF7FEFF 		bl	memset
+ 227              	.LVL4:
+ 228 0012 0126     		movs	r6, #1
+ 229 0014 8DF89460 		strb	r6, [sp, #148]
+ 230 0018 8DF89560 		strb	r6, [sp, #149]
+ 231 001c 0227     		movs	r7, #2
+ 232 001e 8DF89B70 		strb	r7, [sp, #155]
+ 233 0022 1D4B     		ldr	r3, .L22
+ 234 0024 2793     		str	r3, [sp, #156]
+  70:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 235              		.loc 1 70 5 is_stmt 1 view .LVU81
+  72:Robot/RoboTask/chassis/chassisR_task.c ****     joint_motor_init(&chassis->joint_motor[1], 4, MIT_MODE);
+ 236              		.loc 1 72 5 view .LVU82
+ 237 0026 0022     		movs	r2, #0
+ 238 0028 0321     		movs	r1, #3
+ 239 002a 2046     		mov	r0, r4
+ 240 002c FFF7FEFF 		bl	joint_motor_init
+ 241              	.LVL5:
+  73:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 242              		.loc 1 73 5 view .LVU83
+ 243 0030 0022     		movs	r2, #0
+ 244 0032 0421     		movs	r1, #4
+ 245 0034 04F14000 		add	r0, r4, #64
+ 246 0038 FFF7FEFF 		bl	joint_motor_init
+ 247              	.LVL6:
+  76:Robot/RoboTask/chassis/chassisR_task.c ****     chassis_motor_configR.controller_setting_init_config.motor_reverse_flag = MOTOR_DIRECTION_REVER
+ 248              		.loc 1 76 5 view .LVU84
+  76:Robot/RoboTask/chassis/chassisR_task.c ****     chassis_motor_configR.controller_setting_init_config.motor_reverse_flag = MOTOR_DIRECTION_REVER
+ 249              		.loc 1 76 49 is_stmt 0 view .LVU85
+ 250 003c 2897     		str	r7, [sp, #160]
+  77:Robot/RoboTask/chassis/chassisR_task.c ****     chassis->wheel_motor[0] = DJIMotorInit(&chassis_motor_configR);
+ 251              		.loc 1 77 5 is_stmt 1 view .LVU86
+ARM GAS  D:\temp\TMP\ccbEsdae.s 			page 8
+
+
+  77:Robot/RoboTask/chassis/chassisR_task.c ****     chassis->wheel_motor[0] = DJIMotorInit(&chassis_motor_configR);
+ 252              		.loc 1 77 77 is_stmt 0 view .LVU87
+ 253 003e 8DF89660 		strb	r6, [sp, #150]
+  78:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 254              		.loc 1 78 5 is_stmt 1 view .LVU88
+  78:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 255              		.loc 1 78 31 is_stmt 0 view .LVU89
+ 256 0042 6846     		mov	r0, sp
+ 257 0044 FFF7FEFF 		bl	DJIMotorInit
+ 258              	.LVL7:
+  78:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 259              		.loc 1 78 29 view .LVU90
+ 260 0048 C4F80001 		str	r0, [r4, #256]
+  81:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 261              		.loc 1 81 5 is_stmt 1 view .LVU91
+ 262 004c DFED130A 		vldr.32	s1, .L22+4
+ 263 0050 9FED130A 		vldr.32	s0, .L22+8
+ 264 0054 134A     		ldr	r2, .L22+12
+ 265 0056 0021     		movs	r1, #0
+ 266 0058 2846     		mov	r0, r5
+ 267 005a FFF7FEFF 		bl	PID_init
+ 268              	.LVL8:
+  84:Robot/RoboTask/chassis/chassisR_task.c ****     {
+ 269              		.loc 1 84 5 view .LVU92
+ 270              	.LBB2:
+  84:Robot/RoboTask/chassis/chassisR_task.c ****     {
+ 271              		.loc 1 84 10 view .LVU93
+  84:Robot/RoboTask/chassis/chassisR_task.c ****     {
+ 272              		.loc 1 84 18 is_stmt 0 view .LVU94
+ 273 005e 0025     		movs	r5, #0
+ 274              	.LVL9:
+  84:Robot/RoboTask/chassis/chassisR_task.c ****     {
+ 275              		.loc 1 84 5 view .LVU95
+ 276 0060 15E0     		b	.L19
+ 277              	.LVL10:
+ 278              	.L20:
+  87:Robot/RoboTask/chassis/chassisR_task.c ****         Enable_Motor_Mode(&hfdcan1, chassis->joint_motor[1].para.id, chassis->joint_motor[1].mode);
+ 279              		.loc 1 87 9 is_stmt 1 discriminator 3 view .LVU96
+ 280 0062 114E     		ldr	r6, .L22+16
+ 281 0064 2288     		ldrh	r2, [r4]
+ 282 0066 A188     		ldrh	r1, [r4, #4]
+ 283 0068 3046     		mov	r0, r6
+ 284 006a FFF7FEFF 		bl	Enable_Motor_Mode
+ 285              	.LVL11:
+  88:Robot/RoboTask/chassis/chassisR_task.c ****         DJIMotorEnable(chassis->wheel_motor[0]);
+ 286              		.loc 1 88 9 discriminator 3 view .LVU97
+ 287 006e B4F84020 		ldrh	r2, [r4, #64]
+ 288 0072 B4F84410 		ldrh	r1, [r4, #68]
+ 289 0076 3046     		mov	r0, r6
+ 290 0078 FFF7FEFF 		bl	Enable_Motor_Mode
+ 291              	.LVL12:
+  89:Robot/RoboTask/chassis/chassisR_task.c ****         osDelay(1);
+ 292              		.loc 1 89 9 discriminator 3 view .LVU98
+ 293 007c D4F80001 		ldr	r0, [r4, #256]
+ 294 0080 FFF7FEFF 		bl	DJIMotorEnable
+ 295              	.LVL13:
+  90:Robot/RoboTask/chassis/chassisR_task.c ****     }
+ARM GAS  D:\temp\TMP\ccbEsdae.s 			page 9
+
+
+ 296              		.loc 1 90 9 discriminator 3 view .LVU99
+ 297 0084 0120     		movs	r0, #1
+ 298 0086 FFF7FEFF 		bl	osDelay
+ 299              	.LVL14:
+  84:Robot/RoboTask/chassis/chassisR_task.c ****     {
+ 300              		.loc 1 84 32 discriminator 3 view .LVU100
+  84:Robot/RoboTask/chassis/chassisR_task.c ****     {
+ 301              		.loc 1 84 33 is_stmt 0 discriminator 3 view .LVU101
+ 302 008a 0135     		adds	r5, r5, #1
+ 303              	.LVL15:
+  84:Robot/RoboTask/chassis/chassisR_task.c ****     {
+ 304              		.loc 1 84 33 discriminator 3 view .LVU102
+ 305 008c EDB2     		uxtb	r5, r5
+ 306              	.LVL16:
+ 307              	.L19:
+  84:Robot/RoboTask/chassis/chassisR_task.c ****     {
+ 308              		.loc 1 84 25 is_stmt 1 discriminator 1 view .LVU103
+  84:Robot/RoboTask/chassis/chassisR_task.c ****     {
+ 309              		.loc 1 84 5 is_stmt 0 discriminator 1 view .LVU104
+ 310 008e 022D     		cmp	r5, #2
+ 311 0090 E7D9     		bls	.L20
+ 312              	.LBE2:
+  93:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 313              		.loc 1 93 1 view .LVU105
+ 314 0092 2DB0     		add	sp, sp, #180
+ 315              	.LCFI2:
+ 316              		.cfi_def_cfa_offset 20
+ 317              		@ sp needed
+ 318 0094 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 319              	.LVL17:
+ 320              	.L23:
+  93:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 321              		.loc 1 93 1 view .LVU106
+ 322 0096 00BF     		.align	2
+ 323              	.L22:
+ 324 0098 00000000 		.word	hfdcan2
+ 325 009c 00000000 		.word	0
+ 326 00a0 0000C842 		.word	1120403456
+ 327 00a4 00000000 		.word	.LANCHOR0
+ 328 00a8 00000000 		.word	hfdcan1
+ 329              		.cfi_endproc
+ 330              	.LFE195:
+ 332              		.section	.text.ChasssisR_Control,"ax",%progbits
+ 333              		.align	1
+ 334              		.syntax unified
+ 335              		.thumb
+ 336              		.thumb_func
+ 338              	ChasssisR_Control:
+ 339              	.LVL18:
+ 340              	.LFB199:
+ 136:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 137:Robot/RoboTask/chassis/chassisR_task.c **** /**
+ 138:Robot/RoboTask/chassis/chassisR_task.c ****  * @brief 跳跃控制
+ 139:Robot/RoboTask/chassis/chassisR_task.c ****  * 
+ 140:Robot/RoboTask/chassis/chassisR_task.c ****  */
+ 141:Robot/RoboTask/chassis/chassisR_task.c **** static void JumpR_Loop(chassis_t* chassis, Leg_t* leg, PidTypeDef* pid)
+ 142:Robot/RoboTask/chassis/chassisR_task.c **** {
+ARM GAS  D:\temp\TMP\ccbEsdae.s 			page 10
+
+
+ 143:Robot/RoboTask/chassis/chassisR_task.c ****     if (chassis->flag.jump_flag == JUMP_STEP_SQUST)
+ 144:Robot/RoboTask/chassis/chassisR_task.c ****     {
+ 145:Robot/RoboTask/chassis/chassisR_task.c ****         /* code */
+ 146:Robot/RoboTask/chassis/chassisR_task.c **** 
  147:Robot/RoboTask/chassis/chassisR_task.c ****     }
- 148:Robot/RoboTask/chassis/chassisR_task.c **** }
- 149:Robot/RoboTask/chassis/chassisR_task.c **** 
- 150:Robot/RoboTask/chassis/chassisR_task.c **** /**
- 151:Robot/RoboTask/chassis/chassisR_task.c ****  * @brief 跳跃控制
- 152:Robot/RoboTask/chassis/chassisR_task.c ****  * 
- 153:Robot/RoboTask/chassis/chassisR_task.c ****  */
- 154:Robot/RoboTask/chassis/chassisR_task.c **** static void JumpR_Loop(chassis_t* chassis, Leg_t* leg, PidTypeDef* pid)
- 155:Robot/RoboTask/chassis/chassisR_task.c **** {
- 156:Robot/RoboTask/chassis/chassisR_task.c ****     if (chassis->flag.jump_flag == JUMP_STEP_SQUST)
- 157:Robot/RoboTask/chassis/chassisR_task.c ****     {
- 158:Robot/RoboTask/chassis/chassisR_task.c ****         /* code */
-ARM GAS  D:\temp\TMP\ccHRiiLn.s 			page 7
+ 148:Robot/RoboTask/chassis/chassisR_task.c ****     
+ 149:Robot/RoboTask/chassis/chassisR_task.c **** }
+ 150:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 151:Robot/RoboTask/chassis/chassisR_task.c **** /**
+ 152:Robot/RoboTask/chassis/chassisR_task.c ****  * @brief 倒地自起
+ 153:Robot/RoboTask/chassis/chassisR_task.c ****  *  
+ 154:Robot/RoboTask/chassis/chassisR_task.c ****  */
+ 155:Robot/RoboTask/chassis/chassisR_task.c **** void RiseR_Loop(chassis_t* chassis, Leg_t* leg)
+ 156:Robot/RoboTask/chassis/chassisR_task.c **** {
+ 157:Robot/RoboTask/chassis/chassisR_task.c ****     // 用关节电机角度判断是否完成自起
+ 158:Robot/RoboTask/chassis/chassisR_task.c ****     if ((chassis->joint_motor[0].para.pos > 0.0f && chassis->joint_motor[0].para.pos < PI/2.0f) && 
+ 159:Robot/RoboTask/chassis/chassisR_task.c ****         (chassis->joint_motor[1].para.pos > -PI/2.0f && chassis->joint_motor[1].para.pos < 0.0f))
+ 160:Robot/RoboTask/chassis/chassisR_task.c ****         chassis->flag.recover_flag = 1;
+ 161:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 162:Robot/RoboTask/chassis/chassisR_task.c ****     float diff1, diff4;
+ 163:Robot/RoboTask/chassis/chassisR_task.c ****     float target1 = -PI/3.0f;
+ 164:Robot/RoboTask/chassis/chassisR_task.c ****     float target4 = PI/3.0f;
+ 165:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 166:Robot/RoboTask/chassis/chassisR_task.c ****     if (chassis->joint_motor[1].para.pos < 0 && chassis->joint_motor[0].para.pos < 0)
+ 167:Robot/RoboTask/chassis/chassisR_task.c ****     {
+ 168:Robot/RoboTask/chassis/chassisR_task.c ****         diff1 = target1 - chassis->joint_motor[1].para.pos;
+ 169:Robot/RoboTask/chassis/chassisR_task.c ****         diff4 = target4 - chassis->joint_motor[0].para.pos;
+ 170:Robot/RoboTask/chassis/chassisR_task.c ****     }
+ 171:Robot/RoboTask/chassis/chassisR_task.c ****     if (chassis->joint_motor[1].para.pos > 0 && chassis->joint_motor[0].para.pos > 0)
+ 172:Robot/RoboTask/chassis/chassisR_task.c ****     {
+ 173:Robot/RoboTask/chassis/chassisR_task.c ****         diff1 = target1 + 2*PI - chassis->joint_motor[1].para.pos;
+ 174:Robot/RoboTask/chassis/chassisR_task.c ****         diff4 = target4 + 2*PI - chassis->joint_motor[0].para.pos;
+ 175:Robot/RoboTask/chassis/chassisR_task.c ****     }
+ 176:Robot/RoboTask/chassis/chassisR_task.c ****     
+ 177:Robot/RoboTask/chassis/chassisR_task.c ****     if (chassis->flag.recover_flag == 0)
+ 178:Robot/RoboTask/chassis/chassisR_task.c ****     {
+ 179:Robot/RoboTask/chassis/chassisR_task.c ****         /* code */
+ 180:Robot/RoboTask/chassis/chassisR_task.c ****         chassis->leg_set = LEG_RISE_LENGTH_SET;
+ 181:Robot/RoboTask/chassis/chassisR_task.c ****         Mit_Ctrl(&hcan1, chassis->joint_motor[0].para.id, diff4, 0.0f, 10.0f, 5.0f, 0.0f);
+ 182:Robot/RoboTask/chassis/chassisR_task.c ****         Mit_Ctrl(&hcan1, chassis->joint_motor[1].para.id, diff1, 0.0f, 10.0f, 5.0f, 0.0f);
+ 183:Robot/RoboTask/chassis/chassisR_task.c ****     }
+ 184:Robot/RoboTask/chassis/chassisR_task.c **** }
+ 185:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 186:Robot/RoboTask/chassis/chassisR_task.c **** /**
+ 187:Robot/RoboTask/chassis/chassisR_task.c ****  * @brief 底盘控制
+ 188:Robot/RoboTask/chassis/chassisR_task.c ****  * 
+ 189:Robot/RoboTask/chassis/chassisR_task.c ****  * @param chassis
+ 190:Robot/RoboTask/chassis/chassisR_task.c ****  * @param ins 
+ 191:Robot/RoboTask/chassis/chassisR_task.c ****  * @param pid 
+ 192:Robot/RoboTask/chassis/chassisR_task.c ****  */
+ 193:Robot/RoboTask/chassis/chassisR_task.c **** #ifdef ControlOperation
+ 194:Robot/RoboTask/chassis/chassisR_task.c **** static void ChasssisR_Control(
+ 195:Robot/RoboTask/chassis/chassisR_task.c ****     chassis_t* chassis, Leg_t* leg, Excessive_t* excessive, INS_t* ins, PidTypeDef* length_pid, flo
+ 196:Robot/RoboTask/chassis/chassisR_task.c **** {
+ 341              		.loc 1 196 1 is_stmt 1 view -0
+ 342              		.cfi_startproc
+ 343              		@ args = 8, pretend = 0, frame = 0
+ARM GAS  D:\temp\TMP\ccbEsdae.s 			page 11
 
 
- 159:Robot/RoboTask/chassis/chassisR_task.c **** 
- 160:Robot/RoboTask/chassis/chassisR_task.c ****     }
- 161:Robot/RoboTask/chassis/chassisR_task.c ****     
- 162:Robot/RoboTask/chassis/chassisR_task.c **** }
- 163:Robot/RoboTask/chassis/chassisR_task.c **** 
- 164:Robot/RoboTask/chassis/chassisR_task.c **** 
- 165:Robot/RoboTask/chassis/chassisR_task.c **** /**
- 166:Robot/RoboTask/chassis/chassisR_task.c ****  * @brief 底盘控制
- 167:Robot/RoboTask/chassis/chassisR_task.c ****  * 
- 168:Robot/RoboTask/chassis/chassisR_task.c ****  * @param chassis
- 169:Robot/RoboTask/chassis/chassisR_task.c ****  * @param ins 
- 170:Robot/RoboTask/chassis/chassisR_task.c ****  * @param pid 
- 171:Robot/RoboTask/chassis/chassisR_task.c ****  */
- 172:Robot/RoboTask/chassis/chassisR_task.c **** #ifdef ControlOperation
- 173:Robot/RoboTask/chassis/chassisR_task.c **** static void ChasssisR_Control(
- 174:Robot/RoboTask/chassis/chassisR_task.c ****     chassis_t* chassis, Leg_t* leg, LegState_t* leg_state , Excessive_t* excessive, Period_t* perio
- 175:Robot/RoboTask/chassis/chassisR_task.c **** {
- 176:Robot/RoboTask/chassis/chassisR_task.c ****     chassis->flag.is_take_off = legR.is_take_off || legL.is_take_off;
- 177:Robot/RoboTask/chassis/chassisR_task.c **** 
- 178:Robot/RoboTask/chassis/chassisR_task.c ****     ForwardKinematics(leg, excessive, ins, ((float)CHASSIS_TIME)*3.0f/1000); //该任务控制周�
- 179:Robot/RoboTask/chassis/chassisR_task.c **** 
- 180:Robot/RoboTask/chassis/chassisR_task.c ****     Calc_LQR_K(lqr_k, leg->rod.L0, chassis->flag.is_take_off);
- 181:Robot/RoboTask/chassis/chassisR_task.c **** 
- 182:Robot/RoboTask/chassis/chassisR_task.c ****     //yaw轴pid
- 183:Robot/RoboTask/chassis/chassisR_task.c ****     chassis->turn_T = Turn_Pid.Kp*(chassis->turn_set-chassis->total_yaw)-Turn_Pid.Kd*ins->Gyro[2];
- 184:Robot/RoboTask/chassis/chassisR_task.c ****     //roll轴pid
- 185:Robot/RoboTask/chassis/chassisR_task.c ****     chassis->roll_T = Roll_Pid.Kp*(chassis->roll_set-chassis->roll)-Roll_Pid.Kd*ins->Gyro[0];
- 186:Robot/RoboTask/chassis/chassisR_task.c ****     //放劈叉pid
- 187:Robot/RoboTask/chassis/chassisR_task.c ****     chassis->leg_tp = PID_Calc(&Tp_Pid, chassis->theta_err, 0.0f);
- 188:Robot/RoboTask/chassis/chassisR_task.c **** 
- 189:Robot/RoboTask/chassis/chassisR_task.c ****     // 状态向量更新--方便调试查看
- 190:Robot/RoboTask/chassis/chassisR_task.c ****     // leg_state->theta     = X0_OFFSET + (leg->rod.theta - 0.0f);
- 191:Robot/RoboTask/chassis/chassisR_task.c ****     // leg_state->theta_dot = X1_OFFSET + (leg->rod.d_theta - 0.0f);
- 192:Robot/RoboTask/chassis/chassisR_task.c ****     // leg_state->x         = X2_OFFSET + (chassis->state.x_filter - chassis->state.x_set);
- 193:Robot/RoboTask/chassis/chassisR_task.c ****     // leg_state->x_dot     = X3_OFFSET + (chassis->state.v_filter - chassis->state.v_set);
- 194:Robot/RoboTask/chassis/chassisR_task.c ****     leg_state->phi       = X4_OFFSET + (chassis->myPithR - chassis->phi_set);
- 195:Robot/RoboTask/chassis/chassisR_task.c ****     leg_state->phi_dot   = X5_OFFSET + (chassis->myPithGyroR - 0.0f);
- 196:Robot/RoboTask/chassis/chassisR_task.c **** 
- 197:Robot/RoboTask/chassis/chassisR_task.c ****     leg->rod.T = (    lqr_k[0][0] * leg_state->theta
- 198:Robot/RoboTask/chassis/chassisR_task.c ****                     + lqr_k[0][1] * leg_state->theta_dot
- 199:Robot/RoboTask/chassis/chassisR_task.c ****                     + lqr_k[0][2] * leg_state->x
- 200:Robot/RoboTask/chassis/chassisR_task.c ****                     + lqr_k[0][3] * leg_state->x_dot
- 201:Robot/RoboTask/chassis/chassisR_task.c ****                     + lqr_k[0][4] * leg_state->phi
- 202:Robot/RoboTask/chassis/chassisR_task.c ****                     + lqr_k[0][5] * leg_state->phi_dot);
- 203:Robot/RoboTask/chassis/chassisR_task.c **** 
- 204:Robot/RoboTask/chassis/chassisR_task.c ****     leg->rod.Tp = (   lqr_k[1][0] * leg_state->theta
- 205:Robot/RoboTask/chassis/chassisR_task.c ****                     + lqr_k[1][1] * leg_state->theta_dot
- 206:Robot/RoboTask/chassis/chassisR_task.c ****                     + lqr_k[1][2] * leg_state->x
- 207:Robot/RoboTask/chassis/chassisR_task.c ****                     + lqr_k[1][3] * leg_state->x_dot
- 208:Robot/RoboTask/chassis/chassisR_task.c ****                     + lqr_k[1][4] * leg_state->phi
- 209:Robot/RoboTask/chassis/chassisR_task.c ****                     + lqr_k[1][5] * leg_state->phi_dot);
+ 344              		@ frame_needed = 0, uses_anonymous_args = 0
+ 345              		.loc 1 196 1 is_stmt 0 view .LVU108
+ 346 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 347              	.LCFI3:
+ 348              		.cfi_def_cfa_offset 24
+ 349              		.cfi_offset 3, -24
+ 350              		.cfi_offset 4, -20
+ 351              		.cfi_offset 5, -16
+ 352              		.cfi_offset 6, -12
+ 353              		.cfi_offset 7, -8
+ 354              		.cfi_offset 14, -4
+ 355 0002 2DED028B 		vpush.64	{d8}
+ 356              	.LCFI4:
+ 357              		.cfi_def_cfa_offset 32
+ 358              		.cfi_offset 80, -32
+ 359              		.cfi_offset 81, -28
+ 360 0006 0646     		mov	r6, r0
+ 361 0008 0C46     		mov	r4, r1
+ 362 000a 1746     		mov	r7, r2
+ 363 000c 099D     		ldr	r5, [sp, #36]
+ 197:Robot/RoboTask/chassis/chassisR_task.c ****     // chassis->flag.is_take_off = legR.is_take_off || legL.is_take_off;
+ 198:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 199:Robot/RoboTask/chassis/chassisR_task.c ****     ForwardKinematics(leg, excessive); 
+ 364              		.loc 1 199 5 is_stmt 1 view .LVU109
+ 365 000e 1146     		mov	r1, r2
+ 366              	.LVL19:
+ 367              		.loc 1 199 5 is_stmt 0 view .LVU110
+ 368 0010 2046     		mov	r0, r4
+ 369              	.LVL20:
+ 370              		.loc 1 199 5 view .LVU111
+ 371 0012 FFF7FEFF 		bl	ForwardKinematics
+ 372              	.LVL21:
+ 200:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 201:Robot/RoboTask/chassis/chassisR_task.c ****     Calc_LQR_K(lqr_k, leg->rod.L0, chassis->flag.is_take_off);
+ 373              		.loc 1 201 5 is_stmt 1 view .LVU112
+ 374 0016 96F8A011 		ldrb	r1, [r6, #416]	@ zero_extendqisi2
+ 375 001a 94ED020A 		vldr.32	s0, [r4, #8]
+ 376 001e 2846     		mov	r0, r5
+ 377 0020 FFF7FEFF 		bl	Calc_LQR_K
+ 378              	.LVL22:
+ 202:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 203:Robot/RoboTask/chassis/chassisR_task.c ****     // 状态向量更新--方便调试查看
+ 204:Robot/RoboTask/chassis/chassisR_task.c ****     legR_state.theta     = X0_OFFSET + (leg->rod.theta - 0.0f);
+ 379              		.loc 1 204 5 view .LVU113
+ 380              		.loc 1 204 56 is_stmt 0 view .LVU114
+ 381 0024 94ED0A0A 		vldr.32	s0, [r4, #40]
+ 382              		.loc 1 204 38 view .LVU115
+ 383 0028 9FED6A7A 		vldr.32	s14, .L54
+ 384 002c 70EE077A 		vadd.f32	s15, s0, s14
+ 385              		.loc 1 204 26 view .LVU116
+ 386 0030 694B     		ldr	r3, .L54+4
+ 387 0032 C3ED007A 		vstr.32	s15, [r3]
+ 205:Robot/RoboTask/chassis/chassisR_task.c ****     legR_state.theta_dot = X1_OFFSET + (leg->rod.d_theta - 0.0f);
+ 388              		.loc 1 205 5 is_stmt 1 view .LVU117
+ 389              		.loc 1 205 58 is_stmt 0 view .LVU118
+ 390 0036 94ED0B6A 		vldr.32	s12, [r4, #44]
+ 391              		.loc 1 205 38 view .LVU119
+ARM GAS  D:\temp\TMP\ccbEsdae.s 			page 12
+
+
+ 392 003a 36EE076A 		vadd.f32	s12, s12, s14
+ 393              		.loc 1 205 26 view .LVU120
+ 394 003e 83ED016A 		vstr.32	s12, [r3, #4]
+ 206:Robot/RoboTask/chassis/chassisR_task.c ****     // legR_state.x         = X2_OFFSET + (chassis->state.x_filter - chassis->state.x_set);
+ 207:Robot/RoboTask/chassis/chassisR_task.c ****     // legR_state.x_dot     = X3_OFFSET + (chassis->state.v_filter - chassis->state.v_set);
+ 208:Robot/RoboTask/chassis/chassisR_task.c ****     legR_state.phi       = X4_OFFSET + (chassis->myPithR - chassis->phi_set);
+ 395              		.loc 1 208 5 is_stmt 1 view .LVU121
+ 396              		.loc 1 208 48 is_stmt 0 view .LVU122
+ 397 0042 D6ED606A 		vldr.32	s13, [r6, #384]
+ 398              		.loc 1 208 67 view .LVU123
+ 399 0046 D6ED5D5A 		vldr.32	s11, [r6, #372]
+ 400              		.loc 1 208 58 view .LVU124
+ 401 004a 76EEE56A 		vsub.f32	s13, s13, s11
+ 402              		.loc 1 208 38 view .LVU125
+ 403 004e 76EE876A 		vadd.f32	s13, s13, s14
+ 404              		.loc 1 208 26 view .LVU126
+ 405 0052 C3ED046A 		vstr.32	s13, [r3, #16]
+ 209:Robot/RoboTask/chassis/chassisR_task.c ****     legR_state.phi_dot   = X5_OFFSET + (chassis->myPithGyroR - 0.0f);
+ 406              		.loc 1 209 5 is_stmt 1 view .LVU127
+ 407              		.loc 1 209 62 is_stmt 0 view .LVU128
+ 408 0056 D6ED615A 		vldr.32	s11, [r6, #388]
+ 409              		.loc 1 209 38 view .LVU129
+ 410 005a 75EE875A 		vadd.f32	s11, s11, s14
+ 411              		.loc 1 209 26 view .LVU130
+ 412 005e C3ED055A 		vstr.32	s11, [r3, #20]
  210:Robot/RoboTask/chassis/chassisR_task.c **** 
- 211:Robot/RoboTask/chassis/chassisR_task.c ****     leg->rod.Tp = leg->rod.Tp + chassis->leg_tp;        //髋关节输出力矩
- 212:Robot/RoboTask/chassis/chassisR_task.c ****     // leg->rod.T = leg->rod.T - chassis->turn_T;          //轮毂关节输出力矩
- 213:Robot/RoboTask/chassis/chassisR_task.c **** 
- 214:Robot/RoboTask/chassis/chassisR_task.c ****     //输出限幅
- 215:Robot/RoboTask/chassis/chassisR_task.c ****     SATURATE(&leg->rod.T, -3.0f, 3.0f);
-ARM GAS  D:\temp\TMP\ccHRiiLn.s 			page 8
+ 211:Robot/RoboTask/chassis/chassisR_task.c ****     leg->rod.T = (    lqr_k[0][0] * legR_state.theta
+ 413              		.loc 1 211 5 is_stmt 1 view .LVU131
+ 414              		.loc 1 211 31 is_stmt 0 view .LVU132
+ 415 0062 95ED007A 		vldr.32	s14, [r5]
+ 416              		.loc 1 211 35 view .LVU133
+ 417 0066 27EE877A 		vmul.f32	s14, s15, s14
+ 212:Robot/RoboTask/chassis/chassisR_task.c ****                     + lqr_k[0][1] * legR_state.theta_dot
+ 418              		.loc 1 212 31 view .LVU134
+ 419 006a 95ED015A 		vldr.32	s10, [r5, #4]
+ 420              		.loc 1 212 35 view .LVU135
+ 421 006e 26EE055A 		vmul.f32	s10, s12, s10
+ 422              		.loc 1 212 21 view .LVU136
+ 423 0072 37EE057A 		vadd.f32	s14, s14, s10
+ 213:Robot/RoboTask/chassis/chassisR_task.c ****                     + lqr_k[0][2] * legR_state.x
+ 424              		.loc 1 213 31 view .LVU137
+ 425 0076 95ED025A 		vldr.32	s10, [r5, #8]
+ 426              		.loc 1 213 47 view .LVU138
+ 427 007a D3ED024A 		vldr.32	s9, [r3, #8]
+ 428              		.loc 1 213 35 view .LVU139
+ 429 007e 25EE245A 		vmul.f32	s10, s10, s9
+ 430              		.loc 1 213 21 view .LVU140
+ 431 0082 37EE057A 		vadd.f32	s14, s14, s10
+ 214:Robot/RoboTask/chassis/chassisR_task.c ****                     + lqr_k[0][3] * legR_state.x_dot
+ 432              		.loc 1 214 31 view .LVU141
+ 433 0086 95ED034A 		vldr.32	s8, [r5, #12]
+ 434              		.loc 1 214 47 view .LVU142
+ 435 008a 93ED035A 		vldr.32	s10, [r3, #12]
+ 436              		.loc 1 214 35 view .LVU143
+ 437 008e 24EE054A 		vmul.f32	s8, s8, s10
+ 438              		.loc 1 214 21 view .LVU144
+ 439 0092 37EE047A 		vadd.f32	s14, s14, s8
+ARM GAS  D:\temp\TMP\ccbEsdae.s 			page 13
 
 
- 216:Robot/RoboTask/chassis/chassisR_task.c **** 
- 217:Robot/RoboTask/chassis/chassisR_task.c ****     // chassis->leg_set = 0.0f;
- 218:Robot/RoboTask/chassis/chassisR_task.c ****     leg->rod.F0 = BODY_MASS * GRAVITY / arm_cos_f32(leg->rod.theta) / 2 
- 219:Robot/RoboTask/chassis/chassisR_task.c ****                     + PID_Calc(length_pid, leg->rod.L0, chassis->leg_set);
- 220:Robot/RoboTask/chassis/chassisR_task.c **** 
- 221:Robot/RoboTask/chassis/chassisR_task.c ****     chassis->flag.right_flag = GroundDetect(leg, period, ins);
- 222:Robot/RoboTask/chassis/chassisR_task.c ****     leg->is_take_off = chassis->flag.right_flag;
- 223:Robot/RoboTask/chassis/chassisR_task.c **** 
- 224:Robot/RoboTask/chassis/chassisR_task.c ****     if (chassis->flag.recover_flag == 0)
- 225:Robot/RoboTask/chassis/chassisR_task.c ****     {
- 226:Robot/RoboTask/chassis/chassisR_task.c ****         /* code */
- 227:Robot/RoboTask/chassis/chassisR_task.c ****         if(leg->is_take_off && leg->touch_time > TOUCH_TOGGLE_THRESHOLD)
- 228:Robot/RoboTask/chassis/chassisR_task.c ****         {
- 229:Robot/RoboTask/chassis/chassisR_task.c ****             leg->is_take_off = false;
- 230:Robot/RoboTask/chassis/chassisR_task.c ****         }
- 231:Robot/RoboTask/chassis/chassisR_task.c ****         else if (!leg->is_take_off && leg->take_off_time > TOUCH_TOGGLE_THRESHOLD)
- 232:Robot/RoboTask/chassis/chassisR_task.c ****         {
- 233:Robot/RoboTask/chassis/chassisR_task.c ****             leg->is_take_off = true;
- 234:Robot/RoboTask/chassis/chassisR_task.c ****             chassis->state.x_filter = 0.0f;
- 235:Robot/RoboTask/chassis/chassisR_task.c ****             chassis->state.x_set = chassis->state.x_filter;
- 236:Robot/RoboTask/chassis/chassisR_task.c ****         }
- 237:Robot/RoboTask/chassis/chassisR_task.c ****     }
- 238:Robot/RoboTask/chassis/chassisR_task.c ****     SATURATE(&leg->rod.F0, -0.0f, 0.0f);
- 239:Robot/RoboTask/chassis/chassisR_task.c **** 
- 240:Robot/RoboTask/chassis/chassisR_task.c ****     JacobianMatrix(leg, excessive);
- 241:Robot/RoboTask/chassis/chassisR_task.c **** 
- 242:Robot/RoboTask/chassis/chassisR_task.c ****     // 髋关节输出限幅
- 243:Robot/RoboTask/chassis/chassisR_task.c ****     SATURATE(&leg->joint.T1, -3.0f, 3.0f);
- 244:Robot/RoboTask/chassis/chassisR_task.c ****     SATURATE(&leg->joint.T2, -3.0f, 3.0f);
- 245:Robot/RoboTask/chassis/chassisR_task.c **** }
- 246:Robot/RoboTask/chassis/chassisR_task.c **** #endif
- 247:Robot/RoboTask/chassis/chassisR_task.c **** 
- 248:Robot/RoboTask/chassis/chassisR_task.c **** /**
- 249:Robot/RoboTask/chassis/chassisR_task.c ****  * @brief 位控调试模式
- 250:Robot/RoboTask/chassis/chassisR_task.c ****  * 
- 251:Robot/RoboTask/chassis/chassisR_task.c ****  */
- 252:Robot/RoboTask/chassis/chassisR_task.c **** #ifdef ControlDebug
- 253:Robot/RoboTask/chassis/chassisR_task.c **** static inline float WrapToPi(float x)
- 254:Robot/RoboTask/chassis/chassisR_task.c **** {
- 255:Robot/RoboTask/chassis/chassisR_task.c ****     while (x >  PI) x -= 2.0f * PI;
- 256:Robot/RoboTask/chassis/chassisR_task.c ****     while (x < -PI) x += 2.0f * PI;
- 257:Robot/RoboTask/chassis/chassisR_task.c ****     return x;
- 258:Robot/RoboTask/chassis/chassisR_task.c **** }
+ 215:Robot/RoboTask/chassis/chassisR_task.c ****                     + lqr_k[0][4] * legR_state.phi
+ 440              		.loc 1 215 31 view .LVU145
+ 441 0096 95ED044A 		vldr.32	s8, [r5, #16]
+ 442              		.loc 1 215 35 view .LVU146
+ 443 009a 26EE844A 		vmul.f32	s8, s13, s8
+ 444              		.loc 1 215 21 view .LVU147
+ 445 009e 37EE047A 		vadd.f32	s14, s14, s8
+ 216:Robot/RoboTask/chassis/chassisR_task.c ****                     + lqr_k[0][5] * legR_state.phi_dot);
+ 446              		.loc 1 216 31 view .LVU148
+ 447 00a2 95ED054A 		vldr.32	s8, [r5, #20]
+ 448              		.loc 1 216 35 view .LVU149
+ 449 00a6 25EE844A 		vmul.f32	s8, s11, s8
+ 450              		.loc 1 216 21 view .LVU150
+ 451 00aa 37EE047A 		vadd.f32	s14, s14, s8
+ 211:Robot/RoboTask/chassis/chassisR_task.c ****                     + lqr_k[0][1] * legR_state.theta_dot
+ 452              		.loc 1 211 16 view .LVU151
+ 453 00ae 84ED117A 		vstr.32	s14, [r4, #68]
+ 217:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 218:Robot/RoboTask/chassis/chassisR_task.c ****     leg->rod.Tp = (   lqr_k[1][0] * legR_state.theta
+ 454              		.loc 1 218 5 is_stmt 1 view .LVU152
+ 455              		.loc 1 218 31 is_stmt 0 view .LVU153
+ 456 00b2 95ED064A 		vldr.32	s8, [r5, #24]
+ 457              		.loc 1 218 35 view .LVU154
+ 458 00b6 67EE847A 		vmul.f32	s15, s15, s8
+ 219:Robot/RoboTask/chassis/chassisR_task.c ****                     + lqr_k[1][1] * legR_state.theta_dot
+ 459              		.loc 1 219 31 view .LVU155
+ 460 00ba 95ED074A 		vldr.32	s8, [r5, #28]
+ 461              		.loc 1 219 35 view .LVU156
+ 462 00be 26EE046A 		vmul.f32	s12, s12, s8
+ 463              		.loc 1 219 21 view .LVU157
+ 464 00c2 77EE867A 		vadd.f32	s15, s15, s12
+ 220:Robot/RoboTask/chassis/chassisR_task.c ****                     + lqr_k[1][2] * legR_state.x
+ 465              		.loc 1 220 31 view .LVU158
+ 466 00c6 95ED086A 		vldr.32	s12, [r5, #32]
+ 467              		.loc 1 220 35 view .LVU159
+ 468 00ca 64EE864A 		vmul.f32	s9, s9, s12
+ 469              		.loc 1 220 21 view .LVU160
+ 470 00ce 77EEA47A 		vadd.f32	s15, s15, s9
+ 221:Robot/RoboTask/chassis/chassisR_task.c ****                     + lqr_k[1][3] * legR_state.x_dot
+ 471              		.loc 1 221 31 view .LVU161
+ 472 00d2 95ED096A 		vldr.32	s12, [r5, #36]
+ 473              		.loc 1 221 35 view .LVU162
+ 474 00d6 25EE065A 		vmul.f32	s10, s10, s12
+ 475              		.loc 1 221 21 view .LVU163
+ 476 00da 77EE857A 		vadd.f32	s15, s15, s10
+ 222:Robot/RoboTask/chassis/chassisR_task.c ****                     + lqr_k[1][4] * legR_state.phi
+ 477              		.loc 1 222 31 view .LVU164
+ 478 00de 95ED0A6A 		vldr.32	s12, [r5, #40]
+ 479              		.loc 1 222 35 view .LVU165
+ 480 00e2 66EE866A 		vmul.f32	s13, s13, s12
+ 481              		.loc 1 222 21 view .LVU166
+ 482 00e6 77EEA67A 		vadd.f32	s15, s15, s13
+ 223:Robot/RoboTask/chassis/chassisR_task.c ****                     + lqr_k[1][5] * legR_state.phi_dot);
+ 483              		.loc 1 223 31 view .LVU167
+ 484 00ea D5ED0B6A 		vldr.32	s13, [r5, #44]
+ 485              		.loc 1 223 35 view .LVU168
+ 486 00ee 65EEA66A 		vmul.f32	s13, s11, s13
+ARM GAS  D:\temp\TMP\ccbEsdae.s 			page 14
+
+
+ 487              		.loc 1 223 21 view .LVU169
+ 488 00f2 77EEA67A 		vadd.f32	s15, s15, s13
+ 218:Robot/RoboTask/chassis/chassisR_task.c ****                     + lqr_k[1][1] * legR_state.theta_dot
+ 489              		.loc 1 218 17 view .LVU170
+ 490 00f6 C4ED107A 		vstr.32	s15, [r4, #64]
+ 224:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 225:Robot/RoboTask/chassis/chassisR_task.c ****     // leg->rod.Tp = leg->rod.Tp + chassis->leg_tp;        //髋关节输出力矩
+ 226:Robot/RoboTask/chassis/chassisR_task.c ****     // leg->rod.T = leg->rod.T - chassis->turn_T;          //轮毂关节输出力矩
+ 227:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 228:Robot/RoboTask/chassis/chassisR_task.c ****     //输出限幅
+ 229:Robot/RoboTask/chassis/chassisR_task.c ****     SATURATE(&leg->rod.T, -20.0f, 20.0f);
+ 491              		.loc 1 229 5 is_stmt 1 view .LVU171
+ 492              		.loc 1 229 5 view .LVU172
+ 493 00fa FBEE047A 		vmov.f32	s15, #-2.0e+1
+ 494 00fe B4EEE77A 		vcmpe.f32	s14, s15
+ 495 0102 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 496 0106 3CD5     		bpl	.L49
+ 497              		.loc 1 229 5 discriminator 1 view .LVU173
+ 498 0108 C4ED117A 		vstr.32	s15, [r4, #68]
+ 499              	.L27:
+ 500              		.loc 1 229 5 discriminator 6 view .LVU174
+ 230:Robot/RoboTask/chassis/chassisR_task.c ****     
+ 231:Robot/RoboTask/chassis/chassisR_task.c ****     leg->rod.F0 = BODY_MASS * GRAVITY / arm_cos_f32(leg->rod.theta) / 2 
+ 501              		.loc 1 231 5 discriminator 6 view .LVU175
+ 502              		.loc 1 231 41 is_stmt 0 discriminator 6 view .LVU176
+ 503 010c FFF7FEFF 		bl	arm_cos_f32
+ 504              	.LVL23:
+ 505              		.loc 1 231 39 discriminator 6 view .LVU177
+ 506 0110 DFED327A 		vldr.32	s15, .L54+8
+ 507 0114 87EE808A 		vdiv.f32	s16, s15, s0
+ 508              		.loc 1 231 69 discriminator 6 view .LVU178
+ 509 0118 B6EE000A 		vmov.f32	s0, #5.0e-1
+ 510 011c 28EE008A 		vmul.f32	s16, s16, s0
+ 232:Robot/RoboTask/chassis/chassisR_task.c ****                     + PID_Calc(length_pid, leg->rod.L0, chassis->leg_set);
+ 511              		.loc 1 232 23 discriminator 6 view .LVU179
+ 512 0120 D6ED5F0A 		vldr.32	s1, [r6, #380]
+ 513 0124 94ED020A 		vldr.32	s0, [r4, #8]
+ 514 0128 0898     		ldr	r0, [sp, #32]
+ 515 012a FFF7FEFF 		bl	PID_Calc
+ 516              	.LVL24:
+ 517              		.loc 1 232 21 discriminator 6 view .LVU180
+ 518 012e 38EE000A 		vadd.f32	s0, s16, s0
+ 231:Robot/RoboTask/chassis/chassisR_task.c ****                     + PID_Calc(length_pid, leg->rod.L0, chassis->leg_set);
+ 519              		.loc 1 231 17 discriminator 6 view .LVU181
+ 520 0132 84ED0E0A 		vstr.32	s0, [r4, #56]
+ 233:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 234:Robot/RoboTask/chassis/chassisR_task.c ****     // leg->is_take_off = chassis->flag.right_flag;
+ 235:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 236:Robot/RoboTask/chassis/chassisR_task.c ****     // if (chassis->flag.recover_flag == 0)
+ 237:Robot/RoboTask/chassis/chassisR_task.c ****     // {
+ 238:Robot/RoboTask/chassis/chassisR_task.c ****     //     /* code */
+ 239:Robot/RoboTask/chassis/chassisR_task.c ****     //     if(leg->is_take_off && leg->touch_time > TOUCH_TOGGLE_THRESHOLD)
+ 240:Robot/RoboTask/chassis/chassisR_task.c ****     //     {
+ 241:Robot/RoboTask/chassis/chassisR_task.c ****     //         leg->is_take_off = false;
+ 242:Robot/RoboTask/chassis/chassisR_task.c ****     //     }
+ 243:Robot/RoboTask/chassis/chassisR_task.c ****     //     else if (!leg->is_take_off && leg->take_off_time > TOUCH_TOGGLE_THRESHOLD)
+ 244:Robot/RoboTask/chassis/chassisR_task.c ****     //     {
+ARM GAS  D:\temp\TMP\ccbEsdae.s 			page 15
+
+
+ 245:Robot/RoboTask/chassis/chassisR_task.c ****     //         leg->is_take_off = true;
+ 246:Robot/RoboTask/chassis/chassisR_task.c ****     //         chassis->state.x_filter = 0.0f;
+ 247:Robot/RoboTask/chassis/chassisR_task.c ****     //         chassis->state.x_set = chassis->state.x_filter;
+ 248:Robot/RoboTask/chassis/chassisR_task.c ****     //     }
+ 249:Robot/RoboTask/chassis/chassisR_task.c ****     // }
+ 250:Robot/RoboTask/chassis/chassisR_task.c ****     SATURATE(&leg->rod.F0, -200.0f, 200.0f);
+ 521              		.loc 1 250 5 is_stmt 1 discriminator 6 view .LVU182
+ 522              		.loc 1 250 5 discriminator 6 view .LVU183
+ 523 0136 DFED2A7A 		vldr.32	s15, .L54+12
+ 524 013a B4EEE70A 		vcmpe.f32	s0, s15
+ 525 013e F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 526 0142 28D5     		bpl	.L50
+ 527              		.loc 1 250 5 discriminator 1 view .LVU184
+ 528 0144 C4ED0E7A 		vstr.32	s15, [r4, #56]
+ 529              	.L31:
+ 530              		.loc 1 250 5 discriminator 6 view .LVU185
+ 251:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 252:Robot/RoboTask/chassis/chassisR_task.c ****     JacobianMatrix(leg, excessive);
+ 531              		.loc 1 252 5 discriminator 6 view .LVU186
+ 532 0148 3946     		mov	r1, r7
+ 533 014a 2046     		mov	r0, r4
+ 534 014c FFF7FEFF 		bl	JacobianMatrix
+ 535              	.LVL25:
+ 253:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 254:Robot/RoboTask/chassis/chassisR_task.c ****     // 髋关节输出限幅
+ 255:Robot/RoboTask/chassis/chassisR_task.c ****     SATURATE(&leg->joint.T1, -MAX_TORQUE, MAX_TORQUE);
+ 536              		.loc 1 255 5 discriminator 6 view .LVU187
+ 537              		.loc 1 255 5 discriminator 6 view .LVU188
+ 538 0150 D4ED127A 		vldr.32	s15, [r4, #72]
+ 539 0154 BAEE047A 		vmov.f32	s14, #-1.0e+1
+ 540 0158 F4EEC77A 		vcmpe.f32	s15, s14
+ 541 015c F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 542 0160 23D5     		bpl	.L51
+ 543              		.loc 1 255 5 discriminator 1 view .LVU189
+ 544 0162 84ED127A 		vstr.32	s14, [r4, #72]
+ 545              	.L35:
+ 546              		.loc 1 255 5 discriminator 6 view .LVU190
+ 256:Robot/RoboTask/chassis/chassisR_task.c ****     SATURATE(&leg->joint.T2, -MAX_TORQUE, MAX_TORQUE);
+ 547              		.loc 1 256 5 discriminator 6 view .LVU191
+ 548              		.loc 1 256 5 discriminator 6 view .LVU192
+ 549 0166 D4ED137A 		vldr.32	s15, [r4, #76]
+ 550 016a BAEE047A 		vmov.f32	s14, #-1.0e+1
+ 551 016e F4EEC77A 		vcmpe.f32	s15, s14
+ 552 0172 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 553 0176 22D5     		bpl	.L52
+ 554              		.loc 1 256 5 discriminator 1 view .LVU193
+ 555 0178 84ED137A 		vstr.32	s14, [r4, #76]
+ 556              	.L24:
+ 257:Robot/RoboTask/chassis/chassisR_task.c **** }
+ 557              		.loc 1 257 1 is_stmt 0 view .LVU194
+ 558 017c BDEC028B 		vldm	sp!, {d8}
+ 559              	.LCFI5:
+ 560              		.cfi_remember_state
+ 561              		.cfi_restore 80
+ 562              		.cfi_restore 81
+ 563              		.cfi_def_cfa_offset 24
+ 564 0180 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ARM GAS  D:\temp\TMP\ccbEsdae.s 			page 16
+
+
+ 565              	.LVL26:
+ 566              	.L49:
+ 567              	.LCFI6:
+ 568              		.cfi_restore_state
+ 229:Robot/RoboTask/chassis/chassisR_task.c ****     
+ 569              		.loc 1 229 5 is_stmt 1 discriminator 2 view .LVU195
+ 570 0182 F3EE047A 		vmov.f32	s15, #2.0e+1
+ 571 0186 B4EEE77A 		vcmpe.f32	s14, s15
+ 572 018a F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 573 018e BDDD     		ble	.L27
+ 229:Robot/RoboTask/chassis/chassisR_task.c ****     
+ 574              		.loc 1 229 5 discriminator 4 view .LVU196
+ 575 0190 C4ED117A 		vstr.32	s15, [r4, #68]
+ 576 0194 BAE7     		b	.L27
+ 577              	.L50:
+ 250:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 578              		.loc 1 250 5 discriminator 2 view .LVU197
+ 579 0196 DFED137A 		vldr.32	s15, .L54+16
+ 580 019a B4EEE70A 		vcmpe.f32	s0, s15
+ 581 019e F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 582 01a2 D1DD     		ble	.L31
+ 250:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 583              		.loc 1 250 5 discriminator 4 view .LVU198
+ 584 01a4 C4ED0E7A 		vstr.32	s15, [r4, #56]
+ 585 01a8 CEE7     		b	.L31
+ 586              	.L51:
+ 255:Robot/RoboTask/chassis/chassisR_task.c ****     SATURATE(&leg->joint.T2, -MAX_TORQUE, MAX_TORQUE);
+ 587              		.loc 1 255 5 discriminator 2 view .LVU199
+ 588 01aa B2EE047A 		vmov.f32	s14, #1.0e+1
+ 589 01ae F4EEC77A 		vcmpe.f32	s15, s14
+ 590 01b2 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 591 01b6 D6DD     		ble	.L35
+ 255:Robot/RoboTask/chassis/chassisR_task.c ****     SATURATE(&leg->joint.T2, -MAX_TORQUE, MAX_TORQUE);
+ 592              		.loc 1 255 5 discriminator 4 view .LVU200
+ 593 01b8 84ED127A 		vstr.32	s14, [r4, #72]
+ 594 01bc D3E7     		b	.L35
+ 595              	.L52:
+ 256:Robot/RoboTask/chassis/chassisR_task.c **** }
+ 596              		.loc 1 256 5 discriminator 2 view .LVU201
+ 597 01be B2EE047A 		vmov.f32	s14, #1.0e+1
+ 598 01c2 F4EEC77A 		vcmpe.f32	s15, s14
+ 599 01c6 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 600 01ca D7DD     		ble	.L24
+ 256:Robot/RoboTask/chassis/chassisR_task.c **** }
+ 601              		.loc 1 256 5 discriminator 4 view .LVU202
+ 602 01cc 84ED137A 		vstr.32	s14, [r4, #76]
+ 256:Robot/RoboTask/chassis/chassisR_task.c **** }
+ 603              		.loc 1 256 5 discriminator 4 view .LVU203
+ 604              		.loc 1 257 1 is_stmt 0 discriminator 4 view .LVU204
+ 605 01d0 D4E7     		b	.L24
+ 606              	.L55:
+ 607 01d2 00BF     		.align	2
+ 608              	.L54:
+ 609 01d4 00000000 		.word	0
+ 610 01d8 00000000 		.word	.LANCHOR1
+ 611 01dc F0A71C42 		.word	1109174256
+ 612 01e0 000048C3 		.word	-1018691584
+ARM GAS  D:\temp\TMP\ccbEsdae.s 			page 17
+
+
+ 613 01e4 00004843 		.word	1128792064
+ 614              		.cfi_endproc
+ 615              	.LFE199:
+ 617              		.section	.text.LimitChassisOutputR,"ax",%progbits
+ 618              		.align	1
+ 619              		.syntax unified
+ 620              		.thumb
+ 621              		.thumb_func
+ 623              	LimitChassisOutputR:
+ 624              	.LVL27:
+ 625              	.LFB200:
+ 258:Robot/RoboTask/chassis/chassisR_task.c **** #endif
  259:Robot/RoboTask/chassis/chassisR_task.c **** 
- 260:Robot/RoboTask/chassis/chassisR_task.c **** static inline float ShortestAngle(float target, float current)
- 261:Robot/RoboTask/chassis/chassisR_task.c **** {
- 262:Robot/RoboTask/chassis/chassisR_task.c ****     return current + WrapToPi(target - current);
- 263:Robot/RoboTask/chassis/chassisR_task.c **** }
- 264:Robot/RoboTask/chassis/chassisR_task.c **** static void ChassisR_Debug(chassis_t* chassis, Leg_t* leg, Excessive_t* excessive,PidTypeDef* lengt
- 265:Robot/RoboTask/chassis/chassisR_task.c **** {
- 183              		.loc 1 265 1 is_stmt 1 view -0
- 184              		.cfi_startproc
- 185              		@ args = 0, pretend = 0, frame = 0
- 186              		@ frame_needed = 0, uses_anonymous_args = 0
- 187              		.loc 1 265 1 is_stmt 0 view .LVU32
- 188 0000 70B5     		push	{r4, r5, r6, lr}
- 189              	.LCFI3:
-ARM GAS  D:\temp\TMP\ccHRiiLn.s 			page 9
-
-
- 190              		.cfi_def_cfa_offset 16
- 191              		.cfi_offset 4, -16
- 192              		.cfi_offset 5, -12
- 193              		.cfi_offset 6, -8
- 194              		.cfi_offset 14, -4
- 195 0002 0546     		mov	r5, r0
- 196 0004 0C46     		mov	r4, r1
- 197 0006 1646     		mov	r6, r2
- 266:Robot/RoboTask/chassis/chassisR_task.c ****     // leg->joint.T1 = 0.0f;
- 267:Robot/RoboTask/chassis/chassisR_task.c ****     // leg->joint.T2 = 0.0f;
- 268:Robot/RoboTask/chassis/chassisR_task.c **** 
- 269:Robot/RoboTask/chassis/chassisR_task.c ****     PID_Calc(length_pid, leg->rod.L0, chassis->leg_set);
- 198              		.loc 1 269 5 is_stmt 1 view .LVU33
- 199 0008 D0ED4B0A 		vldr.32	s1, [r0, #300]
- 200 000c 91ED020A 		vldr.32	s0, [r1, #8]
- 201 0010 1846     		mov	r0, r3
- 202              	.LVL17:
- 203              		.loc 1 269 5 is_stmt 0 view .LVU34
- 204 0012 FFF7FEFF 		bl	PID_Calc
- 205              	.LVL18:
+ 260:Robot/RoboTask/chassis/chassisR_task.c **** /**
+ 261:Robot/RoboTask/chassis/chassisR_task.c ****  * @brief 位控调试模式
+ 262:Robot/RoboTask/chassis/chassisR_task.c ****  * 
+ 263:Robot/RoboTask/chassis/chassisR_task.c ****  */
+ 264:Robot/RoboTask/chassis/chassisR_task.c **** #ifdef ControlDebug
+ 265:Robot/RoboTask/chassis/chassisR_task.c **** // 保证电机逆解走最短路径
+ 266:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 267:Robot/RoboTask/chassis/chassisR_task.c **** static void ChassisR_Debug(chassis_t* chassis, Leg_t* leg, Excessive_t* excessive,PidTypeDef* lengt
+ 268:Robot/RoboTask/chassis/chassisR_task.c **** {
+ 269:Robot/RoboTask/chassis/chassisR_task.c ****     // PID_Calc(length_pid, leg->rod.L0, chassis->leg_set);
  270:Robot/RoboTask/chassis/chassisR_task.c ****     InverseKinematics(chassis, leg, excessive);
- 206              		.loc 1 270 5 is_stmt 1 view .LVU35
- 207 0016 3246     		mov	r2, r6
- 208 0018 2146     		mov	r1, r4
- 209 001a 2846     		mov	r0, r5
- 210 001c FFF7FEFF 		bl	InverseKinematics
- 211              	.LVL19:
  271:Robot/RoboTask/chassis/chassisR_task.c **** 
  272:Robot/RoboTask/chassis/chassisR_task.c ****     float phi1 = -PI/2.0f + leg->joint.Phi1;
- 212              		.loc 1 272 5 view .LVU36
- 213              		.loc 1 272 39 is_stmt 0 view .LVU37
- 214 0020 94ED147A 		vldr.32	s14, [r4, #80]
- 215              		.loc 1 272 11 view .LVU38
- 216 0024 DFED246A 		vldr.32	s13, .L17
- 217 0028 37EE667A 		vsub.f32	s14, s14, s13
- 218              	.LVL20:
  273:Robot/RoboTask/chassis/chassisR_task.c ****     float phi4 = -PI/2.0f + leg->joint.Phi4;
- 219              		.loc 1 273 5 is_stmt 1 view .LVU39
- 220              		.loc 1 273 39 is_stmt 0 view .LVU40
- 221 002c D4ED157A 		vldr.32	s15, [r4, #84]
- 222              		.loc 1 273 11 view .LVU41
- 223 0030 77EEE67A 		vsub.f32	s15, s15, s13
- 224              	.LVL21:
  274:Robot/RoboTask/chassis/chassisR_task.c **** 
- 275:Robot/RoboTask/chassis/chassisR_task.c ****     leg->joint.Phi1_set = ShortestAngle(phi1, chassis->joint_motor[0].para.pos);
- 225              		.loc 1 275 5 is_stmt 1 view .LVU42
- 226              		.loc 1 275 27 is_stmt 0 view .LVU43
- 227 0034 95ED086A 		vldr.32	s12, [r5, #32]
- 228              	.LVL22:
- 229              	.LBB13:
- 230              	.LBI13:
- 260:Robot/RoboTask/chassis/chassisR_task.c **** {
- 231              		.loc 1 260 21 is_stmt 1 view .LVU44
- 232              	.LBB14:
- 262:Robot/RoboTask/chassis/chassisR_task.c **** }
- 233              		.loc 1 262 5 view .LVU45
- 262:Robot/RoboTask/chassis/chassisR_task.c **** }
-ARM GAS  D:\temp\TMP\ccHRiiLn.s 			page 10
+ 275:Robot/RoboTask/chassis/chassisR_task.c ****     // // 达妙电机，顺时针是正角度，逆时针是负角度
+ 276:Robot/RoboTask/chassis/chassisR_task.c ****     leg->joint.Phi1_set = ShortestAngle(phi1, &leg->joint.Phi1_set);
+ 277:Robot/RoboTask/chassis/chassisR_task.c ****     leg->joint.Phi4_set = ShortestAngle(phi4, &leg->joint.Phi4_set);
+ 278:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 279:Robot/RoboTask/chassis/chassisR_task.c ****     //输出角度限幅
+ 280:Robot/RoboTask/chassis/chassisR_task.c ****     SATURATE(&leg->joint.Phi1_set, 0.0f, PI);
+ 281:Robot/RoboTask/chassis/chassisR_task.c ****     SATURATE(&leg->joint.Phi4_set, -PI, 0.0f);
+ 282:Robot/RoboTask/chassis/chassisR_task.c **** }
+ 283:Robot/RoboTask/chassis/chassisR_task.c **** #endif
+ 284:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 285:Robot/RoboTask/chassis/chassisR_task.c **** /**
+ 286:Robot/RoboTask/chassis/chassisR_task.c ****  * @brief 根据裁判系统和电容剩余容量对输出进行限制并设置电机参考值
+ 287:Robot/RoboTask/chassis/chassisR_task.c ****  *
+ 288:Robot/RoboTask/chassis/chassisR_task.c ****  */
+ 289:Robot/RoboTask/chassis/chassisR_task.c **** static void LimitChassisOutputR(chassis_t* chassis, Leg_t* leg)
+ 290:Robot/RoboTask/chassis/chassisR_task.c **** {
+ 626              		.loc 1 290 1 is_stmt 1 view -0
+ 627              		.cfi_startproc
+ 628              		@ args = 0, pretend = 0, frame = 0
+ 629              		@ frame_needed = 0, uses_anonymous_args = 0
+ 630              		.loc 1 290 1 is_stmt 0 view .LVU206
+ 631 0000 08B5     		push	{r3, lr}
+ 632              	.LCFI7:
+ 633              		.cfi_def_cfa_offset 8
+ 634              		.cfi_offset 3, -8
+ 635              		.cfi_offset 14, -4
+ 291:Robot/RoboTask/chassis/chassisR_task.c ****     // 功率限制 待添加
+ 292:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 293:Robot/RoboTask/chassis/chassisR_task.c **** 
+ARM GAS  D:\temp\TMP\ccbEsdae.s 			page 18
 
 
- 234              		.loc 1 262 22 is_stmt 0 view .LVU46
- 235 0038 37EE467A 		vsub.f32	s14, s14, s12
- 236              	.LVL23:
- 237              	.LBB15:
- 238              	.LBI15:
- 253:Robot/RoboTask/chassis/chassisR_task.c **** {
- 239              		.loc 1 253 21 is_stmt 1 view .LVU47
- 240              	.LBB16:
- 255:Robot/RoboTask/chassis/chassisR_task.c ****     while (x < -PI) x += 2.0f * PI;
- 241              		.loc 1 255 5 view .LVU48
- 255:Robot/RoboTask/chassis/chassisR_task.c ****     while (x < -PI) x += 2.0f * PI;
- 242              		.loc 1 255 11 is_stmt 0 view .LVU49
- 243 003c 03E0     		b	.L8
- 244              	.LVL24:
- 245              	.L9:
- 255:Robot/RoboTask/chassis/chassisR_task.c ****     while (x < -PI) x += 2.0f * PI;
- 246              		.loc 1 255 21 is_stmt 1 view .LVU50
- 255:Robot/RoboTask/chassis/chassisR_task.c ****     while (x < -PI) x += 2.0f * PI;
- 247              		.loc 1 255 23 is_stmt 0 view .LVU51
- 248 003e DFED1F6A 		vldr.32	s13, .L17+4
- 249 0042 37EE667A 		vsub.f32	s14, s14, s13
- 250              	.LVL25:
- 251              	.L8:
- 255:Robot/RoboTask/chassis/chassisR_task.c ****     while (x < -PI) x += 2.0f * PI;
- 252              		.loc 1 255 11 is_stmt 1 view .LVU52
- 253 0046 DFED1E6A 		vldr.32	s13, .L17+8
- 254 004a B4EEE67A 		vcmpe.f32	s14, s13
- 255 004e F1EE10FA 		vmrs	APSR_nzcv, FPSCR
- 256 0052 F4DC     		bgt	.L9
- 255:Robot/RoboTask/chassis/chassisR_task.c ****     while (x < -PI) x += 2.0f * PI;
- 257              		.loc 1 255 11 is_stmt 0 view .LVU53
- 258 0054 03E0     		b	.L10
- 259              	.L11:
- 256:Robot/RoboTask/chassis/chassisR_task.c ****     return x;
- 260              		.loc 1 256 21 is_stmt 1 view .LVU54
- 256:Robot/RoboTask/chassis/chassisR_task.c ****     return x;
- 261              		.loc 1 256 23 is_stmt 0 view .LVU55
- 262 0056 DFED196A 		vldr.32	s13, .L17+4
- 263 005a 37EE267A 		vadd.f32	s14, s14, s13
- 264              	.LVL26:
- 265              	.L10:
- 256:Robot/RoboTask/chassis/chassisR_task.c ****     return x;
- 266              		.loc 1 256 11 is_stmt 1 view .LVU56
- 267 005e DFED196A 		vldr.32	s13, .L17+12
- 268 0062 B4EEE67A 		vcmpe.f32	s14, s13
- 269 0066 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
- 270 006a F4D4     		bmi	.L11
- 257:Robot/RoboTask/chassis/chassisR_task.c **** }
- 271              		.loc 1 257 5 view .LVU57
- 272              	.LVL27:
- 257:Robot/RoboTask/chassis/chassisR_task.c **** }
- 273              		.loc 1 257 5 is_stmt 0 view .LVU58
- 274              	.LBE16:
- 275              	.LBE15:
- 262:Robot/RoboTask/chassis/chassisR_task.c **** }
- 276              		.loc 1 262 20 view .LVU59
- 277 006c 36EE077A 		vadd.f32	s14, s12, s14
-ARM GAS  D:\temp\TMP\ccHRiiLn.s 			page 11
-
-
- 278              	.LVL28:
- 262:Robot/RoboTask/chassis/chassisR_task.c **** }
- 279              		.loc 1 262 20 view .LVU60
- 280              	.LBE14:
- 281              	.LBE13:
- 282              		.loc 1 275 25 view .LVU61
- 283 0070 84ED167A 		vstr.32	s14, [r4, #88]
- 276:Robot/RoboTask/chassis/chassisR_task.c ****     leg->joint.Phi4_set = ShortestAngle(phi4, chassis->joint_motor[1].para.pos);
- 284              		.loc 1 276 5 is_stmt 1 view .LVU62
- 285              		.loc 1 276 27 is_stmt 0 view .LVU63
- 286 0074 D5ED186A 		vldr.32	s13, [r5, #96]
- 287              	.LVL29:
- 288              	.LBB17:
- 289              	.LBI17:
- 260:Robot/RoboTask/chassis/chassisR_task.c **** {
- 290              		.loc 1 260 21 is_stmt 1 view .LVU64
- 291              	.LBB18:
- 262:Robot/RoboTask/chassis/chassisR_task.c **** }
- 292              		.loc 1 262 5 view .LVU65
- 262:Robot/RoboTask/chassis/chassisR_task.c **** }
- 293              		.loc 1 262 22 is_stmt 0 view .LVU66
- 294 0078 77EEE67A 		vsub.f32	s15, s15, s13
- 295              	.LVL30:
- 296              	.LBB19:
- 297              	.LBI19:
- 253:Robot/RoboTask/chassis/chassisR_task.c **** {
- 298              		.loc 1 253 21 is_stmt 1 view .LVU67
- 299              	.LBB20:
- 255:Robot/RoboTask/chassis/chassisR_task.c ****     while (x < -PI) x += 2.0f * PI;
- 300              		.loc 1 255 5 view .LVU68
- 255:Robot/RoboTask/chassis/chassisR_task.c ****     while (x < -PI) x += 2.0f * PI;
- 301              		.loc 1 255 11 is_stmt 0 view .LVU69
- 302 007c 03E0     		b	.L12
- 303              	.L13:
- 255:Robot/RoboTask/chassis/chassisR_task.c ****     while (x < -PI) x += 2.0f * PI;
- 304              		.loc 1 255 21 is_stmt 1 view .LVU70
- 255:Robot/RoboTask/chassis/chassisR_task.c ****     while (x < -PI) x += 2.0f * PI;
- 305              		.loc 1 255 23 is_stmt 0 view .LVU71
- 306 007e 9FED0F7A 		vldr.32	s14, .L17+4
- 307 0082 77EEC77A 		vsub.f32	s15, s15, s14
- 308              	.LVL31:
- 309              	.L12:
- 255:Robot/RoboTask/chassis/chassisR_task.c ****     while (x < -PI) x += 2.0f * PI;
- 310              		.loc 1 255 11 is_stmt 1 view .LVU72
- 311 0086 9FED0E7A 		vldr.32	s14, .L17+8
- 312 008a F4EEC77A 		vcmpe.f32	s15, s14
- 313 008e F1EE10FA 		vmrs	APSR_nzcv, FPSCR
- 314 0092 F4DC     		bgt	.L13
- 255:Robot/RoboTask/chassis/chassisR_task.c ****     while (x < -PI) x += 2.0f * PI;
- 315              		.loc 1 255 11 is_stmt 0 view .LVU73
- 316 0094 03E0     		b	.L14
- 317              	.L15:
- 256:Robot/RoboTask/chassis/chassisR_task.c ****     return x;
- 318              		.loc 1 256 21 is_stmt 1 view .LVU74
- 256:Robot/RoboTask/chassis/chassisR_task.c ****     return x;
- 319              		.loc 1 256 23 is_stmt 0 view .LVU75
- 320 0096 9FED097A 		vldr.32	s14, .L17+4
-ARM GAS  D:\temp\TMP\ccHRiiLn.s 			page 12
-
-
- 321 009a 77EE877A 		vadd.f32	s15, s15, s14
- 322              	.LVL32:
- 323              	.L14:
- 256:Robot/RoboTask/chassis/chassisR_task.c ****     return x;
- 324              		.loc 1 256 11 is_stmt 1 view .LVU76
- 325 009e 9FED097A 		vldr.32	s14, .L17+12
- 326 00a2 F4EEC77A 		vcmpe.f32	s15, s14
- 327 00a6 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
- 328 00aa F4D4     		bmi	.L15
- 257:Robot/RoboTask/chassis/chassisR_task.c **** }
- 329              		.loc 1 257 5 view .LVU77
- 330              	.LVL33:
- 257:Robot/RoboTask/chassis/chassisR_task.c **** }
- 331              		.loc 1 257 5 is_stmt 0 view .LVU78
- 332              	.LBE20:
- 333              	.LBE19:
- 262:Robot/RoboTask/chassis/chassisR_task.c **** }
- 334              		.loc 1 262 20 view .LVU79
- 335 00ac 76EEA77A 		vadd.f32	s15, s13, s15
- 336              	.LVL34:
- 262:Robot/RoboTask/chassis/chassisR_task.c **** }
- 337              		.loc 1 262 20 view .LVU80
- 338              	.LBE18:
- 339              	.LBE17:
- 340              		.loc 1 276 25 view .LVU81
- 341 00b0 C4ED177A 		vstr.32	s15, [r4, #92]
- 277:Robot/RoboTask/chassis/chassisR_task.c **** 
- 278:Robot/RoboTask/chassis/chassisR_task.c ****     // 达妙电机，顺时针是正角度，逆时针是负角度
- 279:Robot/RoboTask/chassis/chassisR_task.c ****     // leg->joint.Phi1_set = -PI/2.0f + leg->joint.Phi1;
- 280:Robot/RoboTask/chassis/chassisR_task.c ****     // leg->joint.Phi4_set = -(PI/2.0f - leg->joint.Phi4);
- 281:Robot/RoboTask/chassis/chassisR_task.c **** 
- 282:Robot/RoboTask/chassis/chassisR_task.c ****     //输出角度限幅
- 283:Robot/RoboTask/chassis/chassisR_task.c ****     // SATURATE(&leg->joint.Phi1_set, 0.0f, 1.57f);
- 284:Robot/RoboTask/chassis/chassisR_task.c ****     // SATURATE(&leg->joint.Phi4_set, -1.57f, 0.0f);
- 285:Robot/RoboTask/chassis/chassisR_task.c **** }
- 342              		.loc 1 285 1 view .LVU82
- 343 00b4 70BD     		pop	{r4, r5, r6, pc}
- 344              	.LVL35:
- 345              	.L18:
- 346              		.loc 1 285 1 view .LVU83
- 347 00b6 00BF     		.align	2
- 348              	.L17:
- 349 00b8 DB0FC93F 		.word	1070141403
- 350 00bc DB0FC940 		.word	1086918619
- 351 00c0 DB0F4940 		.word	1078530011
- 352 00c4 DB0F49C0 		.word	-1068953637
- 353              		.cfi_endproc
- 354              	.LFE199:
- 356              		.section	.text.Pensation_Init,"ax",%progbits
- 357              		.align	1
- 358              		.global	Pensation_Init
- 359              		.syntax unified
- 360              		.thumb
- 361              		.thumb_func
- 363              	Pensation_Init:
- 364              	.LVL36:
- 365              	.LFB194:
-ARM GAS  D:\temp\TMP\ccHRiiLn.s 			page 13
-
-
- 113:Robot/RoboTask/chassis/chassisR_task.c ****     const static float roll_pid[3] = {ROLL_PID_KP, ROLL_PID_KI,ROLL_PID_KD};
- 366              		.loc 1 113 1 is_stmt 1 view -0
- 367              		.cfi_startproc
- 368              		@ args = 0, pretend = 0, frame = 0
- 369              		@ frame_needed = 0, uses_anonymous_args = 0
- 113:Robot/RoboTask/chassis/chassisR_task.c ****     const static float roll_pid[3] = {ROLL_PID_KP, ROLL_PID_KI,ROLL_PID_KD};
- 370              		.loc 1 113 1 is_stmt 0 view .LVU85
- 371 0000 38B5     		push	{r3, r4, r5, lr}
- 372              	.LCFI4:
- 373              		.cfi_def_cfa_offset 16
- 374              		.cfi_offset 3, -16
- 375              		.cfi_offset 4, -12
- 376              		.cfi_offset 5, -8
- 377              		.cfi_offset 14, -4
- 378 0002 2DED028B 		vpush.64	{d8}
- 379              	.LCFI5:
- 380              		.cfi_def_cfa_offset 24
- 381              		.cfi_offset 80, -24
- 382              		.cfi_offset 81, -20
- 383 0006 0D46     		mov	r5, r1
- 384 0008 1446     		mov	r4, r2
- 114:Robot/RoboTask/chassis/chassisR_task.c **** 	const static float tp_pid[3] = {TP_PID_KP, TP_PID_KI, TP_PID_KD};
- 385              		.loc 1 114 5 is_stmt 1 view .LVU86
- 115:Robot/RoboTask/chassis/chassisR_task.c **** 	const static float turn_pid[3] = {TURN_PID_KP, TURN_PID_KI, TURN_PID_KD};
- 386              		.loc 1 115 2 view .LVU87
- 116:Robot/RoboTask/chassis/chassisR_task.c **** 	
- 387              		.loc 1 116 2 view .LVU88
- 118:Robot/RoboTask/chassis/chassisR_task.c **** 	PID_init(Tp, PID_POSITION, tp_pid, TP_PID_MAX_OUT,TP_PID_MAX_IOUT);
- 388              		.loc 1 118 2 view .LVU89
- 389 000a 9FED0F8A 		vldr.32	s16, .L21
- 390 000e F0EE480A 		vmov.f32	s1, s16
- 391 0012 9FED0E0A 		vldr.32	s0, .L21+4
- 392 0016 0E4A     		ldr	r2, .L21+8
- 393              	.LVL37:
- 118:Robot/RoboTask/chassis/chassisR_task.c **** 	PID_init(Tp, PID_POSITION, tp_pid, TP_PID_MAX_OUT,TP_PID_MAX_IOUT);
- 394              		.loc 1 118 2 is_stmt 0 view .LVU90
- 395 0018 0021     		movs	r1, #0
- 396              	.LVL38:
- 118:Robot/RoboTask/chassis/chassisR_task.c **** 	PID_init(Tp, PID_POSITION, tp_pid, TP_PID_MAX_OUT,TP_PID_MAX_IOUT);
- 397              		.loc 1 118 2 view .LVU91
- 398 001a FFF7FEFF 		bl	PID_init
- 399              	.LVL39:
- 119:Robot/RoboTask/chassis/chassisR_task.c **** 	PID_init(turn, PID_POSITION, turn_pid, TURN_PID_MAX_OUT, TURN_PID_MAX_IOUT);
- 400              		.loc 1 119 2 is_stmt 1 view .LVU92
- 401 001e F0EE480A 		vmov.f32	s1, s16
- 402 0022 B0EE000A 		vmov.f32	s0, #2.0e+0
- 403 0026 0B4A     		ldr	r2, .L21+12
- 404 0028 0021     		movs	r1, #0
- 405 002a 2846     		mov	r0, r5
- 406 002c FFF7FEFF 		bl	PID_init
- 407              	.LVL40:
- 120:Robot/RoboTask/chassis/chassisR_task.c **** }
- 408              		.loc 1 120 2 view .LVU93
- 409 0030 F0EE480A 		vmov.f32	s1, s16
- 410 0034 B7EE000A 		vmov.f32	s0, #1.0e+0
- 411 0038 074A     		ldr	r2, .L21+16
- 412 003a 0021     		movs	r1, #0
-ARM GAS  D:\temp\TMP\ccHRiiLn.s 			page 14
-
-
- 413 003c 2046     		mov	r0, r4
- 414 003e FFF7FEFF 		bl	PID_init
- 415              	.LVL41:
- 121:Robot/RoboTask/chassis/chassisR_task.c **** 
- 416              		.loc 1 121 1 is_stmt 0 view .LVU94
- 417 0042 BDEC028B 		vldm	sp!, {d8}
- 418              	.LCFI6:
- 419              		.cfi_restore 80
- 420              		.cfi_restore 81
- 421              		.cfi_def_cfa_offset 16
- 422 0046 38BD     		pop	{r3, r4, r5, pc}
- 423              	.LVL42:
- 424              	.L22:
- 121:Robot/RoboTask/chassis/chassisR_task.c **** 
- 425              		.loc 1 121 1 view .LVU95
- 426              		.align	2
- 427              	.L21:
- 428 0048 00000000 		.word	0
- 429 004c 0000C842 		.word	1120403456
- 430 0050 00000000 		.word	.LANCHOR1
- 431 0054 00000000 		.word	.LANCHOR2
- 432 0058 00000000 		.word	.LANCHOR3
- 433              		.cfi_endproc
- 434              	.LFE194:
- 436              		.section	.text.ChassisR_Task,"ax",%progbits
- 437              		.align	1
- 438              		.global	ChassisR_Task
- 439              		.syntax unified
- 440              		.thumb
- 441              		.thumb_func
- 443              	ChassisR_Task:
- 444              	.LFB201:
- 286:Robot/RoboTask/chassis/chassisR_task.c **** #endif
- 287:Robot/RoboTask/chassis/chassisR_task.c **** 
- 288:Robot/RoboTask/chassis/chassisR_task.c **** /**
- 289:Robot/RoboTask/chassis/chassisR_task.c ****  * @brief 根据裁判系统和电容剩余容量对输出进行限制并设置电机参考值
- 290:Robot/RoboTask/chassis/chassisR_task.c ****  *
- 291:Robot/RoboTask/chassis/chassisR_task.c ****  */
- 292:Robot/RoboTask/chassis/chassisR_task.c **** static void LimitChassisOutputR(chassis_t* chassis, Leg_t* leg)
- 293:Robot/RoboTask/chassis/chassisR_task.c **** {
- 294:Robot/RoboTask/chassis/chassisR_task.c ****     // 功率限制 待添加
- 295:Robot/RoboTask/chassis/chassisR_task.c **** 
- 296:Robot/RoboTask/chassis/chassisR_task.c **** 
- 297:Robot/RoboTask/chassis/chassisR_task.c ****     // 完成功率限制后进行电机参考输入设定
- 298:Robot/RoboTask/chassis/chassisR_task.c ****     DJIMotorSetRef(chassis->wheel_motor[0], leg->rod.T);
- 299:Robot/RoboTask/chassis/chassisR_task.c **** }
- 300:Robot/RoboTask/chassis/chassisR_task.c **** 
- 301:Robot/RoboTask/chassis/chassisR_task.c **** /**
- 302:Robot/RoboTask/chassis/chassisR_task.c ****  * @brief 底盘任务
- 303:Robot/RoboTask/chassis/chassisR_task.c ****  * 
- 304:Robot/RoboTask/chassis/chassisR_task.c ****  */
- 305:Robot/RoboTask/chassis/chassisR_task.c **** void ChassisR_Task(void)
- 306:Robot/RoboTask/chassis/chassisR_task.c **** {
- 445              		.loc 1 306 1 is_stmt 1 view -0
- 446              		.cfi_startproc
- 447              		@ Volatile: function does not return.
- 448              		@ args = 0, pretend = 0, frame = 0
-ARM GAS  D:\temp\TMP\ccHRiiLn.s 			page 15
-
-
- 449              		@ frame_needed = 0, uses_anonymous_args = 0
- 450 0000 08B5     		push	{r3, lr}
- 451              	.LCFI7:
- 452              		.cfi_def_cfa_offset 8
- 453              		.cfi_offset 3, -8
- 454              		.cfi_offset 14, -4
- 307:Robot/RoboTask/chassis/chassisR_task.c ****     while(INS.ins_flag == 0) //等待INS初始化完成
- 455              		.loc 1 307 5 view .LVU97
- 456              		.loc 1 307 10 is_stmt 0 view .LVU98
- 457 0002 02E0     		b	.L24
- 458              	.L25:
- 308:Robot/RoboTask/chassis/chassisR_task.c ****     {
- 309:Robot/RoboTask/chassis/chassisR_task.c ****         osDelay(1);
- 459              		.loc 1 309 9 is_stmt 1 view .LVU99
- 460 0004 0120     		movs	r0, #1
- 461 0006 FFF7FEFF 		bl	osDelay
- 462              	.LVL43:
- 463              	.L24:
- 307:Robot/RoboTask/chassis/chassisR_task.c ****     while(INS.ins_flag == 0) //等待INS初始化完成
- 464              		.loc 1 307 10 view .LVU100
- 307:Robot/RoboTask/chassis/chassisR_task.c ****     while(INS.ins_flag == 0) //等待INS初始化完成
- 465              		.loc 1 307 14 is_stmt 0 view .LVU101
- 466 000a 3B4B     		ldr	r3, .L31
- 467 000c 93F88830 		ldrb	r3, [r3, #136]	@ zero_extendqisi2
- 307:Robot/RoboTask/chassis/chassisR_task.c ****     while(INS.ins_flag == 0) //等待INS初始化完成
- 468              		.loc 1 307 10 view .LVU102
- 469 0010 002B     		cmp	r3, #0
- 470 0012 F7D0     		beq	.L25
- 310:Robot/RoboTask/chassis/chassisR_task.c ****     }
- 311:Robot/RoboTask/chassis/chassisR_task.c **** 
- 312:Robot/RoboTask/chassis/chassisR_task.c ****     ChassisR_Init(&chassis_move, &LegR_pid);
- 471              		.loc 1 312 5 is_stmt 1 view .LVU103
- 472 0014 394C     		ldr	r4, .L31+4
- 473 0016 3A49     		ldr	r1, .L31+8
- 474 0018 2046     		mov	r0, r4
- 475 001a FFF7FEFF 		bl	ChassisR_Init
- 476              	.LVL44:
- 313:Robot/RoboTask/chassis/chassisR_task.c ****     Pensation_Init(&Roll_Pid,&Tp_Pid,&Turn_Pid);
- 477              		.loc 1 313 5 view .LVU104
- 478 001e 394A     		ldr	r2, .L31+12
- 479 0020 3949     		ldr	r1, .L31+16
- 480 0022 3A48     		ldr	r0, .L31+20
- 481 0024 FFF7FEFF 		bl	Pensation_Init
- 482              	.LVL45:
- 314:Robot/RoboTask/chassis/chassisR_task.c ****     chassis_move.flag.start_flag = 1;
- 483              		.loc 1 314 5 view .LVU105
- 484              		.loc 1 314 34 is_stmt 0 view .LVU106
- 485 0028 0123     		movs	r3, #1
- 486 002a 84F85C31 		strb	r3, [r4, #348]
- 315:Robot/RoboTask/chassis/chassisR_task.c ****     chassis_move.leg_set = 0.30f;
- 487              		.loc 1 315 5 is_stmt 1 view .LVU107
- 488              		.loc 1 315 26 is_stmt 0 view .LVU108
- 489 002e 384B     		ldr	r3, .L31+24
- 490 0030 C4F82C31 		str	r3, [r4, #300]	@ float
- 316:Robot/RoboTask/chassis/chassisR_task.c ****     legR.rod.theta = PI/2.0f;
- 491              		.loc 1 316 5 is_stmt 1 view .LVU109
- 492              		.loc 1 316 20 is_stmt 0 view .LVU110
-ARM GAS  D:\temp\TMP\ccHRiiLn.s 			page 16
-
-
- 493 0034 374B     		ldr	r3, .L31+28
- 494 0036 384A     		ldr	r2, .L31+32
- 495 0038 9A62     		str	r2, [r3, #40]	@ float
- 496 003a 25E0     		b	.L26
- 497              	.L30:
- 317:Robot/RoboTask/chassis/chassisR_task.c **** 
- 318:Robot/RoboTask/chassis/chassisR_task.c ****     while (1)
- 319:Robot/RoboTask/chassis/chassisR_task.c ****     {
- 320:Robot/RoboTask/chassis/chassisR_task.c ****         #ifdef ControlOperation
- 321:Robot/RoboTask/chassis/chassisR_task.c ****         /* code */
- 322:Robot/RoboTask/chassis/chassisR_task.c ****         ChassisR_Feedback_Update(&chassis_move, &legR,&INS);
- 323:Robot/RoboTask/chassis/chassisR_task.c ****         ChasssisR_Control(&chassis_move, &legR, &legR_state, &excessiveR, &periods, &INS, &LegR_pid
- 324:Robot/RoboTask/chassis/chassisR_task.c ****         #endif
- 325:Robot/RoboTask/chassis/chassisR_task.c ****         #ifdef ControlDebug
- 326:Robot/RoboTask/chassis/chassisR_task.c ****         ChassisR_Debug(&chassis_move, &legR, &excessiveR, &LegR_pid);
- 327:Robot/RoboTask/chassis/chassisR_task.c ****         #endif
- 328:Robot/RoboTask/chassis/chassisR_task.c ****         if (chassis_move.flag.start_flag == 1)
- 329:Robot/RoboTask/chassis/chassisR_task.c ****         {
- 330:Robot/RoboTask/chassis/chassisR_task.c ****             #ifdef ControlOperation
- 331:Robot/RoboTask/chassis/chassisR_task.c ****             /* code */
- 332:Robot/RoboTask/chassis/chassisR_task.c ****             Mit_Ctrl(&hfdcan1, 0x03, 0.0f, 0.0f, 0.0f, 0.0f, legR.joint.T1);
- 333:Robot/RoboTask/chassis/chassisR_task.c ****             osDelay(CHASSIS_TIME);
- 334:Robot/RoboTask/chassis/chassisR_task.c ****             Mit_Ctrl(&hfdcan1, 0x04, 0.0f, 0.0f, 0.0f, 0.0f, legR.joint.T2);
- 335:Robot/RoboTask/chassis/chassisR_task.c ****             osDelay(CHASSIS_TIME);
- 336:Robot/RoboTask/chassis/chassisR_task.c ****             // 3508控制
- 337:Robot/RoboTask/chassis/chassisR_task.c ****             // DJIMotorSetRef(chassis_move.wheel_motor[0], legR.rod.T);
- 338:Robot/RoboTask/chassis/chassisR_task.c ****             LimitChassisOutputR(&chassis_move, &legR);
- 339:Robot/RoboTask/chassis/chassisR_task.c ****             #endif
- 340:Robot/RoboTask/chassis/chassisR_task.c **** 
- 341:Robot/RoboTask/chassis/chassisR_task.c ****             #ifdef ControlDebug
- 342:Robot/RoboTask/chassis/chassisR_task.c ****             Mit_Ctrl(&hfdcan1, 0x03, legR.joint.Phi1_set, 0.0f, 10.0f, 4.0f, 0.0f);
- 498              		.loc 1 342 13 is_stmt 1 view .LVU111
- 499 003c 9FED378A 		vldr.32	s16, .L31+36
- 500 0040 344D     		ldr	r5, .L31+28
- 501 0042 374C     		ldr	r4, .L31+40
- 502 0044 B0EE482A 		vmov.f32	s4, s16
- 503 0048 F1EE001A 		vmov.f32	s3, #4.0e+0
- 504 004c B2EE041A 		vmov.f32	s2, #1.0e+1
- 505 0050 F0EE480A 		vmov.f32	s1, s16
- 506 0054 95ED160A 		vldr.32	s0, [r5, #88]
- 507 0058 0321     		movs	r1, #3
- 508 005a 2046     		mov	r0, r4
- 509 005c FFF7FEFF 		bl	Mit_Ctrl
- 510              	.LVL46:
- 343:Robot/RoboTask/chassis/chassisR_task.c ****             osDelay(CHASSIS_TIME);
- 511              		.loc 1 343 13 view .LVU112
- 512 0060 0120     		movs	r0, #1
- 513 0062 FFF7FEFF 		bl	osDelay
- 514              	.LVL47:
- 344:Robot/RoboTask/chassis/chassisR_task.c ****             Mit_Ctrl(&hfdcan1, 0x04, legR.joint.Phi4_set, 0.0f, 10.0f, 4.0f, 0.0f);
- 515              		.loc 1 344 13 view .LVU113
- 516 0066 B0EE482A 		vmov.f32	s4, s16
- 517 006a F1EE001A 		vmov.f32	s3, #4.0e+0
- 518 006e B2EE041A 		vmov.f32	s2, #1.0e+1
- 519 0072 F0EE480A 		vmov.f32	s1, s16
- 520 0076 95ED170A 		vldr.32	s0, [r5, #92]
- 521 007a 0421     		movs	r1, #4
-ARM GAS  D:\temp\TMP\ccHRiiLn.s 			page 17
-
-
- 522 007c 2046     		mov	r0, r4
- 523 007e FFF7FEFF 		bl	Mit_Ctrl
- 524              	.LVL48:
- 345:Robot/RoboTask/chassis/chassisR_task.c ****             osDelay(CHASSIS_TIME);
- 525              		.loc 1 345 13 view .LVU114
- 526 0082 0120     		movs	r0, #1
- 527 0084 FFF7FEFF 		bl	osDelay
- 528              	.LVL49:
- 529              	.L26:
- 318:Robot/RoboTask/chassis/chassisR_task.c ****     {
- 530              		.loc 1 318 5 view .LVU115
- 326:Robot/RoboTask/chassis/chassisR_task.c ****         #endif
- 531              		.loc 1 326 9 view .LVU116
- 532 0088 1C4C     		ldr	r4, .L31+4
- 533 008a 1D4B     		ldr	r3, .L31+8
- 534 008c 254A     		ldr	r2, .L31+44
- 535 008e 2149     		ldr	r1, .L31+28
- 536 0090 2046     		mov	r0, r4
- 537 0092 FFF7FEFF 		bl	ChassisR_Debug
- 538              	.LVL50:
- 328:Robot/RoboTask/chassis/chassisR_task.c ****         {
- 539              		.loc 1 328 9 view .LVU117
- 328:Robot/RoboTask/chassis/chassisR_task.c ****         {
- 540              		.loc 1 328 30 is_stmt 0 view .LVU118
- 541 0096 94F85C31 		ldrb	r3, [r4, #348]	@ zero_extendqisi2
- 328:Robot/RoboTask/chassis/chassisR_task.c ****         {
- 542              		.loc 1 328 12 view .LVU119
- 543 009a 012B     		cmp	r3, #1
- 544 009c CED0     		beq	.L30
- 346:Robot/RoboTask/chassis/chassisR_task.c ****             #endif
- 347:Robot/RoboTask/chassis/chassisR_task.c ****         }
- 348:Robot/RoboTask/chassis/chassisR_task.c ****         else if (chassis_move.flag.start_flag == 0)
- 545              		.loc 1 348 14 is_stmt 1 view .LVU120
- 546              		.loc 1 348 17 is_stmt 0 view .LVU121
- 547 009e 002B     		cmp	r3, #0
- 548 00a0 F2D1     		bne	.L26
- 349:Robot/RoboTask/chassis/chassisR_task.c ****         {
- 350:Robot/RoboTask/chassis/chassisR_task.c ****             Mit_Ctrl(&hfdcan1, 0x03, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
- 549              		.loc 1 350 13 is_stmt 1 view .LVU122
- 550 00a2 9FED1E8A 		vldr.32	s16, .L31+36
- 551 00a6 1E4C     		ldr	r4, .L31+40
- 552 00a8 B0EE482A 		vmov.f32	s4, s16
- 553 00ac F0EE481A 		vmov.f32	s3, s16
- 554 00b0 B0EE481A 		vmov.f32	s2, s16
- 555 00b4 F0EE480A 		vmov.f32	s1, s16
- 556 00b8 B0EE480A 		vmov.f32	s0, s16
- 557 00bc 0321     		movs	r1, #3
- 558 00be 2046     		mov	r0, r4
- 559 00c0 FFF7FEFF 		bl	Mit_Ctrl
- 560              	.LVL51:
- 351:Robot/RoboTask/chassis/chassisR_task.c ****             osDelay(CHASSIS_TIME);
- 561              		.loc 1 351 13 view .LVU123
- 562 00c4 0120     		movs	r0, #1
- 563 00c6 FFF7FEFF 		bl	osDelay
- 564              	.LVL52:
- 352:Robot/RoboTask/chassis/chassisR_task.c ****             Mit_Ctrl(&hfdcan1, 0x04, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
- 565              		.loc 1 352 13 view .LVU124
-ARM GAS  D:\temp\TMP\ccHRiiLn.s 			page 18
-
-
- 566 00ca B0EE482A 		vmov.f32	s4, s16
- 567 00ce F0EE481A 		vmov.f32	s3, s16
- 568 00d2 B0EE481A 		vmov.f32	s2, s16
- 569 00d6 F0EE480A 		vmov.f32	s1, s16
- 570 00da B0EE480A 		vmov.f32	s0, s16
- 571 00de 0421     		movs	r1, #4
- 572 00e0 2046     		mov	r0, r4
- 573 00e2 FFF7FEFF 		bl	Mit_Ctrl
- 574              	.LVL53:
- 353:Robot/RoboTask/chassis/chassisR_task.c ****             osDelay(CHASSIS_TIME);
- 575              		.loc 1 353 13 view .LVU125
- 576 00e6 0120     		movs	r0, #1
- 577 00e8 FFF7FEFF 		bl	osDelay
- 578              	.LVL54:
- 354:Robot/RoboTask/chassis/chassisR_task.c ****             // 3508控制
- 355:Robot/RoboTask/chassis/chassisR_task.c ****             DJIMotorStop(chassis_move.wheel_motor[0]);
- 579              		.loc 1 355 13 view .LVU126
- 580 00ec 034B     		ldr	r3, .L31+4
- 581 00ee D3F80001 		ldr	r0, [r3, #256]
- 582 00f2 FFF7FEFF 		bl	DJIMotorStop
- 583              	.LVL55:
- 584 00f6 C7E7     		b	.L26
- 585              	.L32:
- 586              		.align	2
- 587              	.L31:
- 588 00f8 00000000 		.word	INS
- 589 00fc 00000000 		.word	.LANCHOR5
- 590 0100 00000000 		.word	.LANCHOR4
- 591 0104 00000000 		.word	.LANCHOR6
- 592 0108 00000000 		.word	.LANCHOR7
- 593 010c 00000000 		.word	.LANCHOR8
- 594 0110 9A99993E 		.word	1050253722
- 595 0114 00000000 		.word	.LANCHOR9
- 596 0118 DB0FC93F 		.word	1070141403
- 597 011c 00000000 		.word	0
- 598 0120 00000000 		.word	hfdcan1
- 599 0124 00000000 		.word	.LANCHOR10
- 600              		.cfi_endproc
- 601              	.LFE201:
- 603              		.global	TRANSITION_MATRIX
- 604              		.global	LQR_K
- 605              		.global	Roll_Pid
- 606              		.global	Turn_Pid
- 607              		.global	Tp_Pid
- 608              		.global	LegR_pid
- 609              		.global	periods
- 610              		.global	chassis_move
- 611              		.global	excessiveR
- 612              		.global	legR_state
- 613              		.global	legR
- 614              		.section	.bss.LegR_pid,"aw",%nobits
- 615              		.align	2
- 616              		.set	.LANCHOR4,. + 0
- 619              	LegR_pid:
- 620 0000 00000000 		.space	72
- 620      00000000 
- 620      00000000 
-ARM GAS  D:\temp\TMP\ccHRiiLn.s 			page 19
-
-
- 620      00000000 
- 620      00000000 
- 621              		.section	.bss.Roll_Pid,"aw",%nobits
- 622              		.align	2
- 623              		.set	.LANCHOR8,. + 0
- 626              	Roll_Pid:
- 627 0000 00000000 		.space	72
- 627      00000000 
- 627      00000000 
- 627      00000000 
- 627      00000000 
- 628              		.section	.bss.TRANSITION_MATRIX,"aw",%nobits
- 629              		.align	2
- 632              	TRANSITION_MATRIX:
- 633 0000 00000000 		.space	10
- 633      00000000 
- 633      0000
- 634              		.section	.bss.Tp_Pid,"aw",%nobits
- 635              		.align	2
- 636              		.set	.LANCHOR7,. + 0
- 639              	Tp_Pid:
- 640 0000 00000000 		.space	72
- 640      00000000 
- 640      00000000 
- 640      00000000 
- 640      00000000 
- 641              		.section	.bss.Turn_Pid,"aw",%nobits
- 642              		.align	2
- 643              		.set	.LANCHOR6,. + 0
- 646              	Turn_Pid:
- 647 0000 00000000 		.space	72
- 647      00000000 
- 647      00000000 
- 647      00000000 
- 647      00000000 
- 648              		.section	.bss.chassis_move,"aw",%nobits
- 649              		.align	2
- 650              		.set	.LANCHOR5,. + 0
- 653              	chassis_move:
- 654 0000 00000000 		.space	356
- 654      00000000 
- 654      00000000 
- 654      00000000 
- 654      00000000 
- 655              		.section	.bss.excessiveR,"aw",%nobits
+ 294:Robot/RoboTask/chassis/chassisR_task.c ****     // 完成功率限制后进行电机参考输入设定
+ 295:Robot/RoboTask/chassis/chassisR_task.c ****     DJIMotorSetRef(chassis->wheel_motor[0], leg->rod.T/TOR_COEFFICIENT/REDUCTION_RATIO/EFFICIENCY);
+ 636              		.loc 1 295 5 is_stmt 1 view .LVU207
+ 637              		.loc 1 295 53 is_stmt 0 view .LVU208
+ 638 0002 D1ED116A 		vldr.32	s13, [r1, #68]
+ 639              		.loc 1 295 55 view .LVU209
+ 640 0006 DFED087A 		vldr.32	s15, .L58
+ 641 000a 86EEA77A 		vdiv.f32	s14, s13, s15
+ 642              		.loc 1 295 71 view .LVU210
+ 643 000e DFED077A 		vldr.32	s15, .L58+4
+ 644 0012 87EE270A 		vdiv.f32	s0, s14, s15
+ 645              		.loc 1 295 5 view .LVU211
+ 646 0016 DFED067A 		vldr.32	s15, .L58+8
+ 647 001a 80EE270A 		vdiv.f32	s0, s0, s15
+ 648 001e D0F80001 		ldr	r0, [r0, #256]
+ 649              	.LVL28:
+ 650              		.loc 1 295 5 view .LVU212
+ 651 0022 FFF7FEFF 		bl	DJIMotorSetRef
+ 652              	.LVL29:
+ 296:Robot/RoboTask/chassis/chassisR_task.c **** }
+ 653              		.loc 1 296 1 view .LVU213
+ 654 0026 08BD     		pop	{r3, pc}
+ 655              	.L59:
  656              		.align	2
- 657              		.set	.LANCHOR10,. + 0
- 660              	excessiveR:
- 661 0000 00000000 		.space	8
- 661      00000000 
- 662              		.section	.bss.legR,"aw",%nobits
- 663              		.align	2
- 664              		.set	.LANCHOR9,. + 0
- 667              	legR:
- 668 0000 00000000 		.space	128
- 668      00000000 
- 668      00000000 
-ARM GAS  D:\temp\TMP\ccHRiiLn.s 			page 20
+ 657              	.L58:
+ 658 0028 9A99993E 		.word	1050253722
+ 659 002c 33337B41 		.word	1098593075
+ 660 0030 3333333F 		.word	1060320051
+ 661              		.cfi_endproc
+ 662              	.LFE200:
+ 664              		.section	.text.RiseR_Loop,"ax",%progbits
+ 665              		.align	1
+ 666              		.global	RiseR_Loop
+ 667              		.syntax unified
+ 668              		.thumb
+ 669              		.thumb_func
+ 671              	RiseR_Loop:
+ 672              	.LVL30:
+ 673              	.LFB198:
+ 156:Robot/RoboTask/chassis/chassisR_task.c ****     // 用关节电机角度判断是否完成自起
+ 674              		.loc 1 156 1 is_stmt 1 view -0
+ 675              		.cfi_startproc
+ 676              		@ args = 0, pretend = 0, frame = 0
+ 677              		@ frame_needed = 0, uses_anonymous_args = 0
+ 156:Robot/RoboTask/chassis/chassisR_task.c ****     // 用关节电机角度判断是否完成自起
+ 678              		.loc 1 156 1 is_stmt 0 view .LVU215
+ 679 0000 38B5     		push	{r3, r4, r5, lr}
+ 680              	.LCFI8:
+ 681              		.cfi_def_cfa_offset 16
+ 682              		.cfi_offset 3, -16
+ 683              		.cfi_offset 4, -12
+ 684              		.cfi_offset 5, -8
+ 685              		.cfi_offset 14, -4
+ 686 0002 2DED028B 		vpush.64	{d8}
+ 687              	.LCFI9:
+ 688              		.cfi_def_cfa_offset 24
+ 689              		.cfi_offset 80, -24
+ARM GAS  D:\temp\TMP\ccbEsdae.s 			page 19
 
 
- 668      00000000 
- 668      00000000 
- 669              		.section	.bss.legR_state,"aw",%nobits
- 670              		.align	2
- 673              	legR_state:
- 674 0000 00000000 		.space	24
- 674      00000000 
- 674      00000000 
- 674      00000000 
- 674      00000000 
- 675              		.section	.bss.periods,"aw",%nobits
- 676              		.align	2
- 679              	periods:
- 680 0000 00000000 		.space	8
- 680      00000000 
- 681              		.section	.data.LQR_K,"aw"
- 682              		.align	2
- 685              	LQR_K:
- 686 0000 20C32EC1 		.word	-1053900000
- 687 0004 9E4A4FBF 		.word	-1085322594
- 688 0008 955365BF 		.word	-1083878507
- 689 000c 65BEB0BF 		.word	-1078935963
- 690 0010 117EB740 		.word	1085767185
- 691 0014 33E44F3F 		.word	1062200371
- 692 0018 21799541 		.word	1100314913
- 693 001c 606DCA3F 		.word	1070230880
- 694 0020 406C6040 		.word	1080060992
- 695 0024 68BBA140 		.word	1084341096
- 696 0028 88620741 		.word	1091003016
- 697 002c 61E0D43E 		.word	1054138465
- 698              		.section	.rodata.leg_pid_R.0,"a"
- 699              		.align	2
- 700              		.set	.LANCHOR0,. + 0
- 703              	leg_pid_R.0:
- 704 0000 00000000 		.space	12
- 704      00000000 
- 704      00000000 
- 705              		.section	.rodata.roll_pid.3,"a"
- 706              		.align	2
- 707              		.set	.LANCHOR1,. + 0
- 710              	roll_pid.3:
- 711 0000 00000C43 		.word	1124859904
- 712 0004 00000000 		.word	0
- 713 0008 00002041 		.word	1092616192
- 714              		.section	.rodata.tp_pid.2,"a"
- 715              		.align	2
- 716              		.set	.LANCHOR2,. + 0
- 719              	tp_pid.2:
- 720 0000 0000F041 		.word	1106247680
- 721 0004 00000000 		.word	0
- 722 0008 0000803F 		.word	1065353216
- 723              		.section	.rodata.turn_pid.1,"a"
- 724              		.align	2
- 725              		.set	.LANCHOR3,. + 0
- 728              	turn_pid.1:
- 729 0000 00002040 		.word	1075838976
- 730 0004 00000000 		.word	0
-ARM GAS  D:\temp\TMP\ccHRiiLn.s 			page 21
+ 690              		.cfi_offset 81, -20
+ 691 0006 0446     		mov	r4, r0
+ 158:Robot/RoboTask/chassis/chassisR_task.c ****         (chassis->joint_motor[1].para.pos > -PI/2.0f && chassis->joint_motor[1].para.pos < 0.0f))
+ 692              		.loc 1 158 5 is_stmt 1 view .LVU216
+ 158:Robot/RoboTask/chassis/chassisR_task.c ****         (chassis->joint_motor[1].para.pos > -PI/2.0f && chassis->joint_motor[1].para.pos < 0.0f))
+ 693              		.loc 1 158 38 is_stmt 0 view .LVU217
+ 694 0008 D0ED087A 		vldr.32	s15, [r0, #32]
+ 158:Robot/RoboTask/chassis/chassisR_task.c ****         (chassis->joint_motor[1].para.pos > -PI/2.0f && chassis->joint_motor[1].para.pos < 0.0f))
+ 695              		.loc 1 158 8 view .LVU218
+ 696 000c F5EEC07A 		vcmpe.f32	s15, #0
+ 697 0010 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 698 0014 14DD     		ble	.L61
+ 158:Robot/RoboTask/chassis/chassisR_task.c ****         (chassis->joint_motor[1].para.pos > -PI/2.0f && chassis->joint_motor[1].para.pos < 0.0f))
+ 699              		.loc 1 158 50 discriminator 1 view .LVU219
+ 700 0016 9FED347A 		vldr.32	s14, .L85
+ 701 001a F4EEC77A 		vcmpe.f32	s15, s14
+ 702 001e F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 703 0022 0DD5     		bpl	.L61
+ 159:Robot/RoboTask/chassis/chassisR_task.c ****         chassis->flag.recover_flag = 1;
+ 704              		.loc 1 159 38 discriminator 2 view .LVU220
+ 705 0024 90ED187A 		vldr.32	s14, [r0, #96]
+ 158:Robot/RoboTask/chassis/chassisR_task.c ****         (chassis->joint_motor[1].para.pos > -PI/2.0f && chassis->joint_motor[1].para.pos < 0.0f))
+ 706              		.loc 1 158 97 discriminator 2 view .LVU221
+ 707 0028 DFED306A 		vldr.32	s13, .L85+4
+ 708 002c B4EEE67A 		vcmpe.f32	s14, s13
+ 709 0030 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 710 0034 04DD     		ble	.L61
+ 159:Robot/RoboTask/chassis/chassisR_task.c ****         chassis->flag.recover_flag = 1;
+ 711              		.loc 1 159 54 view .LVU222
+ 712 0036 B5EEC07A 		vcmpe.f32	s14, #0
+ 713 003a F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 714 003e 1ED4     		bmi	.L82
+ 715              	.L61:
+ 162:Robot/RoboTask/chassis/chassisR_task.c ****     float target1 = -PI/3.0f;
+ 716              		.loc 1 162 5 is_stmt 1 view .LVU223
+ 163:Robot/RoboTask/chassis/chassisR_task.c ****     float target4 = PI/3.0f;
+ 717              		.loc 1 163 5 view .LVU224
+ 718              	.LVL31:
+ 164:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 719              		.loc 1 164 5 view .LVU225
+ 166:Robot/RoboTask/chassis/chassisR_task.c ****     {
+ 720              		.loc 1 166 5 view .LVU226
+ 166:Robot/RoboTask/chassis/chassisR_task.c ****     {
+ 721              		.loc 1 166 37 is_stmt 0 view .LVU227
+ 722 0040 94ED187A 		vldr.32	s14, [r4, #96]
+ 166:Robot/RoboTask/chassis/chassisR_task.c ****     {
+ 723              		.loc 1 166 8 view .LVU228
+ 724 0044 B5EEC07A 		vcmpe.f32	s14, #0
+ 725 0048 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 726 004c 1BD4     		bmi	.L83
+ 727              	.L66:
+ 728              	.LVL32:
+ 171:Robot/RoboTask/chassis/chassisR_task.c ****     {
+ 729              		.loc 1 171 5 is_stmt 1 view .LVU229
+ 171:Robot/RoboTask/chassis/chassisR_task.c ****     {
+ 730              		.loc 1 171 8 is_stmt 0 view .LVU230
+ 731 004e B5EEC07A 		vcmpe.f32	s14, #0
+ARM GAS  D:\temp\TMP\ccbEsdae.s 			page 20
 
 
- 731 0008 9A99993E 		.word	1050253722
- 732              		.text
- 733              	.Letext0:
- 734              		.file 2 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\machine\\_default_types.h"
- 735              		.file 3 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
- 736              		.file 4 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h723xx.h"
- 737              		.file 5 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h"
- 738              		.file 6 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h"
- 739              		.file 7 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_fdcan.h"
- 740              		.file 8 "Core/Inc/fdcan.h"
- 741              		.file 9 "Bsp/bsp_can.h"
- 742              		.file 10 "Robot/Controller/controller.h"
- 743              		.file 11 "Robot/Devices/motor_def.h"
- 744              		.file 12 "Robot/daemon/daemon.h"
- 745              		.file 13 "Robot/Devices/Motor/djimotor.h"
- 746              		.file 14 "Robot/Devices/Motor/dmmotor.h"
- 747              		.file 15 "Robot/RoboTask/chassis/chassis_def.h"
- 748              		.file 16 "Robot/RoboTask/ins/ins_task.h"
- 749              		.file 17 "Robot/Controller/kinematics.h"
- 750              		.file 18 "Robot/Controller/pid.h"
- 751              		.file 19 "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h"
- 752              		.file 20 "<built-in>"
-ARM GAS  D:\temp\TMP\ccHRiiLn.s 			page 22
+ 732 0052 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 733 0056 0CDD     		ble	.L69
+ 171:Robot/RoboTask/chassis/chassisR_task.c ****     {
+ 734              		.loc 1 171 46 discriminator 1 view .LVU231
+ 735 0058 F5EEC07A 		vcmpe.f32	s15, #0
+ 736 005c F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 737 0060 07DD     		ble	.L69
+ 173:Robot/RoboTask/chassis/chassisR_task.c ****         diff4 = target4 + 2*PI - chassis->joint_motor[0].para.pos;
+ 738              		.loc 1 173 9 is_stmt 1 view .LVU232
+ 173:Robot/RoboTask/chassis/chassisR_task.c ****         diff4 = target4 + 2*PI - chassis->joint_motor[0].para.pos;
+ 739              		.loc 1 173 15 is_stmt 0 view .LVU233
+ 740 0062 9FED238A 		vldr.32	s16, .L85+8
+ 741              	.LVL33:
+ 173:Robot/RoboTask/chassis/chassisR_task.c ****         diff4 = target4 + 2*PI - chassis->joint_motor[0].para.pos;
+ 742              		.loc 1 173 15 view .LVU234
+ 743 0066 38EE478A 		vsub.f32	s16, s16, s14
+ 744              	.LVL34:
+ 174:Robot/RoboTask/chassis/chassisR_task.c ****     }
+ 745              		.loc 1 174 9 is_stmt 1 view .LVU235
+ 174:Robot/RoboTask/chassis/chassisR_task.c ****     }
+ 746              		.loc 1 174 15 is_stmt 0 view .LVU236
+ 747 006a 9FED220A 		vldr.32	s0, .L85+12
+ 748              	.LVL35:
+ 174:Robot/RoboTask/chassis/chassisR_task.c ****     }
+ 749              		.loc 1 174 15 view .LVU237
+ 750 006e 30EE670A 		vsub.f32	s0, s0, s15
+ 751              	.LVL36:
+ 752              	.L69:
+ 177:Robot/RoboTask/chassis/chassisR_task.c ****     {
+ 753              		.loc 1 177 5 is_stmt 1 view .LVU238
+ 177:Robot/RoboTask/chassis/chassisR_task.c ****     {
+ 754              		.loc 1 177 22 is_stmt 0 view .LVU239
+ 755 0072 94F89F31 		ldrb	r3, [r4, #415]	@ zero_extendqisi2
+ 177:Robot/RoboTask/chassis/chassisR_task.c ****     {
+ 756              		.loc 1 177 8 view .LVU240
+ 757 0076 A3B1     		cbz	r3, .L84
+ 758              	.LVL37:
+ 759              	.L60:
+ 184:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 760              		.loc 1 184 1 view .LVU241
+ 761 0078 BDEC028B 		vldm	sp!, {d8}
+ 762              	.LCFI10:
+ 763              		.cfi_remember_state
+ 764              		.cfi_restore 80
+ 765              		.cfi_restore 81
+ 766              		.cfi_def_cfa_offset 16
+ 767              	.LVL38:
+ 184:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 768              		.loc 1 184 1 view .LVU242
+ 769 007c 38BD     		pop	{r3, r4, r5, pc}
+ 770              	.LVL39:
+ 771              	.L82:
+ 772              	.LCFI11:
+ 773              		.cfi_restore_state
+ 160:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 774              		.loc 1 160 9 is_stmt 1 view .LVU243
+ 160:Robot/RoboTask/chassis/chassisR_task.c **** 
+ARM GAS  D:\temp\TMP\ccbEsdae.s 			page 21
+
+
+ 775              		.loc 1 160 36 is_stmt 0 view .LVU244
+ 776 007e 0123     		movs	r3, #1
+ 777 0080 80F89F31 		strb	r3, [r0, #415]
+ 778 0084 DCE7     		b	.L61
+ 779              	.LVL40:
+ 780              	.L83:
+ 166:Robot/RoboTask/chassis/chassisR_task.c ****     {
+ 781              		.loc 1 166 46 discriminator 1 view .LVU245
+ 782 0086 F5EEC07A 		vcmpe.f32	s15, #0
+ 783 008a F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 784 008e DED5     		bpl	.L66
+ 168:Robot/RoboTask/chassis/chassisR_task.c ****         diff4 = target4 - chassis->joint_motor[0].para.pos;
+ 785              		.loc 1 168 9 is_stmt 1 view .LVU246
+ 168:Robot/RoboTask/chassis/chassisR_task.c ****         diff4 = target4 - chassis->joint_motor[0].para.pos;
+ 786              		.loc 1 168 15 is_stmt 0 view .LVU247
+ 787 0090 9FED198A 		vldr.32	s16, .L85+16
+ 788 0094 38EE478A 		vsub.f32	s16, s16, s14
+ 789              	.LVL41:
+ 169:Robot/RoboTask/chassis/chassisR_task.c ****     }
+ 790              		.loc 1 169 9 is_stmt 1 view .LVU248
+ 169:Robot/RoboTask/chassis/chassisR_task.c ****     }
+ 791              		.loc 1 169 15 is_stmt 0 view .LVU249
+ 792 0098 9FED180A 		vldr.32	s0, .L85+20
+ 793 009c 30EE670A 		vsub.f32	s0, s0, s15
+ 794              	.LVL42:
+ 169:Robot/RoboTask/chassis/chassisR_task.c ****     }
+ 795              		.loc 1 169 15 view .LVU250
+ 796 00a0 D5E7     		b	.L66
+ 797              	.L84:
+ 180:Robot/RoboTask/chassis/chassisR_task.c ****         Mit_Ctrl(&hcan1, chassis->joint_motor[0].para.id, diff4, 0.0f, 10.0f, 5.0f, 0.0f);
+ 798              		.loc 1 180 9 is_stmt 1 view .LVU251
+ 180:Robot/RoboTask/chassis/chassisR_task.c ****         Mit_Ctrl(&hcan1, chassis->joint_motor[0].para.id, diff4, 0.0f, 10.0f, 5.0f, 0.0f);
+ 799              		.loc 1 180 26 is_stmt 0 view .LVU252
+ 800 00a2 174B     		ldr	r3, .L85+24
+ 801 00a4 C4F87C31 		str	r3, [r4, #380]	@ float
+ 181:Robot/RoboTask/chassis/chassisR_task.c ****         Mit_Ctrl(&hcan1, chassis->joint_motor[1].para.id, diff1, 0.0f, 10.0f, 5.0f, 0.0f);
+ 802              		.loc 1 181 9 is_stmt 1 view .LVU253
+ 803 00a8 DFED168A 		vldr.32	s17, .L85+28
+ 804 00ac 164D     		ldr	r5, .L85+32
+ 805 00ae B0EE682A 		vmov.f32	s4, s17
+ 806 00b2 F1EE041A 		vmov.f32	s3, #5.0e+0
+ 807 00b6 B2EE041A 		vmov.f32	s2, #1.0e+1
+ 808 00ba F0EE680A 		vmov.f32	s1, s17
+ 809 00be A188     		ldrh	r1, [r4, #4]
+ 810              	.LVL43:
+ 181:Robot/RoboTask/chassis/chassisR_task.c ****         Mit_Ctrl(&hcan1, chassis->joint_motor[1].para.id, diff1, 0.0f, 10.0f, 5.0f, 0.0f);
+ 811              		.loc 1 181 9 is_stmt 0 view .LVU254
+ 812 00c0 2846     		mov	r0, r5
+ 813              	.LVL44:
+ 181:Robot/RoboTask/chassis/chassisR_task.c ****         Mit_Ctrl(&hcan1, chassis->joint_motor[1].para.id, diff1, 0.0f, 10.0f, 5.0f, 0.0f);
+ 814              		.loc 1 181 9 view .LVU255
+ 815 00c2 FFF7FEFF 		bl	Mit_Ctrl
+ 816              	.LVL45:
+ 182:Robot/RoboTask/chassis/chassisR_task.c ****     }
+ 817              		.loc 1 182 9 is_stmt 1 view .LVU256
+ 818 00c6 B0EE682A 		vmov.f32	s4, s17
+ 819 00ca F1EE041A 		vmov.f32	s3, #5.0e+0
+ARM GAS  D:\temp\TMP\ccbEsdae.s 			page 22
+
+
+ 820 00ce B2EE041A 		vmov.f32	s2, #1.0e+1
+ 821 00d2 F0EE680A 		vmov.f32	s1, s17
+ 822 00d6 B0EE480A 		vmov.f32	s0, s16
+ 823 00da B4F84410 		ldrh	r1, [r4, #68]
+ 824 00de 2846     		mov	r0, r5
+ 825 00e0 FFF7FEFF 		bl	Mit_Ctrl
+ 826              	.LVL46:
+ 184:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 827              		.loc 1 184 1 is_stmt 0 view .LVU257
+ 828 00e4 C8E7     		b	.L60
+ 829              	.L86:
+ 830 00e6 00BF     		.align	2
+ 831              	.L85:
+ 832 00e8 DB0FC93F 		.word	1070141403
+ 833 00ec DB0FC9BF 		.word	-1077342245
+ 834 00f0 368DA740 		.word	1084722486
+ 835 00f4 8092EA40 		.word	1089114752
+ 836 00f8 920A86BF 		.word	-1081734510
+ 837 00fc 920A863F 		.word	1065749138
+ 838 0100 CDCC4C3E 		.word	1045220557
+ 839 0104 00000000 		.word	0
+ 840 0108 00000000 		.word	hfdcan1
+ 841              		.cfi_endproc
+ 842              	.LFE198:
+ 844              		.section	.text.ChassisR_Task,"ax",%progbits
+ 845              		.align	1
+ 846              		.global	ChassisR_Task
+ 847              		.syntax unified
+ 848              		.thumb
+ 849              		.thumb_func
+ 851              	ChassisR_Task:
+ 852              	.LFB201:
+ 297:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 298:Robot/RoboTask/chassis/chassisR_task.c **** /**
+ 299:Robot/RoboTask/chassis/chassisR_task.c ****  * @brief 底盘任务
+ 300:Robot/RoboTask/chassis/chassisR_task.c ****  * 
+ 301:Robot/RoboTask/chassis/chassisR_task.c ****  */
+ 302:Robot/RoboTask/chassis/chassisR_task.c **** void ChassisR_Task(void)
+ 303:Robot/RoboTask/chassis/chassisR_task.c **** {
+ 853              		.loc 1 303 1 is_stmt 1 view -0
+ 854              		.cfi_startproc
+ 855              		@ Volatile: function does not return.
+ 856              		@ args = 0, pretend = 0, frame = 0
+ 857              		@ frame_needed = 0, uses_anonymous_args = 0
+ 858 0000 00B5     		push	{lr}
+ 859              	.LCFI12:
+ 860              		.cfi_def_cfa_offset 4
+ 861              		.cfi_offset 14, -4
+ 862 0002 83B0     		sub	sp, sp, #12
+ 863              	.LCFI13:
+ 864              		.cfi_def_cfa_offset 16
+ 304:Robot/RoboTask/chassis/chassisR_task.c ****     #ifdef ControlOperation
+ 305:Robot/RoboTask/chassis/chassisR_task.c ****     while(INS.ins_flag == 0) //等待INS初始化完成
+ 865              		.loc 1 305 5 view .LVU259
+ 866              		.loc 1 305 10 is_stmt 0 view .LVU260
+ 867 0004 02E0     		b	.L88
+ 868              	.L89:
+ARM GAS  D:\temp\TMP\ccbEsdae.s 			page 23
+
+
+ 306:Robot/RoboTask/chassis/chassisR_task.c ****     {
+ 307:Robot/RoboTask/chassis/chassisR_task.c ****         osDelay(1);
+ 869              		.loc 1 307 9 is_stmt 1 view .LVU261
+ 870 0006 0120     		movs	r0, #1
+ 871 0008 FFF7FEFF 		bl	osDelay
+ 872              	.LVL47:
+ 873              	.L88:
+ 305:Robot/RoboTask/chassis/chassisR_task.c ****     {
+ 874              		.loc 1 305 10 view .LVU262
+ 305:Robot/RoboTask/chassis/chassisR_task.c ****     {
+ 875              		.loc 1 305 14 is_stmt 0 view .LVU263
+ 876 000c 3C4B     		ldr	r3, .L95
+ 877 000e 93F85830 		ldrb	r3, [r3, #88]	@ zero_extendqisi2
+ 305:Robot/RoboTask/chassis/chassisR_task.c ****     {
+ 878              		.loc 1 305 10 view .LVU264
+ 879 0012 002B     		cmp	r3, #0
+ 880 0014 F7D0     		beq	.L89
+ 308:Robot/RoboTask/chassis/chassisR_task.c ****     }
+ 309:Robot/RoboTask/chassis/chassisR_task.c ****     #endif
+ 310:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 311:Robot/RoboTask/chassis/chassisR_task.c ****     ChassisR_Init(&chassis_move, &LegR_pid);
+ 881              		.loc 1 311 5 is_stmt 1 view .LVU265
+ 882 0016 3B49     		ldr	r1, .L95+4
+ 883 0018 3B48     		ldr	r0, .L95+8
+ 884 001a FFF7FEFF 		bl	ChassisR_Init
+ 885              	.LVL48:
+ 886 001e 29E0     		b	.L90
+ 887              	.L94:
+ 312:Robot/RoboTask/chassis/chassisR_task.c ****     // Pensation_Init(&Roll_Pid,&Tp_Pid,&Turn_Pid);
+ 313:Robot/RoboTask/chassis/chassisR_task.c ****     
+ 314:Robot/RoboTask/chassis/chassisR_task.c ****     while (1)
+ 315:Robot/RoboTask/chassis/chassisR_task.c ****     {
+ 316:Robot/RoboTask/chassis/chassisR_task.c ****         #ifdef ControlOperation
+ 317:Robot/RoboTask/chassis/chassisR_task.c ****         // /* code */
+ 318:Robot/RoboTask/chassis/chassisR_task.c ****         ChassisR_Feedback_Update(&chassis_move, &legR, &INS, (float)CHASSIS_TIME/1000.0f);
+ 319:Robot/RoboTask/chassis/chassisR_task.c ****         ChasssisR_Control(&chassis_move, &legR, &excessiveR, &INS, &LegR_pid, LQR_K_R);
+ 320:Robot/RoboTask/chassis/chassisR_task.c ****         #endif
+ 321:Robot/RoboTask/chassis/chassisR_task.c ****         #ifdef ControlDebug
+ 322:Robot/RoboTask/chassis/chassisR_task.c ****         ChassisR_Debug(&chassis_move, &legR, &excessiveR, &LegR_pid);
+ 323:Robot/RoboTask/chassis/chassisR_task.c ****         #endif
+ 324:Robot/RoboTask/chassis/chassisR_task.c ****         if (chassis_move.flag.start_flag == 1)
+ 325:Robot/RoboTask/chassis/chassisR_task.c ****         {
+ 326:Robot/RoboTask/chassis/chassisR_task.c ****             #ifdef ControlOperation
+ 327:Robot/RoboTask/chassis/chassisR_task.c ****             /* code */
+ 328:Robot/RoboTask/chassis/chassisR_task.c ****                 /* code */
+ 329:Robot/RoboTask/chassis/chassisR_task.c ****                 Mit_Ctrl(&hfdcan1, chassis_move.joint_motor[0].para.id, 0.0f, 0.0f, 0.0f, 0.0f, leg
+ 888              		.loc 1 329 17 view .LVU266
+ 889 0020 9FED3A8A 		vldr.32	s16, .L95+12
+ 890 0024 3A4E     		ldr	r6, .L95+16
+ 891 0026 95ED122A 		vldr.32	s4, [r5, #72]
+ 892 002a F0EE481A 		vmov.f32	s3, s16
+ 893 002e B0EE481A 		vmov.f32	s2, s16
+ 894 0032 F0EE480A 		vmov.f32	s1, s16
+ 895 0036 B0EE480A 		vmov.f32	s0, s16
+ 896 003a A188     		ldrh	r1, [r4, #4]
+ 897 003c 3046     		mov	r0, r6
+ 898 003e FFF7FEFF 		bl	Mit_Ctrl
+ARM GAS  D:\temp\TMP\ccbEsdae.s 			page 24
+
+
+ 899              	.LVL49:
+ 330:Robot/RoboTask/chassis/chassisR_task.c ****                 osDelay(CHASSIS_TIME);
+ 900              		.loc 1 330 17 view .LVU267
+ 901 0042 0120     		movs	r0, #1
+ 902 0044 FFF7FEFF 		bl	osDelay
+ 903              	.LVL50:
+ 331:Robot/RoboTask/chassis/chassisR_task.c ****                 Mit_Ctrl(&hfdcan1, chassis_move.joint_motor[1].para.id, 0.0f, 0.0f, 0.0f, 0.0f, leg
+ 904              		.loc 1 331 17 view .LVU268
+ 905 0048 95ED132A 		vldr.32	s4, [r5, #76]
+ 906 004c F0EE481A 		vmov.f32	s3, s16
+ 907 0050 B0EE481A 		vmov.f32	s2, s16
+ 908 0054 F0EE480A 		vmov.f32	s1, s16
+ 909 0058 B0EE480A 		vmov.f32	s0, s16
+ 910 005c B4F84410 		ldrh	r1, [r4, #68]
+ 911 0060 3046     		mov	r0, r6
+ 912 0062 FFF7FEFF 		bl	Mit_Ctrl
+ 913              	.LVL51:
+ 332:Robot/RoboTask/chassis/chassisR_task.c ****                 osDelay(CHASSIS_TIME);
+ 914              		.loc 1 332 17 view .LVU269
+ 915 0066 0120     		movs	r0, #1
+ 916 0068 FFF7FEFF 		bl	osDelay
+ 917              	.LVL52:
+ 333:Robot/RoboTask/chassis/chassisR_task.c ****                 // 3508控制
+ 334:Robot/RoboTask/chassis/chassisR_task.c ****                 LimitChassisOutputR(&chassis_move, &legR);
+ 918              		.loc 1 334 17 view .LVU270
+ 919 006c 2946     		mov	r1, r5
+ 920 006e 2046     		mov	r0, r4
+ 921 0070 FFF7FEFF 		bl	LimitChassisOutputR
+ 922              	.LVL53:
+ 923              	.L90:
+ 314:Robot/RoboTask/chassis/chassisR_task.c ****     {
+ 924              		.loc 1 314 5 view .LVU271
+ 318:Robot/RoboTask/chassis/chassisR_task.c ****         ChasssisR_Control(&chassis_move, &legR, &excessiveR, &INS, &LegR_pid, LQR_K_R);
+ 925              		.loc 1 318 9 view .LVU272
+ 926 0074 224E     		ldr	r6, .L95
+ 927 0076 274D     		ldr	r5, .L95+20
+ 928 0078 234C     		ldr	r4, .L95+8
+ 929 007a 9FED270A 		vldr.32	s0, .L95+24
+ 930 007e 3246     		mov	r2, r6
+ 931 0080 2946     		mov	r1, r5
+ 932 0082 2046     		mov	r0, r4
+ 933 0084 FFF7FEFF 		bl	ChassisR_Feedback_Update
+ 934              	.LVL54:
+ 319:Robot/RoboTask/chassis/chassisR_task.c ****         #endif
+ 935              		.loc 1 319 9 view .LVU273
+ 936 0088 244B     		ldr	r3, .L95+28
+ 937 008a 0193     		str	r3, [sp, #4]
+ 938 008c 1D4B     		ldr	r3, .L95+4
+ 939 008e 0093     		str	r3, [sp]
+ 940 0090 3346     		mov	r3, r6
+ 941 0092 234A     		ldr	r2, .L95+32
+ 942 0094 2946     		mov	r1, r5
+ 943 0096 2046     		mov	r0, r4
+ 944 0098 FFF7FEFF 		bl	ChasssisR_Control
+ 945              	.LVL55:
+ 324:Robot/RoboTask/chassis/chassisR_task.c ****         {
+ 946              		.loc 1 324 9 view .LVU274
+ARM GAS  D:\temp\TMP\ccbEsdae.s 			page 25
+
+
+ 324:Robot/RoboTask/chassis/chassisR_task.c ****         {
+ 947              		.loc 1 324 30 is_stmt 0 view .LVU275
+ 948 009c 94F89C31 		ldrb	r3, [r4, #412]	@ zero_extendqisi2
+ 324:Robot/RoboTask/chassis/chassisR_task.c ****         {
+ 949              		.loc 1 324 12 view .LVU276
+ 950 00a0 012B     		cmp	r3, #1
+ 951 00a2 BDD0     		beq	.L94
+ 335:Robot/RoboTask/chassis/chassisR_task.c ****             #endif
+ 336:Robot/RoboTask/chassis/chassisR_task.c **** 
+ 337:Robot/RoboTask/chassis/chassisR_task.c ****             #ifdef ControlDebug
+ 338:Robot/RoboTask/chassis/chassisR_task.c ****             Mit_Ctrl(&hfdcan1, 0x03, legR.joint.Phi4_set, 0.0f, 100.0f, 4.0f, 0.0f);
+ 339:Robot/RoboTask/chassis/chassisR_task.c ****             osDelay(CHASSIS_TIME);
+ 340:Robot/RoboTask/chassis/chassisR_task.c ****             Mit_Ctrl(&hfdcan1, 0x04, legR.joint.Phi1_set, 0.0f, 100.0f, 4.0f, 0.0f);
+ 341:Robot/RoboTask/chassis/chassisR_task.c ****             osDelay(CHASSIS_TIME);
+ 342:Robot/RoboTask/chassis/chassisR_task.c ****             #endif
+ 343:Robot/RoboTask/chassis/chassisR_task.c ****         }
+ 344:Robot/RoboTask/chassis/chassisR_task.c ****         else if (chassis_move.flag.start_flag == 0)
+ 952              		.loc 1 344 14 is_stmt 1 view .LVU277
+ 953              		.loc 1 344 17 is_stmt 0 view .LVU278
+ 954 00a4 002B     		cmp	r3, #0
+ 955 00a6 E5D1     		bne	.L90
+ 345:Robot/RoboTask/chassis/chassisR_task.c ****         {
+ 346:Robot/RoboTask/chassis/chassisR_task.c ****             Mit_Ctrl(&hfdcan1, chassis_move.joint_motor[0].para.id, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+ 956              		.loc 1 346 13 is_stmt 1 view .LVU279
+ 957              		.loc 1 346 64 is_stmt 0 view .LVU280
+ 958 00a8 174C     		ldr	r4, .L95+8
+ 959              		.loc 1 346 13 view .LVU281
+ 960 00aa 9FED188A 		vldr.32	s16, .L95+12
+ 961 00ae 184D     		ldr	r5, .L95+16
+ 962 00b0 B0EE482A 		vmov.f32	s4, s16
+ 963 00b4 F0EE481A 		vmov.f32	s3, s16
+ 964 00b8 B0EE481A 		vmov.f32	s2, s16
+ 965 00bc F0EE480A 		vmov.f32	s1, s16
+ 966 00c0 B0EE480A 		vmov.f32	s0, s16
+ 967 00c4 A188     		ldrh	r1, [r4, #4]
+ 968 00c6 2846     		mov	r0, r5
+ 969 00c8 FFF7FEFF 		bl	Mit_Ctrl
+ 970              	.LVL56:
+ 347:Robot/RoboTask/chassis/chassisR_task.c ****             osDelay(CHASSIS_TIME);
+ 971              		.loc 1 347 13 is_stmt 1 view .LVU282
+ 972 00cc 0120     		movs	r0, #1
+ 973 00ce FFF7FEFF 		bl	osDelay
+ 974              	.LVL57:
+ 348:Robot/RoboTask/chassis/chassisR_task.c ****             Mit_Ctrl(&hfdcan1, chassis_move.joint_motor[1].para.id, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+ 975              		.loc 1 348 13 view .LVU283
+ 976 00d2 B0EE482A 		vmov.f32	s4, s16
+ 977 00d6 F0EE481A 		vmov.f32	s3, s16
+ 978 00da B0EE481A 		vmov.f32	s2, s16
+ 979 00de F0EE480A 		vmov.f32	s1, s16
+ 980 00e2 B0EE480A 		vmov.f32	s0, s16
+ 981 00e6 B4F84410 		ldrh	r1, [r4, #68]
+ 982 00ea 2846     		mov	r0, r5
+ 983 00ec FFF7FEFF 		bl	Mit_Ctrl
+ 984              	.LVL58:
+ 349:Robot/RoboTask/chassis/chassisR_task.c ****             osDelay(CHASSIS_TIME);
+ 985              		.loc 1 349 13 view .LVU284
+ 986 00f0 0120     		movs	r0, #1
+ARM GAS  D:\temp\TMP\ccbEsdae.s 			page 26
+
+
+ 987 00f2 FFF7FEFF 		bl	osDelay
+ 988              	.LVL59:
+ 350:Robot/RoboTask/chassis/chassisR_task.c ****             // 3508控制
+ 351:Robot/RoboTask/chassis/chassisR_task.c ****             DJIMotorStop(chassis_move.wheel_motor[0]);
+ 989              		.loc 1 351 13 view .LVU285
+ 990 00f6 D4F80001 		ldr	r0, [r4, #256]
+ 991 00fa FFF7FEFF 		bl	DJIMotorStop
+ 992              	.LVL60:
+ 993 00fe B9E7     		b	.L90
+ 994              	.L96:
+ 995              		.align	2
+ 996              	.L95:
+ 997 0100 00000000 		.word	INS
+ 998 0104 00000000 		.word	.LANCHOR2
+ 999 0108 00000000 		.word	chassis_move
+ 1000 010c 00000000 		.word	0
+ 1001 0110 00000000 		.word	hfdcan1
+ 1002 0114 00000000 		.word	.LANCHOR3
+ 1003 0118 6F12833A 		.word	981668463
+ 1004 011c 00000000 		.word	.LANCHOR5
+ 1005 0120 00000000 		.word	.LANCHOR4
+ 1006              		.cfi_endproc
+ 1007              	.LFE201:
+ 1009              		.global	LQR_K_R
+ 1010              		.global	LegR_pid
+ 1011              		.global	excessiveR
+ 1012              		.global	legR_state
+ 1013              		.global	legR
+ 1014              		.section	.bss.LQR_K_R,"aw",%nobits
+ 1015              		.align	2
+ 1016              		.set	.LANCHOR5,. + 0
+ 1019              	LQR_K_R:
+ 1020 0000 00000000 		.space	48
+ 1020      00000000 
+ 1020      00000000 
+ 1020      00000000 
+ 1020      00000000 
+ 1021              		.section	.bss.LegR_pid,"aw",%nobits
+ 1022              		.align	2
+ 1023              		.set	.LANCHOR2,. + 0
+ 1026              	LegR_pid:
+ 1027 0000 00000000 		.space	72
+ 1027      00000000 
+ 1027      00000000 
+ 1027      00000000 
+ 1027      00000000 
+ 1028              		.section	.bss.excessiveR,"aw",%nobits
+ 1029              		.align	2
+ 1030              		.set	.LANCHOR4,. + 0
+ 1033              	excessiveR:
+ 1034 0000 00000000 		.space	8
+ 1034      00000000 
+ 1035              		.section	.bss.legR,"aw",%nobits
+ 1036              		.align	2
+ 1037              		.set	.LANCHOR3,. + 0
+ 1040              	legR:
+ 1041 0000 00000000 		.space	128
+ARM GAS  D:\temp\TMP\ccbEsdae.s 			page 27
+
+
+ 1041      00000000 
+ 1041      00000000 
+ 1041      00000000 
+ 1041      00000000 
+ 1042              		.section	.bss.legR_state,"aw",%nobits
+ 1043              		.align	2
+ 1044              		.set	.LANCHOR1,. + 0
+ 1047              	legR_state:
+ 1048 0000 00000000 		.space	24
+ 1048      00000000 
+ 1048      00000000 
+ 1048      00000000 
+ 1048      00000000 
+ 1049              		.section	.rodata.leg_pid_R.0,"a"
+ 1050              		.align	2
+ 1051              		.set	.LANCHOR0,. + 0
+ 1054              	leg_pid_R.0:
+ 1055 0000 00004844 		.word	1145569280
+ 1056 0004 00000000 		.word	0
+ 1057 0008 00007A46 		.word	1182400512
+ 1058              		.text
+ 1059              	.Letext0:
+ 1060              		.file 2 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 1061              		.file 3 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
+ 1062              		.file 4 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h723xx.h"
+ 1063              		.file 5 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h"
+ 1064              		.file 6 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h"
+ 1065              		.file 7 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_fdcan.h"
+ 1066              		.file 8 "Core/Inc/fdcan.h"
+ 1067              		.file 9 "Bsp/bsp_can.h"
+ 1068              		.file 10 "Robot/Controller/controller.h"
+ 1069              		.file 11 "Robot/Devices/motor_def.h"
+ 1070              		.file 12 "Robot/daemon/daemon.h"
+ 1071              		.file 13 "Robot/Devices/Motor/djimotor.h"
+ 1072              		.file 14 "Robot/Devices/Motor/dmmotor.h"
+ 1073              		.file 15 "Robot/RoboTask/chassis/chassis_def.h"
+ 1074              		.file 16 "Robot/RoboTask/ins/ins_task.h"
+ 1075              		.file 17 "Robot/Controller/kinematics.h"
+ 1076              		.file 18 "Robot/Controller/pid.h"
+ 1077              		.file 19 "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h"
+ 1078              		.file 20 "Middlewares/ST/ARM/DSP/Inc/arm_math.h"
+ 1079              		.file 21 "<built-in>"
+ARM GAS  D:\temp\TMP\ccbEsdae.s 			page 28
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 chassisR_task.c
-D:\temp\TMP\ccHRiiLn.s:19     .text.ChassisR_Init:00000000 $t
-D:\temp\TMP\ccHRiiLn.s:24     .text.ChassisR_Init:00000000 ChassisR_Init
-D:\temp\TMP\ccHRiiLn.s:162    .text.ChassisR_Init:000000b0 $d
-D:\temp\TMP\ccHRiiLn.s:175    .text.ChassisR_Debug:00000000 $t
-D:\temp\TMP\ccHRiiLn.s:180    .text.ChassisR_Debug:00000000 ChassisR_Debug
-D:\temp\TMP\ccHRiiLn.s:349    .text.ChassisR_Debug:000000b8 $d
-D:\temp\TMP\ccHRiiLn.s:357    .text.Pensation_Init:00000000 $t
-D:\temp\TMP\ccHRiiLn.s:363    .text.Pensation_Init:00000000 Pensation_Init
-D:\temp\TMP\ccHRiiLn.s:428    .text.Pensation_Init:00000048 $d
-D:\temp\TMP\ccHRiiLn.s:437    .text.ChassisR_Task:00000000 $t
-D:\temp\TMP\ccHRiiLn.s:443    .text.ChassisR_Task:00000000 ChassisR_Task
-D:\temp\TMP\ccHRiiLn.s:588    .text.ChassisR_Task:000000f8 $d
-D:\temp\TMP\ccHRiiLn.s:632    .bss.TRANSITION_MATRIX:00000000 TRANSITION_MATRIX
-D:\temp\TMP\ccHRiiLn.s:685    .data.LQR_K:00000000 LQR_K
-D:\temp\TMP\ccHRiiLn.s:626    .bss.Roll_Pid:00000000 Roll_Pid
-D:\temp\TMP\ccHRiiLn.s:646    .bss.Turn_Pid:00000000 Turn_Pid
-D:\temp\TMP\ccHRiiLn.s:639    .bss.Tp_Pid:00000000 Tp_Pid
-D:\temp\TMP\ccHRiiLn.s:619    .bss.LegR_pid:00000000 LegR_pid
-D:\temp\TMP\ccHRiiLn.s:679    .bss.periods:00000000 periods
-D:\temp\TMP\ccHRiiLn.s:653    .bss.chassis_move:00000000 chassis_move
-D:\temp\TMP\ccHRiiLn.s:660    .bss.excessiveR:00000000 excessiveR
-D:\temp\TMP\ccHRiiLn.s:673    .bss.legR_state:00000000 legR_state
-D:\temp\TMP\ccHRiiLn.s:667    .bss.legR:00000000 legR
-D:\temp\TMP\ccHRiiLn.s:615    .bss.LegR_pid:00000000 $d
-D:\temp\TMP\ccHRiiLn.s:622    .bss.Roll_Pid:00000000 $d
-D:\temp\TMP\ccHRiiLn.s:629    .bss.TRANSITION_MATRIX:00000000 $d
-D:\temp\TMP\ccHRiiLn.s:635    .bss.Tp_Pid:00000000 $d
-D:\temp\TMP\ccHRiiLn.s:642    .bss.Turn_Pid:00000000 $d
-D:\temp\TMP\ccHRiiLn.s:649    .bss.chassis_move:00000000 $d
-D:\temp\TMP\ccHRiiLn.s:656    .bss.excessiveR:00000000 $d
-D:\temp\TMP\ccHRiiLn.s:663    .bss.legR:00000000 $d
-D:\temp\TMP\ccHRiiLn.s:670    .bss.legR_state:00000000 $d
-D:\temp\TMP\ccHRiiLn.s:676    .bss.periods:00000000 $d
-D:\temp\TMP\ccHRiiLn.s:682    .data.LQR_K:00000000 $d
-D:\temp\TMP\ccHRiiLn.s:699    .rodata.leg_pid_R.0:00000000 $d
-D:\temp\TMP\ccHRiiLn.s:703    .rodata.leg_pid_R.0:00000000 leg_pid_R.0
-D:\temp\TMP\ccHRiiLn.s:706    .rodata.roll_pid.3:00000000 $d
-D:\temp\TMP\ccHRiiLn.s:710    .rodata.roll_pid.3:00000000 roll_pid.3
-D:\temp\TMP\ccHRiiLn.s:715    .rodata.tp_pid.2:00000000 $d
-D:\temp\TMP\ccHRiiLn.s:719    .rodata.tp_pid.2:00000000 tp_pid.2
-D:\temp\TMP\ccHRiiLn.s:724    .rodata.turn_pid.1:00000000 $d
-D:\temp\TMP\ccHRiiLn.s:728    .rodata.turn_pid.1:00000000 turn_pid.1
+D:\temp\TMP\ccbEsdae.s:19     .text.ChassisR_Feedback_Update:00000000 $t
+D:\temp\TMP\ccbEsdae.s:24     .text.ChassisR_Feedback_Update:00000000 ChassisR_Feedback_Update
+D:\temp\TMP\ccbEsdae.s:184    .text.ChassisR_Feedback_Update:00000100 $d
+D:\temp\TMP\ccbEsdae.s:191    .text.ChassisR_Init:00000000 $t
+D:\temp\TMP\ccbEsdae.s:196    .text.ChassisR_Init:00000000 ChassisR_Init
+D:\temp\TMP\ccbEsdae.s:324    .text.ChassisR_Init:00000098 $d
+D:\temp\TMP\ccbEsdae.s:333    .text.ChasssisR_Control:00000000 $t
+D:\temp\TMP\ccbEsdae.s:338    .text.ChasssisR_Control:00000000 ChasssisR_Control
+D:\temp\TMP\ccbEsdae.s:609    .text.ChasssisR_Control:000001d4 $d
+D:\temp\TMP\ccbEsdae.s:618    .text.LimitChassisOutputR:00000000 $t
+D:\temp\TMP\ccbEsdae.s:623    .text.LimitChassisOutputR:00000000 LimitChassisOutputR
+D:\temp\TMP\ccbEsdae.s:658    .text.LimitChassisOutputR:00000028 $d
+D:\temp\TMP\ccbEsdae.s:665    .text.RiseR_Loop:00000000 $t
+D:\temp\TMP\ccbEsdae.s:671    .text.RiseR_Loop:00000000 RiseR_Loop
+D:\temp\TMP\ccbEsdae.s:832    .text.RiseR_Loop:000000e8 $d
+D:\temp\TMP\ccbEsdae.s:845    .text.ChassisR_Task:00000000 $t
+D:\temp\TMP\ccbEsdae.s:851    .text.ChassisR_Task:00000000 ChassisR_Task
+D:\temp\TMP\ccbEsdae.s:997    .text.ChassisR_Task:00000100 $d
+D:\temp\TMP\ccbEsdae.s:1019   .bss.LQR_K_R:00000000 LQR_K_R
+D:\temp\TMP\ccbEsdae.s:1026   .bss.LegR_pid:00000000 LegR_pid
+D:\temp\TMP\ccbEsdae.s:1033   .bss.excessiveR:00000000 excessiveR
+D:\temp\TMP\ccbEsdae.s:1047   .bss.legR_state:00000000 legR_state
+D:\temp\TMP\ccbEsdae.s:1040   .bss.legR:00000000 legR
+D:\temp\TMP\ccbEsdae.s:1015   .bss.LQR_K_R:00000000 $d
+D:\temp\TMP\ccbEsdae.s:1022   .bss.LegR_pid:00000000 $d
+D:\temp\TMP\ccbEsdae.s:1029   .bss.excessiveR:00000000 $d
+D:\temp\TMP\ccbEsdae.s:1036   .bss.legR:00000000 $d
+D:\temp\TMP\ccbEsdae.s:1043   .bss.legR_state:00000000 $d
+D:\temp\TMP\ccbEsdae.s:1050   .rodata.leg_pid_R.0:00000000 $d
+D:\temp\TMP\ccbEsdae.s:1054   .rodata.leg_pid_R.0:00000000 leg_pid_R.0
 
 UNDEFINED SYMBOLS
 memset
@@ -1277,14 +1645,17 @@ joint_motor_init
 DJIMotorInit
 PID_init
 Enable_Motor_Mode
+DJIMotorEnable
 osDelay
 hfdcan2
 hfdcan1
+ForwardKinematics
+Calc_LQR_K
+arm_cos_f32
 PID_Calc
-InverseKinematics
+JacobianMatrix
+DJIMotorSetRef
 Mit_Ctrl
-ARM GAS  D:\temp\TMP\ccHRiiLn.s 			page 23
-
-
 DJIMotorStop
 INS
+chassis_move

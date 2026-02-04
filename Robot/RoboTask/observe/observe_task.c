@@ -92,18 +92,18 @@ void Observe_Task(void)
   while (1)
   {
     /* code */
-    observe_data.wr = -angle_to_radian(chassis_move.wheel_motor[0]->measure.speed_aps)-INS.Gyro[1]-legR.rod.d_phi0;
-    observe_data.wl = -angle_to_radian(chassis_move.wheel_motor[1]->measure.speed_aps)+INS.Gyro[1]-legR.rod.d_phi0;
+    observe_data.wr = -angle_to_radian(chassis_move.wheel_motor[0]->measure.speed_aps)-INS.Gyro[Y_AXIS]-legR.rod.d_phi0;
+    observe_data.wl = -angle_to_radian(chassis_move.wheel_motor[1]->measure.speed_aps)+INS.Gyro[Y_AXIS]-legR.rod.d_phi0;
 
     // 公式意义：角速度 x 半径 + 角速度 x 长度 x cos(角度) + 长度变化量 x sin(角度)
-    observe_data.vrb = observe_data.wr*WHEEL_RADIUS + legR.rod.L0*legR.rod.d_theta*arm_cos_f32(legR.rod.d_theta) + legR.rod.d_L0*arm_sin_f32(legR.rod.theta);
-    observe_data.vlb = observe_data.wl*WHEEL_RADIUS + legL.rod.L0*legL.rod.d_theta*arm_cos_f32(legL.rod.d_theta) + legL.rod.d_L0*arm_sin_f32(legL.rod.theta);
+    observe_data.vrb = observe_data.wr*WHEEL_RADIUS + legR.rod.L0*legR.rod.d_theta*arm_cos_f32(legR.rod.theta) + legR.rod.d_L0*arm_sin_f32(legR.rod.theta);
+    observe_data.vlb = observe_data.wl*WHEEL_RADIUS + legL.rod.L0*legL.rod.d_theta*arm_cos_f32(legL.rod.theta) + legL.rod.d_L0*arm_sin_f32(legL.rod.theta);
 
     // 因规定顺时针为正，所以右轮为正，左轮为负，因此前进速度为差值，角速度为和值
     observe_data.forward_v = (observe_data.vrb - observe_data.vlb)/2.0f;
     observe_data.angular_v = (observe_data.vrb + observe_data.vlb)/WHEEL_DISTANCE;
     
-    xvEstimateKF_Update(&vaEstimateKF, -INS.MotionAccel_b[0], observe_data.forward_v);
+    xvEstimateKF_Update(&vaEstimateKF, -chassis_move.body.x_accel, observe_data.forward_v);
 
     // 原地自转时，v_filter和x_filter应该都为0
     chassis_move.state.v_filter = vel_acc[0];
@@ -112,36 +112,4 @@ void Observe_Task(void)
     osDelay(OBSERVE_TIME);
   }
   
-}
-
-float  RAMP_float( float  final, float  now, float  ramp )
-{
-	  float  buffer = 0;
-		
-	  buffer = final - now;
-	
-		if (buffer > 0)
-		{
-				if (buffer > ramp)
-				{  
-						now += ramp;
-				}   
-				else
-				{
-						now += buffer;
-				}
-		}
-		else
-		{
-				if (buffer < -ramp)
-				{
-						now += -ramp;
-				}
-				else
-				{
-						now += buffer;
-				}
-		}
-		
-		return now;
 }

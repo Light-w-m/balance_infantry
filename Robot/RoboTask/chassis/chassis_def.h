@@ -18,29 +18,39 @@
 #include "dmmotor.h"
 
 // 限幅
-#define SATURATE(in, min, max)    \
-    do {                          \
-        float *_p = (in);         \
-        if (*_p < (min))          \
-            *_p = (min);          \
-        else if (*_p > (max))     \
-            *_p = (max);          \
-    } while(0)
+#define SATURATE(p, min, max)           \
+    do {                                \
+        if (*(p) < (min))               \
+            *(p) = (min);               \
+        else if (*(p) > (max))          \
+            *(p) = (max);               \
+    } while (0)
 
 /**********************control parameters*******************/
 //内部参数配置，宏定义判断是否启动
 
 //两种控制模式不可同时进行
-// #define ControlOperation    //正常控制模式--正解
-#define ControlDebug        //调试模式--逆解
+#define ControlOperation    //正常控制模式--正解
+// #define ControlDebug        //调试模式--逆解
+
+/**********************direction parameters*******************/
+#define X_AXIS 0
+#define Y_AXIS 1
+#define Z_AXIS 2
+
 /**********************physical parameters*******************/
 #define GRAVITY 9.791f         // 重力加速度--福建
 
-#define BODY_MASS       0.0f       // 载体重量
+#define BODY_MASS       4.0f       // 载体重量
 #define WHEEL_MASS      0.0f       // 轮重量
-#define WHEEL_RADIUS    0.0f       // 轮子半径
-#define WHEEL_DISTANCE  0.0f       // 轮子间距
+#define WHEEL_RADIUS    0.06f       // 轮子半径
+#define WHEEL_DISTANCE  0.435f       // 轮子间距
 
+#define TOR_COEFFICIENT 0.3f        // 电机电流扭矩系数
+#define REDUCTION_RATIO 15.7f        // 电机减速比
+#define EFFICIENCY     0.7f        // 传动效率
+
+/**********************chassis parameters*******************/
 // 支持力阈值，当支持力小于这个值时认为离地
 #define TAKE_OFF_FN_THRESHOLD (3.0f)
 // 触地状态切换时间阈值，当时间接触或离地时间超过这个值时切换触地状态
@@ -48,20 +58,29 @@
 
 #define CHASSIS_TIME 1         //延迟时间
 
+/****************amplitude limiting parameters*************/
+// 腿长
+#define MAX_LEG_LENGTH 0.32f
+#define MIN_LEG_LENGTH 0.15f
+#define MAX_LEG_VEL 0.2f    //最大腿长变化速度 m/s
+
+// 扭矩
+#define MAX_TORQUE 10.0f    //关机最大输出扭矩 N·m
+
 /***********************length parameters****************/
 #define LEG1 0.21f
 #define LEG2 0.25f
 #define LEG3 0.25f
 #define LEG4 0.21f
 
-#define MAX_LEG_LENGTH 0.0f
-#define MIN_LEG_LENGTH 0.0f
+#define LEG_RISE_LENGTH_SET 0.20f   //完成倒地自起时腿长
+#define LEG_DEFAULT 0.20f   //默认腿长
 
 /***********************pid parameters*******************/
-#define LEG_PID_KP  0.0f
+#define LEG_PID_KP  800.0f
 #define LEG_PID_KI  0.0f
-#define LEG_PID_KD  0.0f
-#define LEG_PID_MAX_OUT  90.0f //90ţ
+#define LEG_PID_KD  16000.0f
+#define LEG_PID_MAX_OUT  100.0f //90ţ
 #define LEG_PID_MAX_IOUT 0.0f
 
 #define ROLL_PID_KP 140.0f
@@ -113,6 +132,18 @@ typedef enum
     CHASSIS_CRASHING    // 底盘接地状态，进行缓冲
 } ChassisMode_e;
 
+typedef union
+{
+    struct 
+    {
+        /* data */
+        float x;
+        float y;
+        float z;
+    };
+    float data[3];
+}xyz_t;
+
 typedef struct
 {
     Joint_Motor_t joint_motor[4];       // 0，1 为右腿
@@ -129,24 +160,57 @@ typedef struct
 
     } state;
 
+    struct body
+    {
+        float x_accel;  // 机体坐标系下x轴加速度
+        float y_accel;  // 机体坐标系下y轴加速度
+        float z_accel;  // 机体坐标系下z轴加速度
+
+        float gx, gy, gz;  //重力加速度在机体坐标系下的分量，用于消除重力加速度对加速度计的影响
+
+        float roll;
+        float roll_dot;
+        float yaw;
+        float yaw_dot;
+    } body;
+
+    struct world
+    {
+        float x_accel;  // 大地坐标系下x轴加速度
+        float y_accel;  // 大地坐标系下y轴加速度
+        float z_accel;  // 大地坐标系下z轴加速度
+    } world;
+
+    struct reference
+    {
+        float roll;
+        float roll_dot;
+        float yaw;
+        float yaw_dot;
+        
+        float vx;  // (m/s) x方向速度
+        float vy;  // (m/s) y方向速度
+        float wz;  // (rad/s) 旋转速度
+    } reference;
+
     float turn_set;     //期望yaw轴弧度
 	float roll_set;	    //期望roll轴弧度
 
     float phi_set;
 	float theta_set;
     float leg_set;      //期望腿长
-	float last_leg_set;
 
     float myPithR;
 	float myPithGyroR;
-    float total_yaw;
-    float roll;
+	float myPithL;
+	float myPithGyroL;
+    // float total_yaw;
 
     float turn_T;       //yaw补偿
     float roll_T;       //roll补偿
     float leg_tp;       //防劈叉补偿
 
-    float theta_err;    //两腿夹角误差
+    // float theta_err;    //两腿夹角误差
 
     struct flag
     {
@@ -178,5 +242,21 @@ typedef struct
     uint32_t last_time;     // (ms)上一次更新时间
     float duration;         // (ms)任务周期
 } Period_t;
+
+/***********************functions***********************/
+static inline float WrapToPi(float x)
+{
+    while (x >  PI) x -= 2.0f * PI;
+    while (x < -PI) x += 2.0f * PI;
+    return x;
+}
+
+// 保证电机逆解走最短路径
+static inline float ShortestAngle(float target, float *last_set)
+{
+    float out = *last_set + WrapToPi(target - *last_set);
+    *last_set = out;
+    return out;
+}
 
 #endif // !CHASSIS_DEF_H

@@ -16,10 +16,6 @@
 #include "stdint.h"
 #include "BMI088driver.h"
 
-#define X_AXIS 0
-#define Y_AXIS 1
-#define Z_AXIS 2
-
 //温度控制参数
 #define DES_TEMP    40.0f
 #define KP          100.f
@@ -40,21 +36,10 @@ typedef struct
 
     float AccelLPF; // 加速度低通滤波系数
 
-    // 加速度在绝对系的向量表示
-    float xn[3];
-    float yn[3];
-    float zn[3];
-
-    float atanxz;
-    float atanyz;
-
     // 位姿
     float Roll;
     float Pitch;
     float Yaw;
-    float YawTotalAngle;
-	// float YawAngleLast;
-	// float YawRoundCount;
 		
 	float v_n;//绝对系沿着水平运动方向的速度
 	float x_n;//绝对系沿着水平运动方向的位移

@@ -11,20 +11,39 @@
  */
 
 #include "kinematics.h"
+#include "math.h"
 
-// 三项式拟合系数
-float a11[4];
-float a12[4];
-float a13[4];
-float a14[4];
-float a15[4];
-float a16[4];
-float a21[4];
-float a22[4];
-float a23[4];
-float a24[4];
-float a25[4];
-float a26[4];
+// #define MPC
+
+// LQR三项式拟合系数
+float a11[4] = {35.747040206208389,	1.197888445165823e+02,	-1.340612668652686e+02,	2.054337552542976};
+float a12[4] = {40.972452123430529,	-27.190035352805062,	-3.953334953621627,	0.119311951595448};
+float a13[4] = {-21.566843609988112,	33.155272024052223,	-16.362549215350821,	0.654807416007942};
+float a14[4] = {-24.580040645915389,	42.800574172201770,	-22.812684952195962,	0.750630100840322};
+float a15[4] = {1.545095383101002e+02,	-1.134164555924551e+02,	14.749413381880609,	7.917779553782676};
+float a16[4] = {21.248429771574838,	-17.194903979093272,	3.321339495850584,	1.010355734774323};
+float a21[4] = {1.828441322270747e+03,	-1.551033677261753e+03,	4.116033439243860e+02,	3.023679449579539};
+float a22[4] = {69.038239918892415,	-77.940439425410304,	29.490450292520134,	-0.340610624644939};
+float a23[4] = {1.425690653843912e+02,	-86.860443348572730,	2.697180627378617,	7.040938326992611};
+float a24[4] = {1.856957418205554e+02,	-1.117748796015461e+02,	1.252346785379551,	10.305374416876612};
+float a25[4] = {2.945733509758427e+02,	-4.027852715393474e+02,	1.973084404073282e+02,	-18.146418478120918};
+float a26[4] = {22.888444382736235,	-41.669966467800890,	24.214361249303444,	-2.842115499141104};
+
+#ifdef MPC
+// MPC拟合系数
+float b11[4];
+float b12[4];
+float b13[4];
+float b14[4];
+float b15[4];
+float b16[4];
+float b21[4];
+float b22[4];
+float b23[4];
+float b24[4];
+float b25[4];
+float b26[4];
+#endif
 
 /**
  * @brief 线性化处理K矩
@@ -51,27 +70,43 @@ void Calc_LQR_K(float k[2][6], float length, bool flag)
     k[1][4] = a25[0]*t3 + a25[1]*t2 + a25[2]*t1 + a25[3];
     k[1][5] = a26[0]*t3 + a26[1]*t2 + a26[2]*t1 + a26[3];
 
+#ifdef MPC
+    float u[2][6];  // 待后期使用放入形参中
+
+    u[0][0] = b11[0]*expf(b11[1]*length)+b11[2]*expf(b11[3]*length);
+    u[0][1] = b12[0]*expf(b12[1]*length)+b12[2]*expf(b12[3]*length);
+    u[0][2] = b13[0]*expf(b13[1]*length)+b13[2]*expf(b13[3]*length);
+    u[0][3] = b14[0]*expf(b14[1]*length)+b14[2]*expf(b14[3]*length);
+    u[0][4] = b15[0]*expf(b15[1]*length)+b15[2]*expf(b15[3]*length);
+    u[0][5] = b16[0]*expf(b16[1]*length)+b16[2]*expf(b16[3]*length);
+    u[1][0] = b21[0]*expf(b21[1]*length)+b21[2]*expf(b21[3]*length);
+    u[1][1] = b22[0]*expf(b22[1]*length)+b22[2]*expf(b22[3]*length);
+    u[1][2] = b23[0]*expf(b23[1]*length)+b23[2]*expf(b23[3]*length);
+    u[1][3] = b24[0]*expf(b24[1]*length)+b24[2]*expf(b24[3]*length);
+    u[1][4] = b25[0]*expf(b25[1]*length)+b25[2]*expf(b25[3]*length);
+    u[1][5] = b26[0]*expf(b26[1]*length)+b26[2]*expf(b26[3]*length);
+#endif
+
     //离地判断
-    if (flag)
-    {
-        /* code */
-        k[0][0] = 0;
-        k[0][1] = 0;
-        k[0][2] = 0;
-        k[0][3] = 0;
-        k[0][4] = 0;
-        k[0][5] = 0;
-        k[1][0] = 0;
-        k[1][1] = 0;
-        k[1][2] = 0;
-        k[1][3] = 0;
-        k[1][4] = 0;
-        k[1][5] = 0;
-    }
+    // if (flag)
+    // {
+    //     /* code */
+    //     k[0][0] = 0;
+    //     k[0][1] = 0;
+    //     k[0][2] = 0;
+    //     k[0][3] = 0;
+    //     k[0][4] = 0;
+    //     k[0][5] = 0;
+    //     k[1][0] = 0;
+    //     k[1][1] = 0;
+    //     k[1][2] = 0;
+    //     k[1][3] = 0;
+    //     k[1][4] = 0;
+    //     k[1][5] = 0;
+    // }
     
 }
 
-float constrainValue(float value, float min, float max);
 float safe_sqrt(float x);
 float safe_div(float num, float denom);
 
@@ -81,18 +116,12 @@ float safe_div(float num, float denom);
  * @param leg 
  * @param excessive 
  * @param ins 
- * @param dt 
  */
-void ForwardKinematics(Leg_t* leg,Excessive_t* excessive, INS_t* ins, float dt)
+void ForwardKinematics(Leg_t* leg,Excessive_t* excessive)
 {
     float XD, YD, XB, YB;
     float lBD;
     float A0, B0, C0;
-
-    static float PitchR = 0.0f;
-    static float PitchGyroR = 0.0f;
-    PitchR = ins->Pitch;
-    PitchGyroR = ins->Gyro[0];
 
     XD = LEG4*arm_cos_f32(leg->joint.Phi4);
     YD = LEG4*arm_sin_f32(leg->joint.Phi4);
@@ -113,25 +142,6 @@ void ForwardKinematics(Leg_t* leg,Excessive_t* excessive, INS_t* ins, float dt)
 
     leg->rod.L0 = safe_sqrt(leg->rod.xC*leg->rod.xC + leg->rod.yC*leg->rod.yC);
     leg->rod.phi0 = atan2f(leg->rod.yC, leg->rod.xC);
-
-    //LQR控制器参数
-    leg->rod.d_phi0 = (leg->rod.phi0 - leg->rod.last_phi0) / dt;
-    
-    leg->rod.last_phi0 = leg->rod.phi0;
-
-    //theta
-    leg->rod.theta = PI/2 - leg->rod.phi0 - PitchR; //状态量1
-    leg->rod.d_theta = - leg->rod.d_phi0 - PitchGyroR; //状态量2
-    leg->rod.dd_theta = (leg->rod.d_theta - leg->rod.last_d_theta) / dt;
-    leg->rod.last_d_theta = leg->rod.d_theta;
-
-    //L0
-    leg->rod.d_L0 = (leg->rod.L0 - leg->rod.last_L0) / dt;
-    leg->rod.dd_L0 = (leg->rod.d_L0 - leg->rod.last_d_L0) / dt;
-
-    leg->rod.last_L0 = leg->rod.L0;
-    leg->rod.last_d_L0 = leg->rod.d_L0;
-
 }
 
 /**
@@ -140,13 +150,13 @@ void ForwardKinematics(Leg_t* leg,Excessive_t* excessive, INS_t* ins, float dt)
  * @param leg 
  * @param excessive 
  */
-void InverseKinematics(chassis_t* chassis, Leg_t* leg,Excessive_t* excessive)
+void InverseKinematics(chassis_t* chassis, Leg_t* leg)
 {
     float A1, B1, C1, D1;
     float A4, B4, C4, D4, E4, F4;
 
-    leg->rod.xC = chassis->leg_set * arm_cos_f32(leg->rod.theta);
-    leg->rod.yC = chassis->leg_set * arm_sin_f32(leg->rod.theta);
+    leg->rod.xC = chassis->leg_set * arm_cos_f32(leg->rod.phi0);
+    leg->rod.yC = chassis->leg_set * arm_sin_f32(leg->rod.phi0);
 
 
     //过度变量
@@ -181,8 +191,52 @@ void JacobianMatrix(Leg_t* leg,Excessive_t* excessive)
 
     leg->joint.T1 = leg->j11*leg->rod.F0 + leg->j12*leg->rod.Tp;
     leg->joint.T2 = leg->j21*leg->rod.F0 + leg->j22*leg->rod.Tp;
+
+    // leg->rod.d_L0 = leg->j11*leg->joint.d_Phi1 + leg->j12*leg->joint.d_Phi4;
+    // leg->rod.d_phi0 = leg->j21*leg->joint.d_Phi1 + leg->j22*leg->joint.d_Phi4;
 }
 
+/**
+ * @brief 更新大地坐标系下的加速度
+ * 
+ */
+void Acceleration_Updata(chassis_t chassis, INS_t* ins)
+{
+    float ax = ins->Accel[X_AXIS];
+    float ay = ins->Accel[Y_AXIS];
+    float az = ins->Accel[Z_AXIS];
+
+    float sin_pitch,cos_pitch,sin_roll,cos_roll,sin_yaw,cos_yaw;
+    
+    sin_roll = arm_sin_f32(ins->Roll);
+    cos_roll = arm_cos_f32(ins->Roll);
+    sin_pitch = arm_sin_f32(ins->Pitch);
+    cos_pitch = arm_cos_f32(ins->Pitch);
+    sin_yaw = arm_sin_f32(ins->Yaw);
+    cos_yaw = arm_cos_f32(ins->Yaw);
+
+    chassis.body.gx = GRAVITY * sin_pitch;
+    chassis.body.gy = -GRAVITY * sin_roll * cos_pitch;
+    chassis.body.gz = -GRAVITY * cos_roll * cos_pitch;
+
+    chassis.body.x_accel = ax + chassis.body.gx;
+    chassis.body.y_accel = ay + chassis.body.gy;
+    chassis.body.z_accel = az + chassis.body.gz;
+
+    // 计算旋转矩阵
+    float R[3][3] = 
+    {
+        {cos_pitch * cos_yaw, sin_roll * sin_pitch * cos_yaw - cos_roll * sin_yaw, cos_roll * sin_pitch * cos_yaw + sin_roll * sin_yaw},
+        {cos_pitch * sin_yaw, sin_roll * sin_pitch * sin_yaw + cos_roll * cos_yaw, cos_roll * sin_pitch * sin_yaw - sin_roll * cos_yaw},
+        {-sin_pitch         , sin_roll * cos_pitch                               , cos_roll * cos_pitch                               }
+    };
+
+    // 更新大地坐标系下的加速度
+    chassis.world.x_accel = R[0][0]*ax + R[0][1]*ay + R[0][2]*az;
+    chassis.world.y_accel = R[1][0]*ax + R[1][1]*ay + R[1][2]*az;
+    chassis.world.z_accel = R[2][0]*ax + R[2][1]*ay + R[2][2]*az-GRAVITY;
+
+}
 
 /**
  * @brief 离地检测
@@ -190,10 +244,10 @@ void JacobianMatrix(Leg_t* leg,Excessive_t* excessive)
  * @param leg 
  * @param overall 
  */
-uint8_t GroundDetect(Leg_t* leg, Period_t* period, INS_t* ins)
+uint8_t GroundDetect(chassis_t* chassis, Leg_t* leg, Period_t* period)
 {
     float P;                                    //驱动轮对摆杆的力的竖直分量--用于判断离地检测
-    float dd_z_M = ins->MotionAccel_n[2];       //机体竖直方向位移--二阶导--加速度
+    float dd_z_M = chassis->world.z_accel;       //机体竖直方向位移--二阶导--加速度
     float dd_z_w;                               //轮子竖直方向位移--二阶导
     
     dd_z_w = dd_z_M
@@ -298,13 +352,6 @@ float DeviationCalc(float diff, float real, float target)
            cosf(real) / cosf(target) * (WHEEL_DISTANCE * tanf(real) - diff);
 }
 
-// 限幅
-float constrainValue(float value, float min, float max)
-{
-    if (value < min) return min;
-    if (value > max) return max;
-    return value;
-}
 
 // 防止负数输入
 float safe_sqrt(float x)

@@ -14,6 +14,7 @@
 #include "djimotor.h"
 #include "bsp_can.h"
 #include "BMI088driver.h"
+#include "remote_task.h"
 #include "bsp_dwt.h"
 
 void RobotInit(void)
@@ -24,6 +25,7 @@ void RobotInit(void)
     HIPNUC_Init();
     #endif
 
+    RobotCMDInit();
     FDCAN1_Config();
 }
 

@@ -44,6 +44,7 @@ typedef struct
     {
         float T1, T2;           //髋关节输出扭矩
         float Phi1, Phi4;
+        float d_Phi1, d_Phi4;
 
         #ifdef ControlDebug
         // 位控调试时使用
@@ -82,10 +83,10 @@ typedef struct
 
 
 void Calc_LQR_K(float k[2][6], float length, bool flag);
-void ForwardKinematics(Leg_t* leg,Excessive_t* excessive, INS_t* ins, float dt);
-void InverseKinematics(chassis_t* chassis, Leg_t* leg,Excessive_t* excessive);
+void ForwardKinematics(Leg_t* leg,Excessive_t* excessive);
+void InverseKinematics(chassis_t* chassis, Leg_t* leg);
 void JacobianMatrix(Leg_t* leg,Excessive_t* excessive);
-uint8_t GroundDetect(Leg_t* leg, Period_t* period, INS_t* ins);
+uint8_t GroundDetect(chassis_t* chassis, Leg_t* leg, Period_t* period);
 void CoordinateLength(float *LengthL, float *LengthR, float diff, float add);
 float DeviationCalc(float diff, float real, float target);
 

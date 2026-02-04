@@ -33,10 +33,13 @@ build/ins_task.o: Robot/RoboTask/ins/ins_task.c \
  Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h \
  Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h \
  Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h \
- Robot/RoboTask/Robot_def.h Robot/Devices/Hipnuc/hipnuc_dec.h \
- Robot/Devices/Hipnuc/hipnuc_def.h Robot/Controller/controller.h \
- Bsp/bsp_dwt.h Middlewares/ST/ARM/DSP/Inc/arm_math.h \
- Drivers/CMSIS/Include/cmsis_compiler.h \
+ Robot/RoboTask/Robot_def.h Robot/RoboTask/chassis/chassis_def.h \
+ Robot/Devices/Motor/djimotor.h Bsp/bsp_can.h Core/Inc/fdcan.h \
+ Core/Inc/main.h Robot/Controller/controller.h Bsp/bsp_dwt.h \
+ Middlewares/ST/ARM/DSP/Inc/arm_math.h \
+ Drivers/CMSIS/Include/cmsis_compiler.h Robot/Devices/motor_def.h \
+ Robot/daemon/daemon.h Robot/Devices/Motor/dmmotor.h \
+ Robot/Devices/Hipnuc/hipnuc_dec.h Robot/Devices/Hipnuc/hipnuc_def.h \
  Robot/Algorithm/EKF/QuaternionEKF.h \
  Robot/Algorithm/kalman/kalman_filter.h Robot/Lib/user_lib.h \
  Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h \
@@ -56,8 +59,9 @@ build/ins_task.o: Robot/RoboTask/ins/ins_task.c \
  Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
- Robot/Algorithm/mahony/mahony_filter.h Core/Inc/gpio.h Core/Inc/main.h \
- Robot/Controller/pid.h Core/Inc/spi.h Core/Inc/tim.h Core/Inc/usart.h
+ Robot/Algorithm/mahony/mahony_filter.h Core/Inc/gpio.h \
+ Robot/Controller/pid.h Core/Inc/spi.h Core/Inc/tim.h Bsp/bsp_usart.h \
+ Core/Inc/usart.h
 Robot/RoboTask/ins/ins_task.h:
 Robot/Devices/BMI088/BMI088driver.h:
 Core/Inc/main.h:
@@ -97,12 +101,20 @@ Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h:
 Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h:
 Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h:
 Robot/RoboTask/Robot_def.h:
-Robot/Devices/Hipnuc/hipnuc_dec.h:
-Robot/Devices/Hipnuc/hipnuc_def.h:
+Robot/RoboTask/chassis/chassis_def.h:
+Robot/Devices/Motor/djimotor.h:
+Bsp/bsp_can.h:
+Core/Inc/fdcan.h:
+Core/Inc/main.h:
 Robot/Controller/controller.h:
 Bsp/bsp_dwt.h:
 Middlewares/ST/ARM/DSP/Inc/arm_math.h:
 Drivers/CMSIS/Include/cmsis_compiler.h:
+Robot/Devices/motor_def.h:
+Robot/daemon/daemon.h:
+Robot/Devices/Motor/dmmotor.h:
+Robot/Devices/Hipnuc/hipnuc_dec.h:
+Robot/Devices/Hipnuc/hipnuc_def.h:
 Robot/Algorithm/EKF/QuaternionEKF.h:
 Robot/Algorithm/kalman/kalman_filter.h:
 Robot/Lib/user_lib.h:
@@ -125,8 +137,8 @@ Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h:
 Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
 Robot/Algorithm/mahony/mahony_filter.h:
 Core/Inc/gpio.h:
-Core/Inc/main.h:
 Robot/Controller/pid.h:
 Core/Inc/spi.h:
 Core/Inc/tim.h:
+Bsp/bsp_usart.h:
 Core/Inc/usart.h:

@@ -96,6 +96,21 @@ typedef struct
     float frame_period; //时间间隔
 } ramp_function_source_t;
 
+// 定义一阶低通滤波器结构体
+typedef struct LowPassFilter
+{
+    float alpha;  // 平滑系数
+    float out;    // 输出
+} LowPassFilter_t;
+
+typedef struct
+{
+    float input;         //输入数据
+    float out;           //滤波输出的数据
+    float num[1];        //滤波参数
+    float frame_period;  //滤波的时间间隔 单位 s
+} first_order_filter_type_t;
+
 typedef struct __attribute__((packed))
 {
     uint16_t Order;
@@ -119,6 +134,15 @@ float Sqrt(float x);
 void ramp_init(ramp_function_source_t *ramp_source_type, float frame_period, float max, float min);
 //斜波函数计算
 float ramp_calc(ramp_function_source_t *ramp_source_type, float input);
+
+//低通滤波器
+void low_filter_init(LowPassFilter_t * filter, float alpha);
+float low_filter_calc(LowPassFilter_t * filter, float input);
+
+//一阶低通滤波器
+void first_order_filter_init(
+    first_order_filter_type_t * first_order_filter_type, float frame_period, const float num[1]);
+void first_order_filter_cali(first_order_filter_type_t * first_order_filter_type, float input);
 
 float *Norm3d(float *v);
 float NormOf3d(float *v);

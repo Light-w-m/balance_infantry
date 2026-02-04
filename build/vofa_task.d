@@ -53,7 +53,11 @@ build/vofa_task.o: Robot/RoboTask/emulator/vofa_task.c \
  Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
  Middlewares/ST/ARM/DSP/Inc/arm_math.h \
- Drivers/CMSIS/Include/cmsis_compiler.h
+ Drivers/CMSIS/Include/cmsis_compiler.h \
+ Robot/RoboTask/chassis/chassis_def.h Robot/Devices/Motor/djimotor.h \
+ Bsp/bsp_can.h Core/Inc/fdcan.h Robot/Controller/controller.h \
+ Bsp/bsp_dwt.h Robot/Devices/motor_def.h Robot/daemon/daemon.h \
+ Robot/Devices/Motor/dmmotor.h Robot/Controller/kinematics.h
 Robot/RoboTask/emulator/vofa_task.h:
 Core/Inc/usart.h:
 Core/Inc/main.h:
@@ -114,3 +118,13 @@ Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h:
 Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
 Middlewares/ST/ARM/DSP/Inc/arm_math.h:
 Drivers/CMSIS/Include/cmsis_compiler.h:
+Robot/RoboTask/chassis/chassis_def.h:
+Robot/Devices/Motor/djimotor.h:
+Bsp/bsp_can.h:
+Core/Inc/fdcan.h:
+Robot/Controller/controller.h:
+Bsp/bsp_dwt.h:
+Robot/Devices/motor_def.h:
+Robot/daemon/daemon.h:
+Robot/Devices/Motor/dmmotor.h:
+Robot/Controller/kinematics.h:

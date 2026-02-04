@@ -15,6 +15,7 @@
 	
 #include "ins_task.h"
 #include "Robot_def.h"
+#include "chassis_def.h"
 #include "hipnuc_dec.h"
 #include "controller.h"
 #include "QuaternionEKF.h"
@@ -25,6 +26,7 @@
 #include "pid.h"
 #include "spi.h"
 #include "tim.h"
+#include "bsp_usart.h"
 #include "usart.h"
 #include "stdint.h"
 #include "cmsis_os.h"
@@ -118,16 +120,16 @@ void INS_task(void)
 
 		BMI088_Read(&BMI088);
 
-		INS.Accel[X_AXIS] = BMI088.Accel[X_AXIS];
-		INS.Accel[Y_AXIS] = BMI088.Accel[Y_AXIS];
+		INS.Accel[Y_AXIS] = BMI088.Accel[X_AXIS];
+		INS.Accel[X_AXIS] = BMI088.Accel[Y_AXIS];
 		INS.Accel[Z_AXIS] = BMI088.Accel[Z_AXIS];
 
 		Accel.x=BMI088.Accel[0];
 		Accel.y=BMI088.Accel[1];
 		Accel.z=BMI088.Accel[2];
 
-		INS.Gyro[X_AXIS] = BMI088.Gyro[X_AXIS];
-		INS.Gyro[Y_AXIS] = BMI088.Gyro[Y_AXIS];
+		INS.Gyro[Y_AXIS] = BMI088.Gyro[X_AXIS];
+		INS.Gyro[X_AXIS] = BMI088.Gyro[Y_AXIS];
 		INS.Gyro[Z_AXIS] = BMI088.Gyro[Z_AXIS];
 
 		Gyro.x=BMI088.Gyro[0];
@@ -178,17 +180,17 @@ void INS_task(void)
 		if(ins_time>2000.0f)
 		{
 			INS.v_n=INS.v_n+INS.MotionAccel_n[1]*0.001f;
-		  	INS.x_n=INS.x_n+INS.v_n*0.001f;
-			INS.ins_flag=1;//四元数基本收敛，加速度也基本收敛，可以开始底盘任务
+		  INS.x_n=INS.x_n+INS.v_n*0.001f;
 			// 获取最终数据
-			INS.Pitch=mahony.roll*180.0f/PI;
-			INS.Roll=mahony.pitch*180.0f/PI;
-			INS.Yaw=mahony.yaw*180.0f/PI;
-			// INS.Pitch=mahony.roll;
-			// INS.Roll=mahony.pitch;
-			// INS.Yaw=mahony.yaw;
+			// INS.Pitch=mahony.roll*180.0f/PI;
+			// INS.Roll=mahony.pitch*180.0f/PI;
+			// INS.Yaw=mahony.yaw*180.0f/PI;
+			INS.Roll=mahony.pitch;
+			INS.Pitch=mahony.roll;
+			INS.Yaw=mahony.yaw;
+      
+			INS.ins_flag=1;//四元数基本收敛，加速度也基本收敛，可以开始底盘任务
 		
-			INS.YawTotalAngle = QEKF_INS.YawTotalAngle;
 		}
 		else
 		{
@@ -206,28 +208,23 @@ void INS_task(void)
  * 
  */
 #ifdef INS_OF_HIPNUC
-
-hipnuc_raw_t HIPNUC;
+hipnuc_raw_t hipnuc_data;
 
 uint8_t uart_rx_buf[1024];
 uint16_t uart_rx_index = 0;
 uint8_t new_data_flag = 0;
 uint8_t rx_byte;
 
-static void AcquireData(void);
-
-
-
 void HIPNUC_Init(void)
 {
-	memset(&HIPNUC, 0, sizeof(hipnuc_raw_t));
-	new_data_flag = 0;
+  memset(&hipnuc_data, 0, sizeof(hipnuc_raw_t));
+  new_data_flag = 0;
 
-	__HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);
-	HAL_UART_Receive_IT(&huart1, &rx_byte, 1);
+  __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);
+  HAL_UART_Receive_IT(&huart1, &rx_byte, 1);
 }
 
-static void AcquireData(void)
+void Process_HIPNUC_Data(void)
 {
   char log_buf[1024];
   
@@ -237,25 +234,47 @@ static void AcquireData(void)
     for (uint16_t i = 0; i < uart_rx_index; i++)
     {
       /* code */
-      if (HipnucInput(uart_rx_buf[i], &HIPNUC))
+      if (HipnucInput(uart_rx_buf[i], &hipnuc_data))
       {
         /* code */
-        HipnucDumpPacket(&HIPNUC, log_buf, sizeof(log_buf));
+        HipnucDumpPacket(&hipnuc_data, log_buf, sizeof(log_buf));
       }
     }
     new_data_flag = 0;
     uart_rx_index = 0;
   }
-  
 }
 
 void INS_task(void)
 {
-	INS_Init();
-	
+  // HIPNUC_Init();
+  while (1)
+  {
+    /* code */
+    Process_HIPNUC_Data();
+
+    INS.Accel[X_AXIS] = hipnuc_data.hi91.acc[X_AXIS];
+    INS.Accel[Y_AXIS] = hipnuc_data.hi91.acc[Y_AXIS];
+    INS.Accel[Z_AXIS] = hipnuc_data.hi91.acc[Z_AXIS];
+
+    INS.Gyro[X_AXIS] = hipnuc_data.hi91.gyro[X_AXIS];
+    INS.Gyro[Y_AXIS] = hipnuc_data.hi91.gyro[Y_AXIS];
+    INS.Gyro[Z_AXIS] = hipnuc_data.hi91.gyro[Z_AXIS];
+
+    INS.q[0] = hipnuc_data.hi91.quaternion[0];
+    INS.q[1] = hipnuc_data.hi91.quaternion[1];
+    INS.q[2] = hipnuc_data.hi91.quaternion[2];
+    INS.q[3] = hipnuc_data.hi91.quaternion[3];
+
+    INS.Roll = hipnuc_data.hi91.roll * PI / 180.0f;
+    INS.Pitch = hipnuc_data.hi91.pitch * PI / 180.0f;
+    INS.Yaw = hipnuc_data.hi91.yaw * PI / 180.0f;
+
+    INS.ins_flag = 1;
+    osDelay(1);
+  }
 }
 
-//此回调有一缺陷，需在中断中检测空闲，待优化
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
   if (huart->Instance == USART1)
@@ -273,8 +292,9 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     uart_rx_index = 0;
   }
   HAL_UART_Receive_IT(&huart1, &rx_byte, 1);
+  
+  
 }
-
 #endif
 
 /**

@@ -39,7 +39,7 @@ build/Robot.o: Robot/RoboTask/Robot.c Robot/RoboTask/Robot.h \
  Robot/Controller/controller.h Bsp/bsp_dwt.h \
  Middlewares/ST/ARM/DSP/Inc/arm_math.h \
  Drivers/CMSIS/Include/cmsis_compiler.h Robot/Devices/motor_def.h \
- Robot/daemon/daemon.h
+ Robot/daemon/daemon.h Robot/RoboTask/remote/remote_task.h
 Robot/RoboTask/Robot.h:
 Core/Inc/spi.h:
 Core/Inc/main.h:
@@ -91,3 +91,4 @@ Middlewares/ST/ARM/DSP/Inc/arm_math.h:
 Drivers/CMSIS/Include/cmsis_compiler.h:
 Robot/Devices/motor_def.h:
 Robot/daemon/daemon.h:
+Robot/RoboTask/remote/remote_task.h:
