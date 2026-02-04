@@ -139,8 +139,6 @@ typedef struct
 
     float myPithR;
 	float myPithGyroR;
-	float myPithL;
-	float myPithGyroL;
     float total_yaw;
     float roll;
 
