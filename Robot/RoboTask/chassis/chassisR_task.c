@@ -28,9 +28,12 @@ extern INS_t INS;
 
 PidTypeDef LegR_pid;    //右腿腿长PID
 
-float LQR_K_R[2][6];
+float LQR_K_R[2][6] = {
+    {-8.973116618168689,	-0.673550201762786,	-0.360066358493418,	-0.846214660322890,	8.199359202435174,	0.843488553139154},
+    {35.260334676919378,	3.177413507736960,	2.041041348591034,	4.702010005595314,	39.261430584893219,	2.209194672639389}
+};
 // int8_t TRANSITION_MATRIX[10] = {0};
-
+static float current_prtR = 420;
 /**
  * @brief 底盘初始化,包括PID参数初始化，电机初始化
  * 
@@ -48,21 +51,14 @@ static void ChassisR_Init(chassis_t* chassis, PidTypeDef* length_pid)
     // 两个轮电机的参数一样,改tx_id和反转标志位即可
     Motor_Init_Config_s chassis_motor_configR = {
         .can_init_config.can_handle = &hcan2,
-        // .controller_param_init_config = {
-        //     .current_PID = {
-        //         .Kp = 0.5, // 0.4
-        //         .Ki = 0,   // 0
-        //         .Kd = 0,
-        //         .IntegralLimit = 3000,
-        //         .Improve = PID_Trapezoid_Intergral | PID_Integral_Limit | PID_Derivative_On_Measurement,
-        //         .MaxOut = 15000,
-        //     },
-        // },
         .controller_setting_init_config = {
             .angle_feedback_source = MOTOR_FEED,
             .speed_feedback_source = MOTOR_FEED,
-            .outer_loop_type = CURRENT_LOOP,
-            .close_loop_type = CURRENT_LOOP,
+            .outer_loop_type = OPEN_LOOP,
+            .close_loop_type = OPEN_LOOP,
+        },
+        .controller_param_init_config = {
+        .current_feedforward_ptr = &current_prtR,
         },
         .motor_type = M3508,
     };
@@ -74,7 +70,7 @@ static void ChassisR_Init(chassis_t* chassis, PidTypeDef* length_pid)
 
     //  @todo: 当前还没有设置电机的正反转,仍然需要手动添加reference的正负号,需要电机module的支持,待修改.
     chassis_motor_configR.can_init_config.tx_id = 2;
-    chassis_motor_configR.controller_setting_init_config.motor_reverse_flag = MOTOR_DIRECTION_REVERSE;
+    chassis_motor_configR.controller_setting_init_config.motor_reverse_flag = MOTOR_DIRECTION_NORMAL;
     chassis->wheel_motor[0] = DJIMotorInit(&chassis_motor_configR);
 
     //腿长PID初始化
@@ -110,8 +106,8 @@ static void ChassisR_Feedback_Update(chassis_t* chassis,Leg_t* leg, INS_t* ins, 
     SATURATE(&leg->joint.Phi4, -PI/3.0f, PI/2.0f);
     SATURATE(&leg->joint.Phi1, PI/2.0f, PI*4/3.0f);
 
-    chassis->myPithR = ins->Pitch;
-    chassis->myPithGyroR = ins->Gyro[1];
+    chassis->myPithR = -ins->Pitch;
+    chassis->myPithGyroR = -ins->Gyro[Y_AXIS];
 
     // L0
     leg->rod.d_L0 = leg->j11*leg->joint.d_Phi1 + leg->j12*leg->joint.d_Phi4;
@@ -198,29 +194,33 @@ static void ChasssisR_Control(
 
     ForwardKinematics(leg, excessive); 
 
-    Calc_LQR_K(lqr_k, leg->rod.L0, chassis->flag.is_take_off);
+    // Calc_LQR_K(lqr_k, leg->rod.L0, chassis->flag.is_take_off);
 
     // 状态向量更新--方便调试查看
     legR_state.theta     = X0_OFFSET + (leg->rod.theta - 0.0f);
     legR_state.theta_dot = X1_OFFSET + (leg->rod.d_theta - 0.0f);
-    // legR_state.x         = X2_OFFSET + (chassis->state.x_filter - chassis->state.x_set);
-    // legR_state.x_dot     = X3_OFFSET + (chassis->state.v_filter - chassis->state.v_set);
+    legR_state.x         = X2_OFFSET + (chassis->state.x_filter - chassis->state.x_set);
+    legR_state.x_dot     = X3_OFFSET + (chassis->state.v_filter - chassis->state.v_set);
     legR_state.phi       = X4_OFFSET + (chassis->myPithR - chassis->phi_set);
     legR_state.phi_dot   = X5_OFFSET + (chassis->myPithGyroR - 0.0f);
 
-    leg->rod.T = (    lqr_k[0][0] * legR_state.theta
+    leg->rod.T = (    
+                    + lqr_k[0][0] * legR_state.theta
                     + lqr_k[0][1] * legR_state.theta_dot
                     + lqr_k[0][2] * legR_state.x
                     + lqr_k[0][3] * legR_state.x_dot
                     + lqr_k[0][4] * legR_state.phi
-                    + lqr_k[0][5] * legR_state.phi_dot);
+                    + lqr_k[0][5] * legR_state.phi_dot
+                    );
 
-    leg->rod.Tp = (   lqr_k[1][0] * legR_state.theta
+    leg->rod.Tp = (   
+                    + lqr_k[1][0] * legR_state.theta
                     + lqr_k[1][1] * legR_state.theta_dot
                     + lqr_k[1][2] * legR_state.x
                     + lqr_k[1][3] * legR_state.x_dot
                     + lqr_k[1][4] * legR_state.phi
-                    + lqr_k[1][5] * legR_state.phi_dot);
+                    + lqr_k[1][5] * legR_state.phi_dot
+                    );
 
     // leg->rod.Tp = leg->rod.Tp + chassis->leg_tp;        //髋关节输出力矩
     // leg->rod.T = leg->rod.T - chassis->turn_T;          //轮毂关节输出力矩
@@ -247,7 +247,7 @@ static void ChasssisR_Control(
     //         chassis->state.x_set = chassis->state.x_filter;
     //     }
     // }
-    SATURATE(&leg->rod.F0, -200.0f, 200.0f);
+    SATURATE(&leg->rod.F0, -500.0f, 500.0f);
 
     JacobianMatrix(leg, excessive);
 
@@ -292,7 +292,8 @@ static void LimitChassisOutputR(chassis_t* chassis, Leg_t* leg)
 
 
     // 完成功率限制后进行电机参考输入设定
-    DJIMotorSetRef(chassis->wheel_motor[0], leg->rod.T/TOR_COEFFICIENT/REDUCTION_RATIO/EFFICIENCY);
+    DJIMotorSetRef(chassis->wheel_motor[0], FINAL_COEFFICIENT*leg->rod.T);
+    // DJIMotorSetRef(chassis->wheel_motor[0], 500);
 }
 
 /**
@@ -349,7 +350,7 @@ void ChassisR_Task(void)
             osDelay(CHASSIS_TIME);
             // 3508控制
             DJIMotorStop(chassis_move.wheel_motor[0]);
-            // DJIMotorSetRef(chassis_move.wheel_motor[0], 0.0f);
+            // DJIMotorSetRef(chassis_move.wheel_motor[0], 300.0f);
         }
         
     }

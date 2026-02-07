@@ -83,9 +83,6 @@ void Observe_Task(void)
     /* code */
     osDelay(1);
   }
-  // static float wr,wl = 0.0f;    //驱动轮转子相对大地角速度，这里定义的是顺时针为正（方向待定）
-  // static float vrb,vlb = 0.0f;  //机体b系的速度
-  // static float aver_v = 0.0f;
     
   xvEstimateKF_Init(&vaEstimateKF);
 
@@ -93,7 +90,7 @@ void Observe_Task(void)
   {
     /* code */
     observe_data.wr = -angle_to_radian(chassis_move.wheel_motor[0]->measure.speed_aps)-INS.Gyro[Y_AXIS]-legR.rod.d_phi0;
-    observe_data.wl = -angle_to_radian(chassis_move.wheel_motor[1]->measure.speed_aps)+INS.Gyro[Y_AXIS]-legR.rod.d_phi0;
+    observe_data.wl = -angle_to_radian(chassis_move.wheel_motor[1]->measure.speed_aps)+INS.Gyro[Y_AXIS]-legL.rod.d_phi0;
 
     // 公式意义：角速度 x 半径 + 角速度 x 长度 x cos(角度) + 长度变化量 x sin(角度)
     observe_data.vrb = observe_data.wr*WHEEL_RADIUS + legR.rod.L0*legR.rod.d_theta*arm_cos_f32(legR.rod.theta) + legR.rod.d_L0*arm_sin_f32(legR.rod.theta);

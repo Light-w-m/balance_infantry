@@ -16,8 +16,12 @@ extern INS_t INS;
 
 PidTypeDef LegL_pid;    //腿长PID
 
-float LQR_K_L[2][6];
+float LQR_K_L[2][6] = {
+   {-8.973116618168689,	-0.673550201762786,	-0.360066358493418,	-0.846214660322890,	8.199359202435174,	0.843488553139154},
+    {35.260334676919378,	3.177413507736960,	2.041041348591034,	4.702010005595314,	39.261430584893219,	2.209194672639389}
+};
 
+static float current_prtL = 0;
 /**
  * @brief 底盘初始化,包括PID参数初始化，电机初始化
  * 
@@ -29,22 +33,16 @@ static void ChassisL_Init(chassis_t* chassis, PidTypeDef* pid)
     // 两个轮电机的参数一样,改tx_id和反转标志位即可
     Motor_Init_Config_s chassis_motor_configL = {
         .can_init_config.can_handle = &hcan2,
-        // .controller_param_init_config = {
-        //     .current_PID = {
-        //         .Kp = 0.5, // 0.4
-        //         .Ki = 0,   // 0
-        //         .Kd = 0,
-        //         .IntegralLimit = 3000,
-        //         .Improve = PID_Trapezoid_Intergral | PID_Integral_Limit | PID_Derivative_On_Measurement,
-        //         .MaxOut = 15000,
-        //     },
-        // },
         .controller_setting_init_config = {
             .angle_feedback_source = MOTOR_FEED,
             .speed_feedback_source = MOTOR_FEED,
             .outer_loop_type = OPEN_LOOP,
             .close_loop_type = OPEN_LOOP,
+
             // .motor_reverse_flag = MOTOR_DIRECTION_NORMAL,
+        },
+        .controller_param_init_config = {
+        .current_feedforward_ptr = &current_prtL,
         },
         .motor_type = M3508,
     };
@@ -91,8 +89,8 @@ static void ChassisL_Feedback_Update(chassis_t* chassis,Leg_t* leg, INS_t* ins, 
     SATURATE(&leg->joint.Phi4, -PI/3.0f, PI/2.0f);
     SATURATE(&leg->joint.Phi1, PI/2.0f, PI*4/3.0f);
 
-    chassis->myPithL = -ins->Pitch;
-    chassis->myPithGyroL = -ins->Gyro[Y_AXIS];
+    chassis->myPithL = ins->Pitch;
+    chassis->myPithGyroL = ins->Gyro[Y_AXIS];
 
     // L0
     leg->rod.d_L0 = leg->j11*leg->joint.d_Phi1 + leg->j12*leg->joint.d_Phi4;
@@ -138,39 +136,43 @@ static void ChasssisL_Control(
     
     ForwardKinematics(leg, excessive); //该任务控制周期是3*0.001秒
 
-    Calc_LQR_K(lqr_k, leg->rod.L0, chassis->flag.is_take_off);
+    // Calc_LQR_K(lqr_k, leg->rod.L0, chassis->flag.is_take_off);
 
 
     // 状态向量更新--方便调试查看
     legL_state.theta     = X0_OFFSET + (leg->rod.theta - 0.0f);
     legL_state.theta_dot = X1_OFFSET + (leg->rod.d_theta - 0.0f);
-    // legL_state.x         = X2_OFFSET + (chassis->state.x_filter - chassis->state.x_set);
-    // legL_state.x_dot     = X3_OFFSET + (chassis->state.v_filter - chassis->state.v_set);
-    legL_state.phi       = X4_OFFSET + (chassis->myPithL - chassis->phi_set);
+    legL_state.x         = X2_OFFSET + (chassis->state.x_filter - chassis->state.x_set);
+    legL_state.x_dot     = X3_OFFSET + (chassis->state.v_filter - chassis->state.v_set);
+    legL_state.phi       = -X4_OFFSET + (chassis->myPithL - chassis->phi_set);
     legL_state.phi_dot   = X5_OFFSET + (chassis->myPithGyroL - 0.0f);
 
-    leg->rod.T = (    lqr_k[0][0] * legL_state.theta
+    leg->rod.T = (    
+                    + lqr_k[0][0] * legL_state.theta
                     + lqr_k[0][1] * legL_state.theta_dot
                     + lqr_k[0][2] * legL_state.x
                     + lqr_k[0][3] * legL_state.x_dot
                     + lqr_k[0][4] * legL_state.phi
-                    + lqr_k[0][5] * legL_state.phi_dot);
+                    + lqr_k[0][5] * legL_state.phi_dot
+                    );
 
-    leg->rod.Tp = (   lqr_k[1][0] * legL_state.theta
+    leg->rod.Tp = (  
+                    + lqr_k[1][0] * legL_state.theta
                     + lqr_k[1][1] * legL_state.theta_dot
                     + lqr_k[1][2] * legL_state.x
                     + lqr_k[1][3] * legL_state.x_dot
                     + lqr_k[1][4] * legL_state.phi
-                    + lqr_k[1][5] * legL_state.phi_dot);
+                    + lqr_k[1][5] * legL_state.phi_dot
+                    );
 
     // leg->rod.Tp = leg->rod.Tp + chassis->leg_tp;        //髋关节输出力矩
 
     //输出限幅
-    SATURATE(&leg->rod.T, -10.0f,10.0f);
+    SATURATE(&leg->rod.T, -20.0f, 20.0f);
 
     leg->rod.F0 = BODY_MASS * GRAVITY / arm_cos_f32(leg->rod.theta) / 2 
                     + PID_Calc(length_pid, leg->rod.L0, chassis->leg_set);
-    SATURATE(&leg->rod.F0, -200.0f, 200.0f);
+    SATURATE(&leg->rod.F0, -500.0f, 500.0f);
 
     JacobianMatrix(leg, excessive);
     
@@ -213,7 +215,8 @@ static void LimitChassisOutputL(chassis_t* chassis, Leg_t* leg)
 
 
     // 完成功率限制后进行电机参考输入设定
-    DJIMotorSetRef(chassis->wheel_motor[1], leg->rod.T);
+    DJIMotorSetRef(chassis->wheel_motor[1], -FINAL_COEFFICIENT*leg->rod.T);
+    // DJIMotorSetRef(chassis->wheel_motor[1], 470);
 }
 
 /**
@@ -250,8 +253,8 @@ void ChassisL_Task(void)
                 osDelay(CHASSIS_TIME);
                 Mit_Ctrl(&hfdcan1, chassis_move.joint_motor[3].para.id, 0.0f, 0.0f, 0.0f, 0.0f, legL.joint.T2);
                 osDelay(CHASSIS_TIME);
-                // 3508控制
-                // DJIMotorSetRef(chassis_move.wheel_motor[0], legR.rod.T);
+                // // 3508控制
+                // // DJIMotorSetRef(chassis_move.wheel_motor[0], legR.rod.T);
                 LimitChassisOutputL(&chassis_move, &legL);
             #endif
             #ifdef ControlDebug
@@ -268,7 +271,8 @@ void ChassisL_Task(void)
             Mit_Ctrl(&hfdcan1, chassis_move.joint_motor[3].para.id, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
             osDelay(CHASSIS_TIME);
             // 3508控制
-            DJIMotorSetRef(chassis_move.wheel_motor[1], 500.0f);
+            DJIMotorStop(chassis_move.wheel_motor[0]);
+            // DJIMotorSetRef(chassis_move.wheel_motor[1], 500.0f);
         }
         
     }

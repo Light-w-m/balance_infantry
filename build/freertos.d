@@ -53,8 +53,9 @@ build/freertos.o: Core/Src/freertos.c \
  Robot/RoboTask/chassis/chassisR_task.h Core/Inc/fdcan.h Core/Inc/main.h \
  Robot/RoboTask/chassis/chassisL_task.h \
  Robot/RoboTask/emulator/vofa_task.h Core/Inc/usart.h \
- Robot/RoboTask/remote/remote_task.h Robot/RoboTask/Robot.h \
- Core/Inc/spi.h
+ Robot/RoboTask/remote/remote_task.h \
+ Robot/RoboTask/observe/observe_task.h Robot/RoboTask/ins/INS_task.h \
+ Robot/RoboTask/Robot.h Core/Inc/spi.h
 Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
 Core/Inc/FreeRTOSConfig.h:
 Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h:
@@ -117,5 +118,7 @@ Robot/RoboTask/chassis/chassisL_task.h:
 Robot/RoboTask/emulator/vofa_task.h:
 Core/Inc/usart.h:
 Robot/RoboTask/remote/remote_task.h:
+Robot/RoboTask/observe/observe_task.h:
+Robot/RoboTask/ins/INS_task.h:
 Robot/RoboTask/Robot.h:
 Core/Inc/spi.h:

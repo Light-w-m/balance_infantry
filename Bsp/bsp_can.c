@@ -101,7 +101,7 @@ static void CANAddFilter(CANInstance *_instance)
 	fdcan_filter_conf.FilterIndex=(*filter_idx_p)++;
 	//使用单个ID模式
 	fdcan_filter_conf.FilterType=FDCAN_FILTER_DUAL;
-	fdcan_filter_conf.FilterConfig=(_instance->tx_id & 1) ? FDCAN_FILTER_TO_RXFIFO0 : FDCAN_FILTER_TO_RXFIFO1;//奇数id的模块会被分配到FIFO0,偶数id的模块会被分配到FIFO1
+	fdcan_filter_conf.FilterConfig=FDCAN_FILTER_TO_RXFIFO1;
 	fdcan_filter_conf.FilterID1=_instance->rx_id;
 	fdcan_filter_conf.FilterID2=_instance->rx_id;
 	fdcan_filter_conf.IdType=FDCAN_STANDARD_ID;
@@ -138,6 +138,7 @@ void CANServiceInit()
 	HAL_FDCAN_ConfigInterruptLines(&hfdcan2, FDCAN_RXActiveITs, FDCAN_INTERRUPT_LINE1);
 	HAL_FDCAN_Start(&hfdcan2);
 	HAL_FDCAN_ActivateNotification(&hfdcan2,FDCAN_RXActiveITs, 0);
+	// HAL_FDCAN_ActivateNotification(&hfdcan2,FDCAN_IT_RX_FIFO1_NEW_MESSAGE, 0);
 
 #endif
 
@@ -284,7 +285,8 @@ static void FDCANFIFOxCallback(FDCAN_HandleTypeDef *_hfdcan, uint32_t fifox)
 						memcpy(can_instance[i]->rx_buff, fdcan_rx_buff, can_instance[i]->rx_len); // 消息拷贝到对应实例
 						can_instance[i]->can_module_callback(can_instance[i]);     // 触发回调进行数据解析和处理
 					}
-					return;
+					// return;
+					break;
 				}
 			}
         }

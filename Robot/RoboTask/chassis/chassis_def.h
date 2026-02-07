@@ -41,15 +41,17 @@
 /**********************physical parameters*******************/
 #define GRAVITY 9.791f         // 重力加速度--福建
 
-#define BODY_MASS       4.0f       // 载体重量
+#define BODY_MASS       8.0f       // 载体重量
 #define WHEEL_MASS      0.0f       // 轮重量
 #define WHEEL_RADIUS    0.06f       // 轮子半径
 #define WHEEL_DISTANCE  0.435f       // 轮子间距
 
 #define TOR_COEFFICIENT 0.3f        // 电机电流扭矩系数
 #define REDUCTION_RATIO 15.7f        // 电机减速比
-#define EFFICIENCY     0.7f        // 传动效率
-
+#define EFFICIENCY      0.15f        // 传动效率 0.075
+#define CURRENT_LIMIT   20.0f       // 电机最大允许电流
+#define CURRENT_MAPPING 16384.0f  // 电机电流映射关系
+#define FINAL_COEFFICIENT (CURRENT_MAPPING/(CURRENT_LIMIT*TOR_COEFFICIENT*REDUCTION_RATIO*EFFICIENCY)) //最终电流映射系数
 /**********************chassis parameters*******************/
 // 支持力阈值，当支持力小于这个值时认为离地
 #define TAKE_OFF_FN_THRESHOLD (3.0f)
@@ -67,6 +69,9 @@
 // 扭矩
 #define MAX_TORQUE 10.0f    //关机最大输出扭矩 N·m
 
+// 速度
+#define MAX_CHASSIS_VEL 2.0f        //最大底盘速度 m/s
+
 /***********************length parameters****************/
 #define LEG1 0.21f
 #define LEG2 0.25f
@@ -74,7 +79,7 @@
 #define LEG4 0.21f
 
 #define LEG_RISE_LENGTH_SET 0.20f   //完成倒地自起时腿长
-#define LEG_DEFAULT 0.20f   //默认腿长
+#define LEG_DEFAULT 0.15f   //默认腿长
 
 /***********************pid parameters*******************/
 #define LEG_PID_KP  800.0f
@@ -106,7 +111,7 @@
 #define X1_OFFSET (0.0f)    // 目标theta_dot偏移量
 #define X2_OFFSET (0.0f)    // 目标x偏移量
 #define X3_OFFSET (0.0f)    // 目标x_dot偏移量
-#define X4_OFFSET (0.0f)    // 目标phi偏移量
+#define X4_OFFSET (-0.044f)    // 目标phi偏移量
 #define X5_OFFSET (0.0f)    // 目标phi_dot偏移量
   
 /**********************Step definitions*******************/

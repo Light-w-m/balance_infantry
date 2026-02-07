@@ -30,6 +30,7 @@
 #include "chassisL_task.h"
 #include "vofa_task.h"
 #include "remote_task.h"
+#include "observe_task.h"
 #include "Robot.h"
 /* USER CODE END Includes */
 
@@ -59,6 +60,7 @@ osThreadId CHASSISR_TASKHandle;
 osThreadId MOTORTASKHandle;
 osThreadId REMOTE_TASKHandle;
 osThreadId CHASSISL_TASKHandle;
+osThreadId OBSERVE_TASKHandle;
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -72,6 +74,7 @@ void StartChassisRTask(void const * argument);
 void StartMotorTask(void const * argument);
 void StartRemoteTask(void const * argument);
 void StartChassisLTask(void const * argument);
+void StartObserveTask(void const * argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -131,11 +134,11 @@ void MX_FREERTOS_Init(void) {
   VOFADEBUGHandle = osThreadCreate(osThread(VOFADEBUG), NULL);
 
   /* definition and creation of CHASSISR_TASK */
-  osThreadDef(CHASSISR_TASK, StartChassisRTask, osPriorityAboveNormal, 0, 1024);
+  osThreadDef(CHASSISR_TASK, StartChassisRTask, osPriorityAboveNormal, 0, 512);
   CHASSISR_TASKHandle = osThreadCreate(osThread(CHASSISR_TASK), NULL);
 
   /* definition and creation of MOTORTASK */
-  osThreadDef(MOTORTASK, StartMotorTask, osPriorityNormal, 0, 256);
+  osThreadDef(MOTORTASK, StartMotorTask, osPriorityAboveNormal, 0, 512);
   MOTORTASKHandle = osThreadCreate(osThread(MOTORTASK), NULL);
 
   /* definition and creation of REMOTE_TASK */
@@ -145,6 +148,10 @@ void MX_FREERTOS_Init(void) {
   /* definition and creation of CHASSISL_TASK */
   osThreadDef(CHASSISL_TASK, StartChassisLTask, osPriorityAboveNormal, 0, 512);
   CHASSISL_TASKHandle = osThreadCreate(osThread(CHASSISL_TASK), NULL);
+
+  /* definition and creation of OBSERVE_TASK */
+  osThreadDef(OBSERVE_TASK, StartObserveTask, osPriorityNormal, 0, 512);
+  OBSERVE_TASKHandle = osThreadCreate(osThread(OBSERVE_TASK), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -240,7 +247,7 @@ void StartMotorTask(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-    // MotorTask();
+    MotorTask();
     osDelay(1);
   }
   /* USER CODE END StartMotorTask */
@@ -282,6 +289,25 @@ void StartChassisLTask(void const * argument)
     osDelay(1);
   }
   /* USER CODE END StartChassisLTask */
+}
+
+/* USER CODE BEGIN Header_StartObserveTask */
+/**
+* @brief Function implementing the OBSERVE_TASK thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartObserveTask */
+void StartObserveTask(void const * argument)
+{
+  /* USER CODE BEGIN StartObserveTask */
+  /* Infinite loop */
+  for(;;)
+  {
+    // Observe_Task();
+    osDelay(1);
+  }
+  /* USER CODE END StartObserveTask */
 }
 
 /* Private application code --------------------------------------------------*/

@@ -22,36 +22,38 @@ void RobotCMDInit(void)
 }
 
 /**
- * @brief 腿长控制
- *        用遥控器积分得到目标腿长，防止突变
- * 
- */
-static void LengthControl(chassis_t* chassis)
-{
-    int16_t rc = rc_data[TEMP].rc.rocker_l_;
-    if (abs(rc) < 20) rc = 0;
-    float vel = MAX_LEG_VEL * (float)rc / 660.0f;               // 遥控器最大值660
-
-    // 斜波控制腿长
-    // float leg_vel = ramp_calc(&leg_ramp, vel);
-    // chassis->leg_set += leg_vel * ((float)CHASSIS_TIME) / 1000.0f; 
-    
-    
-    //   积分控制腿长
-    chassis->leg_set += vel * ((float)CHASSIS_TIME) / 500.0f;   // 控制周期单位ms
-    SATURATE(&chassis->leg_set, MIN_LEG_LENGTH, MAX_LEG_LENGTH);
-}
-
-/**
  * @brief 机器人控制
  * 
  */
-static void RemoteControlSet(void)
+static void RemoteControlSet(chassis_t* chassis)
 {
     #ifdef ControlOperation 
+    while (INS.ins_flag == 0) //等待INS初始化完成
+    {
+        /* code */
+        osDelay(1);
+    }
+    
+    // int16_t rc = rc_data[TEMP].rc.rocker_r_;
+    // if (abs(rc) < 20) rc = 0;
+    // float leg_vel = MAX_LEG_VEL * (float)(rc_data[TEMP].rc.rocker_r_) / 660.0f;               // 遥控器最大值660
+    float target_vel = MAX_CHASSIS_VEL * (float)(rc_data[TEMP].rc.rocker_r1) / 660.0f;
 
-    LengthControl(&chassis_move);
+    if (chassis->flag.start_flag == 1)
+    {
+        /* code */
 
+        // 斜波控制腿长
+        // float leg_vel = ramp_calc(&leg_ramp, vel);
+        // chassis->leg_set += leg_vel * ((float)CHASSIS_TIME) / 1000.0f; 
+        
+        //   积分控制腿长
+        // chassis->leg_set += leg_vel * ((float)CHASSIS_TIME) / 500.0f;   // 控制周期单位ms
+        SATURATE(&chassis->leg_set, MIN_LEG_LENGTH, MAX_LEG_LENGTH);
+
+        slope_following(&target_vel, &chassis->state.v_set, 0.005f);
+        // chassis->state.x_set += chassis->state.v_set * ((float)CHASSIS_TIME) / 500.0f;
+    }
     #endif
     
     #ifdef ControlDebug
@@ -77,5 +79,5 @@ static void EmergencyHandler()
 void Remote_Task(void)
 {
     chassis_move.flag.start_flag = 1;
-    RemoteControlSet();
+    RemoteControlSet(&chassis_move);
 }

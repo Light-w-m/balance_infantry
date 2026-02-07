@@ -1,4 +1,4 @@
-ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 1
+ARM GAS  D:\temp\TMP\ccfvFUGc.s 			page 1
 
 
    1              		.cpu cortex-m7
@@ -58,7 +58,7 @@ ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 1
    8:Robot/Devices/Motor/dmmotor.c **** uint32_t FloatTohex(float HEX)//浮点数到十六进制转换
    9:Robot/Devices/Motor/dmmotor.c **** {
   51              		.loc 1 9 1 is_stmt 1 view -0
-ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 2
+ARM GAS  D:\temp\TMP\ccfvFUGc.s 			page 2
 
 
   52              		.cfi_startproc
@@ -118,7 +118,7 @@ ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 1
   90 0000 31EE601A 		vsub.f32	s2, s2, s1
   91              	.LVL3:
   28:Robot/Devices/Motor/dmmotor.c **** 	float offset = x_min;
-ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 3
+ARM GAS  D:\temp\TMP\ccfvFUGc.s 			page 3
 
 
   92              		.loc 1 28 2 is_stmt 1 view .LVU11
@@ -178,7 +178,7 @@ ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 1
  133              		.loc 1 43 1 is_stmt 0 view .LVU22
  134 0000 07EE900A 		vmov	s15, r0	@ int
   44:Robot/Devices/Motor/dmmotor.c **** 	/* converts unsigned int to float, given range and number of bits */
-ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 4
+ARM GAS  D:\temp\TMP\ccfvFUGc.s 			page 4
 
 
   45:Robot/Devices/Motor/dmmotor.c **** 	float span = x_max - x_min;
@@ -238,7 +238,7 @@ ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 1
  177              		@ frame_needed = 0, uses_anonymous_args = 0
  178              		@ link register save eliminated.
   59:Robot/Devices/Motor/dmmotor.c ****   motor->mode=mode;
-ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 5
+ARM GAS  D:\temp\TMP\ccfvFUGc.s 			page 5
 
 
  179              		.loc 1 59 3 view .LVU36
@@ -298,7 +298,7 @@ ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 1
  218 0006 0B78     		ldrb	r3, [r1]	@ zero_extendqisi2
  219              		.loc 1 76 31 view .LVU45
  220 0008 03F00F03 		and	r3, r3, #15
-ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 6
+ARM GAS  D:\temp\TMP\ccfvFUGc.s 			page 6
 
 
  221              		.loc 1 76 17 view .LVU46
@@ -358,7 +358,7 @@ ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 1
  270 0042 FFF7FEFF 		bl	uint_to_float
  271              	.LVL14:
  272              		.loc 1 81 18 view .LVU71
-ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 7
+ARM GAS  D:\temp\TMP\ccfvFUGc.s 			page 7
 
 
  273 0046 84ED080A 		vstr.32	s0, [r4, #32]
@@ -418,7 +418,7 @@ ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 1
  322              		.section	.text.Clear_Error,"ax",%progbits
  323              		.align	1
  324              		.global	Clear_Error
-ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 8
+ARM GAS  D:\temp\TMP\ccfvFUGc.s 			page 8
 
 
  325              		.syntax unified
@@ -478,7 +478,7 @@ ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 1
  106:Robot/Devices/Motor/dmmotor.c **** 	data[4] = 0xFF;
  362              		.loc 1 106 2 is_stmt 1 view .LVU101
  363              		.loc 1 106 10 is_stmt 0 view .LVU102
-ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 9
+ARM GAS  D:\temp\TMP\ccfvFUGc.s 			page 9
 
 
  364 0018 8DF80430 		strb	r3, [sp, #4]
@@ -538,7 +538,7 @@ ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 1
  404              		.cfi_startproc
  405              		@ args = 0, pretend = 0, frame = 8
  406              		@ frame_needed = 0, uses_anonymous_args = 0
-ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 10
+ARM GAS  D:\temp\TMP\ccfvFUGc.s 			page 10
 
 
  407              		.loc 1 122 1 is_stmt 0 view .LVU114
@@ -598,7 +598,7 @@ ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 1
  448 002c 6A46     		mov	r2, sp
  449              	.LVL24:
  450              		.loc 1 135 2 is_stmt 0 view .LVU135
-ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 11
+ARM GAS  D:\temp\TMP\ccfvFUGc.s 			page 11
 
 
  451 002e 89B2     		uxth	r1, r1
@@ -658,7 +658,7 @@ ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 1
  492              		.loc 1 150 10 is_stmt 0 view .LVU144
  493 0006 FF23     		movs	r3, #255
  494 0008 8DF80030 		strb	r3, [sp]
-ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 12
+ARM GAS  D:\temp\TMP\ccfvFUGc.s 			page 12
 
 
  151:Robot/Devices/Motor/dmmotor.c **** 	data[1] = 0xFF;
@@ -718,7 +718,7 @@ ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 1
  540              		.thumb_func
  542              	Save_Pos_Zero:
  543              	.LVL30:
-ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 13
+ARM GAS  D:\temp\TMP\ccfvFUGc.s 			page 13
 
 
  544              	.LFB153:
@@ -778,7 +778,7 @@ ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 1
  579              		.loc 1 179 10 is_stmt 0 view .LVU179
  580 001c 8DF80530 		strb	r3, [sp, #5]
  180:Robot/Devices/Motor/dmmotor.c **** 	data[6] = 0xFF;
-ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 14
+ARM GAS  D:\temp\TMP\ccfvFUGc.s 			page 14
 
 
  581              		.loc 1 180 2 is_stmt 1 view .LVU180
@@ -838,7 +838,7 @@ ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 1
  616              		.loc 1 201 1 is_stmt 1 view -0
  617              		.cfi_startproc
  618              		@ args = 0, pretend = 0, frame = 8
-ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 15
+ARM GAS  D:\temp\TMP\ccfvFUGc.s 			page 15
 
 
  619              		@ frame_needed = 0, uses_anonymous_args = 0
@@ -898,7 +898,7 @@ ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 1
  668              		.loc 1 206 10 view .LVU199
  669 002e 1FFA80FB 		uxth	fp, r0
  670              	.LVL40:
-ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 16
+ARM GAS  D:\temp\TMP\ccfvFUGc.s 			page 16
 
 
  207:Robot/Devices/Motor/dmmotor.c **** 	vel_tmp = float_to_uint(vel,  V_MIN,  V_MAX,  12);
@@ -958,7 +958,7 @@ ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 1
  719              	.LVL49:
  720              		.loc 1 212 10 view .LVU214
  721 008a 8DF800B0 		strb	fp, [sp]
-ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 17
+ARM GAS  D:\temp\TMP\ccfvFUGc.s 			page 17
 
 
  213:Robot/Devices/Motor/dmmotor.c **** 	data[1] = pos_tmp;
@@ -1018,7 +1018,7 @@ ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 1
  766              		.cfi_def_cfa_offset 52
  767              		@ sp needed
  768 00ca BDEC048B 		vldm	sp!, {d8-d9}
-ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 18
+ARM GAS  D:\temp\TMP\ccfvFUGc.s 			page 18
 
 
  769              	.LCFI19:
@@ -1078,7 +1078,7 @@ ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 1
  812 0004 8DED000A 		vstr.32	s0, [sp]
  813 0008 CDED010A 		vstr.32	s1, [sp, #4]
  236:Robot/Devices/Motor/dmmotor.c **** 	uint16_t id;
-ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 19
+ARM GAS  D:\temp\TMP\ccfvFUGc.s 			page 19
 
 
  814              		.loc 1 236 2 is_stmt 1 view .LVU239
@@ -1138,7 +1138,7 @@ ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 1
  252:Robot/Devices/Motor/dmmotor.c **** 	data[7] = *(vbuf+3);
  853              		.loc 1 252 2 is_stmt 1 view .LVU262
  854              		.loc 1 252 10 is_stmt 0 view .LVU263
-ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 20
+ARM GAS  D:\temp\TMP\ccfvFUGc.s 			page 20
 
 
  855 0044 C3F30763 		ubfx	r3, r3, #24, #8
@@ -1198,7 +1198,7 @@ ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 1
  895 0002 85B0     		sub	sp, sp, #20
  896              	.LCFI24:
  897              		.cfi_def_cfa_offset 24
-ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 21
+ARM GAS  D:\temp\TMP\ccfvFUGc.s 			page 21
 
 
  898 0004 8DED010A 		vstr.32	s0, [sp, #4]
@@ -1258,7 +1258,7 @@ ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 1
  938              		.cfi_endproc
  939              	.LFE156:
  941              		.text
-ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 22
+ARM GAS  D:\temp\TMP\ccfvFUGc.s 			page 22
 
 
  942              	.Letext0:
@@ -1270,39 +1270,39 @@ ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 1
  948              		.file 7 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_fdcan.h"
  949              		.file 8 "Bsp/bsp_can.h"
  950              		.file 9 "Robot/Devices/Motor/dmmotor.h"
-ARM GAS  D:\temp\TMP\ccs39CZ0.s 			page 23
+ARM GAS  D:\temp\TMP\ccfvFUGc.s 			page 23
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 dmmotor.c
-D:\temp\TMP\ccs39CZ0.s:19     .text.Hex_To_Float:00000000 $t
-D:\temp\TMP\ccs39CZ0.s:25     .text.Hex_To_Float:00000000 Hex_To_Float
-D:\temp\TMP\ccs39CZ0.s:42     .text.FloatTohex:00000000 $t
-D:\temp\TMP\ccs39CZ0.s:48     .text.FloatTohex:00000000 FloatTohex
-D:\temp\TMP\ccs39CZ0.s:74     .text.float_to_uint:00000000 $t
-D:\temp\TMP\ccs39CZ0.s:80     .text.float_to_uint:00000000 float_to_uint
-D:\temp\TMP\ccs39CZ0.s:119    .text.uint_to_float:00000000 $t
-D:\temp\TMP\ccs39CZ0.s:125    .text.uint_to_float:00000000 uint_to_float
-D:\temp\TMP\ccs39CZ0.s:165    .text.joint_motor_init:00000000 $t
-D:\temp\TMP\ccs39CZ0.s:171    .text.joint_motor_init:00000000 joint_motor_init
-D:\temp\TMP\ccs39CZ0.s:191    .text.Dm8009_Fbdata:00000000 $t
-D:\temp\TMP\ccs39CZ0.s:197    .text.Dm8009_Fbdata:00000000 Dm8009_Fbdata
-D:\temp\TMP\ccs39CZ0.s:317    .text.Dm8009_Fbdata:00000090 $d
-D:\temp\TMP\ccs39CZ0.s:323    .text.Clear_Error:00000000 $t
-D:\temp\TMP\ccs39CZ0.s:329    .text.Clear_Error:00000000 Clear_Error
-D:\temp\TMP\ccs39CZ0.s:394    .text.Enable_Motor_Mode:00000000 $t
-D:\temp\TMP\ccs39CZ0.s:400    .text.Enable_Motor_Mode:00000000 Enable_Motor_Mode
-D:\temp\TMP\ccs39CZ0.s:465    .text.Disable_Motor_Mode:00000000 $t
-D:\temp\TMP\ccs39CZ0.s:471    .text.Disable_Motor_Mode:00000000 Disable_Motor_Mode
-D:\temp\TMP\ccs39CZ0.s:536    .text.Save_Pos_Zero:00000000 $t
-D:\temp\TMP\ccs39CZ0.s:542    .text.Save_Pos_Zero:00000000 Save_Pos_Zero
-D:\temp\TMP\ccs39CZ0.s:607    .text.Mit_Ctrl:00000000 $t
-D:\temp\TMP\ccs39CZ0.s:613    .text.Mit_Ctrl:00000000 Mit_Ctrl
-D:\temp\TMP\ccs39CZ0.s:783    .text.Mit_Ctrl:000000d4 $d
-D:\temp\TMP\ccs39CZ0.s:791    .text.Pos_Speed_Ctrl:00000000 $t
-D:\temp\TMP\ccs39CZ0.s:797    .text.Pos_Speed_Ctrl:00000000 Pos_Speed_Ctrl
-D:\temp\TMP\ccs39CZ0.s:877    .text.Speed_Ctrl:00000000 $t
-D:\temp\TMP\ccs39CZ0.s:883    .text.Speed_Ctrl:00000000 Speed_Ctrl
+D:\temp\TMP\ccfvFUGc.s:19     .text.Hex_To_Float:00000000 $t
+D:\temp\TMP\ccfvFUGc.s:25     .text.Hex_To_Float:00000000 Hex_To_Float
+D:\temp\TMP\ccfvFUGc.s:42     .text.FloatTohex:00000000 $t
+D:\temp\TMP\ccfvFUGc.s:48     .text.FloatTohex:00000000 FloatTohex
+D:\temp\TMP\ccfvFUGc.s:74     .text.float_to_uint:00000000 $t
+D:\temp\TMP\ccfvFUGc.s:80     .text.float_to_uint:00000000 float_to_uint
+D:\temp\TMP\ccfvFUGc.s:119    .text.uint_to_float:00000000 $t
+D:\temp\TMP\ccfvFUGc.s:125    .text.uint_to_float:00000000 uint_to_float
+D:\temp\TMP\ccfvFUGc.s:165    .text.joint_motor_init:00000000 $t
+D:\temp\TMP\ccfvFUGc.s:171    .text.joint_motor_init:00000000 joint_motor_init
+D:\temp\TMP\ccfvFUGc.s:191    .text.Dm8009_Fbdata:00000000 $t
+D:\temp\TMP\ccfvFUGc.s:197    .text.Dm8009_Fbdata:00000000 Dm8009_Fbdata
+D:\temp\TMP\ccfvFUGc.s:317    .text.Dm8009_Fbdata:00000090 $d
+D:\temp\TMP\ccfvFUGc.s:323    .text.Clear_Error:00000000 $t
+D:\temp\TMP\ccfvFUGc.s:329    .text.Clear_Error:00000000 Clear_Error
+D:\temp\TMP\ccfvFUGc.s:394    .text.Enable_Motor_Mode:00000000 $t
+D:\temp\TMP\ccfvFUGc.s:400    .text.Enable_Motor_Mode:00000000 Enable_Motor_Mode
+D:\temp\TMP\ccfvFUGc.s:465    .text.Disable_Motor_Mode:00000000 $t
+D:\temp\TMP\ccfvFUGc.s:471    .text.Disable_Motor_Mode:00000000 Disable_Motor_Mode
+D:\temp\TMP\ccfvFUGc.s:536    .text.Save_Pos_Zero:00000000 $t
+D:\temp\TMP\ccfvFUGc.s:542    .text.Save_Pos_Zero:00000000 Save_Pos_Zero
+D:\temp\TMP\ccfvFUGc.s:607    .text.Mit_Ctrl:00000000 $t
+D:\temp\TMP\ccfvFUGc.s:613    .text.Mit_Ctrl:00000000 Mit_Ctrl
+D:\temp\TMP\ccfvFUGc.s:783    .text.Mit_Ctrl:000000d4 $d
+D:\temp\TMP\ccfvFUGc.s:791    .text.Pos_Speed_Ctrl:00000000 $t
+D:\temp\TMP\ccfvFUGc.s:797    .text.Pos_Speed_Ctrl:00000000 Pos_Speed_Ctrl
+D:\temp\TMP\ccfvFUGc.s:877    .text.Speed_Ctrl:00000000 $t
+D:\temp\TMP\ccfvFUGc.s:883    .text.Speed_Ctrl:00000000 Speed_Ctrl
 
 UNDEFINED SYMBOLS
 canx_send_data

@@ -168,6 +168,8 @@ float theta_format(float Ang);
 
 int float_rounding(float raw);
 
+void slope_following(float *target,float *set,float acc);
+
 float angle_to_radian(float angle);
 float radian_to_angle(float radian);
 

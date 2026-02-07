@@ -11,6 +11,14 @@
     joint_motor[3]   ||     joint_motor[1]
         左           前          右
 
+    wheel_motor[1]           wheel_motor[0]
+        1                        2
+
+    遥控器控制：
+        
+
+
+
     完成进度:
         已完成：
             未测试：
