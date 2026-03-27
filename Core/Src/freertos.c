@@ -209,7 +209,7 @@ void StartVofaDebug(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-    // VofaDebug_Task();
+    VofaDebug_Task();
     osDelay(1);
   }
   /* USER CODE END StartVofaDebug */

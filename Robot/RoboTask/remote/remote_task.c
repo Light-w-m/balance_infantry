@@ -38,6 +38,7 @@ static void RemoteControlSet(chassis_t* chassis)
     // if (abs(rc) < 20) rc = 0;
     // float leg_vel = MAX_LEG_VEL * (float)(rc_data[TEMP].rc.rocker_r_) / 660.0f;               // 遥控器最大值660
     float target_vel = MAX_CHASSIS_VEL * (float)(rc_data[TEMP].rc.rocker_r1) / 660.0f;
+    chassis->reference.wz = 0;
 
     if (chassis->flag.start_flag == 1)
     {

@@ -46,9 +46,11 @@
 #define WHEEL_RADIUS    0.06f       // 轮子半径
 #define WHEEL_DISTANCE  0.435f       // 轮子间距
 
+#define OFFSET          0.68f        //关节补偿系数
+
 #define TOR_COEFFICIENT 0.3f        // 电机电流扭矩系数
 #define REDUCTION_RATIO 15.7f        // 电机减速比
-#define EFFICIENCY      0.15f        // 传动效率 0.075
+#define EFFICIENCY      0.1f        // 传动效率 0.075
 #define CURRENT_LIMIT   20.0f       // 电机最大允许电流
 #define CURRENT_MAPPING 16384.0f  // 电机电流映射关系
 #define FINAL_COEFFICIENT (CURRENT_MAPPING/(CURRENT_LIMIT*TOR_COEFFICIENT*REDUCTION_RATIO*EFFICIENCY)) //最终电流映射系数
@@ -65,9 +67,11 @@
 #define MAX_LEG_LENGTH 0.32f
 #define MIN_LEG_LENGTH 0.15f
 #define MAX_LEG_VEL 0.2f    //最大腿长变化速度 m/s
+// #define CENTER (MAX_LEG_LENGTH + MIN_LEG_LENGTH)/2
+// #define RANGE 0.085         
 
 // 扭矩
-#define MAX_TORQUE 10.0f    //关机最大输出扭矩 N·m
+#define MAX_TORQUE 8.0f    //关机最大输出扭矩 N·m
 
 // 速度
 #define MAX_CHASSIS_VEL 2.0f        //最大底盘速度 m/s
@@ -79,7 +83,7 @@
 #define LEG4 0.21f
 
 #define LEG_RISE_LENGTH_SET 0.20f   //完成倒地自起时腿长
-#define LEG_DEFAULT 0.15f   //默认腿长
+#define LEG_DEFAULT 0.20f   //默认腿长
 
 /***********************pid parameters*******************/
 #define LEG_PID_KP  800.0f
@@ -87,6 +91,20 @@
 #define LEG_PID_KD  16000.0f
 #define LEG_PID_MAX_OUT  100.0f //90ţ
 #define LEG_PID_MAX_IOUT 0.0f
+
+#define Pitch_ki 0.1f
+
+#define PITCH_V_PID_KP 1.2f
+#define PITCH_V_PID_KI 0.0f 
+#define PITCH_V_PID_KD 0.5f
+#define PITCH_V_PID_MAX_OUT  10.0f
+#define PITCH_V_PID_MAX_IOUT 0.0f
+
+#define PITCH_PID_KP 8.0f
+#define PITCH_PID_KI 0.0f 
+#define PITCH_PID_KD 0.0f
+#define PITCH_PID_MAX_OUT  5.0f
+#define PITCH_PID_MAX_IOUT 0.0f
 
 #define ROLL_PID_KP 140.0f
 #define ROLL_PID_KI 0.0f 
@@ -97,21 +115,30 @@
 #define TP_PID_KP 30.0f
 #define TP_PID_KI 0.0f 
 #define TP_PID_KD 1.0f
-#define TP_PID_MAX_OUT  2.0f
+#define TP_PID_MAX_OUT  0.0f
 #define TP_PID_MAX_IOUT 0.0f
+
+#define kp_Yaw 0.0f
 
 #define TURN_PID_KP 2.5f
 #define TURN_PID_KI 0.0f 
 #define TURN_PID_KD 0.3f
-#define TURN_PID_MAX_OUT  1.0f//轮毂电机的额定扭矩
+#define TURN_PID_MAX_OUT  5.0f//轮毂电机的额定扭矩
 #define TURN_PID_MAX_IOUT 0.0f
 
+// #define WHEEL_PID_KP 0.5f
+// #define WHEEL_PID_KI 0.0f
+// #define WHEEL_PID_KD 0.1f
+// #define WHEEL_PID_MAX_OUT  16384.0f//电机最大允许电流
+// #define WHEEL_PID_MAX_IOUT -16384.0f
+
 /**********************offset parameters*******************/
-#define X0_OFFSET (0.0f)    // 目标theta偏移量
+#define THETA_OFFSET (-0.0f)    //腿角偏移量
+#define X0_OFFSET (0.15f)    // 目标theta偏移量
 #define X1_OFFSET (0.0f)    // 目标theta_dot偏移量
 #define X2_OFFSET (0.0f)    // 目标x偏移量
 #define X3_OFFSET (0.0f)    // 目标x_dot偏移量
-#define X4_OFFSET (-0.044f)    // 目标phi偏移量
+#define X4_OFFSET (0.0f)    // 目标phi偏移量
 #define X5_OFFSET (0.0f)    // 目标phi_dot偏移量
   
 /**********************Step definitions*******************/
@@ -173,6 +200,8 @@ typedef struct
 
         float gx, gy, gz;  //重力加速度在机体坐标系下的分量，用于消除重力加速度对加速度计的影响
 
+        float pitch;
+        float pitch_dot;
         float roll;
         float roll_dot;
         float yaw;
@@ -188,6 +217,8 @@ typedef struct
 
     struct reference
     {
+        float pitch;
+        float pitch_dot;
         float roll;
         float roll_dot;
         float yaw;
@@ -198,11 +229,17 @@ typedef struct
         float wz;  // (rad/s) 旋转速度
     } reference;
 
+    struct bias
+    {
+	    float theta_err;
+        float myPitch;  //自适应重心误差补偿
+        float error;
+    } bias;
+
     float turn_set;     //期望yaw轴弧度
 	float roll_set;	    //期望roll轴弧度
 
     float phi_set;
-	float theta_set;
     float leg_set;      //期望腿长
 
     float myPithR;
@@ -211,6 +248,7 @@ typedef struct
 	float myPithGyroL;
     // float total_yaw;
 
+    float pitch_T;      //俯仰角补偿
     float turn_T;       //yaw补偿
     float roll_T;       //roll补偿
     float leg_tp;       //防劈叉补偿

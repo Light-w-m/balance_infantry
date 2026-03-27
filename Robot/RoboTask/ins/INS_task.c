@@ -120,16 +120,16 @@ void INS_task(void)
 
 		BMI088_Read(&BMI088);
 
-		INS.Accel[Y_AXIS] = BMI088.Accel[X_AXIS];
-		INS.Accel[X_AXIS] = BMI088.Accel[Y_AXIS];
+		INS.Accel[X_AXIS] = BMI088.Accel[X_AXIS];
+		INS.Accel[Y_AXIS] = BMI088.Accel[Y_AXIS];
 		INS.Accel[Z_AXIS] = BMI088.Accel[Z_AXIS];
 
 		Accel.x=BMI088.Accel[0];
 		Accel.y=BMI088.Accel[1];
 		Accel.z=BMI088.Accel[2];
 
-		INS.Gyro[Y_AXIS] = BMI088.Gyro[X_AXIS];
-		INS.Gyro[X_AXIS] = BMI088.Gyro[Y_AXIS];
+		INS.Gyro[X_AXIS] = BMI088.Gyro[X_AXIS];
+		INS.Gyro[Y_AXIS] = BMI088.Gyro[Y_AXIS];
 		INS.Gyro[Z_AXIS] = BMI088.Gyro[Z_AXIS];
 
 		Gyro.x=BMI088.Gyro[0];
@@ -217,10 +217,10 @@ uint8_t rx_byte;
 
 void HIPNUC_Init(void)
 {
-  memset(&hipnuc_data, 0, sizeof(hipnuc_raw_t));
-  new_data_flag = 0;
+  // memset(&hipnuc_data, 0, sizeof(hipnuc_raw_t));
+  // new_data_flag = 0;
 
-  __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);
+  // __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);
   HAL_UART_Receive_IT(&huart1, &rx_byte, 1);
 }
 
@@ -245,30 +245,60 @@ void Process_HIPNUC_Data(void)
   }
 }
 
+typedef struct 
+{
+  /* data */
+  float yaw, pitch, roll,accx,accy,accz,gyrx,gyry,gyrz;
+}data;
+
+uint8_t a[100];
+uint8_t imu_rx_byte;
+uint16_t imu_rx_cnt = 0;
+data imu_data;
+#define IMU_FRAME_LEN  82
+static float    R4(uint8_t *p) {float r; memcpy(&r,p,4); return r;}
+void hi05()
+{
+    if (a[0]==0x5A && a[1]==0xA5&& a[6]==0x91)
+    {
+        /* code */
+        imu_data.accx=R4(&a[12+6])*GRAVITY;
+        imu_data.accy=R4(&a[16+6])*GRAVITY;
+        imu_data.accz=R4(&a[20+6])*GRAVITY;
+        imu_data.gyrx=R4(&a[24+6]) * PI / 180.0f;
+        imu_data.gyry=R4(&a[28+6]) * PI / 180.0f;
+        imu_data.gyrz=R4(&a[32+6]) * PI / 180.0f;
+        imu_data.roll=R4(&a[48+6]) * PI / 180.0f;
+        imu_data.pitch=R4(&a[52+6]) * PI / 180.0f;
+        imu_data.yaw=R4(&a[56+6]) * PI / 180.0f;
+    }
+    
+}
 void INS_task(void)
 {
   // HIPNUC_Init();
   while (1)
   {
     /* code */
-    Process_HIPNUC_Data();
+    // Process_HIPNUC_Data();
 
-    INS.Accel[X_AXIS] = hipnuc_data.hi91.acc[X_AXIS];
-    INS.Accel[Y_AXIS] = hipnuc_data.hi91.acc[Y_AXIS];
-    INS.Accel[Z_AXIS] = hipnuc_data.hi91.acc[Z_AXIS];
+    // INS.Accel[X_AXIS] = -hipnuc_data.hi91.acc[X_AXIS];
+    // INS.Accel[Y_AXIS] = hipnuc_data.hi91.acc[Y_AXIS];
+    // INS.Accel[Z_AXIS] = hipnuc_data.hi91.acc[Z_AXIS];
 
-    INS.Gyro[X_AXIS] = hipnuc_data.hi91.gyro[X_AXIS];
-    INS.Gyro[Y_AXIS] = hipnuc_data.hi91.gyro[Y_AXIS];
-    INS.Gyro[Z_AXIS] = hipnuc_data.hi91.gyro[Z_AXIS];
+    // INS.Gyro[X_AXIS] = -hipnuc_data.hi91.gyro[X_AXIS] * PI / 180.0f;
+    // INS.Gyro[Y_AXIS] = hipnuc_data.hi91.gyro[Y_AXIS] * PI / 180.0f;
+    // INS.Gyro[Z_AXIS] = hipnuc_data.hi91.gyro[Z_AXIS] * PI / 180.0f;
 
-    INS.q[0] = hipnuc_data.hi91.quaternion[0];
-    INS.q[1] = hipnuc_data.hi91.quaternion[1];
-    INS.q[2] = hipnuc_data.hi91.quaternion[2];
-    INS.q[3] = hipnuc_data.hi91.quaternion[3];
+    // INS.q[0] = hipnuc_data.hi91.quaternion[0];
+    // INS.q[1] = hipnuc_data.hi91.quaternion[1];
+    // INS.q[2] = hipnuc_data.hi91.quaternion[2];
+    // INS.q[3] = hipnuc_data.hi91.quaternion[3];
 
-    INS.Roll = hipnuc_data.hi91.roll * PI / 180.0f;
-    INS.Pitch = hipnuc_data.hi91.pitch * PI / 180.0f;
-    INS.Yaw = hipnuc_data.hi91.yaw * PI / 180.0f;
+    // INS.Roll = hipnuc_data.hi91.pitch * PI / 180.0f;
+    // INS.Pitch = hipnuc_data.hi91.roll * PI / 180.0f;
+    // INS.Yaw = hipnuc_data.hi91.yaw * PI / 180.0f;
+    
 
     INS.ins_flag = 1;
     osDelay(1);
@@ -277,22 +307,50 @@ void INS_task(void)
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-  if (huart->Instance == USART1)
+  // if (huart->Instance == USART1)
+  // {
+  //   /* code */
+  //   if (uart_rx_index < 1024)
+  //   {
+  //     /* code */
+  //     uart_rx_buf[uart_rx_index++] = rx_byte;
+  //   }
+  // }
+  // else
+  // {
+  //   /* code */
+  //   uart_rx_index = 0;
+  // }
+  // HAL_UART_Receive_IT(&huart1, &rx_byte, 1);
+  if(huart->Instance == USART1)
   {
     /* code */
-    if (uart_rx_index < 1024)
+    a[imu_rx_cnt++] = imu_rx_byte;
+
+    if (imu_rx_cnt >= 2)
     {
       /* code */
-      uart_rx_buf[uart_rx_index++] = rx_byte;
+      if (a[0] != 0x5A || a[1] != 0xA5)
+      {
+        a[0] = a[1];
+        imu_rx_cnt = 1;  // 丢弃错位
+      }
     }
+
+    if (imu_rx_cnt >= IMU_FRAME_LEN)
+    {
+      if(a[6] == 0x91)
+      {
+        hi05();         
+      }
+      imu_rx_cnt = 0;  
+    }
+    if(imu_rx_cnt >= 100)
+    {
+      imu_rx_cnt = 0;  
+    } 
   }
-  else
-  {
-    /* code */
-    uart_rx_index = 0;
-  }
-  HAL_UART_Receive_IT(&huart1, &rx_byte, 1);
-  
+  HAL_UART_Receive_IT(&huart1, &imu_rx_byte, 1);
   
 }
 #endif

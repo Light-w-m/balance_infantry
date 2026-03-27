@@ -1,4 +1,4 @@
-ARM GAS  D:\temp\TMP\ccS01sgv.s 			page 1
+ARM GAS  D:\temp\TMP\ccs0IGdc.s 			page 1
 
 
    1              		.cpu cortex-m7
@@ -58,7 +58,7 @@ ARM GAS  D:\temp\TMP\ccS01sgv.s 			page 1
   39 005c 4F425345 		.ascii	"OBSERVE_TASK\000"
   39      5256455F 
   39      5441534B 
-ARM GAS  D:\temp\TMP\ccS01sgv.s 			page 2
+ARM GAS  D:\temp\TMP\ccs0IGdc.s 			page 2
 
 
   39      00
@@ -118,7 +118,7 @@ ARM GAS  D:\temp\TMP\ccS01sgv.s 			page 1
   42:Core/Src/freertos.c **** /* Private define ------------------------------------------------------------*/
   43:Core/Src/freertos.c **** /* USER CODE BEGIN PD */
   44:Core/Src/freertos.c **** 
-ARM GAS  D:\temp\TMP\ccS01sgv.s 			page 3
+ARM GAS  D:\temp\TMP\ccs0IGdc.s 			page 3
 
 
   45:Core/Src/freertos.c **** /* USER CODE END PD */
@@ -178,7 +178,7 @@ ARM GAS  D:\temp\TMP\ccS01sgv.s 			page 1
   99:Core/Src/freertos.c ****   * @param  None
  100:Core/Src/freertos.c ****   * @retval None
  101:Core/Src/freertos.c ****   */
-ARM GAS  D:\temp\TMP\ccS01sgv.s 			page 4
+ARM GAS  D:\temp\TMP\ccs0IGdc.s 			page 4
 
 
  102:Core/Src/freertos.c **** void MX_FREERTOS_Init(void) {
@@ -238,7 +238,7 @@ ARM GAS  D:\temp\TMP\ccS01sgv.s 			page 1
  156:Core/Src/freertos.c ****   /* USER CODE BEGIN RTOS_THREADS */
  157:Core/Src/freertos.c ****   /* add threads, ... */
  158:Core/Src/freertos.c ****   /* USER CODE END RTOS_THREADS */
-ARM GAS  D:\temp\TMP\ccS01sgv.s 			page 5
+ARM GAS  D:\temp\TMP\ccs0IGdc.s 			page 5
 
 
  159:Core/Src/freertos.c **** 
@@ -282,14 +282,14 @@ ARM GAS  D:\temp\TMP\ccS01sgv.s 			page 1
   73 0008 FBE7     		b	.L2
   74              		.cfi_endproc
   75              	.LFE154:
-  77              		.section	.text.StartVofaDebug,"ax",%progbits
+  77              		.section	.text.StartObserveTask,"ax",%progbits
   78              		.align	1
-  79              		.global	StartVofaDebug
+  79              		.global	StartObserveTask
   80              		.syntax unified
   81              		.thumb
   82              		.thumb_func
-  84              	StartVofaDebug:
-  85              	.LFB156:
+  84              	StartObserveTask:
+  85              	.LFB161:
  176:Core/Src/freertos.c ****   }
  177:Core/Src/freertos.c ****   /* USER CODE END StartDefaultTask */
  178:Core/Src/freertos.c **** }
@@ -298,7 +298,7 @@ ARM GAS  D:\temp\TMP\ccS01sgv.s 			page 1
  181:Core/Src/freertos.c **** /**
  182:Core/Src/freertos.c **** * @brief Function implementing the INS_TASK thread.
  183:Core/Src/freertos.c **** * @param argument: Not used
-ARM GAS  D:\temp\TMP\ccS01sgv.s 			page 6
+ARM GAS  D:\temp\TMP\ccs0IGdc.s 			page 6
 
 
  184:Core/Src/freertos.c **** * @retval None
@@ -325,47 +325,12 @@ ARM GAS  D:\temp\TMP\ccS01sgv.s 			page 1
  205:Core/Src/freertos.c **** /* USER CODE END Header_StartVofaDebug */
  206:Core/Src/freertos.c **** void StartVofaDebug(void const * argument)
  207:Core/Src/freertos.c **** {
-  86              		.loc 1 207 1 view -0
-  87              		.cfi_startproc
-  88              		@ Volatile: function does not return.
-  89              		@ args = 0, pretend = 0, frame = 0
-  90              		@ frame_needed = 0, uses_anonymous_args = 0
-  91              	.LVL3:
-  92              		.loc 1 207 1 is_stmt 0 view .LVU6
-  93 0000 08B5     		push	{r3, lr}
-  94              	.LCFI1:
-  95              		.cfi_def_cfa_offset 8
-  96              		.cfi_offset 3, -8
-  97              		.cfi_offset 14, -4
-  98              	.LVL4:
-  99              	.L5:
  208:Core/Src/freertos.c ****   /* USER CODE BEGIN StartVofaDebug */
  209:Core/Src/freertos.c ****   /* Infinite loop */
  210:Core/Src/freertos.c ****   for(;;)
- 100              		.loc 1 210 3 is_stmt 1 discriminator 1 view .LVU7
  211:Core/Src/freertos.c ****   {
- 212:Core/Src/freertos.c ****     // VofaDebug_Task();
+ 212:Core/Src/freertos.c ****     VofaDebug_Task();
  213:Core/Src/freertos.c ****     osDelay(1);
- 101              		.loc 1 213 5 discriminator 1 view .LVU8
- 102 0002 0120     		movs	r0, #1
- 103 0004 FFF7FEFF 		bl	osDelay
- 104              	.LVL5:
- 210:Core/Src/freertos.c ****   {
- 105              		.loc 1 210 8 discriminator 1 view .LVU9
- 106 0008 FBE7     		b	.L5
- 107              		.cfi_endproc
- 108              	.LFE156:
- 110              		.section	.text.StartObserveTask,"ax",%progbits
- 111              		.align	1
- 112              		.global	StartObserveTask
-ARM GAS  D:\temp\TMP\ccS01sgv.s 			page 7
-
-
- 113              		.syntax unified
- 114              		.thumb
- 115              		.thumb_func
- 117              	StartObserveTask:
- 118              	.LFB161:
  214:Core/Src/freertos.c ****   }
  215:Core/Src/freertos.c ****   /* USER CODE END StartVofaDebug */
  216:Core/Src/freertos.c **** }
@@ -393,6 +358,9 @@ ARM GAS  D:\temp\TMP\ccS01sgv.s 			page 1
  238:Core/Src/freertos.c **** /**
  239:Core/Src/freertos.c **** * @brief Function implementing the MOTORTASK thread.
  240:Core/Src/freertos.c **** * @param argument: Not used
+ARM GAS  D:\temp\TMP\ccs0IGdc.s 			page 7
+
+
  241:Core/Src/freertos.c **** * @retval None
  242:Core/Src/freertos.c **** */
  243:Core/Src/freertos.c **** /* USER CODE END Header_StartMotorTask */
@@ -418,9 +386,6 @@ ARM GAS  D:\temp\TMP\ccS01sgv.s 			page 1
  263:Core/Src/freertos.c **** void StartRemoteTask(void const * argument)
  264:Core/Src/freertos.c **** {
  265:Core/Src/freertos.c ****   /* USER CODE BEGIN StartRemoteTask */
-ARM GAS  D:\temp\TMP\ccS01sgv.s 			page 8
-
-
  266:Core/Src/freertos.c ****   /* Infinite loop */
  267:Core/Src/freertos.c ****   for(;;)
  268:Core/Src/freertos.c ****   {
@@ -453,727 +418,772 @@ ARM GAS  D:\temp\TMP\ccS01sgv.s 			page 1
  295:Core/Src/freertos.c **** /**
  296:Core/Src/freertos.c **** * @brief Function implementing the OBSERVE_TASK thread.
  297:Core/Src/freertos.c **** * @param argument: Not used
+ARM GAS  D:\temp\TMP\ccs0IGdc.s 			page 8
+
+
  298:Core/Src/freertos.c **** * @retval None
  299:Core/Src/freertos.c **** */
  300:Core/Src/freertos.c **** /* USER CODE END Header_StartObserveTask */
  301:Core/Src/freertos.c **** void StartObserveTask(void const * argument)
  302:Core/Src/freertos.c **** {
- 119              		.loc 1 302 1 view -0
+  86              		.loc 1 302 1 view -0
+  87              		.cfi_startproc
+  88              		@ Volatile: function does not return.
+  89              		@ args = 0, pretend = 0, frame = 0
+  90              		@ frame_needed = 0, uses_anonymous_args = 0
+  91              	.LVL3:
+  92              		.loc 1 302 1 is_stmt 0 view .LVU6
+  93 0000 08B5     		push	{r3, lr}
+  94              	.LCFI1:
+  95              		.cfi_def_cfa_offset 8
+  96              		.cfi_offset 3, -8
+  97              		.cfi_offset 14, -4
+  98              	.LVL4:
+  99              	.L5:
+ 303:Core/Src/freertos.c ****   /* USER CODE BEGIN StartObserveTask */
+ 304:Core/Src/freertos.c ****   /* Infinite loop */
+ 305:Core/Src/freertos.c ****   for(;;)
+ 100              		.loc 1 305 3 is_stmt 1 discriminator 1 view .LVU7
+ 306:Core/Src/freertos.c ****   {
+ 307:Core/Src/freertos.c ****     // Observe_Task();
+ 308:Core/Src/freertos.c ****     osDelay(1);
+ 101              		.loc 1 308 5 discriminator 1 view .LVU8
+ 102 0002 0120     		movs	r0, #1
+ 103 0004 FFF7FEFF 		bl	osDelay
+ 104              	.LVL5:
+ 305:Core/Src/freertos.c ****   {
+ 105              		.loc 1 305 8 discriminator 1 view .LVU9
+ 106 0008 FBE7     		b	.L5
+ 107              		.cfi_endproc
+ 108              	.LFE161:
+ 110              		.section	.text.StartInsTask,"ax",%progbits
+ 111              		.align	1
+ 112              		.global	StartInsTask
+ 113              		.syntax unified
+ 114              		.thumb
+ 115              		.thumb_func
+ 117              	StartInsTask:
+ 118              	.LFB155:
+ 188:Core/Src/freertos.c ****   /* USER CODE BEGIN StartInsTask */
+ 119              		.loc 1 188 1 view -0
  120              		.cfi_startproc
  121              		@ Volatile: function does not return.
  122              		@ args = 0, pretend = 0, frame = 0
  123              		@ frame_needed = 0, uses_anonymous_args = 0
  124              	.LVL6:
- 125              		.loc 1 302 1 is_stmt 0 view .LVU11
+ 188:Core/Src/freertos.c ****   /* USER CODE BEGIN StartInsTask */
+ 125              		.loc 1 188 1 is_stmt 0 view .LVU11
  126 0000 08B5     		push	{r3, lr}
  127              	.LCFI2:
  128              		.cfi_def_cfa_offset 8
  129              		.cfi_offset 3, -8
  130              		.cfi_offset 14, -4
+ARM GAS  D:\temp\TMP\ccs0IGdc.s 			page 9
+
+
  131              	.LVL7:
  132              	.L8:
- 303:Core/Src/freertos.c ****   /* USER CODE BEGIN StartObserveTask */
- 304:Core/Src/freertos.c ****   /* Infinite loop */
- 305:Core/Src/freertos.c ****   for(;;)
- 133              		.loc 1 305 3 is_stmt 1 discriminator 1 view .LVU12
- 306:Core/Src/freertos.c ****   {
- 307:Core/Src/freertos.c ****     // Observe_Task();
-ARM GAS  D:\temp\TMP\ccS01sgv.s 			page 9
-
-
- 308:Core/Src/freertos.c ****     osDelay(1);
- 134              		.loc 1 308 5 discriminator 1 view .LVU13
- 135 0002 0120     		movs	r0, #1
- 136 0004 FFF7FEFF 		bl	osDelay
- 137              	.LVL8:
- 305:Core/Src/freertos.c ****   {
- 138              		.loc 1 305 8 discriminator 1 view .LVU14
- 139 0008 FBE7     		b	.L8
- 140              		.cfi_endproc
- 141              	.LFE161:
- 143              		.section	.text.StartInsTask,"ax",%progbits
- 144              		.align	1
- 145              		.global	StartInsTask
- 146              		.syntax unified
- 147              		.thumb
- 148              		.thumb_func
- 150              	StartInsTask:
- 151              	.LFB155:
- 188:Core/Src/freertos.c ****   /* USER CODE BEGIN StartInsTask */
- 152              		.loc 1 188 1 view -0
- 153              		.cfi_startproc
- 154              		@ Volatile: function does not return.
- 155              		@ args = 0, pretend = 0, frame = 0
- 156              		@ frame_needed = 0, uses_anonymous_args = 0
- 157              	.LVL9:
- 188:Core/Src/freertos.c ****   /* USER CODE BEGIN StartInsTask */
- 158              		.loc 1 188 1 is_stmt 0 view .LVU16
- 159 0000 08B5     		push	{r3, lr}
- 160              	.LCFI3:
- 161              		.cfi_def_cfa_offset 8
- 162              		.cfi_offset 3, -8
- 163              		.cfi_offset 14, -4
- 164              	.LVL10:
- 165              	.L11:
  191:Core/Src/freertos.c ****   {
- 166              		.loc 1 191 3 is_stmt 1 discriminator 1 view .LVU17
+ 133              		.loc 1 191 3 is_stmt 1 discriminator 1 view .LVU12
  193:Core/Src/freertos.c ****     osDelay(1);
- 167              		.loc 1 193 5 discriminator 1 view .LVU18
- 168 0002 FFF7FEFF 		bl	INS_task
- 169              	.LVL11:
+ 134              		.loc 1 193 5 discriminator 1 view .LVU13
+ 135 0002 FFF7FEFF 		bl	INS_task
+ 136              	.LVL8:
  194:Core/Src/freertos.c ****   }
- 170              		.loc 1 194 5 discriminator 1 view .LVU19
- 171 0006 0120     		movs	r0, #1
- 172 0008 FFF7FEFF 		bl	osDelay
- 173              	.LVL12:
+ 137              		.loc 1 194 5 discriminator 1 view .LVU14
+ 138 0006 0120     		movs	r0, #1
+ 139 0008 FFF7FEFF 		bl	osDelay
+ 140              	.LVL9:
  191:Core/Src/freertos.c ****   {
- 174              		.loc 1 191 8 discriminator 1 view .LVU20
- 175 000c F9E7     		b	.L11
- 176              		.cfi_endproc
- 177              	.LFE155:
- 179              		.section	.text.StartChassisRTask,"ax",%progbits
- 180              		.align	1
- 181              		.global	StartChassisRTask
- 182              		.syntax unified
- 183              		.thumb
- 184              		.thumb_func
- 186              	StartChassisRTask:
-ARM GAS  D:\temp\TMP\ccS01sgv.s 			page 10
+ 141              		.loc 1 191 8 discriminator 1 view .LVU15
+ 142 000c F9E7     		b	.L8
+ 143              		.cfi_endproc
+ 144              	.LFE155:
+ 146              		.section	.text.StartVofaDebug,"ax",%progbits
+ 147              		.align	1
+ 148              		.global	StartVofaDebug
+ 149              		.syntax unified
+ 150              		.thumb
+ 151              		.thumb_func
+ 153              	StartVofaDebug:
+ 154              	.LFB156:
+ 207:Core/Src/freertos.c ****   /* USER CODE BEGIN StartVofaDebug */
+ 155              		.loc 1 207 1 view -0
+ 156              		.cfi_startproc
+ 157              		@ Volatile: function does not return.
+ 158              		@ args = 0, pretend = 0, frame = 0
+ 159              		@ frame_needed = 0, uses_anonymous_args = 0
+ 160              	.LVL10:
+ 207:Core/Src/freertos.c ****   /* USER CODE BEGIN StartVofaDebug */
+ 161              		.loc 1 207 1 is_stmt 0 view .LVU17
+ 162 0000 08B5     		push	{r3, lr}
+ 163              	.LCFI3:
+ 164              		.cfi_def_cfa_offset 8
+ 165              		.cfi_offset 3, -8
+ 166              		.cfi_offset 14, -4
+ 167              	.LVL11:
+ 168              	.L11:
+ 210:Core/Src/freertos.c ****   {
+ 169              		.loc 1 210 3 is_stmt 1 discriminator 1 view .LVU18
+ 212:Core/Src/freertos.c ****     osDelay(1);
+ 170              		.loc 1 212 5 discriminator 1 view .LVU19
+ 171 0002 FFF7FEFF 		bl	VofaDebug_Task
+ 172              	.LVL12:
+ 213:Core/Src/freertos.c ****   }
+ 173              		.loc 1 213 5 discriminator 1 view .LVU20
+ 174 0006 0120     		movs	r0, #1
+ 175 0008 FFF7FEFF 		bl	osDelay
+ 176              	.LVL13:
+ 210:Core/Src/freertos.c ****   {
+ 177              		.loc 1 210 8 discriminator 1 view .LVU21
+ 178 000c F9E7     		b	.L11
+ 179              		.cfi_endproc
+ARM GAS  D:\temp\TMP\ccs0IGdc.s 			page 10
 
 
- 187              	.LFB157:
+ 180              	.LFE156:
+ 182              		.section	.text.StartChassisRTask,"ax",%progbits
+ 183              		.align	1
+ 184              		.global	StartChassisRTask
+ 185              		.syntax unified
+ 186              		.thumb
+ 187              		.thumb_func
+ 189              	StartChassisRTask:
+ 190              	.LFB157:
  226:Core/Src/freertos.c ****   /* USER CODE BEGIN StartChassisRTask */
- 188              		.loc 1 226 1 view -0
- 189              		.cfi_startproc
- 190              		@ Volatile: function does not return.
- 191              		@ args = 0, pretend = 0, frame = 0
- 192              		@ frame_needed = 0, uses_anonymous_args = 0
- 193              	.LVL13:
+ 191              		.loc 1 226 1 view -0
+ 192              		.cfi_startproc
+ 193              		@ Volatile: function does not return.
+ 194              		@ args = 0, pretend = 0, frame = 0
+ 195              		@ frame_needed = 0, uses_anonymous_args = 0
+ 196              	.LVL14:
  226:Core/Src/freertos.c ****   /* USER CODE BEGIN StartChassisRTask */
- 194              		.loc 1 226 1 is_stmt 0 view .LVU22
- 195 0000 08B5     		push	{r3, lr}
- 196              	.LCFI4:
- 197              		.cfi_def_cfa_offset 8
- 198              		.cfi_offset 3, -8
- 199              		.cfi_offset 14, -4
- 200              	.LVL14:
- 201              	.L14:
+ 197              		.loc 1 226 1 is_stmt 0 view .LVU23
+ 198 0000 08B5     		push	{r3, lr}
+ 199              	.LCFI4:
+ 200              		.cfi_def_cfa_offset 8
+ 201              		.cfi_offset 3, -8
+ 202              		.cfi_offset 14, -4
+ 203              	.LVL15:
+ 204              	.L14:
  229:Core/Src/freertos.c ****   {
- 202              		.loc 1 229 3 is_stmt 1 discriminator 1 view .LVU23
+ 205              		.loc 1 229 3 is_stmt 1 discriminator 1 view .LVU24
  231:Core/Src/freertos.c ****     osDelay(1);
- 203              		.loc 1 231 5 discriminator 1 view .LVU24
- 204 0002 FFF7FEFF 		bl	ChassisR_Task
- 205              	.LVL15:
+ 206              		.loc 1 231 5 discriminator 1 view .LVU25
+ 207 0002 FFF7FEFF 		bl	ChassisR_Task
+ 208              	.LVL16:
  232:Core/Src/freertos.c ****   }
- 206              		.loc 1 232 5 discriminator 1 view .LVU25
- 207 0006 0120     		movs	r0, #1
- 208 0008 FFF7FEFF 		bl	osDelay
- 209              	.LVL16:
+ 209              		.loc 1 232 5 discriminator 1 view .LVU26
+ 210 0006 0120     		movs	r0, #1
+ 211 0008 FFF7FEFF 		bl	osDelay
+ 212              	.LVL17:
  229:Core/Src/freertos.c ****   {
- 210              		.loc 1 229 8 discriminator 1 view .LVU26
- 211 000c F9E7     		b	.L14
- 212              		.cfi_endproc
- 213              	.LFE157:
- 215              		.section	.text.StartMotorTask,"ax",%progbits
- 216              		.align	1
- 217              		.global	StartMotorTask
- 218              		.syntax unified
- 219              		.thumb
- 220              		.thumb_func
- 222              	StartMotorTask:
- 223              	.LFB158:
+ 213              		.loc 1 229 8 discriminator 1 view .LVU27
+ 214 000c F9E7     		b	.L14
+ 215              		.cfi_endproc
+ 216              	.LFE157:
+ 218              		.section	.text.StartMotorTask,"ax",%progbits
+ 219              		.align	1
+ 220              		.global	StartMotorTask
+ 221              		.syntax unified
+ 222              		.thumb
+ 223              		.thumb_func
+ 225              	StartMotorTask:
+ 226              	.LFB158:
  245:Core/Src/freertos.c ****   /* USER CODE BEGIN StartMotorTask */
- 224              		.loc 1 245 1 view -0
- 225              		.cfi_startproc
- 226              		@ Volatile: function does not return.
- 227              		@ args = 0, pretend = 0, frame = 0
- 228              		@ frame_needed = 0, uses_anonymous_args = 0
- 229              	.LVL17:
+ 227              		.loc 1 245 1 view -0
+ 228              		.cfi_startproc
+ 229              		@ Volatile: function does not return.
+ 230              		@ args = 0, pretend = 0, frame = 0
+ 231              		@ frame_needed = 0, uses_anonymous_args = 0
+ 232              	.LVL18:
  245:Core/Src/freertos.c ****   /* USER CODE BEGIN StartMotorTask */
- 230              		.loc 1 245 1 is_stmt 0 view .LVU28
- 231 0000 08B5     		push	{r3, lr}
- 232              	.LCFI5:
- 233              		.cfi_def_cfa_offset 8
- 234              		.cfi_offset 3, -8
- 235              		.cfi_offset 14, -4
- 236              	.LVL18:
- 237              	.L17:
-ARM GAS  D:\temp\TMP\ccS01sgv.s 			page 11
+ARM GAS  D:\temp\TMP\ccs0IGdc.s 			page 11
 
 
+ 233              		.loc 1 245 1 is_stmt 0 view .LVU29
+ 234 0000 08B5     		push	{r3, lr}
+ 235              	.LCFI5:
+ 236              		.cfi_def_cfa_offset 8
+ 237              		.cfi_offset 3, -8
+ 238              		.cfi_offset 14, -4
+ 239              	.LVL19:
+ 240              	.L17:
  248:Core/Src/freertos.c ****   {
- 238              		.loc 1 248 3 is_stmt 1 discriminator 1 view .LVU29
+ 241              		.loc 1 248 3 is_stmt 1 discriminator 1 view .LVU30
  250:Core/Src/freertos.c ****     osDelay(1);
- 239              		.loc 1 250 5 discriminator 1 view .LVU30
- 240 0002 FFF7FEFF 		bl	MotorTask
- 241              	.LVL19:
+ 242              		.loc 1 250 5 discriminator 1 view .LVU31
+ 243 0002 FFF7FEFF 		bl	MotorTask
+ 244              	.LVL20:
  251:Core/Src/freertos.c ****   }
- 242              		.loc 1 251 5 discriminator 1 view .LVU31
- 243 0006 0120     		movs	r0, #1
- 244 0008 FFF7FEFF 		bl	osDelay
- 245              	.LVL20:
+ 245              		.loc 1 251 5 discriminator 1 view .LVU32
+ 246 0006 0120     		movs	r0, #1
+ 247 0008 FFF7FEFF 		bl	osDelay
+ 248              	.LVL21:
  248:Core/Src/freertos.c ****   {
- 246              		.loc 1 248 8 discriminator 1 view .LVU32
- 247 000c F9E7     		b	.L17
- 248              		.cfi_endproc
- 249              	.LFE158:
- 251              		.section	.text.StartRemoteTask,"ax",%progbits
- 252              		.align	1
- 253              		.global	StartRemoteTask
- 254              		.syntax unified
- 255              		.thumb
- 256              		.thumb_func
- 258              	StartRemoteTask:
- 259              	.LFB159:
+ 249              		.loc 1 248 8 discriminator 1 view .LVU33
+ 250 000c F9E7     		b	.L17
+ 251              		.cfi_endproc
+ 252              	.LFE158:
+ 254              		.section	.text.StartRemoteTask,"ax",%progbits
+ 255              		.align	1
+ 256              		.global	StartRemoteTask
+ 257              		.syntax unified
+ 258              		.thumb
+ 259              		.thumb_func
+ 261              	StartRemoteTask:
+ 262              	.LFB159:
  264:Core/Src/freertos.c ****   /* USER CODE BEGIN StartRemoteTask */
- 260              		.loc 1 264 1 view -0
- 261              		.cfi_startproc
- 262              		@ Volatile: function does not return.
- 263              		@ args = 0, pretend = 0, frame = 0
- 264              		@ frame_needed = 0, uses_anonymous_args = 0
- 265              	.LVL21:
+ 263              		.loc 1 264 1 view -0
+ 264              		.cfi_startproc
+ 265              		@ Volatile: function does not return.
+ 266              		@ args = 0, pretend = 0, frame = 0
+ 267              		@ frame_needed = 0, uses_anonymous_args = 0
+ 268              	.LVL22:
  264:Core/Src/freertos.c ****   /* USER CODE BEGIN StartRemoteTask */
- 266              		.loc 1 264 1 is_stmt 0 view .LVU34
- 267 0000 08B5     		push	{r3, lr}
- 268              	.LCFI6:
- 269              		.cfi_def_cfa_offset 8
- 270              		.cfi_offset 3, -8
- 271              		.cfi_offset 14, -4
- 272              	.LVL22:
- 273              	.L20:
+ 269              		.loc 1 264 1 is_stmt 0 view .LVU35
+ 270 0000 08B5     		push	{r3, lr}
+ 271              	.LCFI6:
+ 272              		.cfi_def_cfa_offset 8
+ 273              		.cfi_offset 3, -8
+ 274              		.cfi_offset 14, -4
+ 275              	.LVL23:
+ 276              	.L20:
  267:Core/Src/freertos.c ****   {
- 274              		.loc 1 267 3 is_stmt 1 discriminator 1 view .LVU35
+ 277              		.loc 1 267 3 is_stmt 1 discriminator 1 view .LVU36
  269:Core/Src/freertos.c ****     osDelay(1);
- 275              		.loc 1 269 5 discriminator 1 view .LVU36
- 276 0002 FFF7FEFF 		bl	Remote_Task
- 277              	.LVL23:
+ 278              		.loc 1 269 5 discriminator 1 view .LVU37
+ 279 0002 FFF7FEFF 		bl	Remote_Task
+ 280              	.LVL24:
  270:Core/Src/freertos.c ****   }
- 278              		.loc 1 270 5 discriminator 1 view .LVU37
- 279 0006 0120     		movs	r0, #1
- 280 0008 FFF7FEFF 		bl	osDelay
- 281              	.LVL24:
+ 281              		.loc 1 270 5 discriminator 1 view .LVU38
+ 282 0006 0120     		movs	r0, #1
+ARM GAS  D:\temp\TMP\ccs0IGdc.s 			page 12
+
+
+ 283 0008 FFF7FEFF 		bl	osDelay
+ 284              	.LVL25:
  267:Core/Src/freertos.c ****   {
- 282              		.loc 1 267 8 discriminator 1 view .LVU38
- 283 000c F9E7     		b	.L20
- 284              		.cfi_endproc
- 285              	.LFE159:
- 287              		.section	.text.StartChassisLTask,"ax",%progbits
-ARM GAS  D:\temp\TMP\ccS01sgv.s 			page 12
-
-
- 288              		.align	1
- 289              		.global	StartChassisLTask
- 290              		.syntax unified
- 291              		.thumb
- 292              		.thumb_func
- 294              	StartChassisLTask:
- 295              	.LFB160:
+ 285              		.loc 1 267 8 discriminator 1 view .LVU39
+ 286 000c F9E7     		b	.L20
+ 287              		.cfi_endproc
+ 288              	.LFE159:
+ 290              		.section	.text.StartChassisLTask,"ax",%progbits
+ 291              		.align	1
+ 292              		.global	StartChassisLTask
+ 293              		.syntax unified
+ 294              		.thumb
+ 295              		.thumb_func
+ 297              	StartChassisLTask:
+ 298              	.LFB160:
  283:Core/Src/freertos.c ****   /* USER CODE BEGIN StartChassisLTask */
- 296              		.loc 1 283 1 view -0
- 297              		.cfi_startproc
- 298              		@ Volatile: function does not return.
- 299              		@ args = 0, pretend = 0, frame = 0
- 300              		@ frame_needed = 0, uses_anonymous_args = 0
- 301              	.LVL25:
+ 299              		.loc 1 283 1 view -0
+ 300              		.cfi_startproc
+ 301              		@ Volatile: function does not return.
+ 302              		@ args = 0, pretend = 0, frame = 0
+ 303              		@ frame_needed = 0, uses_anonymous_args = 0
+ 304              	.LVL26:
  283:Core/Src/freertos.c ****   /* USER CODE BEGIN StartChassisLTask */
- 302              		.loc 1 283 1 is_stmt 0 view .LVU40
- 303 0000 08B5     		push	{r3, lr}
- 304              	.LCFI7:
- 305              		.cfi_def_cfa_offset 8
- 306              		.cfi_offset 3, -8
- 307              		.cfi_offset 14, -4
- 308              	.LVL26:
- 309              	.L23:
+ 305              		.loc 1 283 1 is_stmt 0 view .LVU41
+ 306 0000 08B5     		push	{r3, lr}
+ 307              	.LCFI7:
+ 308              		.cfi_def_cfa_offset 8
+ 309              		.cfi_offset 3, -8
+ 310              		.cfi_offset 14, -4
+ 311              	.LVL27:
+ 312              	.L23:
  286:Core/Src/freertos.c ****   {
- 310              		.loc 1 286 3 is_stmt 1 discriminator 1 view .LVU41
+ 313              		.loc 1 286 3 is_stmt 1 discriminator 1 view .LVU42
  288:Core/Src/freertos.c ****     osDelay(1);
- 311              		.loc 1 288 5 discriminator 1 view .LVU42
- 312 0002 FFF7FEFF 		bl	ChassisL_Task
- 313              	.LVL27:
+ 314              		.loc 1 288 5 discriminator 1 view .LVU43
+ 315 0002 FFF7FEFF 		bl	ChassisL_Task
+ 316              	.LVL28:
  289:Core/Src/freertos.c ****   }
- 314              		.loc 1 289 5 discriminator 1 view .LVU43
- 315 0006 0120     		movs	r0, #1
- 316 0008 FFF7FEFF 		bl	osDelay
- 317              	.LVL28:
+ 317              		.loc 1 289 5 discriminator 1 view .LVU44
+ 318 0006 0120     		movs	r0, #1
+ 319 0008 FFF7FEFF 		bl	osDelay
+ 320              	.LVL29:
  286:Core/Src/freertos.c ****   {
- 318              		.loc 1 286 8 discriminator 1 view .LVU44
- 319 000c F9E7     		b	.L23
- 320              		.cfi_endproc
- 321              	.LFE160:
- 323              		.section	.text.vApplicationGetIdleTaskMemory,"ax",%progbits
- 324              		.align	1
- 325              		.global	vApplicationGetIdleTaskMemory
- 326              		.syntax unified
- 327              		.thumb
- 328              		.thumb_func
- 330              	vApplicationGetIdleTaskMemory:
- 331              	.LVL29:
- 332              	.LFB152:
+ 321              		.loc 1 286 8 discriminator 1 view .LVU45
+ 322 000c F9E7     		b	.L23
+ 323              		.cfi_endproc
+ 324              	.LFE160:
+ 326              		.section	.text.vApplicationGetIdleTaskMemory,"ax",%progbits
+ 327              		.align	1
+ 328              		.global	vApplicationGetIdleTaskMemory
+ 329              		.syntax unified
+ 330              		.thumb
+ 331              		.thumb_func
+ 333              	vApplicationGetIdleTaskMemory:
+ 334              	.LVL30:
+ 335              	.LFB152:
   89:Core/Src/freertos.c ****   *ppxIdleTaskTCBBuffer = &xIdleTaskTCBBuffer;
- 333              		.loc 1 89 1 view -0
- 334              		.cfi_startproc
- 335              		@ args = 0, pretend = 0, frame = 0
- 336              		@ frame_needed = 0, uses_anonymous_args = 0
- 337              		@ link register save eliminated.
-  90:Core/Src/freertos.c ****   *ppxIdleTaskStackBuffer = &xIdleStack[0];
- 338              		.loc 1 90 3 view .LVU46
-  90:Core/Src/freertos.c ****   *ppxIdleTaskStackBuffer = &xIdleStack[0];
-ARM GAS  D:\temp\TMP\ccS01sgv.s 			page 13
+ARM GAS  D:\temp\TMP\ccs0IGdc.s 			page 13
 
 
- 339              		.loc 1 90 25 is_stmt 0 view .LVU47
- 340 0000 034B     		ldr	r3, .L26
- 341 0002 0360     		str	r3, [r0]
+ 336              		.loc 1 89 1 view -0
+ 337              		.cfi_startproc
+ 338              		@ args = 0, pretend = 0, frame = 0
+ 339              		@ frame_needed = 0, uses_anonymous_args = 0
+ 340              		@ link register save eliminated.
+  90:Core/Src/freertos.c ****   *ppxIdleTaskStackBuffer = &xIdleStack[0];
+ 341              		.loc 1 90 3 view .LVU47
+  90:Core/Src/freertos.c ****   *ppxIdleTaskStackBuffer = &xIdleStack[0];
+ 342              		.loc 1 90 25 is_stmt 0 view .LVU48
+ 343 0000 034B     		ldr	r3, .L26
+ 344 0002 0360     		str	r3, [r0]
   91:Core/Src/freertos.c ****   *pulIdleTaskStackSize = configMINIMAL_STACK_SIZE;
- 342              		.loc 1 91 3 is_stmt 1 view .LVU48
+ 345              		.loc 1 91 3 is_stmt 1 view .LVU49
   91:Core/Src/freertos.c ****   *pulIdleTaskStackSize = configMINIMAL_STACK_SIZE;
- 343              		.loc 1 91 27 is_stmt 0 view .LVU49
- 344 0004 034B     		ldr	r3, .L26+4
- 345 0006 0B60     		str	r3, [r1]
+ 346              		.loc 1 91 27 is_stmt 0 view .LVU50
+ 347 0004 034B     		ldr	r3, .L26+4
+ 348 0006 0B60     		str	r3, [r1]
   92:Core/Src/freertos.c ****   /* place for user code */
- 346              		.loc 1 92 3 is_stmt 1 view .LVU50
+ 349              		.loc 1 92 3 is_stmt 1 view .LVU51
   92:Core/Src/freertos.c ****   /* place for user code */
- 347              		.loc 1 92 25 is_stmt 0 view .LVU51
- 348 0008 8023     		movs	r3, #128
- 349 000a 1360     		str	r3, [r2]
+ 350              		.loc 1 92 25 is_stmt 0 view .LVU52
+ 351 0008 8023     		movs	r3, #128
+ 352 000a 1360     		str	r3, [r2]
   94:Core/Src/freertos.c **** /* USER CODE END GET_IDLE_TASK_MEMORY */
- 350              		.loc 1 94 1 view .LVU52
- 351 000c 7047     		bx	lr
- 352              	.L27:
- 353 000e 00BF     		.align	2
- 354              	.L26:
- 355 0010 00000000 		.word	.LANCHOR0
- 356 0014 00000000 		.word	.LANCHOR1
- 357              		.cfi_endproc
- 358              	.LFE152:
- 360              		.section	.text.MX_FREERTOS_Init,"ax",%progbits
- 361              		.align	1
- 362              		.global	MX_FREERTOS_Init
- 363              		.syntax unified
- 364              		.thumb
- 365              		.thumb_func
- 367              	MX_FREERTOS_Init:
- 368              	.LFB153:
+ 353              		.loc 1 94 1 view .LVU53
+ 354 000c 7047     		bx	lr
+ 355              	.L27:
+ 356 000e 00BF     		.align	2
+ 357              	.L26:
+ 358 0010 00000000 		.word	.LANCHOR0
+ 359 0014 00000000 		.word	.LANCHOR1
+ 360              		.cfi_endproc
+ 361              	.LFE152:
+ 363              		.section	.text.MX_FREERTOS_Init,"ax",%progbits
+ 364              		.align	1
+ 365              		.global	MX_FREERTOS_Init
+ 366              		.syntax unified
+ 367              		.thumb
+ 368              		.thumb_func
+ 370              	MX_FREERTOS_Init:
+ 371              	.LFB153:
  102:Core/Src/freertos.c ****   /* USER CODE BEGIN Init */
- 369              		.loc 1 102 29 is_stmt 1 view -0
- 370              		.cfi_startproc
- 371              		@ args = 0, pretend = 0, frame = 224
- 372              		@ frame_needed = 0, uses_anonymous_args = 0
- 373 0000 10B5     		push	{r4, lr}
- 374              	.LCFI8:
- 375              		.cfi_def_cfa_offset 8
- 376              		.cfi_offset 4, -8
- 377              		.cfi_offset 14, -4
- 378 0002 B8B0     		sub	sp, sp, #224
- 379              	.LCFI9:
- 380              		.cfi_def_cfa_offset 232
+ 372              		.loc 1 102 29 is_stmt 1 view -0
+ 373              		.cfi_startproc
+ 374              		@ args = 0, pretend = 0, frame = 224
+ 375              		@ frame_needed = 0, uses_anonymous_args = 0
+ 376 0000 10B5     		push	{r4, lr}
+ 377              	.LCFI8:
+ 378              		.cfi_def_cfa_offset 8
+ 379              		.cfi_offset 4, -8
+ 380              		.cfi_offset 14, -4
+ 381 0002 B8B0     		sub	sp, sp, #224
+ 382              	.LCFI9:
+ 383              		.cfi_def_cfa_offset 232
  125:Core/Src/freertos.c ****   defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
- 381              		.loc 1 125 3 view .LVU54
- 382 0004 484C     		ldr	r4, .L30
- 383 0006 0DF1C40C 		add	ip, sp, #196
- 384 000a A646     		mov	lr, r4
- 385 000c BEE80F00 		ldmia	lr!, {r0, r1, r2, r3}
- 386 0010 ACE80F00 		stmia	ip!, {r0, r1, r2, r3}
- 387 0014 9EE80700 		ldm	lr, {r0, r1, r2}
- 388 0018 8CE80700 		stm	ip, {r0, r1, r2}
- 126:Core/Src/freertos.c **** 
- 389              		.loc 1 126 3 view .LVU55
-ARM GAS  D:\temp\TMP\ccS01sgv.s 			page 14
+ 384              		.loc 1 125 3 view .LVU55
+ 385 0004 484C     		ldr	r4, .L30
+ARM GAS  D:\temp\TMP\ccs0IGdc.s 			page 14
 
 
+ 386 0006 0DF1C40C 		add	ip, sp, #196
+ 387 000a A646     		mov	lr, r4
+ 388 000c BEE80F00 		ldmia	lr!, {r0, r1, r2, r3}
+ 389 0010 ACE80F00 		stmia	ip!, {r0, r1, r2, r3}
+ 390 0014 9EE80700 		ldm	lr, {r0, r1, r2}
+ 391 0018 8CE80700 		stm	ip, {r0, r1, r2}
  126:Core/Src/freertos.c **** 
- 390              		.loc 1 126 23 is_stmt 0 view .LVU56
- 391 001c 0021     		movs	r1, #0
- 392 001e 31A8     		add	r0, sp, #196
- 393 0020 FFF7FEFF 		bl	osThreadCreate
- 394              	.LVL30:
+ 392              		.loc 1 126 3 view .LVU56
  126:Core/Src/freertos.c **** 
- 395              		.loc 1 126 21 view .LVU57
- 396 0024 414B     		ldr	r3, .L30+4
- 397 0026 1860     		str	r0, [r3]
+ 393              		.loc 1 126 23 is_stmt 0 view .LVU57
+ 394 001c 0021     		movs	r1, #0
+ 395 001e 31A8     		add	r0, sp, #196
+ 396 0020 FFF7FEFF 		bl	osThreadCreate
+ 397              	.LVL31:
+ 126:Core/Src/freertos.c **** 
+ 398              		.loc 1 126 21 view .LVU58
+ 399 0024 414B     		ldr	r3, .L30+4
+ 400 0026 1860     		str	r0, [r3]
  129:Core/Src/freertos.c ****   INS_TASKHandle = osThreadCreate(osThread(INS_TASK), NULL);
- 398              		.loc 1 129 3 is_stmt 1 view .LVU58
- 399 0028 0DF1A80C 		add	ip, sp, #168
- 400 002c 04F11C0E 		add	lr, r4, #28
- 401 0030 BEE80F00 		ldmia	lr!, {r0, r1, r2, r3}
- 402 0034 ACE80F00 		stmia	ip!, {r0, r1, r2, r3}
- 403 0038 9EE80700 		ldm	lr, {r0, r1, r2}
- 404 003c 8CE80700 		stm	ip, {r0, r1, r2}
+ 401              		.loc 1 129 3 is_stmt 1 view .LVU59
+ 402 0028 0DF1A80C 		add	ip, sp, #168
+ 403 002c 04F11C0E 		add	lr, r4, #28
+ 404 0030 BEE80F00 		ldmia	lr!, {r0, r1, r2, r3}
+ 405 0034 ACE80F00 		stmia	ip!, {r0, r1, r2, r3}
+ 406 0038 9EE80700 		ldm	lr, {r0, r1, r2}
+ 407 003c 8CE80700 		stm	ip, {r0, r1, r2}
  130:Core/Src/freertos.c **** 
- 405              		.loc 1 130 3 view .LVU59
+ 408              		.loc 1 130 3 view .LVU60
  130:Core/Src/freertos.c **** 
- 406              		.loc 1 130 20 is_stmt 0 view .LVU60
- 407 0040 0021     		movs	r1, #0
- 408 0042 2AA8     		add	r0, sp, #168
- 409 0044 FFF7FEFF 		bl	osThreadCreate
- 410              	.LVL31:
+ 409              		.loc 1 130 20 is_stmt 0 view .LVU61
+ 410 0040 0021     		movs	r1, #0
+ 411 0042 2AA8     		add	r0, sp, #168
+ 412 0044 FFF7FEFF 		bl	osThreadCreate
+ 413              	.LVL32:
  130:Core/Src/freertos.c **** 
- 411              		.loc 1 130 18 view .LVU61
- 412 0048 394B     		ldr	r3, .L30+8
- 413 004a 1860     		str	r0, [r3]
+ 414              		.loc 1 130 18 view .LVU62
+ 415 0048 394B     		ldr	r3, .L30+8
+ 416 004a 1860     		str	r0, [r3]
  133:Core/Src/freertos.c ****   VOFADEBUGHandle = osThreadCreate(osThread(VOFADEBUG), NULL);
- 414              		.loc 1 133 3 is_stmt 1 view .LVU62
- 415 004c 0DF18C0C 		add	ip, sp, #140
- 416 0050 04F1380E 		add	lr, r4, #56
- 417 0054 BEE80F00 		ldmia	lr!, {r0, r1, r2, r3}
- 418 0058 ACE80F00 		stmia	ip!, {r0, r1, r2, r3}
- 419 005c 9EE80700 		ldm	lr, {r0, r1, r2}
- 420 0060 8CE80700 		stm	ip, {r0, r1, r2}
+ 417              		.loc 1 133 3 is_stmt 1 view .LVU63
+ 418 004c 0DF18C0C 		add	ip, sp, #140
+ 419 0050 04F1380E 		add	lr, r4, #56
+ 420 0054 BEE80F00 		ldmia	lr!, {r0, r1, r2, r3}
+ 421 0058 ACE80F00 		stmia	ip!, {r0, r1, r2, r3}
+ 422 005c 9EE80700 		ldm	lr, {r0, r1, r2}
+ 423 0060 8CE80700 		stm	ip, {r0, r1, r2}
  134:Core/Src/freertos.c **** 
- 421              		.loc 1 134 3 view .LVU63
+ 424              		.loc 1 134 3 view .LVU64
  134:Core/Src/freertos.c **** 
- 422              		.loc 1 134 21 is_stmt 0 view .LVU64
- 423 0064 0021     		movs	r1, #0
- 424 0066 23A8     		add	r0, sp, #140
- 425 0068 FFF7FEFF 		bl	osThreadCreate
- 426              	.LVL32:
+ 425              		.loc 1 134 21 is_stmt 0 view .LVU65
+ 426 0064 0021     		movs	r1, #0
+ 427 0066 23A8     		add	r0, sp, #140
+ 428 0068 FFF7FEFF 		bl	osThreadCreate
+ 429              	.LVL33:
  134:Core/Src/freertos.c **** 
- 427              		.loc 1 134 19 view .LVU65
- 428 006c 314B     		ldr	r3, .L30+12
- 429 006e 1860     		str	r0, [r3]
+ 430              		.loc 1 134 19 view .LVU66
+ 431 006c 314B     		ldr	r3, .L30+12
+ARM GAS  D:\temp\TMP\ccs0IGdc.s 			page 15
+
+
+ 432 006e 1860     		str	r0, [r3]
  137:Core/Src/freertos.c ****   CHASSISR_TASKHandle = osThreadCreate(osThread(CHASSISR_TASK), NULL);
- 430              		.loc 1 137 3 is_stmt 1 view .LVU66
- 431 0070 0DF1700C 		add	ip, sp, #112
- 432 0074 04F1540E 		add	lr, r4, #84
- 433 0078 BEE80F00 		ldmia	lr!, {r0, r1, r2, r3}
- 434 007c ACE80F00 		stmia	ip!, {r0, r1, r2, r3}
- 435 0080 9EE80700 		ldm	lr, {r0, r1, r2}
-ARM GAS  D:\temp\TMP\ccS01sgv.s 			page 15
-
-
- 436 0084 8CE80700 		stm	ip, {r0, r1, r2}
+ 433              		.loc 1 137 3 is_stmt 1 view .LVU67
+ 434 0070 0DF1700C 		add	ip, sp, #112
+ 435 0074 04F1540E 		add	lr, r4, #84
+ 436 0078 BEE80F00 		ldmia	lr!, {r0, r1, r2, r3}
+ 437 007c ACE80F00 		stmia	ip!, {r0, r1, r2, r3}
+ 438 0080 9EE80700 		ldm	lr, {r0, r1, r2}
+ 439 0084 8CE80700 		stm	ip, {r0, r1, r2}
  138:Core/Src/freertos.c **** 
- 437              		.loc 1 138 3 view .LVU67
+ 440              		.loc 1 138 3 view .LVU68
  138:Core/Src/freertos.c **** 
- 438              		.loc 1 138 25 is_stmt 0 view .LVU68
- 439 0088 0021     		movs	r1, #0
- 440 008a 1CA8     		add	r0, sp, #112
- 441 008c FFF7FEFF 		bl	osThreadCreate
- 442              	.LVL33:
+ 441              		.loc 1 138 25 is_stmt 0 view .LVU69
+ 442 0088 0021     		movs	r1, #0
+ 443 008a 1CA8     		add	r0, sp, #112
+ 444 008c FFF7FEFF 		bl	osThreadCreate
+ 445              	.LVL34:
  138:Core/Src/freertos.c **** 
- 443              		.loc 1 138 23 view .LVU69
- 444 0090 294B     		ldr	r3, .L30+16
- 445 0092 1860     		str	r0, [r3]
+ 446              		.loc 1 138 23 view .LVU70
+ 447 0090 294B     		ldr	r3, .L30+16
+ 448 0092 1860     		str	r0, [r3]
  141:Core/Src/freertos.c ****   MOTORTASKHandle = osThreadCreate(osThread(MOTORTASK), NULL);
- 446              		.loc 1 141 3 is_stmt 1 view .LVU70
- 447 0094 0DF1540C 		add	ip, sp, #84
- 448 0098 04F1700E 		add	lr, r4, #112
- 449 009c BEE80F00 		ldmia	lr!, {r0, r1, r2, r3}
- 450 00a0 ACE80F00 		stmia	ip!, {r0, r1, r2, r3}
- 451 00a4 9EE80700 		ldm	lr, {r0, r1, r2}
- 452 00a8 8CE80700 		stm	ip, {r0, r1, r2}
+ 449              		.loc 1 141 3 is_stmt 1 view .LVU71
+ 450 0094 0DF1540C 		add	ip, sp, #84
+ 451 0098 04F1700E 		add	lr, r4, #112
+ 452 009c BEE80F00 		ldmia	lr!, {r0, r1, r2, r3}
+ 453 00a0 ACE80F00 		stmia	ip!, {r0, r1, r2, r3}
+ 454 00a4 9EE80700 		ldm	lr, {r0, r1, r2}
+ 455 00a8 8CE80700 		stm	ip, {r0, r1, r2}
  142:Core/Src/freertos.c **** 
- 453              		.loc 1 142 3 view .LVU71
+ 456              		.loc 1 142 3 view .LVU72
  142:Core/Src/freertos.c **** 
- 454              		.loc 1 142 21 is_stmt 0 view .LVU72
- 455 00ac 0021     		movs	r1, #0
- 456 00ae 15A8     		add	r0, sp, #84
- 457 00b0 FFF7FEFF 		bl	osThreadCreate
- 458              	.LVL34:
+ 457              		.loc 1 142 21 is_stmt 0 view .LVU73
+ 458 00ac 0021     		movs	r1, #0
+ 459 00ae 15A8     		add	r0, sp, #84
+ 460 00b0 FFF7FEFF 		bl	osThreadCreate
+ 461              	.LVL35:
  142:Core/Src/freertos.c **** 
- 459              		.loc 1 142 19 view .LVU73
- 460 00b4 214B     		ldr	r3, .L30+20
- 461 00b6 1860     		str	r0, [r3]
+ 462              		.loc 1 142 19 view .LVU74
+ 463 00b4 214B     		ldr	r3, .L30+20
+ 464 00b6 1860     		str	r0, [r3]
  145:Core/Src/freertos.c ****   REMOTE_TASKHandle = osThreadCreate(osThread(REMOTE_TASK), NULL);
- 462              		.loc 1 145 3 is_stmt 1 view .LVU74
- 463 00b8 0DF1380C 		add	ip, sp, #56
- 464 00bc 04F18C0E 		add	lr, r4, #140
- 465 00c0 BEE80F00 		ldmia	lr!, {r0, r1, r2, r3}
- 466 00c4 ACE80F00 		stmia	ip!, {r0, r1, r2, r3}
- 467 00c8 9EE80700 		ldm	lr, {r0, r1, r2}
- 468 00cc 8CE80700 		stm	ip, {r0, r1, r2}
+ 465              		.loc 1 145 3 is_stmt 1 view .LVU75
+ 466 00b8 0DF1380C 		add	ip, sp, #56
+ 467 00bc 04F18C0E 		add	lr, r4, #140
+ 468 00c0 BEE80F00 		ldmia	lr!, {r0, r1, r2, r3}
+ 469 00c4 ACE80F00 		stmia	ip!, {r0, r1, r2, r3}
+ 470 00c8 9EE80700 		ldm	lr, {r0, r1, r2}
+ 471 00cc 8CE80700 		stm	ip, {r0, r1, r2}
  146:Core/Src/freertos.c **** 
- 469              		.loc 1 146 3 view .LVU75
+ 472              		.loc 1 146 3 view .LVU76
  146:Core/Src/freertos.c **** 
- 470              		.loc 1 146 23 is_stmt 0 view .LVU76
- 471 00d0 0021     		movs	r1, #0
- 472 00d2 0EA8     		add	r0, sp, #56
- 473 00d4 FFF7FEFF 		bl	osThreadCreate
- 474              	.LVL35:
+ 473              		.loc 1 146 23 is_stmt 0 view .LVU77
+ 474 00d0 0021     		movs	r1, #0
+ 475 00d2 0EA8     		add	r0, sp, #56
+ 476 00d4 FFF7FEFF 		bl	osThreadCreate
+ 477              	.LVL36:
+ARM GAS  D:\temp\TMP\ccs0IGdc.s 			page 16
+
+
  146:Core/Src/freertos.c **** 
- 475              		.loc 1 146 21 view .LVU77
- 476 00d8 194B     		ldr	r3, .L30+24
- 477 00da 1860     		str	r0, [r3]
+ 478              		.loc 1 146 21 view .LVU78
+ 479 00d8 194B     		ldr	r3, .L30+24
+ 480 00da 1860     		str	r0, [r3]
  149:Core/Src/freertos.c ****   CHASSISL_TASKHandle = osThreadCreate(osThread(CHASSISL_TASK), NULL);
- 478              		.loc 1 149 3 is_stmt 1 view .LVU78
- 479 00dc 0DF11C0C 		add	ip, sp, #28
- 480 00e0 04F1A80E 		add	lr, r4, #168
-ARM GAS  D:\temp\TMP\ccS01sgv.s 			page 16
-
-
- 481 00e4 BEE80F00 		ldmia	lr!, {r0, r1, r2, r3}
- 482 00e8 ACE80F00 		stmia	ip!, {r0, r1, r2, r3}
- 483 00ec 9EE80700 		ldm	lr, {r0, r1, r2}
- 484 00f0 8CE80700 		stm	ip, {r0, r1, r2}
+ 481              		.loc 1 149 3 is_stmt 1 view .LVU79
+ 482 00dc 0DF11C0C 		add	ip, sp, #28
+ 483 00e0 04F1A80E 		add	lr, r4, #168
+ 484 00e4 BEE80F00 		ldmia	lr!, {r0, r1, r2, r3}
+ 485 00e8 ACE80F00 		stmia	ip!, {r0, r1, r2, r3}
+ 486 00ec 9EE80700 		ldm	lr, {r0, r1, r2}
+ 487 00f0 8CE80700 		stm	ip, {r0, r1, r2}
  150:Core/Src/freertos.c **** 
- 485              		.loc 1 150 3 view .LVU79
+ 488              		.loc 1 150 3 view .LVU80
  150:Core/Src/freertos.c **** 
- 486              		.loc 1 150 25 is_stmt 0 view .LVU80
- 487 00f4 0021     		movs	r1, #0
- 488 00f6 07A8     		add	r0, sp, #28
- 489 00f8 FFF7FEFF 		bl	osThreadCreate
- 490              	.LVL36:
+ 489              		.loc 1 150 25 is_stmt 0 view .LVU81
+ 490 00f4 0021     		movs	r1, #0
+ 491 00f6 07A8     		add	r0, sp, #28
+ 492 00f8 FFF7FEFF 		bl	osThreadCreate
+ 493              	.LVL37:
  150:Core/Src/freertos.c **** 
- 491              		.loc 1 150 23 view .LVU81
- 492 00fc 114B     		ldr	r3, .L30+28
- 493 00fe 1860     		str	r0, [r3]
+ 494              		.loc 1 150 23 view .LVU82
+ 495 00fc 114B     		ldr	r3, .L30+28
+ 496 00fe 1860     		str	r0, [r3]
  153:Core/Src/freertos.c ****   OBSERVE_TASKHandle = osThreadCreate(osThread(OBSERVE_TASK), NULL);
- 494              		.loc 1 153 3 is_stmt 1 view .LVU82
- 495 0100 EE46     		mov	lr, sp
- 496 0102 04F1C40C 		add	ip, r4, #196
- 497 0106 BCE80F00 		ldmia	ip!, {r0, r1, r2, r3}
- 498 010a AEE80F00 		stmia	lr!, {r0, r1, r2, r3}
- 499 010e 9CE80700 		ldm	ip, {r0, r1, r2}
- 500 0112 8EE80700 		stm	lr, {r0, r1, r2}
+ 497              		.loc 1 153 3 is_stmt 1 view .LVU83
+ 498 0100 EE46     		mov	lr, sp
+ 499 0102 04F1C40C 		add	ip, r4, #196
+ 500 0106 BCE80F00 		ldmia	ip!, {r0, r1, r2, r3}
+ 501 010a AEE80F00 		stmia	lr!, {r0, r1, r2, r3}
+ 502 010e 9CE80700 		ldm	ip, {r0, r1, r2}
+ 503 0112 8EE80700 		stm	lr, {r0, r1, r2}
  154:Core/Src/freertos.c **** 
- 501              		.loc 1 154 3 view .LVU83
+ 504              		.loc 1 154 3 view .LVU84
  154:Core/Src/freertos.c **** 
- 502              		.loc 1 154 24 is_stmt 0 view .LVU84
- 503 0116 0021     		movs	r1, #0
- 504 0118 6846     		mov	r0, sp
- 505 011a FFF7FEFF 		bl	osThreadCreate
- 506              	.LVL37:
+ 505              		.loc 1 154 24 is_stmt 0 view .LVU85
+ 506 0116 0021     		movs	r1, #0
+ 507 0118 6846     		mov	r0, sp
+ 508 011a FFF7FEFF 		bl	osThreadCreate
+ 509              	.LVL38:
  154:Core/Src/freertos.c **** 
- 507              		.loc 1 154 22 view .LVU85
- 508 011e 0A4B     		ldr	r3, .L30+32
- 509 0120 1860     		str	r0, [r3]
+ 510              		.loc 1 154 22 view .LVU86
+ 511 011e 0A4B     		ldr	r3, .L30+32
+ 512 0120 1860     		str	r0, [r3]
  160:Core/Src/freertos.c **** 
- 510              		.loc 1 160 1 view .LVU86
- 511 0122 38B0     		add	sp, sp, #224
- 512              	.LCFI10:
- 513              		.cfi_def_cfa_offset 8
- 514              		@ sp needed
- 515 0124 10BD     		pop	{r4, pc}
- 516              	.L31:
- 517 0126 00BF     		.align	2
- 518              	.L30:
- 519 0128 00000000 		.word	.LANCHOR2
- 520 012c 00000000 		.word	.LANCHOR3
- 521 0130 00000000 		.word	.LANCHOR4
- 522 0134 00000000 		.word	.LANCHOR5
- 523 0138 00000000 		.word	.LANCHOR6
- 524 013c 00000000 		.word	.LANCHOR7
- 525 0140 00000000 		.word	.LANCHOR8
- 526 0144 00000000 		.word	.LANCHOR9
- 527 0148 00000000 		.word	.LANCHOR10
- 528              		.cfi_endproc
- 529              	.LFE153:
-ARM GAS  D:\temp\TMP\ccS01sgv.s 			page 17
+ 513              		.loc 1 160 1 view .LVU87
+ 514 0122 38B0     		add	sp, sp, #224
+ 515              	.LCFI10:
+ 516              		.cfi_def_cfa_offset 8
+ 517              		@ sp needed
+ 518 0124 10BD     		pop	{r4, pc}
+ 519              	.L31:
+ 520 0126 00BF     		.align	2
+ 521              	.L30:
+ 522 0128 00000000 		.word	.LANCHOR2
+ 523 012c 00000000 		.word	.LANCHOR3
+ 524 0130 00000000 		.word	.LANCHOR4
+ARM GAS  D:\temp\TMP\ccs0IGdc.s 			page 17
 
 
- 531              		.global	OBSERVE_TASKHandle
- 532              		.global	CHASSISL_TASKHandle
- 533              		.global	REMOTE_TASKHandle
- 534              		.global	MOTORTASKHandle
- 535              		.global	CHASSISR_TASKHandle
- 536              		.global	VOFADEBUGHandle
- 537              		.global	INS_TASKHandle
- 538              		.global	defaultTaskHandle
- 539              		.section	.rodata
- 540              		.align	2
- 541              		.set	.LANCHOR2,. + 0
- 542              	.LC16:
- 543 0000 00000000 		.word	.LC0
- 544 0004 00000000 		.word	StartDefaultTask
- 545 0008 0000     		.short	0
- 546 000a 0000     		.space	2
- 547 000c 00000000 		.word	0
- 548 0010 80000000 		.word	128
- 549 0014 00000000 		.word	0
- 550 0018 00000000 		.word	0
- 551              	.LC17:
- 552 001c 0C000000 		.word	.LC2
- 553 0020 00000000 		.word	StartInsTask
- 554 0024 0200     		.short	2
- 555 0026 0000     		.space	2
- 556 0028 00000000 		.word	0
- 557 002c 00040000 		.word	1024
- 558 0030 00000000 		.word	0
- 559 0034 00000000 		.word	0
- 560              	.LC18:
- 561 0038 18000000 		.word	.LC4
- 562 003c 00000000 		.word	StartVofaDebug
- 563 0040 0000     		.short	0
- 564 0042 0000     		.space	2
- 565 0044 00000000 		.word	0
- 566 0048 00010000 		.word	256
- 567 004c 00000000 		.word	0
- 568 0050 00000000 		.word	0
- 569              	.LC19:
- 570 0054 24000000 		.word	.LC6
- 571 0058 00000000 		.word	StartChassisRTask
- 572 005c 0100     		.short	1
- 573 005e 0000     		.space	2
- 574 0060 00000000 		.word	0
- 575 0064 00020000 		.word	512
- 576 0068 00000000 		.word	0
- 577 006c 00000000 		.word	0
- 578              	.LC20:
- 579 0070 34000000 		.word	.LC8
- 580 0074 00000000 		.word	StartMotorTask
- 581 0078 0100     		.short	1
- 582 007a 0000     		.space	2
- 583 007c 00000000 		.word	0
- 584 0080 00020000 		.word	512
- 585 0084 00000000 		.word	0
- 586 0088 00000000 		.word	0
- 587              	.LC21:
-ARM GAS  D:\temp\TMP\ccS01sgv.s 			page 18
+ 525 0134 00000000 		.word	.LANCHOR5
+ 526 0138 00000000 		.word	.LANCHOR6
+ 527 013c 00000000 		.word	.LANCHOR7
+ 528 0140 00000000 		.word	.LANCHOR8
+ 529 0144 00000000 		.word	.LANCHOR9
+ 530 0148 00000000 		.word	.LANCHOR10
+ 531              		.cfi_endproc
+ 532              	.LFE153:
+ 534              		.global	OBSERVE_TASKHandle
+ 535              		.global	CHASSISL_TASKHandle
+ 536              		.global	REMOTE_TASKHandle
+ 537              		.global	MOTORTASKHandle
+ 538              		.global	CHASSISR_TASKHandle
+ 539              		.global	VOFADEBUGHandle
+ 540              		.global	INS_TASKHandle
+ 541              		.global	defaultTaskHandle
+ 542              		.section	.rodata
+ 543              		.align	2
+ 544              		.set	.LANCHOR2,. + 0
+ 545              	.LC16:
+ 546 0000 00000000 		.word	.LC0
+ 547 0004 00000000 		.word	StartDefaultTask
+ 548 0008 0000     		.short	0
+ 549 000a 0000     		.space	2
+ 550 000c 00000000 		.word	0
+ 551 0010 80000000 		.word	128
+ 552 0014 00000000 		.word	0
+ 553 0018 00000000 		.word	0
+ 554              	.LC17:
+ 555 001c 0C000000 		.word	.LC2
+ 556 0020 00000000 		.word	StartInsTask
+ 557 0024 0200     		.short	2
+ 558 0026 0000     		.space	2
+ 559 0028 00000000 		.word	0
+ 560 002c 00040000 		.word	1024
+ 561 0030 00000000 		.word	0
+ 562 0034 00000000 		.word	0
+ 563              	.LC18:
+ 564 0038 18000000 		.word	.LC4
+ 565 003c 00000000 		.word	StartVofaDebug
+ 566 0040 0000     		.short	0
+ 567 0042 0000     		.space	2
+ 568 0044 00000000 		.word	0
+ 569 0048 00010000 		.word	256
+ 570 004c 00000000 		.word	0
+ 571 0050 00000000 		.word	0
+ 572              	.LC19:
+ 573 0054 24000000 		.word	.LC6
+ 574 0058 00000000 		.word	StartChassisRTask
+ 575 005c 0100     		.short	1
+ 576 005e 0000     		.space	2
+ 577 0060 00000000 		.word	0
+ 578 0064 00020000 		.word	512
+ 579 0068 00000000 		.word	0
+ 580 006c 00000000 		.word	0
+ 581              	.LC20:
+ 582 0070 34000000 		.word	.LC8
+ARM GAS  D:\temp\TMP\ccs0IGdc.s 			page 18
 
 
- 588 008c 40000000 		.word	.LC10
- 589 0090 00000000 		.word	StartRemoteTask
- 590 0094 0000     		.short	0
- 591 0096 0000     		.space	2
- 592 0098 00000000 		.word	0
- 593 009c 00020000 		.word	512
- 594 00a0 00000000 		.word	0
- 595 00a4 00000000 		.word	0
- 596              	.LC22:
- 597 00a8 4C000000 		.word	.LC12
- 598 00ac 00000000 		.word	StartChassisLTask
- 599 00b0 0100     		.short	1
- 600 00b2 0000     		.space	2
- 601 00b4 00000000 		.word	0
- 602 00b8 00020000 		.word	512
- 603 00bc 00000000 		.word	0
- 604 00c0 00000000 		.word	0
- 605              	.LC23:
- 606 00c4 5C000000 		.word	.LC14
- 607 00c8 00000000 		.word	StartObserveTask
- 608 00cc 0000     		.short	0
- 609 00ce 0000     		.space	2
- 610 00d0 00000000 		.word	0
- 611 00d4 00020000 		.word	512
- 612 00d8 00000000 		.word	0
- 613 00dc 00000000 		.word	0
- 614              		.section	.bss.CHASSISL_TASKHandle,"aw",%nobits
- 615              		.align	2
- 616              		.set	.LANCHOR9,. + 0
- 619              	CHASSISL_TASKHandle:
- 620 0000 00000000 		.space	4
- 621              		.section	.bss.CHASSISR_TASKHandle,"aw",%nobits
- 622              		.align	2
- 623              		.set	.LANCHOR6,. + 0
- 626              	CHASSISR_TASKHandle:
- 627 0000 00000000 		.space	4
- 628              		.section	.bss.INS_TASKHandle,"aw",%nobits
- 629              		.align	2
- 630              		.set	.LANCHOR4,. + 0
- 633              	INS_TASKHandle:
- 634 0000 00000000 		.space	4
- 635              		.section	.bss.MOTORTASKHandle,"aw",%nobits
- 636              		.align	2
- 637              		.set	.LANCHOR7,. + 0
- 640              	MOTORTASKHandle:
- 641 0000 00000000 		.space	4
- 642              		.section	.bss.OBSERVE_TASKHandle,"aw",%nobits
- 643              		.align	2
- 644              		.set	.LANCHOR10,. + 0
- 647              	OBSERVE_TASKHandle:
- 648 0000 00000000 		.space	4
- 649              		.section	.bss.REMOTE_TASKHandle,"aw",%nobits
- 650              		.align	2
- 651              		.set	.LANCHOR8,. + 0
- 654              	REMOTE_TASKHandle:
- 655 0000 00000000 		.space	4
- 656              		.section	.bss.VOFADEBUGHandle,"aw",%nobits
-ARM GAS  D:\temp\TMP\ccS01sgv.s 			page 19
+ 583 0074 00000000 		.word	StartMotorTask
+ 584 0078 0100     		.short	1
+ 585 007a 0000     		.space	2
+ 586 007c 00000000 		.word	0
+ 587 0080 00020000 		.word	512
+ 588 0084 00000000 		.word	0
+ 589 0088 00000000 		.word	0
+ 590              	.LC21:
+ 591 008c 40000000 		.word	.LC10
+ 592 0090 00000000 		.word	StartRemoteTask
+ 593 0094 0000     		.short	0
+ 594 0096 0000     		.space	2
+ 595 0098 00000000 		.word	0
+ 596 009c 00020000 		.word	512
+ 597 00a0 00000000 		.word	0
+ 598 00a4 00000000 		.word	0
+ 599              	.LC22:
+ 600 00a8 4C000000 		.word	.LC12
+ 601 00ac 00000000 		.word	StartChassisLTask
+ 602 00b0 0100     		.short	1
+ 603 00b2 0000     		.space	2
+ 604 00b4 00000000 		.word	0
+ 605 00b8 00020000 		.word	512
+ 606 00bc 00000000 		.word	0
+ 607 00c0 00000000 		.word	0
+ 608              	.LC23:
+ 609 00c4 5C000000 		.word	.LC14
+ 610 00c8 00000000 		.word	StartObserveTask
+ 611 00cc 0000     		.short	0
+ 612 00ce 0000     		.space	2
+ 613 00d0 00000000 		.word	0
+ 614 00d4 00020000 		.word	512
+ 615 00d8 00000000 		.word	0
+ 616 00dc 00000000 		.word	0
+ 617              		.section	.bss.CHASSISL_TASKHandle,"aw",%nobits
+ 618              		.align	2
+ 619              		.set	.LANCHOR9,. + 0
+ 622              	CHASSISL_TASKHandle:
+ 623 0000 00000000 		.space	4
+ 624              		.section	.bss.CHASSISR_TASKHandle,"aw",%nobits
+ 625              		.align	2
+ 626              		.set	.LANCHOR6,. + 0
+ 629              	CHASSISR_TASKHandle:
+ 630 0000 00000000 		.space	4
+ 631              		.section	.bss.INS_TASKHandle,"aw",%nobits
+ 632              		.align	2
+ 633              		.set	.LANCHOR4,. + 0
+ 636              	INS_TASKHandle:
+ 637 0000 00000000 		.space	4
+ 638              		.section	.bss.MOTORTASKHandle,"aw",%nobits
+ 639              		.align	2
+ 640              		.set	.LANCHOR7,. + 0
+ 643              	MOTORTASKHandle:
+ 644 0000 00000000 		.space	4
+ 645              		.section	.bss.OBSERVE_TASKHandle,"aw",%nobits
+ 646              		.align	2
+ 647              		.set	.LANCHOR10,. + 0
+ARM GAS  D:\temp\TMP\ccs0IGdc.s 			page 19
 
 
- 657              		.align	2
- 658              		.set	.LANCHOR5,. + 0
- 661              	VOFADEBUGHandle:
- 662 0000 00000000 		.space	4
- 663              		.section	.bss.defaultTaskHandle,"aw",%nobits
- 664              		.align	2
- 665              		.set	.LANCHOR3,. + 0
- 668              	defaultTaskHandle:
- 669 0000 00000000 		.space	4
- 670              		.section	.bss.xIdleStack,"aw",%nobits
- 671              		.align	2
- 672              		.set	.LANCHOR1,. + 0
- 675              	xIdleStack:
- 676 0000 00000000 		.space	512
- 676      00000000 
- 676      00000000 
- 676      00000000 
- 676      00000000 
- 677              		.section	.bss.xIdleTaskTCBBuffer,"aw",%nobits
- 678              		.align	2
- 679              		.set	.LANCHOR0,. + 0
- 682              	xIdleTaskTCBBuffer:
- 683 0000 00000000 		.space	84
- 683      00000000 
- 683      00000000 
- 683      00000000 
- 683      00000000 
- 684              		.text
- 685              	.Letext0:
- 686              		.file 2 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\machine\\_default_types.h"
- 687              		.file 3 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
- 688              		.file 4 "Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h"
- 689              		.file 5 "Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h"
- 690              		.file 6 "Middlewares/Third_Party/FreeRTOS/Source/include/task.h"
- 691              		.file 7 "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h"
- 692              		.file 8 "Robot/RoboTask/chassis/chassisL_task.h"
- 693              		.file 9 "Robot/RoboTask/remote/remote_task.h"
- 694              		.file 10 "Robot/RoboTask/Robot.h"
- 695              		.file 11 "Robot/RoboTask/chassis/chassisR_task.h"
- 696              		.file 12 "Robot/RoboTask/ins/ins_task.h"
-ARM GAS  D:\temp\TMP\ccS01sgv.s 			page 20
+ 650              	OBSERVE_TASKHandle:
+ 651 0000 00000000 		.space	4
+ 652              		.section	.bss.REMOTE_TASKHandle,"aw",%nobits
+ 653              		.align	2
+ 654              		.set	.LANCHOR8,. + 0
+ 657              	REMOTE_TASKHandle:
+ 658 0000 00000000 		.space	4
+ 659              		.section	.bss.VOFADEBUGHandle,"aw",%nobits
+ 660              		.align	2
+ 661              		.set	.LANCHOR5,. + 0
+ 664              	VOFADEBUGHandle:
+ 665 0000 00000000 		.space	4
+ 666              		.section	.bss.defaultTaskHandle,"aw",%nobits
+ 667              		.align	2
+ 668              		.set	.LANCHOR3,. + 0
+ 671              	defaultTaskHandle:
+ 672 0000 00000000 		.space	4
+ 673              		.section	.bss.xIdleStack,"aw",%nobits
+ 674              		.align	2
+ 675              		.set	.LANCHOR1,. + 0
+ 678              	xIdleStack:
+ 679 0000 00000000 		.space	512
+ 679      00000000 
+ 679      00000000 
+ 679      00000000 
+ 679      00000000 
+ 680              		.section	.bss.xIdleTaskTCBBuffer,"aw",%nobits
+ 681              		.align	2
+ 682              		.set	.LANCHOR0,. + 0
+ 685              	xIdleTaskTCBBuffer:
+ 686 0000 00000000 		.space	84
+ 686      00000000 
+ 686      00000000 
+ 686      00000000 
+ 686      00000000 
+ 687              		.text
+ 688              	.Letext0:
+ 689              		.file 2 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 690              		.file 3 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
+ 691              		.file 4 "Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h"
+ 692              		.file 5 "Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h"
+ 693              		.file 6 "Middlewares/Third_Party/FreeRTOS/Source/include/task.h"
+ 694              		.file 7 "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h"
+ 695              		.file 8 "Robot/RoboTask/chassis/chassisL_task.h"
+ 696              		.file 9 "Robot/RoboTask/remote/remote_task.h"
+ 697              		.file 10 "Robot/RoboTask/Robot.h"
+ 698              		.file 11 "Robot/RoboTask/chassis/chassisR_task.h"
+ 699              		.file 12 "Robot/RoboTask/emulator/vofa_task.h"
+ 700              		.file 13 "Robot/RoboTask/ins/ins_task.h"
+ARM GAS  D:\temp\TMP\ccs0IGdc.s 			page 20
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 freertos.c
-D:\temp\TMP\ccS01sgv.s:16     .rodata.str1.4:00000000 $d
-D:\temp\TMP\ccS01sgv.s:44     .text.StartDefaultTask:00000000 $t
-D:\temp\TMP\ccS01sgv.s:50     .text.StartDefaultTask:00000000 StartDefaultTask
-D:\temp\TMP\ccS01sgv.s:78     .text.StartVofaDebug:00000000 $t
-D:\temp\TMP\ccS01sgv.s:84     .text.StartVofaDebug:00000000 StartVofaDebug
-D:\temp\TMP\ccS01sgv.s:111    .text.StartObserveTask:00000000 $t
-D:\temp\TMP\ccS01sgv.s:117    .text.StartObserveTask:00000000 StartObserveTask
-D:\temp\TMP\ccS01sgv.s:144    .text.StartInsTask:00000000 $t
-D:\temp\TMP\ccS01sgv.s:150    .text.StartInsTask:00000000 StartInsTask
-D:\temp\TMP\ccS01sgv.s:180    .text.StartChassisRTask:00000000 $t
-D:\temp\TMP\ccS01sgv.s:186    .text.StartChassisRTask:00000000 StartChassisRTask
-D:\temp\TMP\ccS01sgv.s:216    .text.StartMotorTask:00000000 $t
-D:\temp\TMP\ccS01sgv.s:222    .text.StartMotorTask:00000000 StartMotorTask
-D:\temp\TMP\ccS01sgv.s:252    .text.StartRemoteTask:00000000 $t
-D:\temp\TMP\ccS01sgv.s:258    .text.StartRemoteTask:00000000 StartRemoteTask
-D:\temp\TMP\ccS01sgv.s:288    .text.StartChassisLTask:00000000 $t
-D:\temp\TMP\ccS01sgv.s:294    .text.StartChassisLTask:00000000 StartChassisLTask
-D:\temp\TMP\ccS01sgv.s:324    .text.vApplicationGetIdleTaskMemory:00000000 $t
-D:\temp\TMP\ccS01sgv.s:330    .text.vApplicationGetIdleTaskMemory:00000000 vApplicationGetIdleTaskMemory
-D:\temp\TMP\ccS01sgv.s:355    .text.vApplicationGetIdleTaskMemory:00000010 $d
-D:\temp\TMP\ccS01sgv.s:361    .text.MX_FREERTOS_Init:00000000 $t
-D:\temp\TMP\ccS01sgv.s:367    .text.MX_FREERTOS_Init:00000000 MX_FREERTOS_Init
-D:\temp\TMP\ccS01sgv.s:519    .text.MX_FREERTOS_Init:00000128 $d
-D:\temp\TMP\ccS01sgv.s:647    .bss.OBSERVE_TASKHandle:00000000 OBSERVE_TASKHandle
-D:\temp\TMP\ccS01sgv.s:619    .bss.CHASSISL_TASKHandle:00000000 CHASSISL_TASKHandle
-D:\temp\TMP\ccS01sgv.s:654    .bss.REMOTE_TASKHandle:00000000 REMOTE_TASKHandle
-D:\temp\TMP\ccS01sgv.s:640    .bss.MOTORTASKHandle:00000000 MOTORTASKHandle
-D:\temp\TMP\ccS01sgv.s:626    .bss.CHASSISR_TASKHandle:00000000 CHASSISR_TASKHandle
-D:\temp\TMP\ccS01sgv.s:661    .bss.VOFADEBUGHandle:00000000 VOFADEBUGHandle
-D:\temp\TMP\ccS01sgv.s:633    .bss.INS_TASKHandle:00000000 INS_TASKHandle
-D:\temp\TMP\ccS01sgv.s:668    .bss.defaultTaskHandle:00000000 defaultTaskHandle
-D:\temp\TMP\ccS01sgv.s:540    .rodata:00000000 $d
-D:\temp\TMP\ccS01sgv.s:615    .bss.CHASSISL_TASKHandle:00000000 $d
-D:\temp\TMP\ccS01sgv.s:622    .bss.CHASSISR_TASKHandle:00000000 $d
-D:\temp\TMP\ccS01sgv.s:629    .bss.INS_TASKHandle:00000000 $d
-D:\temp\TMP\ccS01sgv.s:636    .bss.MOTORTASKHandle:00000000 $d
-D:\temp\TMP\ccS01sgv.s:643    .bss.OBSERVE_TASKHandle:00000000 $d
-D:\temp\TMP\ccS01sgv.s:650    .bss.REMOTE_TASKHandle:00000000 $d
-D:\temp\TMP\ccS01sgv.s:657    .bss.VOFADEBUGHandle:00000000 $d
-D:\temp\TMP\ccS01sgv.s:664    .bss.defaultTaskHandle:00000000 $d
-D:\temp\TMP\ccS01sgv.s:671    .bss.xIdleStack:00000000 $d
-D:\temp\TMP\ccS01sgv.s:675    .bss.xIdleStack:00000000 xIdleStack
-D:\temp\TMP\ccS01sgv.s:678    .bss.xIdleTaskTCBBuffer:00000000 $d
-D:\temp\TMP\ccS01sgv.s:682    .bss.xIdleTaskTCBBuffer:00000000 xIdleTaskTCBBuffer
+D:\temp\TMP\ccs0IGdc.s:16     .rodata.str1.4:00000000 $d
+D:\temp\TMP\ccs0IGdc.s:44     .text.StartDefaultTask:00000000 $t
+D:\temp\TMP\ccs0IGdc.s:50     .text.StartDefaultTask:00000000 StartDefaultTask
+D:\temp\TMP\ccs0IGdc.s:78     .text.StartObserveTask:00000000 $t
+D:\temp\TMP\ccs0IGdc.s:84     .text.StartObserveTask:00000000 StartObserveTask
+D:\temp\TMP\ccs0IGdc.s:111    .text.StartInsTask:00000000 $t
+D:\temp\TMP\ccs0IGdc.s:117    .text.StartInsTask:00000000 StartInsTask
+D:\temp\TMP\ccs0IGdc.s:147    .text.StartVofaDebug:00000000 $t
+D:\temp\TMP\ccs0IGdc.s:153    .text.StartVofaDebug:00000000 StartVofaDebug
+D:\temp\TMP\ccs0IGdc.s:183    .text.StartChassisRTask:00000000 $t
+D:\temp\TMP\ccs0IGdc.s:189    .text.StartChassisRTask:00000000 StartChassisRTask
+D:\temp\TMP\ccs0IGdc.s:219    .text.StartMotorTask:00000000 $t
+D:\temp\TMP\ccs0IGdc.s:225    .text.StartMotorTask:00000000 StartMotorTask
+D:\temp\TMP\ccs0IGdc.s:255    .text.StartRemoteTask:00000000 $t
+D:\temp\TMP\ccs0IGdc.s:261    .text.StartRemoteTask:00000000 StartRemoteTask
+D:\temp\TMP\ccs0IGdc.s:291    .text.StartChassisLTask:00000000 $t
+D:\temp\TMP\ccs0IGdc.s:297    .text.StartChassisLTask:00000000 StartChassisLTask
+D:\temp\TMP\ccs0IGdc.s:327    .text.vApplicationGetIdleTaskMemory:00000000 $t
+D:\temp\TMP\ccs0IGdc.s:333    .text.vApplicationGetIdleTaskMemory:00000000 vApplicationGetIdleTaskMemory
+D:\temp\TMP\ccs0IGdc.s:358    .text.vApplicationGetIdleTaskMemory:00000010 $d
+D:\temp\TMP\ccs0IGdc.s:364    .text.MX_FREERTOS_Init:00000000 $t
+D:\temp\TMP\ccs0IGdc.s:370    .text.MX_FREERTOS_Init:00000000 MX_FREERTOS_Init
+D:\temp\TMP\ccs0IGdc.s:522    .text.MX_FREERTOS_Init:00000128 $d
+D:\temp\TMP\ccs0IGdc.s:650    .bss.OBSERVE_TASKHandle:00000000 OBSERVE_TASKHandle
+D:\temp\TMP\ccs0IGdc.s:622    .bss.CHASSISL_TASKHandle:00000000 CHASSISL_TASKHandle
+D:\temp\TMP\ccs0IGdc.s:657    .bss.REMOTE_TASKHandle:00000000 REMOTE_TASKHandle
+D:\temp\TMP\ccs0IGdc.s:643    .bss.MOTORTASKHandle:00000000 MOTORTASKHandle
+D:\temp\TMP\ccs0IGdc.s:629    .bss.CHASSISR_TASKHandle:00000000 CHASSISR_TASKHandle
+D:\temp\TMP\ccs0IGdc.s:664    .bss.VOFADEBUGHandle:00000000 VOFADEBUGHandle
+D:\temp\TMP\ccs0IGdc.s:636    .bss.INS_TASKHandle:00000000 INS_TASKHandle
+D:\temp\TMP\ccs0IGdc.s:671    .bss.defaultTaskHandle:00000000 defaultTaskHandle
+D:\temp\TMP\ccs0IGdc.s:543    .rodata:00000000 $d
+D:\temp\TMP\ccs0IGdc.s:618    .bss.CHASSISL_TASKHandle:00000000 $d
+D:\temp\TMP\ccs0IGdc.s:625    .bss.CHASSISR_TASKHandle:00000000 $d
+D:\temp\TMP\ccs0IGdc.s:632    .bss.INS_TASKHandle:00000000 $d
+D:\temp\TMP\ccs0IGdc.s:639    .bss.MOTORTASKHandle:00000000 $d
+D:\temp\TMP\ccs0IGdc.s:646    .bss.OBSERVE_TASKHandle:00000000 $d
+D:\temp\TMP\ccs0IGdc.s:653    .bss.REMOTE_TASKHandle:00000000 $d
+D:\temp\TMP\ccs0IGdc.s:660    .bss.VOFADEBUGHandle:00000000 $d
+D:\temp\TMP\ccs0IGdc.s:667    .bss.defaultTaskHandle:00000000 $d
+D:\temp\TMP\ccs0IGdc.s:674    .bss.xIdleStack:00000000 $d
+D:\temp\TMP\ccs0IGdc.s:678    .bss.xIdleStack:00000000 xIdleStack
+D:\temp\TMP\ccs0IGdc.s:681    .bss.xIdleTaskTCBBuffer:00000000 $d
+D:\temp\TMP\ccs0IGdc.s:685    .bss.xIdleTaskTCBBuffer:00000000 xIdleTaskTCBBuffer
 
 UNDEFINED SYMBOLS
 osDelay
 INS_task
+VofaDebug_Task
 ChassisR_Task
 MotorTask
 Remote_Task

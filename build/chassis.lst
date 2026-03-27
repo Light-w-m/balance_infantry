@@ -1,4 +1,4 @@
-ARM GAS  D:\temp\TMP\cc19NiBD.s 			page 1
+ARM GAS  D:\temp\TMP\ccU9X1JH.s 			page 1
 
 
    1              		.cpu cortex-m7
@@ -18,344 +18,37 @@ ARM GAS  D:\temp\TMP\cc19NiBD.s 			page 1
   15              		.text
   16              	.Ltext0:
   17              		.cfi_sections	.debug_frame
-  18              		.section	.text.Pensation_Init,"ax",%progbits
-  19              		.align	1
-  20              		.global	Pensation_Init
-  21              		.syntax unified
-  22              		.thumb
-  23              		.thumb_func
-  25              	Pensation_Init:
-  26              	.LVL0:
-  27              	.LFB190:
-  28              		.file 1 "Robot/RoboTask/chassis/chassis.c"
-   1:Robot/RoboTask/chassis/chassis.c **** /**
-   2:Robot/RoboTask/chassis/chassis.c ****  * @file chassis.c
-   3:Robot/RoboTask/chassis/chassis.c ****  * @author your name (you@domain.com)
-   4:Robot/RoboTask/chassis/chassis.c ****  * @brief 两腿共同的任务函数
-   5:Robot/RoboTask/chassis/chassis.c ****  * @version 0.1
-   6:Robot/RoboTask/chassis/chassis.c ****  * @date 2026-01-31
-   7:Robot/RoboTask/chassis/chassis.c ****  * 
-   8:Robot/RoboTask/chassis/chassis.c ****  * @copyright Copyright (c) 2026
-   9:Robot/RoboTask/chassis/chassis.c ****  * 
-  10:Robot/RoboTask/chassis/chassis.c ****  */
-  11:Robot/RoboTask/chassis/chassis.c **** 
-  12:Robot/RoboTask/chassis/chassis.c **** #include "chassis_def.h"
-  13:Robot/RoboTask/chassis/chassis.c **** #include "kinematics.h"
-  14:Robot/RoboTask/chassis/chassis.c **** #include "ins_task.h"
-  15:Robot/RoboTask/chassis/chassis.c **** #include "pid.h"
-  16:Robot/RoboTask/chassis/chassis.c **** 
-  17:Robot/RoboTask/chassis/chassis.c **** chassis_t chassis_move;
-  18:Robot/RoboTask/chassis/chassis.c **** extern Leg_t legR;
-  19:Robot/RoboTask/chassis/chassis.c **** extern Leg_t legL;
-  20:Robot/RoboTask/chassis/chassis.c **** 
-  21:Robot/RoboTask/chassis/chassis.c **** PidTypeDef Turn_Pid;    //转向pd
-  22:Robot/RoboTask/chassis/chassis.c **** PidTypeDef Tp_Pid;      //防劈叉补偿pd
-  23:Robot/RoboTask/chassis/chassis.c **** PidTypeDef Roll_Pid;    //横滚角补偿pd
-  24:Robot/RoboTask/chassis/chassis.c **** 
-  25:Robot/RoboTask/chassis/chassis.c **** /**
-  26:Robot/RoboTask/chassis/chassis.c ****  * @brief 补偿初始化：roll补偿、防劈叉补偿、偏航角补偿
-  27:Robot/RoboTask/chassis/chassis.c ****  * 
-  28:Robot/RoboTask/chassis/chassis.c ****  * @param roll 
-  29:Robot/RoboTask/chassis/chassis.c ****  * @param Tp 
-  30:Robot/RoboTask/chassis/chassis.c ****  * @param turn 
-ARM GAS  D:\temp\TMP\cc19NiBD.s 			page 2
-
-
-  31:Robot/RoboTask/chassis/chassis.c ****  */
-  32:Robot/RoboTask/chassis/chassis.c **** void Pensation_Init(PidTypeDef *roll,PidTypeDef *Tp,PidTypeDef *turn)
-  33:Robot/RoboTask/chassis/chassis.c **** {
-  29              		.loc 1 33 1 view -0
-  30              		.cfi_startproc
-  31              		@ args = 0, pretend = 0, frame = 0
-  32              		@ frame_needed = 0, uses_anonymous_args = 0
-  33              		.loc 1 33 1 is_stmt 0 view .LVU1
-  34 0000 38B5     		push	{r3, r4, r5, lr}
-  35              	.LCFI0:
-  36              		.cfi_def_cfa_offset 16
-  37              		.cfi_offset 3, -16
-  38              		.cfi_offset 4, -12
-  39              		.cfi_offset 5, -8
-  40              		.cfi_offset 14, -4
-  41 0002 2DED028B 		vpush.64	{d8}
-  42              	.LCFI1:
-  43              		.cfi_def_cfa_offset 24
-  44              		.cfi_offset 80, -24
-  45              		.cfi_offset 81, -20
-  46 0006 0D46     		mov	r5, r1
-  47 0008 1446     		mov	r4, r2
-  34:Robot/RoboTask/chassis/chassis.c ****     const static float roll_pid[3] = {ROLL_PID_KP, ROLL_PID_KI,ROLL_PID_KD};
-  48              		.loc 1 34 5 is_stmt 1 view .LVU2
-  35:Robot/RoboTask/chassis/chassis.c **** 	const static float tp_pid[3] = {TP_PID_KP, TP_PID_KI, TP_PID_KD};
-  49              		.loc 1 35 2 view .LVU3
-  36:Robot/RoboTask/chassis/chassis.c **** 	const static float turn_pid[3] = {TURN_PID_KP, TURN_PID_KI, TURN_PID_KD};
-  50              		.loc 1 36 2 view .LVU4
-  37:Robot/RoboTask/chassis/chassis.c **** 	
-  38:Robot/RoboTask/chassis/chassis.c **** 	PID_init(roll, PID_POSITION, roll_pid, ROLL_PID_MAX_OUT, ROLL_PID_MAX_IOUT);
-  51              		.loc 1 38 2 view .LVU5
-  52 000a 9FED0F8A 		vldr.32	s16, .L3
-  53 000e F0EE480A 		vmov.f32	s1, s16
-  54 0012 9FED0E0A 		vldr.32	s0, .L3+4
-  55 0016 0E4A     		ldr	r2, .L3+8
-  56              	.LVL1:
-  57              		.loc 1 38 2 is_stmt 0 view .LVU6
-  58 0018 0021     		movs	r1, #0
-  59              	.LVL2:
-  60              		.loc 1 38 2 view .LVU7
-  61 001a FFF7FEFF 		bl	PID_init
-  62              	.LVL3:
-  39:Robot/RoboTask/chassis/chassis.c **** 	PID_init(Tp, PID_POSITION, tp_pid, TP_PID_MAX_OUT,TP_PID_MAX_IOUT);
-  63              		.loc 1 39 2 is_stmt 1 view .LVU8
-  64 001e F0EE480A 		vmov.f32	s1, s16
-  65 0022 B0EE000A 		vmov.f32	s0, #2.0e+0
-  66 0026 0B4A     		ldr	r2, .L3+12
-  67 0028 0021     		movs	r1, #0
-  68 002a 2846     		mov	r0, r5
-  69 002c FFF7FEFF 		bl	PID_init
-  70              	.LVL4:
-  40:Robot/RoboTask/chassis/chassis.c **** 	PID_init(turn, PID_POSITION, turn_pid, TURN_PID_MAX_OUT, TURN_PID_MAX_IOUT);
-  71              		.loc 1 40 2 view .LVU9
-  72 0030 F0EE480A 		vmov.f32	s1, s16
-  73 0034 B7EE000A 		vmov.f32	s0, #1.0e+0
-  74 0038 074A     		ldr	r2, .L3+16
-  75 003a 0021     		movs	r1, #0
-ARM GAS  D:\temp\TMP\cc19NiBD.s 			page 3
-
-
-  76 003c 2046     		mov	r0, r4
-  77 003e FFF7FEFF 		bl	PID_init
-  78              	.LVL5:
-  41:Robot/RoboTask/chassis/chassis.c **** }
-  79              		.loc 1 41 1 is_stmt 0 view .LVU10
-  80 0042 BDEC028B 		vldm	sp!, {d8}
-  81              	.LCFI2:
-  82              		.cfi_restore 80
-  83              		.cfi_restore 81
-  84              		.cfi_def_cfa_offset 16
-  85 0046 38BD     		pop	{r3, r4, r5, pc}
-  86              	.LVL6:
-  87              	.L4:
-  88              		.loc 1 41 1 view .LVU11
-  89              		.align	2
-  90              	.L3:
-  91 0048 00000000 		.word	0
-  92 004c 0000C842 		.word	1120403456
-  93 0050 00000000 		.word	.LANCHOR0
-  94 0054 00000000 		.word	.LANCHOR1
-  95 0058 00000000 		.word	.LANCHOR2
-  96              		.cfi_endproc
-  97              	.LFE190:
-  99              		.section	.text.Turn_Loop,"ax",%progbits
- 100              		.align	1
- 101              		.global	Turn_Loop
- 102              		.syntax unified
- 103              		.thumb
- 104              		.thumb_func
- 106              	Turn_Loop:
- 107              	.LFB191:
-  42:Robot/RoboTask/chassis/chassis.c **** 
-  43:Robot/RoboTask/chassis/chassis.c **** /**
-  44:Robot/RoboTask/chassis/chassis.c ****  * @brief 转向控制
-  45:Robot/RoboTask/chassis/chassis.c ****  * 
-  46:Robot/RoboTask/chassis/chassis.c ****  */
-  47:Robot/RoboTask/chassis/chassis.c **** void Turn_Loop(void)
-  48:Robot/RoboTask/chassis/chassis.c **** {
- 108              		.loc 1 48 1 is_stmt 1 view -0
- 109              		.cfi_startproc
- 110              		@ args = 0, pretend = 0, frame = 0
- 111              		@ frame_needed = 0, uses_anonymous_args = 0
- 112 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
- 113              	.LCFI3:
- 114              		.cfi_def_cfa_offset 24
- 115              		.cfi_offset 4, -24
- 116              		.cfi_offset 5, -20
- 117              		.cfi_offset 6, -16
- 118              		.cfi_offset 7, -12
- 119              		.cfi_offset 8, -8
- 120              		.cfi_offset 14, -4
-  49:Robot/RoboTask/chassis/chassis.c ****     float L_d0 = legR.rod.L0 - legL.rod.L0;
- 121              		.loc 1 49 5 view .LVU13
- 122              		.loc 1 49 26 is_stmt 0 view .LVU14
- 123 0004 184D     		ldr	r5, .L7
- 124 0006 95ED020A 		vldr.32	s0, [r5, #8]
- 125 000a 05F10808 		add	r8, r5, #8
-ARM GAS  D:\temp\TMP\cc19NiBD.s 			page 4
-
-
- 126              		.loc 1 49 40 view .LVU15
- 127 000e 174E     		ldr	r6, .L7+4
- 128 0010 3746     		mov	r7, r6
- 129 0012 D6ED027A 		vldr.32	s15, [r6, #8]
- 130 0016 0837     		adds	r7, r7, #8
- 131              	.LVL7:
-  50:Robot/RoboTask/chassis/chassis.c ****     float diff = DeviationCalc(L_d0, chassis_move.body.roll, chassis_move.reference.roll);
- 132              		.loc 1 50 5 is_stmt 1 view .LVU16
- 133              		.loc 1 50 18 is_stmt 0 view .LVU17
- 134 0018 154C     		ldr	r4, .L7+8
- 135 001a 94ED541A 		vldr.32	s2, [r4, #336]
- 136 001e D4ED4D0A 		vldr.32	s1, [r4, #308]
- 137 0022 30EE670A 		vsub.f32	s0, s0, s15
- 138              	.LVL8:
- 139              		.loc 1 50 18 view .LVU18
- 140 0026 FFF7FEFF 		bl	DeviationCalc
- 141              	.LVL9:
-  51:Robot/RoboTask/chassis/chassis.c ****     float delta_L0 = 0.0f;
- 142              		.loc 1 51 5 is_stmt 1 view .LVU19
-  52:Robot/RoboTask/chassis/chassis.c **** 
-  53:Robot/RoboTask/chassis/chassis.c ****     CoordinateLength(&legL.rod.L0, &legR.rod.L0, diff, delta_L0);
- 143              		.loc 1 53 5 view .LVU20
- 144 002a DFED120A 		vldr.32	s1, .L7+12
- 145 002e 4146     		mov	r1, r8
- 146 0030 3846     		mov	r0, r7
- 147 0032 FFF7FEFF 		bl	CoordinateLength
- 148              	.LVL10:
-  54:Robot/RoboTask/chassis/chassis.c **** 
-  55:Robot/RoboTask/chassis/chassis.c ****     PID_Calc(&Turn_Pid, chassis_move.body.yaw_dot, chassis_move.reference.wz);
- 149              		.loc 1 55 5 view .LVU21
- 150 0036 104F     		ldr	r7, .L7+16
- 151 0038 D4ED5A0A 		vldr.32	s1, [r4, #360]
- 152 003c 94ED500A 		vldr.32	s0, [r4, #320]
- 153 0040 3846     		mov	r0, r7
- 154 0042 FFF7FEFF 		bl	PID_Calc
- 155              	.LVL11:
-  56:Robot/RoboTask/chassis/chassis.c ****     legL.rod.T += Turn_Pid.out;
- 156              		.loc 1 56 5 view .LVU22
- 157              		.loc 1 56 27 is_stmt 0 view .LVU23
- 158 0046 D7ED086A 		vldr.32	s13, [r7, #32]
- 159              		.loc 1 56 16 view .LVU24
- 160 004a 96ED117A 		vldr.32	s14, [r6, #68]
- 161 004e 37EE267A 		vadd.f32	s14, s14, s13
- 162 0052 86ED117A 		vstr.32	s14, [r6, #68]
-  57:Robot/RoboTask/chassis/chassis.c ****     legR.rod.T -= Turn_Pid.out;
- 163              		.loc 1 57 5 is_stmt 1 view .LVU25
- 164              		.loc 1 57 16 is_stmt 0 view .LVU26
- 165 0056 D5ED117A 		vldr.32	s15, [r5, #68]
- 166 005a 77EEE67A 		vsub.f32	s15, s15, s13
- 167 005e C5ED117A 		vstr.32	s15, [r5, #68]
-  58:Robot/RoboTask/chassis/chassis.c **** }...
- 168              		.loc 1 58 1 view .LVU27
- 169 0062 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
- 170              	.L8:
- 171 0066 00BF     		.align	2
- 172              	.L7:
- 173 0068 00000000 		.word	legR
-ARM GAS  D:\temp\TMP\cc19NiBD.s 			page 5
-
-
- 174 006c 00000000 		.word	legL
- 175 0070 00000000 		.word	.LANCHOR3
- 176 0074 00000000 		.word	0
- 177 0078 00000000 		.word	.LANCHOR4
- 178              		.cfi_endproc
- 179              	.LFE191:
- 181              		.global	Roll_Pid
- 182              		.global	Tp_Pid
- 183              		.global	Turn_Pid
- 184              		.global	chassis_move
- 185              		.section	.bss.Roll_Pid,"aw",%nobits
- 186              		.align	2
- 189              	Roll_Pid:
- 190 0000 00000000 		.space	72
- 190      00000000 
- 190      00000000 
- 190      00000000 
- 190      00000000 
- 191              		.section	.bss.Tp_Pid,"aw",%nobits
- 192              		.align	2
- 195              	Tp_Pid:
- 196 0000 00000000 		.space	72
- 196      00000000 
- 196      00000000 
- 196      00000000 
- 196      00000000 
- 197              		.section	.bss.Turn_Pid,"aw",%nobits
- 198              		.align	2
- 199              		.set	.LANCHOR4,. + 0
- 202              	Turn_Pid:
- 203 0000 00000000 		.space	72
- 203      00000000 
- 203      00000000 
- 203      00000000 
- 203      00000000 
- 204              		.section	.bss.chassis_move,"aw",%nobits
- 205              		.align	2
- 206              		.set	.LANCHOR3,. + 0
- 209              	chassis_move:
- 210 0000 00000000 		.space	420
- 210      00000000 
- 210      00000000 
- 210      00000000 
- 210      00000000 
- 211              		.section	.rodata.roll_pid.2,"a"
- 212              		.align	2
- 213              		.set	.LANCHOR0,. + 0
- 216              	roll_pid.2:
- 217 0000 00000C43 		.word	1124859904
- 218 0004 00000000 		.word	0
- 219 0008 00002041 		.word	1092616192
- 220              		.section	.rodata.tp_pid.1,"a"
- 221              		.align	2
- 222              		.set	.LANCHOR1,. + 0
- 225              	tp_pid.1:
- 226 0000 0000F041 		.word	1106247680
- 227 0004 00000000 		.word	0
-ARM GAS  D:\temp\TMP\cc19NiBD.s 			page 6
-
-
- 228 0008 0000803F 		.word	1065353216
- 229              		.section	.rodata.turn_pid.0,"a"
- 230              		.align	2
- 231              		.set	.LANCHOR2,. + 0
- 234              	turn_pid.0:
- 235 0000 00002040 		.word	1075838976
- 236 0004 00000000 		.word	0
- 237 0008 9A99993E 		.word	1050253722
- 238              		.text
- 239              	.Letext0:
- 240              		.file 2 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\machine\\_default_types.h"
- 241              		.file 3 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
- 242              		.file 4 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h723xx.h"
- 243              		.file 5 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h"
- 244              		.file 6 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h"
- 245              		.file 7 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_fdcan.h"
- 246              		.file 8 "Bsp/bsp_can.h"
- 247              		.file 9 "Robot/Controller/controller.h"
- 248              		.file 10 "Robot/Devices/motor_def.h"
- 249              		.file 11 "Robot/daemon/daemon.h"
- 250              		.file 12 "Robot/Devices/Motor/djimotor.h"
- 251              		.file 13 "Robot/Devices/Motor/dmmotor.h"
- 252              		.file 14 "Robot/RoboTask/chassis/chassis_def.h"
- 253              		.file 15 "Robot/Controller/kinematics.h"
- 254              		.file 16 "Robot/Controller/pid.h"
-ARM GAS  D:\temp\TMP\cc19NiBD.s 			page 7
+  18              		.global	chassis_move
+  19              		.section	.bss.chassis_move,"aw",%nobits
+  20              		.align	2
+  23              	chassis_move:
+  24 0000 00000000 		.space	448
+  24      00000000 
+  24      00000000 
+  24      00000000 
+  24      00000000 
+  25              		.text
+  26              	.Letext0:
+  27              		.file 1 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\machine\\_default_types.h"
+  28              		.file 2 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
+  29              		.file 3 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h723xx.h"
+  30              		.file 4 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h"
+  31              		.file 5 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h"
+  32              		.file 6 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_fdcan.h"
+  33              		.file 7 "Bsp/bsp_can.h"
+  34              		.file 8 "Robot/Controller/controller.h"
+  35              		.file 9 "Robot/Devices/motor_def.h"
+  36              		.file 10 "Robot/daemon/daemon.h"
+  37              		.file 11 "Robot/Devices/Motor/djimotor.h"
+  38              		.file 12 "Robot/Devices/Motor/dmmotor.h"
+  39              		.file 13 "Robot/RoboTask/chassis/chassis_def.h"
+  40              		.file 14 "Robot/RoboTask/chassis/chassis.c"
+ARM GAS  D:\temp\TMP\ccU9X1JH.s 			page 2
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 chassis.c
-D:\temp\TMP\cc19NiBD.s:19     .text.Pensation_Init:00000000 $t
-D:\temp\TMP\cc19NiBD.s:25     .text.Pensation_Init:00000000 Pensation_Init
-D:\temp\TMP\cc19NiBD.s:91     .text.Pensation_Init:00000048 $d
-D:\temp\TMP\cc19NiBD.s:100    .text.Turn_Loop:00000000 $t
-D:\temp\TMP\cc19NiBD.s:106    .text.Turn_Loop:00000000 Turn_Loop
-D:\temp\TMP\cc19NiBD.s:173    .text.Turn_Loop:00000068 $d
-D:\temp\TMP\cc19NiBD.s:189    .bss.Roll_Pid:00000000 Roll_Pid
-D:\temp\TMP\cc19NiBD.s:195    .bss.Tp_Pid:00000000 Tp_Pid
-D:\temp\TMP\cc19NiBD.s:202    .bss.Turn_Pid:00000000 Turn_Pid
-D:\temp\TMP\cc19NiBD.s:209    .bss.chassis_move:00000000 chassis_move
-D:\temp\TMP\cc19NiBD.s:186    .bss.Roll_Pid:00000000 $d
-D:\temp\TMP\cc19NiBD.s:192    .bss.Tp_Pid:00000000 $d
-D:\temp\TMP\cc19NiBD.s:198    .bss.Turn_Pid:00000000 $d
-D:\temp\TMP\cc19NiBD.s:205    .bss.chassis_move:00000000 $d
-D:\temp\TMP\cc19NiBD.s:212    .rodata.roll_pid.2:00000000 $d
-D:\temp\TMP\cc19NiBD.s:216    .rodata.roll_pid.2:00000000 roll_pid.2
-D:\temp\TMP\cc19NiBD.s:221    .rodata.tp_pid.1:00000000 $d
-D:\temp\TMP\cc19NiBD.s:225    .rodata.tp_pid.1:00000000 tp_pid.1
-D:\temp\TMP\cc19NiBD.s:230    .rodata.turn_pid.0:00000000 $d
-D:\temp\TMP\cc19NiBD.s:234    .rodata.turn_pid.0:00000000 turn_pid.0
+D:\temp\TMP\ccU9X1JH.s:23     .bss.chassis_move:00000000 chassis_move
+D:\temp\TMP\ccU9X1JH.s:20     .bss.chassis_move:00000000 $d
 
-UNDEFINED SYMBOLS
-PID_init
-DeviationCalc
-CoordinateLength
-PID_Calc
-legR
-legL
+NO UNDEFINED SYMBOLS

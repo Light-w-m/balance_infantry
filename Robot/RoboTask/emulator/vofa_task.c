@@ -20,8 +20,8 @@ void VofaDebug_Task(void)
         /* code */
         // len = snprintf(tx_buff,sizeof(tx_buff), "%.4f, %.4f, %.4f\r\n",
         //          INS.Pitch, INS.Roll, INS.Yaw);
-        len = snprintf(tx_buff,sizeof(tx_buff), "%.4f\r\n",
-                 legL.rod.L0);
+        len = snprintf(tx_buff,sizeof(tx_buff), "%.4f, %.4f, %.4f, %.4f\r\n",
+                 legL.rod.T, legR.rod.T, legL.rod.Tp, legR.rod.Tp);
                  
         HAL_UART_Transmit(&huart7, (uint8_t *)tx_buff, len, 10);
 
