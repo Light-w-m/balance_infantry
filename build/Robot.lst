@@ -1,4 +1,4 @@
-ARM GAS  D:\temp\TMP\cclolCis.s 			page 1
+ARM GAS  D:\temp\TMP\ccNjYEj8.s 			page 1
 
 
    1              		.cpu cortex-m7
@@ -25,7 +25,7 @@ ARM GAS  D:\temp\TMP\cclolCis.s 			page 1
   22              		.thumb
   23              		.thumb_func
   25              	RobotInit:
-  26              	.LFB188:
+  26              	.LFB192:
   27              		.file 1 "Robot/RoboTask/Robot.c"
    1:Robot/RoboTask/Robot.c **** /**
    2:Robot/RoboTask/Robot.c ****  * @file Robot.c
@@ -58,7 +58,7 @@ ARM GAS  D:\temp\TMP\cclolCis.s 			page 1
   35              		.cfi_offset 3, -8
   36              		.cfi_offset 14, -4
   22:Robot/RoboTask/Robot.c ****     
-ARM GAS  D:\temp\TMP\cclolCis.s 			page 2
+ARM GAS  D:\temp\TMP\ccNjYEj8.s 			page 2
 
 
   23:Robot/RoboTask/Robot.c ****     DWT_Init(480); 
@@ -68,29 +68,32 @@ ARM GAS  D:\temp\TMP\cclolCis.s 			page 1
   40              	.LVL0:
   24:Robot/RoboTask/Robot.c ****     #ifdef INS_OF_HIPNUC
   25:Robot/RoboTask/Robot.c ****     HIPNUC_Init();
+  41              		.loc 1 25 5 view .LVU2
+  42 000a FFF7FEFF 		bl	HIPNUC_Init
+  43              	.LVL1:
   26:Robot/RoboTask/Robot.c ****     #endif
   27:Robot/RoboTask/Robot.c **** 
   28:Robot/RoboTask/Robot.c ****     RobotCMDInit();
-  41              		.loc 1 28 5 view .LVU2
-  42 000a FFF7FEFF 		bl	RobotCMDInit
-  43              	.LVL1:
-  29:Robot/RoboTask/Robot.c ****     FDCAN1_Config();
-  44              		.loc 1 29 5 view .LVU3
-  45 000e FFF7FEFF 		bl	FDCAN1_Config
+  44              		.loc 1 28 5 view .LVU3
+  45 000e FFF7FEFF 		bl	RobotCMDInit
   46              	.LVL2:
+  29:Robot/RoboTask/Robot.c ****     FDCAN1_Config();
+  47              		.loc 1 29 5 view .LVU4
+  48 0012 FFF7FEFF 		bl	FDCAN1_Config
+  49              	.LVL3:
   30:Robot/RoboTask/Robot.c **** }
-  47              		.loc 1 30 1 is_stmt 0 view .LVU4
-  48 0012 08BD     		pop	{r3, pc}
-  49              		.cfi_endproc
-  50              	.LFE188:
-  52              		.section	.text.MotorTask,"ax",%progbits
-  53              		.align	1
-  54              		.global	MotorTask
-  55              		.syntax unified
-  56              		.thumb
-  57              		.thumb_func
-  59              	MotorTask:
-  60              	.LFB189:
+  50              		.loc 1 30 1 is_stmt 0 view .LVU5
+  51 0016 08BD     		pop	{r3, pc}
+  52              		.cfi_endproc
+  53              	.LFE192:
+  55              		.section	.text.MotorTask,"ax",%progbits
+  56              		.align	1
+  57              		.global	MotorTask
+  58              		.syntax unified
+  59              		.thumb
+  60              		.thumb_func
+  62              	MotorTask:
+  63              	.LFB193:
   31:Robot/RoboTask/Robot.c **** 
   32:Robot/RoboTask/Robot.c **** /**
   33:Robot/RoboTask/Robot.c ****  * @brief 以1khz的频率运行
@@ -98,45 +101,47 @@ ARM GAS  D:\temp\TMP\cclolCis.s 			page 1
   35:Robot/RoboTask/Robot.c ****  */
   36:Robot/RoboTask/Robot.c **** void MotorTask(void)
   37:Robot/RoboTask/Robot.c **** {
-  61              		.loc 1 37 1 is_stmt 1 view -0
-  62              		.cfi_startproc
-  63              		@ args = 0, pretend = 0, frame = 0
-  64              		@ frame_needed = 0, uses_anonymous_args = 0
-  65 0000 08B5     		push	{r3, lr}
-  66              	.LCFI1:
-  67              		.cfi_def_cfa_offset 8
-  68              		.cfi_offset 3, -8
-  69              		.cfi_offset 14, -4
+  64              		.loc 1 37 1 is_stmt 1 view -0
+  65              		.cfi_startproc
+  66              		@ args = 0, pretend = 0, frame = 0
+  67              		@ frame_needed = 0, uses_anonymous_args = 0
+  68 0000 08B5     		push	{r3, lr}
+  69              	.LCFI1:
+  70              		.cfi_def_cfa_offset 8
+  71              		.cfi_offset 3, -8
+  72              		.cfi_offset 14, -4
   38:Robot/RoboTask/Robot.c ****     DJIMotorControl();
-  70              		.loc 1 38 5 view .LVU6
-  71 0002 FFF7FEFF 		bl	DJIMotorControl
-  72              	.LVL3:
+  73              		.loc 1 38 5 view .LVU7
+  74 0002 FFF7FEFF 		bl	DJIMotorControl
+  75              	.LVL4:
   39:Robot/RoboTask/Robot.c **** }...
-  73              		.loc 1 39 1 is_stmt 0 view .LVU7
-  74 0006 08BD     		pop	{r3, pc}
-  75              		.cfi_endproc
-  76              	.LFE189:
-  78              		.text
-  79              	.Letext0:
-ARM GAS  D:\temp\TMP\cclolCis.s 			page 3
+  76              		.loc 1 39 1 is_stmt 0 view .LVU8
+  77 0006 08BD     		pop	{r3, pc}
+  78              		.cfi_endproc
+ARM GAS  D:\temp\TMP\ccNjYEj8.s 			page 3
 
 
-  80              		.file 2 "Robot/Devices/Motor/djimotor.h"
-  81              		.file 3 "Bsp/bsp_dwt.h"
-  82              		.file 4 "Robot/RoboTask/remote/remote_task.h"
-  83              		.file 5 "Bsp/bsp_can.h"
-ARM GAS  D:\temp\TMP\cclolCis.s 			page 4
+  79              	.LFE193:
+  81              		.text
+  82              	.Letext0:
+  83              		.file 2 "Robot/Devices/Motor/djimotor.h"
+  84              		.file 3 "Bsp/bsp_dwt.h"
+  85              		.file 4 "Robot/RoboTask/ins/INS_task.h"
+  86              		.file 5 "Robot/RoboTask/remote/remote_task.h"
+  87              		.file 6 "Bsp/bsp_can.h"
+ARM GAS  D:\temp\TMP\ccNjYEj8.s 			page 4
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 Robot.c
-D:\temp\TMP\cclolCis.s:19     .text.RobotInit:00000000 $t
-D:\temp\TMP\cclolCis.s:25     .text.RobotInit:00000000 RobotInit
-D:\temp\TMP\cclolCis.s:53     .text.MotorTask:00000000 $t
-D:\temp\TMP\cclolCis.s:59     .text.MotorTask:00000000 MotorTask
+D:\temp\TMP\ccNjYEj8.s:19     .text.RobotInit:00000000 $t
+D:\temp\TMP\ccNjYEj8.s:25     .text.RobotInit:00000000 RobotInit
+D:\temp\TMP\ccNjYEj8.s:56     .text.MotorTask:00000000 $t
+D:\temp\TMP\ccNjYEj8.s:62     .text.MotorTask:00000000 MotorTask
 
 UNDEFINED SYMBOLS
 DWT_Init
+HIPNUC_Init
 RobotCMDInit
 FDCAN1_Config
 DJIMotorControl

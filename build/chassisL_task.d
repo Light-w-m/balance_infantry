@@ -58,7 +58,9 @@ build/chassisL_task.o: Robot/RoboTask/chassis/chassisL_task.c \
  Robot/daemon/daemon.h Robot/Devices/Motor/dmmotor.h \
  Robot/Controller/kinematics.h Robot/RoboTask/ins/ins_task.h \
  Robot/Devices/BMI088/BMI088driver.h Robot/RoboTask/chassis/chassis_def.h \
- Robot/Algorithm/kalman/kalman_filter.h Robot/Controller/pid.h
+ Robot/Algorithm/kalman/kalman_filter.h \
+ Robot/RoboTask/observe/observe_task.h Robot/RoboTask/ins/INS_task.h \
+ Robot/Controller/pid.h
 Robot/RoboTask/chassis/chassisL_task.h:
 Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h:
 Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
@@ -130,4 +132,6 @@ Robot/RoboTask/ins/ins_task.h:
 Robot/Devices/BMI088/BMI088driver.h:
 Robot/RoboTask/chassis/chassis_def.h:
 Robot/Algorithm/kalman/kalman_filter.h:
+Robot/RoboTask/observe/observe_task.h:
+Robot/RoboTask/ins/INS_task.h:
 Robot/Controller/pid.h:

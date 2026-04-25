@@ -34,9 +34,10 @@ typedef struct
         float dd_theta;
 
         float F0;               //F0为五连杆机构末端沿腿的推力 
-        float F;                //F为髋关节产生的沿摆杆的推力 
         float Tp;               //髋关节等效力矩
         float T;                //轮电机等效力矩
+
+        bool recovery_flag;       //倒地自起标志
 
     } rod;  //杆参数--一阶倒立摆
 
@@ -59,7 +60,6 @@ typedef struct
 
     float j11, j12, j21, j22;   //雅可比矩阵
     float FN;                   //支持力
-    bool is_take_off;           // 是否离地
     uint32_t take_off_time;     // 离地计时
     uint32_t touch_time;        // 触地计时
 
@@ -87,6 +87,7 @@ void ForwardKinematics(Leg_t* leg,Excessive_t* excessive);
 void InverseKinematics(chassis_t* chassis, Leg_t* leg);
 void JacobianMatrix(Leg_t* leg,Excessive_t* excessive);
 uint8_t GroundDetect(chassis_t* chassis, Leg_t* leg, Period_t* period);
+void Acceleration_Updata(chassis_t* chassis, INS_t* ins);
 void CoordinateLength(float *LengthL, float *LengthR, float diff, float add);
 float DeviationCalc(float diff, float real, float target);
 

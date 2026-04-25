@@ -20,8 +20,8 @@
 #define COMMUNICATION_LOSS_STATE	0x0D
 #define OVERLOAD_STATE	            0x0E
 
-#define P_MIN -3.1415926f
-#define P_MAX 3.1415926f
+#define P_MIN -6.283f
+#define P_MAX 6.283f
 #define V_MIN -30.0f
 #define V_MAX 30.0f
 #define KP_MIN 0.0f

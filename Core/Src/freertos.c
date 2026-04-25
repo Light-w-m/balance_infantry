@@ -142,7 +142,7 @@ void MX_FREERTOS_Init(void) {
   MOTORTASKHandle = osThreadCreate(osThread(MOTORTASK), NULL);
 
   /* definition and creation of REMOTE_TASK */
-  osThreadDef(REMOTE_TASK, StartRemoteTask, osPriorityNormal, 0, 512);
+  osThreadDef(REMOTE_TASK, StartRemoteTask, osPriorityAboveNormal, 0, 512);
   REMOTE_TASKHandle = osThreadCreate(osThread(REMOTE_TASK), NULL);
 
   /* definition and creation of CHASSISL_TASK */
@@ -150,7 +150,7 @@ void MX_FREERTOS_Init(void) {
   CHASSISL_TASKHandle = osThreadCreate(osThread(CHASSISL_TASK), NULL);
 
   /* definition and creation of OBSERVE_TASK */
-  osThreadDef(OBSERVE_TASK, StartObserveTask, osPriorityNormal, 0, 512);
+  osThreadDef(OBSERVE_TASK, StartObserveTask, osPriorityAboveNormal, 0, 512);
   OBSERVE_TASKHandle = osThreadCreate(osThread(OBSERVE_TASK), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
@@ -304,7 +304,7 @@ void StartObserveTask(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-    // Observe_Task();
+    Observe_Task();
     osDelay(1);
   }
   /* USER CODE END StartObserveTask */

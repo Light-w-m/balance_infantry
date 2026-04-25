@@ -12,7 +12,10 @@ typedef struct
     float vrb,vlb;      //机体b系的速度
     float forward_v;    //前进速度
     float angular_v;    //角速度
+    float T;            //速度环力矩
 } Observe_Data_t;
+
+extern Observe_Data_t observe_data;
 
 void Observe_Task(void);
 

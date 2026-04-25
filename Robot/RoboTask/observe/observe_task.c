@@ -12,6 +12,7 @@
 #include "observe_task.h"
 #include "kalman_filter.h"
 #include "kinematics.h"
+#include "pid.h"
 #include "chassisR_task.h"
 #include "chassis_def.h"
 #include "user_lib.h"
@@ -19,17 +20,17 @@
 
 KalmanFilter_t vaEstimateKF;	   // 卡尔曼滤波器结构体
 
-float vaEstimateKF_F[4] = {1.0f, 0.003f, 
+float vaEstimateKF_F[4] = {1.0f, 0.001f, 
                            0.0f, 1.0f};	   // 状态转移矩阵，控制周期为0.001s
 
 float vaEstimateKF_P[4] = {1.0f, 0.0f,
                            0.0f, 1.0f};    // 后验估计协方差初始值
 
-float vaEstimateKF_Q[4] = {1.0f, 0.0f, 
-                           0.0f, 1.0f};    // Q矩阵初始值
+float vaEstimateKF_Q[4] = {0.2f, 0.0f, 
+                           0.0f, 0.5f};    // Q矩阵初始值
 
-float vaEstimateKF_R[4] = {200.0f, 0.0f, 
-                            0.0f,  200.0f}; 	
+float vaEstimateKF_R[4] = {400.0f, 0.0f, 
+                            0.0f,  100.0f}; 	
 														
 float vaEstimateKF_K[4];
 													 
@@ -42,8 +43,14 @@ extern Leg_t legR;
 extern Leg_t legL;
 
 Observe_Data_t observe_data;
+PidTypeDef Wheel_PID;    //轮速环pid
 float vel_acc[2]; 
-uint32_t OBSERVE_TIME = 3;//任务周期是3ms	
+uint32_t OBSERVE_TIME = 1;//任务周期
+
+const static float wheel_pid[3] = {WHEEL_PID_KD, WHEEL_PID_KI, WHEEL_PID_KD};
+
+static float V_filter = 0.0f; // 滤波后的速度
+float alpha = 0.1f; // 低通滤波系数，范围为0-1，值越小滤波效果越明显
 
 
 void xvEstimateKF_Init(KalmanFilter_t *EstimateKF)
@@ -85,27 +92,50 @@ void Observe_Task(void)
   }
     
   xvEstimateKF_Init(&vaEstimateKF);
+  PID_init(&Wheel_PID, PID_POSITION, wheel_pid, WHEEL_PID_MAX_OUT, WHEEL_PID_MAX_IOUT);
 
   while (1)
   {
+    Acceleration_Updata(&chassis_move, &INS);
     /* code */
-    observe_data.wr = -angle_to_radian(chassis_move.wheel_motor[0]->measure.speed_aps)-INS.Gyro[Y_AXIS]-legR.rod.d_phi0;
-    observe_data.wl = -angle_to_radian(chassis_move.wheel_motor[1]->measure.speed_aps)+INS.Gyro[Y_AXIS]-legL.rod.d_phi0;
+    observe_data.wr = chassis_move.wheel_motor[0]->measure.speed_aps / REDUCTION_RATIO-INS.Gyro[Y_AXIS]-legR.rod.d_phi0;
+    observe_data.wl = -chassis_move.wheel_motor[1]->measure.speed_aps / REDUCTION_RATIO+INS.Gyro[Y_AXIS]-legL.rod.d_phi0;
 
+    // observe_data.wr = chassis_move.wheel_motor[0]->measure.speed_aps / REDUCTION_RATIO;
+    // observe_data.wl = -chassis_move.wheel_motor[1]->measure.speed_aps / REDUCTION_RATIO;
+    
     // 公式意义：角速度 x 半径 + 角速度 x 长度 x cos(角度) + 长度变化量 x sin(角度)
-    observe_data.vrb = observe_data.wr*WHEEL_RADIUS + legR.rod.L0*legR.rod.d_theta*arm_cos_f32(legR.rod.theta) + legR.rod.d_L0*arm_sin_f32(legR.rod.theta);
-    observe_data.vlb = observe_data.wl*WHEEL_RADIUS + legL.rod.L0*legL.rod.d_theta*arm_cos_f32(legL.rod.theta) + legL.rod.d_L0*arm_sin_f32(legL.rod.theta);
+    observe_data.vrb = observe_data.wr*WHEEL_RADIUS 
+                      + chassis_move.leg_set*legR.rod.d_theta*arm_cos_f32(legR.rod.theta) ;
+                      + legR.rod.d_L0*arm_sin_f32(legR.rod.theta);
+    observe_data.vlb = observe_data.wl*WHEEL_RADIUS 
+                      + chassis_move.leg_set*legL.rod.d_theta*arm_cos_f32(legL.rod.theta) ;
+                      + legL.rod.d_L0*arm_sin_f32(legL.rod.theta);
+
+    // observe_data.vrb = observe_data.wr*WHEEL_RADIUS; // 600 3
+    // observe_data.vlb = observe_data.wl*WHEEL_RADIUS; //     3.9
 
     // 因规定顺时针为正，所以右轮为正，左轮为负，因此前进速度为差值，角速度为和值
-    observe_data.forward_v = (observe_data.vrb - observe_data.vlb)/2.0f;
-    observe_data.angular_v = (observe_data.vrb + observe_data.vlb)/WHEEL_DISTANCE;
-    
-    xvEstimateKF_Update(&vaEstimateKF, -chassis_move.body.x_accel, observe_data.forward_v);
+    observe_data.forward_v = (observe_data.vrb + observe_data.vlb) / 2.0f;
+    observe_data.angular_v = (observe_data.vrb - observe_data.vlb) / WHEEL_DISTANCE;
+
+    xvEstimateKF_Update(&vaEstimateKF, chassis_move.body.x_accel, observe_data.forward_v);
+    // xvEstimateKF_Update(&vaEstimateKF, INS.MotionAccel_n[1], observe_data.forward_v);
 
     // 原地自转时，v_filter和x_filter应该都为0
-    chassis_move.state.v_filter = vel_acc[0];
-    chassis_move.state.x_filter = chassis_move.state.x_filter + chassis_move.state.v_filter*((float)OBSERVE_TIME/1000.0f);
+    // chassis_move.state.v_filter = vel_acc[0]*0.1f;
+    V_filter = (1 - alpha) * V_filter + alpha * vel_acc[0];
+    chassis_move.state.v_filter = V_filter * 0.1f;
+    // if (fabsf(chassis_move.state.v_set) > 0.01f)
+    //   chassis_move.state.x_filter = 0.0f;
+    // else
+    //   chassis_move.state.x_filter += chassis_move.state.v_filter*((float)OBSERVE_TIME*1/1000.0f);
     
+    
+    // chassis_move.state.x_filter = chassis_move.state.x_filter + chassis_move.state.v_filter*((float)OBSERVE_TIME*5/1000.0f);
+    
+    // observe_data.T = PID_Calc(&Wheel_PID, V_filter, chassis_move.state.v_set);
+
     osDelay(OBSERVE_TIME);
   }
   

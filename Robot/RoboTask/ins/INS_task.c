@@ -41,6 +41,9 @@ uint32_t INS_DWT_Count = 0;
 float ins_dt = 0.0f;
 float ins_time;
 
+static float last_yaw = 0.0f;
+static float yaw_round_count = 0.0f;
+
 /**
  * @brief BMI088控制
  * 
@@ -179,8 +182,8 @@ void INS_task(void)
 		
 		if(ins_time>2000.0f)
 		{
-			INS.v_n=INS.v_n+INS.MotionAccel_n[1]*0.001f;
-		  INS.x_n=INS.x_n+INS.v_n*0.001f;
+		// 	INS.v_n=INS.v_n+INS.MotionAccel_n[1]*0.001f;
+		//   INS.x_n=INS.x_n+INS.v_n*0.001f;
 			// 获取最终数据
 			// INS.Pitch=mahony.roll*180.0f/PI;
 			// INS.Roll=mahony.pitch*180.0f/PI;
@@ -188,6 +191,11 @@ void INS_task(void)
 			INS.Roll=mahony.pitch;
 			INS.Pitch=mahony.roll;
 			INS.Yaw=mahony.yaw;
+
+            if(INS.Yaw - last_yaw > PI) yaw_round_count--;
+            else if(INS.Yaw - last_yaw < -PI) yaw_round_count++;
+            last_yaw = INS.Yaw;
+            INS.YawTotal = INS.Yaw + yaw_round_count * 2.0f * PI;
       
 			INS.ins_flag=1;//四元数基本收敛，加速度也基本收敛，可以开始底盘任务
 		
@@ -207,152 +215,187 @@ void INS_task(void)
  * @brief hi05控制
  * 
  */
+// #ifdef INS_OF_HIPNUC
+// hipnuc_raw_t hipnuc_data;
+// static uint8_t rx_byte;
+// static uint8_t imu_rx_byte;
+// static uint16_t imu_rx_cnt = 0;
+// void HIPNUC_Init(void)
+// {
+//   HAL_UART_Receive_IT(&huart1, &rx_byte, 1);
+// }
+// void hi05()
+// {
+//     if (hipnuc_data.buf[0]==0x5A && hipnuc_data.buf[1]==0xA5&& hipnuc_data.buf[6]==0x91)
+//     {
+//         /* code */
+//         hipnuc_data.hi91.main_status = U2(&hipnuc_data.buf[1+6]);
+//         hipnuc_data.hi91.temperature = I1(&hipnuc_data.buf[3+6]);
+//         hipnuc_data.hi91.pressure = R4(&hipnuc_data.buf[4+6]);
+//         hipnuc_data.hi91.timestamp = U4(&hipnuc_data.buf[8+6]);
+//         hipnuc_data.hi91.acc[X_AXIS] = R4(&hipnuc_data.buf[12+6]) * GRAVITY;
+//         hipnuc_data.hi91.acc[Y_AXIS] = R4(&hipnuc_data.buf[16+6]) * GRAVITY;
+//         hipnuc_data.hi91.acc[Z_AXIS] = R4(&hipnuc_data.buf[20+6]) * GRAVITY;
+//         hipnuc_data.hi91.gyro[X_AXIS] = R4(&hipnuc_data.buf[24+6]);
+//         hipnuc_data.hi91.gyro[Y_AXIS] = R4(&hipnuc_data.buf[28+6]);
+//         hipnuc_data.hi91.gyro[Z_AXIS] = R4(&hipnuc_data.buf[32+6]);
+//         hipnuc_data.hi91.mag[0] = R4(&hipnuc_data.buf[36+6]);
+//         hipnuc_data.hi91.mag[1] = R4(&hipnuc_data.buf[40+6]);
+//         hipnuc_data.hi91.mag[2] = R4(&hipnuc_data.buf[44+6]);
+//         hipnuc_data.hi91.roll = R4(&hipnuc_data.buf[48+6]);
+//         hipnuc_data.hi91.pitch = R4(&hipnuc_data.buf[52+6]);
+//         hipnuc_data.hi91.yaw = R4(&hipnuc_data.buf[56+6]);
+//         hipnuc_data.hi91.quaternion[0] = R4(&hipnuc_data.buf[60+6]);
+//         hipnuc_data.hi91.quaternion[1] = R4(&hipnuc_data.buf[64+6]);
+//         hipnuc_data.hi91.quaternion[2] = R4(&hipnuc_data.buf[68+6]);
+//         hipnuc_data.hi91.quaternion[3] = R4(&hipnuc_data.buf[72+6]);
+//     }
+// }
+// void INS_task(void)
+// {
+//   // HIPNUC_Init();
+//   while (1)
+//   {
+//     /* code */
+//     // Process_HIPNUC_Data();
+//     // INS.Accel[X_AXIS] = -hipnuc_data.hi91.acc[X_AXIS];
+//     INS.ins_flag = 1;
+//     osDelay(1);
+//   }
+// }
+// void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+// {
+//   if(huart->Instance == USART1)
+//   {
+//     hipnuc_data.buf[imu_rx_cnt++] = imu_rx_byte;
+//     if (imu_rx_cnt >= 2)
+//     {
+//       if (hipnuc_data.buf[0] != 0x5A || hipnuc_data.buf[1] != 0xA5)
+//       {
+//         hipnuc_data.buf[0] = hipnuc_data.buf[1];
+//         imu_rx_cnt = 1;  // 丢弃错位
+//       }
+//     }
+//     if (imu_rx_cnt >= HIPNUC_MIN_LENGTH)
+//     {
+//       if(hipnuc_data.buf[6] == 0x91)
+//         hi05();  
+//       imu_rx_cnt = 0;  
+//     }
+//     if(imu_rx_cnt >= 100)
+//       imu_rx_cnt = 0; 
+//   }
+//   HAL_UART_Receive_IT(&huart1, &imu_rx_byte, 1);
+// }
+// #endif
 #ifdef INS_OF_HIPNUC
-hipnuc_raw_t hipnuc_data;
 
-uint8_t uart_rx_buf[1024];
-uint16_t uart_rx_index = 0;
-uint8_t new_data_flag = 0;
-uint8_t rx_byte;
+hipnuc_raw_t hipnuc_data;
+static USARTInstance *hipnuc_usart_instance = NULL;
+
+static uint8_t hipnuc_frame_buf[HIPNUC_MIN_LENGTH];
+static volatile uint8_t hipnuc_rx_flag = 0;
+static volatile uint16_t hipnuc_frame_len = 0;
+
+static void HIPNUC_ParseFrame(const uint8_t *buf, uint16_t len)
+{
+    if (len < HIPNUC_MIN_LENGTH) return;
+    if (buf[0] != 0x5A || buf[1] != 0xA5) return;
+    if (buf[6] != 0x91) return;
+
+    memcpy(hipnuc_data.buf, buf, len);
+    hipnuc_data.len = len;
+    hipnuc_data.nbyte = 0;
+
+    hipnuc_data.hi91.main_status = U2((uint8_t *)&hipnuc_data.buf[1 + 6]);
+    hipnuc_data.hi91.temperature = I1((uint8_t *)&hipnuc_data.buf[3 + 6]);
+    hipnuc_data.hi91.pressure = R4((uint8_t *)&hipnuc_data.buf[4 + 6]);
+    hipnuc_data.hi91.timestamp = U4((uint8_t *)&hipnuc_data.buf[8 + 6]);
+
+    hipnuc_data.hi91.acc[X_AXIS] = R4((uint8_t *)&hipnuc_data.buf[12 + 6]);
+    hipnuc_data.hi91.acc[Y_AXIS] = R4((uint8_t *)&hipnuc_data.buf[16 + 6]);
+    hipnuc_data.hi91.acc[Z_AXIS] = R4((uint8_t *)&hipnuc_data.buf[20 + 6]);
+
+    hipnuc_data.hi91.gyro[X_AXIS] = R4((uint8_t *)&hipnuc_data.buf[24 + 6]);
+    hipnuc_data.hi91.gyro[Y_AXIS] = R4((uint8_t *)&hipnuc_data.buf[28 + 6]);
+    hipnuc_data.hi91.gyro[Z_AXIS] = R4((uint8_t *)&hipnuc_data.buf[32 + 6]);
+
+    hipnuc_data.hi91.mag[0] = R4((uint8_t *)&hipnuc_data.buf[36 + 6]);
+    hipnuc_data.hi91.mag[1] = R4((uint8_t *)&hipnuc_data.buf[40 + 6]);
+    hipnuc_data.hi91.mag[2] = R4((uint8_t *)&hipnuc_data.buf[44 + 6]);
+
+    hipnuc_data.hi91.roll = R4((uint8_t *)&hipnuc_data.buf[48 + 6]);
+    hipnuc_data.hi91.pitch = R4((uint8_t *)&hipnuc_data.buf[52 + 6]);
+    hipnuc_data.hi91.yaw = R4((uint8_t *)&hipnuc_data.buf[56 + 6]);
+
+    hipnuc_data.hi91.quaternion[0] = R4((uint8_t *)&hipnuc_data.buf[60 + 6]);
+    hipnuc_data.hi91.quaternion[1] = R4((uint8_t *)&hipnuc_data.buf[64 + 6]);
+    hipnuc_data.hi91.quaternion[2] = R4((uint8_t *)&hipnuc_data.buf[68 + 6]);
+    hipnuc_data.hi91.quaternion[3] = R4((uint8_t *)&hipnuc_data.buf[72 + 6]);
+}
+
+static void HIPNUC_RxCallback(void)
+{
+    memcpy(hipnuc_frame_buf, hipnuc_usart_instance->recv_buff, HIPNUC_MIN_LENGTH);
+    hipnuc_frame_len = HIPNUC_MIN_LENGTH;
+    hipnuc_rx_flag = 1;
+}
 
 void HIPNUC_Init(void)
 {
-  // memset(&hipnuc_data, 0, sizeof(hipnuc_raw_t));
-  // new_data_flag = 0;
-
-  // __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);
-  HAL_UART_Receive_IT(&huart1, &rx_byte, 1);
+    USART_Init_Config_s conf;
+    conf.recv_buff_size = HIPNUC_MIN_LENGTH;
+    conf.usart_handle = &huart10;
+    conf.module_callback = HIPNUC_RxCallback;
+    hipnuc_usart_instance = USARTRegister(&conf);
 }
 
-void Process_HIPNUC_Data(void)
-{
-  char log_buf[1024];
-  
-  if (new_data_flag)
-  {
-    /* code */
-    for (uint16_t i = 0; i < uart_rx_index; i++)
-    {
-      /* code */
-      if (HipnucInput(uart_rx_buf[i], &hipnuc_data))
-      {
-        /* code */
-        HipnucDumpPacket(&hipnuc_data, log_buf, sizeof(log_buf));
-      }
-    }
-    new_data_flag = 0;
-    uart_rx_index = 0;
-  }
-}
-
-typedef struct 
-{
-  /* data */
-  float yaw, pitch, roll,accx,accy,accz,gyrx,gyry,gyrz;
-}data;
-
-uint8_t a[100];
-uint8_t imu_rx_byte;
-uint16_t imu_rx_cnt = 0;
-data imu_data;
-#define IMU_FRAME_LEN  82
-static float    R4(uint8_t *p) {float r; memcpy(&r,p,4); return r;}
-void hi05()
-{
-    if (a[0]==0x5A && a[1]==0xA5&& a[6]==0x91)
-    {
-        /* code */
-        imu_data.accx=R4(&a[12+6])*GRAVITY;
-        imu_data.accy=R4(&a[16+6])*GRAVITY;
-        imu_data.accz=R4(&a[20+6])*GRAVITY;
-        imu_data.gyrx=R4(&a[24+6]) * PI / 180.0f;
-        imu_data.gyry=R4(&a[28+6]) * PI / 180.0f;
-        imu_data.gyrz=R4(&a[32+6]) * PI / 180.0f;
-        imu_data.roll=R4(&a[48+6]) * PI / 180.0f;
-        imu_data.pitch=R4(&a[52+6]) * PI / 180.0f;
-        imu_data.yaw=R4(&a[56+6]) * PI / 180.0f;
-    }
-    
-}
 void INS_task(void)
 {
-  // HIPNUC_Init();
-  while (1)
-  {
-    /* code */
-    // Process_HIPNUC_Data();
+    while (1)
+    {
+        if (hipnuc_rx_flag)
+        {
+            uint8_t local_buf[HIPNUC_MIN_LENGTH];
+            uint16_t local_len;
 
-    // INS.Accel[X_AXIS] = -hipnuc_data.hi91.acc[X_AXIS];
-    // INS.Accel[Y_AXIS] = hipnuc_data.hi91.acc[Y_AXIS];
-    // INS.Accel[Z_AXIS] = hipnuc_data.hi91.acc[Z_AXIS];
+            taskENTER_CRITICAL();
+            local_len = hipnuc_frame_len;
+            memcpy(local_buf, hipnuc_frame_buf, local_len);
+            hipnuc_rx_flag = 0;
+            taskEXIT_CRITICAL();
 
-    // INS.Gyro[X_AXIS] = -hipnuc_data.hi91.gyro[X_AXIS] * PI / 180.0f;
-    // INS.Gyro[Y_AXIS] = hipnuc_data.hi91.gyro[Y_AXIS] * PI / 180.0f;
-    // INS.Gyro[Z_AXIS] = hipnuc_data.hi91.gyro[Z_AXIS] * PI / 180.0f;
+            HIPNUC_ParseFrame(local_buf, local_len);
 
-    // INS.q[0] = hipnuc_data.hi91.quaternion[0];
-    // INS.q[1] = hipnuc_data.hi91.quaternion[1];
-    // INS.q[2] = hipnuc_data.hi91.quaternion[2];
-    // INS.q[3] = hipnuc_data.hi91.quaternion[3];
+            INS.Accel[X_AXIS] = hipnuc_data.hi91.acc[X_AXIS] * GRAVITY;
+            INS.Accel[Y_AXIS] = hipnuc_data.hi91.acc[Y_AXIS] * GRAVITY;
+            INS.Accel[Z_AXIS] = hipnuc_data.hi91.acc[Z_AXIS] * GRAVITY;
 
-    // INS.Roll = hipnuc_data.hi91.pitch * PI / 180.0f;
-    // INS.Pitch = hipnuc_data.hi91.roll * PI / 180.0f;
-    // INS.Yaw = hipnuc_data.hi91.yaw * PI / 180.0f;
-    
+            INS.Gyro[X_AXIS] = hipnuc_data.hi91.gyro[X_AXIS] * PI / 180.0f;
+            INS.Gyro[Y_AXIS] = hipnuc_data.hi91.gyro[Y_AXIS] * PI / 180.0f;
+            INS.Gyro[Z_AXIS] = hipnuc_data.hi91.gyro[Z_AXIS] * PI / 180.0f;
 
-    INS.ins_flag = 1;
-    osDelay(1);
-  }
+            INS.q[0] = hipnuc_data.hi91.quaternion[0];
+            INS.q[1] = hipnuc_data.hi91.quaternion[1];
+            INS.q[2] = hipnuc_data.hi91.quaternion[2];
+            INS.q[3] = hipnuc_data.hi91.quaternion[3];
+
+            INS.Roll = hipnuc_data.hi91.pitch * PI / 180.0f;
+            INS.Pitch = hipnuc_data.hi91.roll * PI / 180.0f;
+            INS.Yaw = hipnuc_data.hi91.yaw * PI / 180.0f;
+
+            if(INS.Yaw - last_yaw > PI) yaw_round_count--;
+            else if(INS.Yaw - last_yaw < -PI) yaw_round_count++;
+            last_yaw = INS.Yaw;
+            INS.YawTotal = INS.Yaw + yaw_round_count * 2.0f * PI;
+
+            INS.ins_flag = 1;
+        }
+
+        osDelay(1);
+    }
 }
 
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
-{
-  // if (huart->Instance == USART1)
-  // {
-  //   /* code */
-  //   if (uart_rx_index < 1024)
-  //   {
-  //     /* code */
-  //     uart_rx_buf[uart_rx_index++] = rx_byte;
-  //   }
-  // }
-  // else
-  // {
-  //   /* code */
-  //   uart_rx_index = 0;
-  // }
-  // HAL_UART_Receive_IT(&huart1, &rx_byte, 1);
-  if(huart->Instance == USART1)
-  {
-    /* code */
-    a[imu_rx_cnt++] = imu_rx_byte;
-
-    if (imu_rx_cnt >= 2)
-    {
-      /* code */
-      if (a[0] != 0x5A || a[1] != 0xA5)
-      {
-        a[0] = a[1];
-        imu_rx_cnt = 1;  // 丢弃错位
-      }
-    }
-
-    if (imu_rx_cnt >= IMU_FRAME_LEN)
-    {
-      if(a[6] == 0x91)
-      {
-        hi05();         
-      }
-      imu_rx_cnt = 0;  
-    }
-    if(imu_rx_cnt >= 100)
-    {
-      imu_rx_cnt = 0;  
-    } 
-  }
-  HAL_UART_Receive_IT(&huart1, &imu_rx_byte, 1);
-  
-}
 #endif
 
 /**

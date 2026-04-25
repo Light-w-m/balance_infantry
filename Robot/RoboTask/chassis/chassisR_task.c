@@ -13,6 +13,7 @@
 #include "chassis_def.h"
 #include "kinematics.h"
 #include "kalman_filter.h"
+#include "observe_task.h"
 #include "pid.h"
 #include "djimotor.h"
 #include "dmmotor.h"
@@ -23,7 +24,7 @@ extern Leg_t legL;
 LegState_t legR_state;
 Excessive_t excessiveR;
 extern chassis_t chassis_move;
-// Period_t periods;
+Period_t periods;
 
 extern INS_t INS;
 
@@ -35,11 +36,13 @@ PidTypeDef Pitch_Pid;    //俯仰角补偿pd
 PidTypeDef Pitch_V_Pid;  //俯仰角速度补偿pd
 PidTypeDef Roll_Pid;    //横滚角补偿pd
 
+//Q=diag([80 1 600 200 7000 1]);%theta d_theta x d_x phi d_phi
+// R=diag([50,2]);              %T Tp
 float LQR_K_R[2][6] = {
-    {-18.971593331189162,	-2.479404882164548,	-7.268822787606280,	-7.186461061501463,	12.473163720626447,	1.446267212851958},
-    {17.253164568724152,	2.277826388844824,	8.464168761537939,	7.913109190229177,	73.246775783691589,	3.541952472769575}
+     {-6.223669982749576,	-0.664224151725734,	-2.728282250312658,	-2.533796701097422,	7.291014074233116,	0.455184197951449},
+    {15.665008329804538,	2.102980678432747,	10.672951750369741,	9.484717958425000,	46.594289824326587,	1.042990420163179}
 };
-// int8_t TRANSITION_MATRIX[10] = {0};
+
 static float current_prtR = 0;
 /**
  * @brief 底盘初始化,包括PID参数初始化，电机初始化
@@ -49,12 +52,6 @@ static float current_prtR = 0;
  */
 static void ChassisR_Init(chassis_t* chassis, PidTypeDef* length_pid)
 {
-    // 初始化转移矩阵
-    // TRANSITION_MATRIX[NORMAL_STEP] = NORMAL_STEP;
-    // TRANSITION_MATRIX[JUMP_STEP_SQUST] = JUMP_STEP_JUMP;
-    // TRANSITION_MATRIX[JUMP_STEP_JUMP] = JUMP_STEP_RECOVERY;
-    // TRANSITION_MATRIX[JUMP_STEP_RECOVERY] = NORMAL_STEP;
-
     // 两个轮电机的参数一样,改tx_id和反转标志位即可
     Motor_Init_Config_s chassis_motor_configR = {
         .can_init_config.can_handle = &hcan2,
@@ -102,6 +99,7 @@ static void ChassisR_Init(chassis_t* chassis, PidTypeDef* length_pid)
  * @param ins 
  * @param  
  */
+static float theta_biasR = 0.041f;
 static void ChassisR_Feedback_Update(chassis_t* chassis,Leg_t* leg, INS_t* ins, float dt)
 {
     leg->joint.Phi4 = PI/2.0f + chassis->joint_motor[1].para.pos;
@@ -114,12 +112,13 @@ static void ChassisR_Feedback_Update(chassis_t* chassis,Leg_t* leg, INS_t* ins, 
     SATURATE(&leg->joint.Phi1, PI/2.0f, PI*4/3.0f);
 
     chassis->myPithR = ins->Pitch;
-    chassis->myPithGyroR = ins->Gyro[X_AXIS];
+    chassis->myPithGyroR = ins->Gyro[Y_AXIS];
     
     chassis->body.pitch = ins->Pitch;
-    chassis->body.pitch_dot = ins->Gyro[X_AXIS];
+    chassis->body.pitch_dot = ins->Gyro[Y_AXIS];
     chassis->body.yaw = ins->Yaw;
     chassis->body.yaw_dot = ins->Gyro[Z_AXIS];
+    chassis->body.yaw_total = ins->YawTotal;
     chassis->body.roll = ins->Roll;
 
     // L0
@@ -128,10 +127,13 @@ static void ChassisR_Feedback_Update(chassis_t* chassis,Leg_t* leg, INS_t* ins, 
     leg->rod.dd_L0 = (leg->rod.d_L0 - leg->rod.last_d_L0) / dt;
 
     // phi0
+    // leg->rod.last_phi0 = leg->rod.phi0;
+    // leg->rod.d_phi0 = (leg->rod.phi0 - leg->rod.d_phi0) / dt;
     leg->rod.d_phi0 = leg->j21*leg->joint.d_Phi1 + leg->j22*leg->joint.d_Phi4;
 
     //theta
-    leg->rod.theta = PI/2 - leg->rod.phi0 - chassis->myPithR - 0.28f;
+    // leg->rod.theta = PI/2 - leg->rod.phi0 - chassis->myPithR - 0.24f;
+    leg->rod.theta = PI/2 - leg->rod.phi0 - chassis->myPithR + theta_biasR;
     leg->rod.d_theta = - leg->rod.d_phi0 - chassis->myPithGyroR;
     leg->rod.last_d_theta = leg->rod.d_theta;
     leg->rod.dd_theta = (leg->rod.d_theta - leg->rod.last_d_theta) / dt;
@@ -170,48 +172,85 @@ void Pensation_Init(PidTypeDef *pitch, PidTypeDef *pitch_v, PidTypeDef *roll, Pi
  * @brief 跳跃控制
  * 
  */
-static void JumpR_Loop(chassis_t* chassis, Leg_t* leg, PidTypeDef* pid)
+static void JumpR_Loop(chassis_t* chassis, Leg_t* leg, PidTypeDef* length_pid)
 {
-    if (chassis->flag.jump_flag == JUMP_STEP_SQUST)
+    if (chassis->flag.jump_flag == 1)
     {
-        /* code */
- 
+        if (chassis->step.jump_step == NORMAL_STEP)
+        {
+            leg->rod.F0 = BODY_MASS * GRAVITY / arm_cos_f32(leg->rod.theta) / 2 
+                    + PID_Calc(length_pid, leg->rod.L0, MIN_LEG_LENGTH);
+            if (leg->rod.L0 < 0.18f) chassis->step.jump_step_time++;
+            if (chassis->step.jump_step_time > 10)
+            {
+                chassis->step.jump_step_time = 0;
+                chassis->step.jump_step = JUMP_STEP_SQUST;
+            }
+        }
+        else if (chassis->step.jump_step == JUMP_STEP_SQUST)
+        {
+            leg->rod.F0 = 70.0f;
+            if (leg->rod.L0 > 0.22f) chassis->step.jump_step_time++;
+            if (chassis->step.jump_step_time > 20)
+            {
+                chassis->step.jump_step_time = 0;
+                chassis->step.jump_step = JUMP_STEP_JUMP;
+            }
+        }
+        else if (chassis->step.jump_step == JUMP_STEP_JUMP)
+        {
+            leg->rod.F0 = BODY_MASS * GRAVITY / arm_cos_f32(leg->rod.theta) / 2 
+                    + PID_Calc(length_pid, leg->rod.L0, chassis->leg_set);
+            if (leg->rod.L0 < 0.20f) chassis->step.jump_step_time++;
+            if (chassis->step.jump_step_time > 10)
+            {
+                chassis->step.jump_step_time = 0;
+                chassis->step.jump_step = JUMP_STEP_RECOVERY;
+            }
+        }
+        else 
+            leg->rod.F0 = BODY_MASS * GRAVITY / arm_cos_f32(leg->rod.theta) / 2 
+                    + PID_Calc(length_pid, leg->rod.L0, chassis->leg_set);
+        if (chassis->step.jump_step == JUMP_STEP_RECOVERY)
+        {
+            chassis->flag.jump_flag = 0;
+            chassis->step.jump_step = NORMAL_STEP;
+            chassis->step.jump_step_time = 0;
+        }
     }
-    
+    else
+        leg->rod.F0 = BODY_MASS * GRAVITY / arm_cos_f32(leg->rod.theta) / 2 
+                    + PID_Calc(length_pid, leg->rod.L0, chassis->leg_set);
 }
 
 /**
  * @brief 倒地自起
  *  
  */
-void RiseR_Loop(chassis_t* chassis, Leg_t* leg)
+static void RiseR_Loop(chassis_t* chassis, Leg_t* leg)
 {
     // 用关节电机角度判断是否完成自起
-    if ((chassis->joint_motor[0].para.pos > 0.0f && chassis->joint_motor[0].para.pos < PI/2.0f) && 
-        (chassis->joint_motor[1].para.pos > -PI/2.0f && chassis->joint_motor[1].para.pos < 0.0f))
-        chassis->flag.recover_flag = 1;
+    // if ((chassis->joint_motor[0].para.pos > -0.6f && chassis->joint_motor[0].para.pos < 2.3f) && 
+    //     (chassis->joint_motor[1].para.pos > -2.5f && chassis->joint_motor[1].para.pos < -1.0f))
+    //     leg->rod.recovery_flag = 0; // 倒地自起完成标志
+    // else 
+    //     leg->rod.recovery_flag = 1; // 倒地自起进行中标志
 
-    float diff1, diff4;
-    float target1 = -PI/3.0f;
-    float target4 = PI/3.0f;
+    float target0 = -0.5f;
+    float target1 = -2.2f;
 
-    if (chassis->joint_motor[1].para.pos < 0 && chassis->joint_motor[0].para.pos < 0)
-    {
-        diff1 = target1 - chassis->joint_motor[1].para.pos;
-        diff4 = target4 - chassis->joint_motor[0].para.pos;
-    }
-    if (chassis->joint_motor[1].para.pos > 0 && chassis->joint_motor[0].para.pos > 0)
-    {
-        diff1 = target1 + 2*PI - chassis->joint_motor[1].para.pos;
-        diff4 = target4 + 2*PI - chassis->joint_motor[0].para.pos;
-    }
+    float diff0 = 0.0f; float diff1 = 0.0f;
+
+    // diff0 = ShortestAngle(target0, &diff0);
+    // diff1 = ShortestAngle(target1, &diff1);
     
-    if (chassis->flag.recover_flag == 0)
+    if (chassis->flag.recover_flag == 1 && leg->rod.recovery_flag == 1)
     {
         /* code */
-        chassis->leg_set = LEG_RISE_LENGTH_SET;
-        Mit_Ctrl(&hcan1, chassis->joint_motor[0].para.id, diff4, 0.0f, 10.0f, 5.0f, 0.0f);
-        Mit_Ctrl(&hcan1, chassis->joint_motor[1].para.id, diff1, 0.0f, 10.0f, 5.0f, 0.0f);
+        // chassis->leg_set = LEG_RISE_LENGTH_SET;
+        // 达妙电机mit位置模式，小到大：逆时针，大到小：顺时针
+        Mit_Ctrl(&hcan1, chassis->joint_motor[0].para.id, target0, 0.0f, 15.0f, 5.0f, 0.0f);
+        Mit_Ctrl(&hcan1, chassis->joint_motor[1].para.id, target1, 0.0f, 15.0f, 5.0f, 0.0f);
     }
 }
 
@@ -226,13 +265,16 @@ void RiseR_Loop(chassis_t* chassis, Leg_t* leg)
 static void ChasssisR_Control(
     chassis_t* chassis, Leg_t* leg, Excessive_t* excessive, INS_t* ins, PidTypeDef* length_pid, float lqr_k[2][6])
 {
-    // chassis->flag.is_take_off = legR.is_take_off || legL.is_take_off;
+    // chassis->flag.is_take_off = chassis->flag.right_flag || chassis->flag.left_flag;
 
     ForwardKinematics(leg, excessive); 
 
     // Calc_LQR_K(lqr_k, leg->rod.L0, chassis->flag.is_take_off);
-    chassis->turn_T = kp_Yaw*(chassis->reference.yaw - chassis->body.yaw) 
-                        + PID_Calc(&Turn_Pid, chassis->body.yaw_dot, chassis->reference.wz);
+
+    chassis->turn_T = Turn_Pid.Kp * (chassis->reference.yaw - chassis->body.yaw_total)
+                        - Turn_Pid.Kd * chassis->body.yaw_dot;
+    // chassis->turn_T = kp_Yaw*(chassis->reference.yaw - chassis->body.yaw) 
+    //                     + PID_Calc(&Turn_Pid, chassis->body.yaw_dot, chassis->reference.wz);
     chassis->roll_T = PID_Calc(&Roll_Pid, chassis->body.roll, chassis->reference.roll);
     chassis->reference.pitch_dot = PID_Calc(&Pitch_Pid, chassis->body.pitch, 0.0f);
     chassis->pitch_T = PID_Calc(&Pitch_V_Pid, chassis->body.pitch_dot, chassis->reference.pitch_dot);
@@ -241,7 +283,8 @@ static void ChasssisR_Control(
     // 状态向量更新--方便调试查看
     legR_state.theta     = X0_OFFSET + (leg->rod.theta - 0.0f);
     legR_state.theta_dot = X1_OFFSET + (leg->rod.d_theta - 0.0f);
-    legR_state.x         = X2_OFFSET + (chassis->state.x_filter - chassis->state.x_set);
+    // legR_state.x         = X2_OFFSET(chassis->leg_set) + chassis->state.x_filter;
+    legR_state.x         = X2_OFFSET + chassis->state.x_filter;
     legR_state.x_dot     = X3_OFFSET + (chassis->state.v_filter - chassis->state.v_set);
     legR_state.phi       = X4_OFFSET + (chassis->myPithR - chassis->phi_set);
     legR_state.phi_dot   = X5_OFFSET + (chassis->myPithGyroR - 0.0f);
@@ -265,17 +308,30 @@ static void ChasssisR_Control(
                     );
 
     leg->rod.Tp = leg->rod.Tp + chassis->leg_tp + (1 - 2*leg->rod.L0)*OFFSET;        //髋关节输出力矩
-    leg->rod.T = leg->rod.T + chassis->turn_T + chassis->bias.myPitch;          //轮毂关节输出力矩
+    leg->rod.T = leg->rod.T - chassis->turn_T + chassis->bias.myPitch;          //轮毂关节输出力矩
 
     //输出限幅
-    SATURATE(&leg->rod.T, -5.0f, 5.0f);
+    SATURATE(&leg->rod.T, -2.0f, 2.0f);
     SATURATE(&leg->rod.Tp, -10.0f, 10.0f);
     
     leg->rod.F0 = BODY_MASS * GRAVITY / arm_cos_f32(leg->rod.theta) / 2 
-                    + PID_Calc(length_pid, leg->rod.L0, chassis->leg_set);
-                    // - chassis->roll_T;
+                    + PID_Calc(length_pid, leg->rod.L0, chassis->leg_set) + 2.0f;
+                    // + chassis->roll_T;
 
-    // leg->is_take_off = chassis->flag.right_flag;
+    JumpR_Loop(chassis, leg, length_pid);
+    
+    // 离地判断
+    // chassis->flag.right_flag = GroundDetect(chassis, leg, &periods);
+    if(chassis->flag.is_take_off == 1)
+    {
+        for (uint8_t i = 0; i < 2; i++)
+        {
+            lqr_k[1][i] = 0.0f;
+        }
+    }
+    
+    // 倒地自起判断
+    // RiseR_Loop(chassis, leg);
 
     // if (chassis->flag.recover_flag == 0)
     // {
@@ -337,7 +393,7 @@ static void LimitChassisOutputR(chassis_t* chassis, Leg_t* leg)
 
     // 完成功率限制后进行电机参考输入设定
     DJIMotorSetRef(chassis->wheel_motor[0], -FINAL_COEFFICIENT*leg->rod.T);
-    // DJIMotorSetRef(chassis->wheel_motor[0], 0);
+    // DJIMotorSetRef(chassis->wheel_motor[0], 0.0f);
 }
 
 /**
@@ -369,19 +425,21 @@ void ChassisR_Task(void)
         if (chassis_move.flag.start_flag == 1)
         {
             #ifdef ControlOperation
-            /* code */
                 /* code */
-                Mit_Ctrl(&hfdcan1, chassis_move.joint_motor[0].para.id, 0.0f, 0.0f, 0.0f, 0.0f, legR.joint.T1);
-                osDelay(CHASSIS_TIME);
-                Mit_Ctrl(&hfdcan1, chassis_move.joint_motor[1].para.id, 0.0f, 0.0f, 0.0f, 0.0f, legR.joint.T2);
-                osDelay(CHASSIS_TIME);
-                // 3508控制
-                LimitChassisOutputR(&chassis_move, &legR);
+                if(chassis_move.flag.recover_flag == 0 && legR.rod.recovery_flag == 0)
+                {
+                    Mit_Ctrl(&hfdcan1, chassis_move.joint_motor[0].para.id, 0.0f, 0.0f, 0.0f, 0.0f, legR.joint.T1);
+                    Mit_Ctrl(&hfdcan1, chassis_move.joint_motor[1].para.id, 0.0f, 0.0f, 0.0f, 0.0f, legR.joint.T2);
+                    // Mit_Ctrl(&hfdcan1, chassis_move.joint_motor[0].para.id, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+                    // Mit_Ctrl(&hfdcan1, chassis_move.joint_motor[1].para.id, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+                    // 3508控制
+                    LimitChassisOutputR(&chassis_move, &legR);
+                    osDelay(CHASSIS_TIME);
+                }
             #endif
 
             #ifdef ControlDebug
             Mit_Ctrl(&hfdcan1, 0x03, legR.joint.Phi4_set, 0.0f, 100.0f, 4.0f, 0.0f);
-            osDelay(CHASSIS_TIME);
             Mit_Ctrl(&hfdcan1, 0x04, legR.joint.Phi1_set, 0.0f, 100.0f, 4.0f, 0.0f);
             osDelay(CHASSIS_TIME);
             #endif
@@ -389,11 +447,10 @@ void ChassisR_Task(void)
         else if (chassis_move.flag.start_flag == 0)
         {
             Mit_Ctrl(&hfdcan1, chassis_move.joint_motor[0].para.id, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-            osDelay(CHASSIS_TIME);
             Mit_Ctrl(&hfdcan1, chassis_move.joint_motor[1].para.id, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-            osDelay(CHASSIS_TIME);
             // 3508控制
             DJIMotorStop(chassis_move.wheel_motor[0]);
+            osDelay(CHASSIS_TIME);
             // DJIMotorSetRef(chassis_move.wheel_motor[0], 300.0f);
         }
         

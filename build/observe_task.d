@@ -41,7 +41,8 @@ build/observe_task.o: Robot/RoboTask/observe/observe_task.c \
  Robot/Devices/Motor/djimotor.h Bsp/bsp_can.h Core/Inc/fdcan.h \
  Core/Inc/main.h Robot/Controller/controller.h Bsp/bsp_dwt.h \
  Robot/Devices/motor_def.h Robot/daemon/daemon.h \
- Robot/Devices/Motor/dmmotor.h Robot/RoboTask/chassis/chassisR_task.h \
+ Robot/Devices/Motor/dmmotor.h Robot/Controller/pid.h \
+ Robot/RoboTask/chassis/chassisR_task.h \
  Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h \
  Core/Inc/FreeRTOSConfig.h \
@@ -114,6 +115,7 @@ Bsp/bsp_dwt.h:
 Robot/Devices/motor_def.h:
 Robot/daemon/daemon.h:
 Robot/Devices/Motor/dmmotor.h:
+Robot/Controller/pid.h:
 Robot/RoboTask/chassis/chassisR_task.h:
 Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h:
 Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:

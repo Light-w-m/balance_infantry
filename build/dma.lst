@@ -1,4 +1,4 @@
-ARM GAS  D:\temp\TMP\ccpEXb8x.s 			page 1
+ARM GAS  D:\temp\TMP\ccPKWUNp.s 			page 1
 
 
    1              		.cpu cortex-m7
@@ -58,7 +58,7 @@ ARM GAS  D:\temp\TMP\ccpEXb8x.s 			page 1
   29:Core/Src/dma.c **** /* Configure DMA                                                              */
   30:Core/Src/dma.c **** /*----------------------------------------------------------------------------*/
   31:Core/Src/dma.c **** 
-ARM GAS  D:\temp\TMP\ccpEXb8x.s 			page 2
+ARM GAS  D:\temp\TMP\ccPKWUNp.s 			page 2
 
 
   32:Core/Src/dma.c **** /* USER CODE BEGIN 1 */
@@ -88,7 +88,7 @@ ARM GAS  D:\temp\TMP\ccpEXb8x.s 			page 1
   40              	.LBB2:
   41              		.loc 1 43 3 view .LVU2
   42              		.loc 1 43 3 view .LVU3
-  43 0004 174B     		ldr	r3, .L3
+  43 0004 1B4B     		ldr	r3, .L3
   44 0006 D3F8D820 		ldr	r2, [r3, #216]
   45 000a 42F00102 		orr	r2, r2, #1
   46 000e C3F8D820 		str	r2, [r3, #216]
@@ -118,7 +118,7 @@ ARM GAS  D:\temp\TMP\ccpEXb8x.s 			page 1
   49:Core/Src/dma.c ****   /* DMA1_Stream1_IRQn interrupt configuration */
   50:Core/Src/dma.c ****   HAL_NVIC_SetPriority(DMA1_Stream1_IRQn, 5, 0);
   65              		.loc 1 50 3 view .LVU9
-ARM GAS  D:\temp\TMP\ccpEXb8x.s 			page 3
+ARM GAS  D:\temp\TMP\ccPKWUNp.s 			page 3
 
 
   66 002e 0022     		movs	r2, #0
@@ -144,47 +144,63 @@ ARM GAS  D:\temp\TMP\ccpEXb8x.s 			page 1
   82 0048 0D20     		movs	r0, #13
   83 004a FFF7FEFF 		bl	HAL_NVIC_EnableIRQ
   84              	.LVL5:
-  55:Core/Src/dma.c ****   /* DMA1_Stream7_IRQn interrupt configuration */
-  56:Core/Src/dma.c ****   HAL_NVIC_SetPriority(DMA1_Stream7_IRQn, 5, 0);
+  55:Core/Src/dma.c ****   /* DMA1_Stream3_IRQn interrupt configuration */
+  56:Core/Src/dma.c ****   HAL_NVIC_SetPriority(DMA1_Stream3_IRQn, 5, 0);
   85              		.loc 1 56 3 view .LVU13
   86 004e 0022     		movs	r2, #0
   87 0050 0521     		movs	r1, #5
-  88 0052 2F20     		movs	r0, #47
+  88 0052 0E20     		movs	r0, #14
   89 0054 FFF7FEFF 		bl	HAL_NVIC_SetPriority
   90              	.LVL6:
-  57:Core/Src/dma.c ****   HAL_NVIC_EnableIRQ(DMA1_Stream7_IRQn);
+  57:Core/Src/dma.c ****   HAL_NVIC_EnableIRQ(DMA1_Stream3_IRQn);
   91              		.loc 1 57 3 view .LVU14
-  92 0058 2F20     		movs	r0, #47
+  92 0058 0E20     		movs	r0, #14
   93 005a FFF7FEFF 		bl	HAL_NVIC_EnableIRQ
   94              	.LVL7:
-  58:Core/Src/dma.c **** 
-  59:Core/Src/dma.c **** }
-  95              		.loc 1 59 1 is_stmt 0 view .LVU15
-  96 005e 03B0     		add	sp, sp, #12
-  97              	.LCFI2:
-  98              		.cfi_def_cfa_offset 4
-  99              		@ sp needed
- 100 0060 5DF804FB 		ldr	pc, [sp], #4
- 101              	.L4:
- 102              		.align	2
- 103              	.L3:
- 104 0064 00440258 		.word	1476543488
- 105              		.cfi_endproc
- 106              	.LFE144:
- 108              		.text
- 109              	.Letext0:
- 110              		.file 2 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\machine\\_default_types.h"
- 111              		.file 3 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
- 112              		.file 4 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h723xx.h"
- 113              		.file 5 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_cortex.h"
-ARM GAS  D:\temp\TMP\ccpEXb8x.s 			page 4
+  58:Core/Src/dma.c ****   /* DMA1_Stream7_IRQn interrupt configuration */
+  59:Core/Src/dma.c ****   HAL_NVIC_SetPriority(DMA1_Stream7_IRQn, 5, 0);
+  95              		.loc 1 59 3 view .LVU15
+  96 005e 0022     		movs	r2, #0
+  97 0060 0521     		movs	r1, #5
+  98 0062 2F20     		movs	r0, #47
+  99 0064 FFF7FEFF 		bl	HAL_NVIC_SetPriority
+ 100              	.LVL8:
+  60:Core/Src/dma.c ****   HAL_NVIC_EnableIRQ(DMA1_Stream7_IRQn);
+ 101              		.loc 1 60 3 view .LVU16
+ 102 0068 2F20     		movs	r0, #47
+ 103 006a FFF7FEFF 		bl	HAL_NVIC_EnableIRQ
+ 104              	.LVL9:
+  61:Core/Src/dma.c **** 
+  62:Core/Src/dma.c **** }
+ 105              		.loc 1 62 1 is_stmt 0 view .LVU17
+ 106 006e 03B0     		add	sp, sp, #12
+ 107              	.LCFI2:
+ 108              		.cfi_def_cfa_offset 4
+ 109              		@ sp needed
+ 110 0070 5DF804FB 		ldr	pc, [sp], #4
+ARM GAS  D:\temp\TMP\ccPKWUNp.s 			page 4
+
+
+ 111              	.L4:
+ 112              		.align	2
+ 113              	.L3:
+ 114 0074 00440258 		.word	1476543488
+ 115              		.cfi_endproc
+ 116              	.LFE144:
+ 118              		.text
+ 119              	.Letext0:
+ 120              		.file 2 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 121              		.file 3 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
+ 122              		.file 4 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h723xx.h"
+ 123              		.file 5 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_cortex.h"
+ARM GAS  D:\temp\TMP\ccPKWUNp.s 			page 5
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 dma.c
-D:\temp\TMP\ccpEXb8x.s:19     .text.MX_DMA_Init:00000000 $t
-D:\temp\TMP\ccpEXb8x.s:25     .text.MX_DMA_Init:00000000 MX_DMA_Init
-D:\temp\TMP\ccpEXb8x.s:104    .text.MX_DMA_Init:00000064 $d
+D:\temp\TMP\ccPKWUNp.s:19     .text.MX_DMA_Init:00000000 $t
+D:\temp\TMP\ccPKWUNp.s:25     .text.MX_DMA_Init:00000000 MX_DMA_Init
+D:\temp\TMP\ccPKWUNp.s:114    .text.MX_DMA_Init:00000074 $d
 
 UNDEFINED SYMBOLS
 HAL_NVIC_SetPriority

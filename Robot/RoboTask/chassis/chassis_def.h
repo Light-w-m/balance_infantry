@@ -41,19 +41,20 @@
 /**********************physical parameters*******************/
 #define GRAVITY 9.791f         // 重力加速度--福建
 
-#define BODY_MASS       8.0f       // 载体重量
-#define WHEEL_MASS      0.0f       // 轮重量
+#define BODY_MASS       5.0f       // 载体重量
+#define WHEEL_MASS      0.3f       // 轮重量
 #define WHEEL_RADIUS    0.06f       // 轮子半径
 #define WHEEL_DISTANCE  0.435f       // 轮子间距
 
-#define OFFSET          0.68f        //关节补偿系数
+#define OFFSET          0.0f        //关节补偿系数
 
 #define TOR_COEFFICIENT 0.3f        // 电机电流扭矩系数
 #define REDUCTION_RATIO 15.7f        // 电机减速比
 #define EFFICIENCY      0.1f        // 传动效率 0.075
 #define CURRENT_LIMIT   20.0f       // 电机最大允许电流
 #define CURRENT_MAPPING 16384.0f  // 电机电流映射关系
-#define FINAL_COEFFICIENT (CURRENT_MAPPING/(CURRENT_LIMIT*TOR_COEFFICIENT*REDUCTION_RATIO*EFFICIENCY)) //最终电流映射系数
+#define FINAL_COEFFICIENT 3000 //最终电流映射系数
+// #define FINAL_COEFFICIENT (CURRENT_MAPPING/(CURRENT_LIMIT*TOR_COEFFICIENT*REDUCTION_RATIO*EFFICIENCY)) //最终电流映射系数
 /**********************chassis parameters*******************/
 // 支持力阈值，当支持力小于这个值时认为离地
 #define TAKE_OFF_FN_THRESHOLD (3.0f)
@@ -74,7 +75,7 @@
 #define MAX_TORQUE 8.0f    //关机最大输出扭矩 N·m
 
 // 速度
-#define MAX_CHASSIS_VEL 2.0f        //最大底盘速度 m/s
+#define MAX_CHASSIS_VEL 0.35f        //最大底盘速度 m/s
 
 /***********************length parameters****************/
 #define LEG1 0.21f
@@ -83,7 +84,7 @@
 #define LEG4 0.21f
 
 #define LEG_RISE_LENGTH_SET 0.20f   //完成倒地自起时腿长
-#define LEG_DEFAULT 0.20f   //默认腿长
+#define LEG_DEFAULT 0.15f   //默认腿长
 
 /***********************pid parameters*******************/
 #define LEG_PID_KP  800.0f
@@ -106,37 +107,41 @@
 #define PITCH_PID_MAX_OUT  5.0f
 #define PITCH_PID_MAX_IOUT 0.0f
 
-#define ROLL_PID_KP 140.0f
+#define ROLL_PID_KP 150.0f
 #define ROLL_PID_KI 0.0f 
 #define ROLL_PID_KD 10.0f
 #define ROLL_PID_MAX_OUT  100.0f
 #define ROLL_PID_MAX_IOUT 0.0f
 
-#define TP_PID_KP 30.0f
+#define TP_PID_KP 40.0f
 #define TP_PID_KI 0.0f 
-#define TP_PID_KD 1.0f
-#define TP_PID_MAX_OUT  0.0f
+#define TP_PID_KD 1.5f
+#define TP_PID_MAX_OUT  2.0f
 #define TP_PID_MAX_IOUT 0.0f
 
 #define kp_Yaw 0.0f
 
-#define TURN_PID_KP 2.5f
+#define TURN_PID_KP 5.0f
 #define TURN_PID_KI 0.0f 
-#define TURN_PID_KD 0.3f
-#define TURN_PID_MAX_OUT  5.0f//轮毂电机的额定扭矩
+#define TURN_PID_KD 1.2f
+#define TURN_PID_MAX_OUT  3.0f//轮毂电机的额定扭矩
 #define TURN_PID_MAX_IOUT 0.0f
 
-// #define WHEEL_PID_KP 0.5f
-// #define WHEEL_PID_KI 0.0f
-// #define WHEEL_PID_KD 0.1f
-// #define WHEEL_PID_MAX_OUT  16384.0f//电机最大允许电流
-// #define WHEEL_PID_MAX_IOUT -16384.0f
+#define WHEEL_PID_KP 0.1f
+#define WHEEL_PID_KI 0.0f
+#define WHEEL_PID_KD 0.05f
+#define WHEEL_PID_MAX_OUT  2.0f//电机最大允许电流
+#define WHEEL_PID_MAX_IOUT 0.0f
 
 /**********************offset parameters*******************/
 #define THETA_OFFSET (-0.0f)    //腿角偏移量
-#define X0_OFFSET (0.15f)    // 目标theta偏移量
+
+#define X0_OFFSET (0.0f)    // 目标theta偏移量
 #define X1_OFFSET (0.0f)    // 目标theta_dot偏移量
-#define X2_OFFSET (0.0f)    // 目标x偏移量
+// #define X2_OFFSET(x) (-0.36f + ((x) - 0.15f) * 0.882352941f)    // 目标x偏移量
+// 0.15 -0.38       0.32 -0.23
+#define X2_OFFSET (-0.48f)    // 目标x偏移量
+// #define X2_OFFSET (-0.0f)    // 目标x偏移量
 #define X3_OFFSET (0.0f)    // 目标x_dot偏移量
 #define X4_OFFSET (0.0f)    // 目标phi偏移量
 #define X5_OFFSET (0.0f)    // 目标phi_dot偏移量
@@ -186,7 +191,7 @@ typedef struct
     struct state
     {   // x 和 v的参数
         float v_set;    //期望速度
-        float x_set;    //期望位置
+        // float x_set;    //期望位置
         float v_filter; //滤波后的车体速度，单位是m/s
         float x_filter; //滤波后的车体位置，单位是m
 
@@ -206,6 +211,7 @@ typedef struct
         float roll_dot;
         float yaw;
         float yaw_dot;
+        float yaw_total; // 累计的航向角,用于底盘控制
     } body;
 
     struct world
@@ -255,12 +261,18 @@ typedef struct
 
     // float theta_err;    //两腿夹角误差
 
+    struct step
+    {
+        uint32_t jump_step_time;
+        int8_t jump_step;
+    } step;
+
     struct flag
     {
         uint8_t start_flag;     //启动标志
         uint8_t right_flag;     //右腿离地检测标志
         uint8_t left_flag;      //左腿离地检测标志
-        uint8_t recover_flag;   //倒地自起完成标志
+        uint8_t recover_flag;   //倒地自起启动标志
         bool is_take_off;       //离地标志
         uint8_t jump_flag;      //跳跃标志
     } flag;
@@ -284,6 +296,8 @@ typedef struct
     /* data */
     uint32_t last_time;     // (ms)上一次更新时间
     float duration;         // (ms)任务周期
+    float us_r;             // 右腿倒立自起时间
+    float us_l;             // 左腿倒立自起时间
 } Period_t;
 
 /***********************functions***********************/
@@ -299,6 +313,23 @@ static inline float ShortestAngle(float target, float *last_set)
 {
     float out = *last_set + WrapToPi(target - *last_set);
     *last_set = out;
+    return out;
+}
+
+static inline float FixedDirAngle(float target, float *last, float dir)
+{
+    float delta = target - *last;
+
+    // 去掉 ±π 跳变影响（关键）
+    if (delta >  PI) delta -= 2.0f * PI;
+    if (delta < -PI) delta += 2.0f * PI;
+
+    // 强制方向（核心）
+    if (delta * dir < 0)
+        delta += dir * 2.0f * PI;
+
+    float out = *last + delta;
+    *last = out;
     return out;
 }
 

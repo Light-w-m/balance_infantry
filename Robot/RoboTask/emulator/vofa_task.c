@@ -4,11 +4,13 @@
 #include "arm_math.h"
 #include "chassis_def.h"
 #include "kinematics.h"
+#include "observe_task.h"
 
 extern INS_t INS;
 extern chassis_t chassis_move;
 extern Leg_t legR;
 extern Leg_t legL;
+extern Observe_Data_t observe_data;
 
 void VofaDebug_Task(void)
 {
@@ -18,10 +20,10 @@ void VofaDebug_Task(void)
     while (1)
     {
         /* code */
-        // len = snprintf(tx_buff,sizeof(tx_buff), "%.4f, %.4f, %.4f\r\n",
-        //          INS.Pitch, INS.Roll, INS.Yaw);
         len = snprintf(tx_buff,sizeof(tx_buff), "%.4f, %.4f, %.4f, %.4f\r\n",
-                 legL.rod.T, legR.rod.T, legL.rod.Tp, legR.rod.Tp);
+                 INS.Pitch, INS.Roll, INS.Gyro[X_AXIS], INS.Gyro[Y_AXIS]);
+        // len = snprintf(tx_buff,sizeof(tx_buff), "%.4f, %.4f, %.4f, %.4f, %.4f, %.4f\r\n",
+        //          legL.rod.T, legR.rod.T, legL.rod.Tp, legR.rod.Tp, observe_data.forward_v, chassis_move.state.v_filter*10);
                  
         HAL_UART_Transmit(&huart7, (uint8_t *)tx_buff, len, 10);
 

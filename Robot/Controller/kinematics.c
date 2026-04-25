@@ -16,18 +16,18 @@
 // #define MPC
 
 // LQR三项式拟合系数
-float a11[4] = {-4.013500686481230e+02,	4.448168023846569e+02,	-1.962028941807348e+02,	-11.178950289533221};
-float a12[4] = {-3.963142203218219,	5.974341010796577,	-10.345757837820608,	-0.379472085007600};
-float a13[4] = {13.625473926660618,	-9.910743828794351,	1.793639106438964,	-3.076186092182440};
-float a14[4] = {43.357855170296183,	-38.718990885436121,	12.121443823004514,	-6.734153060555737};
-float a15[4] = {-79.227077551723511,	1.287032367105078e+02,	-85.437751505781875,	28.017162235291160};
-float a16[4] = {-18.490237588368892,	20.740423352128705,	-9.801029890882928,	2.835686870776124};
-float a21[4] = {2.217231851839134e+02,	24.255415629715962,	-1.891884586751662e+02,	1.056601348980694e+02};
-float a22[4] = {37.184934500524164,	-33.780935683063007,	7.805940995831365,	2.597931486254918};
-float a23[4] = {1.225184080264510e+02,	-95.215592587845904,	18.153038919986450,	2.313543146540224};
-float a24[4] = {2.016931230213475e+02,	-1.488737458350358e+02,	23.819766946235021,	5.029722415864938};
-float a25[4] = {6.295080995420572e+02,	-7.090475420156093e+02,	3.025497378564039e+02,	19.964644390910113};
-float a26[4] = {21.917896839010758,	-30.787189361269718,	16.341582536481724,	1.319006761556430};
+float a11[4] = {-1.955354931360409e+02,	2.087888531149964e+02,	-1.222751808148598e+02,	-1.432508005189788};
+float a12[4] = {0.718802743887107,	-2.313370974054871,	-12.631378704876989,	0.110203517480979};
+float a13[4] = {-93.826885610844911,	82.168840978785980,	-25.330775608100364,	-4.838171978035929};
+float a14[4] = {-71.767409438213051,	65.001260889205057,	-24.187829220453487,	-4.457945627634433};
+float a15[4] = {-5.037609857523917e+02,	5.001264024591107e+02,	-1.922239196055656e+02,	36.276450714585408};
+float a16[4] = {-21.194614533139479,	22.617589159554129,	-9.544590144900381,	2.654314186792643};
+float a21[4] = {1.261140409869204e+02,	-84.000799395079781,	2.842501351047588,	17.444315923932699};
+float a22[4] = {22.685947644414398,	-20.755616766820246,	6.023489182592882,	1.481712487777849};
+float a23[4] = {-3.666458608599677e+02,	3.599464191690949e+02,	-1.352291848395973e+02,	23.153450952374069};
+float a24[4] = {-3.269939090666396e+02,	3.174287424222505e+02,	-1.181845308549021e+02,	20.637951681424077};
+float a25[4] = {1.566922587275597e+03,	-1.382769730147842e+03,	4.333149578243112e+02,	52.108679266534637};
+float a26[4] = {1.070697561943495e+02,	-98.067425010244975,	32.853825913042776,	0.450854241840085};
 
 #ifdef MPC
 // MPC拟合系数
@@ -88,22 +88,22 @@ void Calc_LQR_K(float k[2][6], float length, bool flag)
 #endif
 
     //离地判断
-    // if (flag)
-    // {
-    //     /* code */
-    //     k[0][0] = 0;
-    //     k[0][1] = 0;
-    //     k[0][2] = 0;
-    //     k[0][3] = 0;
-    //     k[0][4] = 0;
-    //     k[0][5] = 0;
-    //     k[1][0] = 0;
-    //     k[1][1] = 0;
-    //     k[1][2] = 0;
-    //     k[1][3] = 0;
-    //     k[1][4] = 0;
-    //     k[1][5] = 0;
-    // }
+    if (flag)
+    {
+        /* code */
+        k[0][0] = 0;
+        k[0][1] = 0;
+        k[0][2] = 0;
+        k[0][3] = 0;
+        k[0][4] = 0;
+        k[0][5] = 0;
+        // k[1][0] = 0;
+        // k[1][1] = 0;
+        k[1][2] = 0;
+        k[1][3] = 0;
+        k[1][4] = 0;
+        k[1][5] = 0;
+    }
     
 }
 
@@ -200,7 +200,7 @@ void JacobianMatrix(Leg_t* leg,Excessive_t* excessive)
  * @brief 更新大地坐标系下的加速度
  * 
  */
-void Acceleration_Updata(chassis_t chassis, INS_t* ins)
+void Acceleration_Updata(chassis_t* chassis, INS_t* ins)
 {
     float ax = ins->Accel[X_AXIS];
     float ay = ins->Accel[Y_AXIS];
@@ -215,16 +215,16 @@ void Acceleration_Updata(chassis_t chassis, INS_t* ins)
     sin_yaw = arm_sin_f32(ins->Yaw);
     cos_yaw = arm_cos_f32(ins->Yaw);
 
-    chassis.body.gx = GRAVITY * sin_pitch;
-    chassis.body.gy = -GRAVITY * sin_roll * cos_pitch;
-    chassis.body.gz = -GRAVITY * cos_roll * cos_pitch;
+    chassis->body.gx = GRAVITY * sin_pitch;
+    chassis->body.gy = -GRAVITY * sin_roll * cos_pitch;
+    chassis->body.gz = -GRAVITY * cos_roll * cos_pitch;
 
-    chassis.body.x_accel = ax + chassis.body.gx;
-    chassis.body.y_accel = ay + chassis.body.gy;
-    chassis.body.z_accel = az + chassis.body.gz;
+    chassis->body.x_accel = ax + chassis->body.gx;
+    chassis->body.y_accel = ay + chassis->body.gy;
+    chassis->body.z_accel = az + chassis->body.gz;
 
     // 计算旋转矩阵
-    float R[3][3] = 
+    float R[3][3] =
     {
         {cos_pitch * cos_yaw, sin_roll * sin_pitch * cos_yaw - cos_roll * sin_yaw, cos_roll * sin_pitch * cos_yaw + sin_roll * sin_yaw},
         {cos_pitch * sin_yaw, sin_roll * sin_pitch * sin_yaw + cos_roll * cos_yaw, cos_roll * sin_pitch * sin_yaw - sin_roll * cos_yaw},
@@ -232,9 +232,9 @@ void Acceleration_Updata(chassis_t chassis, INS_t* ins)
     };
 
     // 更新大地坐标系下的加速度
-    chassis.world.x_accel = R[0][0]*ax + R[0][1]*ay + R[0][2]*az;
-    chassis.world.y_accel = R[1][0]*ax + R[1][1]*ay + R[1][2]*az;
-    chassis.world.z_accel = R[2][0]*ax + R[2][1]*ay + R[2][2]*az-GRAVITY;
+    chassis->world.x_accel = R[0][0]*ax + R[0][1]*ay + R[0][2]*az;
+    chassis->world.y_accel = R[1][0]*ax + R[1][1]*ay + R[1][2]*az;
+    chassis->world.z_accel = R[2][0]*ax + R[2][1]*ay + R[2][2]*az-GRAVITY;
 
 }
 
@@ -256,7 +256,7 @@ uint8_t GroundDetect(chassis_t* chassis, Leg_t* leg, Period_t* period)
             + leg->rod.L0 * leg->rod.dd_theta * arm_sin_f32(leg->rod.theta)
             + leg->rod.L0 * leg->rod.d_theta * leg->rod.d_theta * arm_cos_f32(leg->rod.theta);
 
-    P = leg->rod.F * cosf(leg->rod.theta) + leg->rod.Tp * sinf(leg->rod.theta) / leg->rod.L0;
+    P = leg->rod.F0 * cosf(leg->rod.theta) + leg->rod.Tp * sinf(leg->rod.theta) / leg->rod.L0;
     leg->FN = P + WHEEL_MASS * (dd_z_w + GRAVITY);
 
     if (leg->FN < TAKE_OFF_FN_THRESHOLD)

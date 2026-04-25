@@ -8,7 +8,7 @@
 #endif
 
 #define HIPNUC_MIN_LENGTH       (82)   
-#define HIPNUC_MAX_RAW_SIZE     (512)
+#define HIPNUC_MAX_RAW_SIZE     (128)
 #define HIPNUC_ID_HI91          (0x91)
 #define HIPNUC_ID_HI83          (0x83)
 
