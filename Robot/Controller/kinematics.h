@@ -60,6 +60,8 @@ typedef struct
 
     float j11, j12, j21, j22;   //雅可比矩阵
     float FN;                   //支持力
+    uint32_t last_time;  // (ms)上一次更新时间
+    uint32_t duration;   // (ms)任务周期
     uint32_t take_off_time;     // 离地计时
     uint32_t touch_time;        // 触地计时
 
@@ -86,7 +88,8 @@ void Calc_LQR_K(float k[2][6], float length, bool flag);
 void ForwardKinematics(Leg_t* leg,Excessive_t* excessive);
 void InverseKinematics(chassis_t* chassis, Leg_t* leg);
 void JacobianMatrix(Leg_t* leg,Excessive_t* excessive);
-uint8_t GroundDetect(chassis_t* chassis, Leg_t* leg, Period_t* period);
+// uint8_t GroundDetect(chassis_t* chassis, Leg_t* leg, Period_t* period);
+void GroundDetect(chassis_t* chassis, Leg_t* leg);
 void Acceleration_Updata(chassis_t* chassis, INS_t* ins);
 void CoordinateLength(float *LengthL, float *LengthR, float diff, float add);
 float DeviationCalc(float diff, float real, float target);

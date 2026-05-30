@@ -1,4 +1,4 @@
-ARM GAS  D:\temp\TMP\ccaLlnUD.s 			page 1
+ARM GAS  D:\temp\TMP\ccZ3zKfe.s 			page 1
 
 
    1              		.cpu cortex-m7
@@ -18,15 +18,15 @@ ARM GAS  D:\temp\TMP\ccaLlnUD.s 			page 1
   15              		.text
   16              	.Ltext0:
   17              		.cfi_sections	.debug_frame
-  18              		.section	.text.BMI088_ACCEL_NS_L,"ax",%progbits
-  19              		.align	1
-  20              		.global	BMI088_ACCEL_NS_L
-  21              		.syntax unified
-  22              		.thumb
-  23              		.thumb_func
-  25              	BMI088_ACCEL_NS_L:
-  26              	.LFB144:
-  27              		.file 1 "Robot/Devices/BMI088/BMI088Middleware.c"
+  18              		.file 1 "Robot/Devices/BMI088/BMI088Middleware.c"
+  19              		.section	.text.BMI088_ACCEL_NS_L,"ax",%progbits
+  20              		.align	1
+  21              		.global	BMI088_ACCEL_NS_L
+  22              		.syntax unified
+  23              		.thumb
+  24              		.thumb_func
+  26              	BMI088_ACCEL_NS_L:
+  27              	.LFB144:
    1:Robot/Devices/BMI088/BMI088Middleware.c **** #include "BMI088Middleware.h"
    2:Robot/Devices/BMI088/BMI088Middleware.c **** #include "main.h"
    3:Robot/Devices/BMI088/BMI088Middleware.c **** 
@@ -58,7 +58,7 @@ ARM GAS  D:\temp\TMP\ccaLlnUD.s 			page 1
   47              	.L3:
   48 0010 00080258 		.word	1476528128
   49              		.cfi_endproc
-ARM GAS  D:\temp\TMP\ccaLlnUD.s 			page 2
+ARM GAS  D:\temp\TMP\ccZ3zKfe.s 			page 2
 
 
   50              	.LFE144:
@@ -118,7 +118,7 @@ ARM GAS  D:\temp\TMP\ccaLlnUD.s 			page 1
  101              		.cfi_offset 3, -8
  102              		.cfi_offset 14, -4
   17:Robot/Devices/BMI088/BMI088Middleware.c ****     HAL_GPIO_WritePin(GYRO_CS_GPIO_Port, GYRO_CS_Pin, GPIO_PIN_RESET);
-ARM GAS  D:\temp\TMP\ccaLlnUD.s 			page 3
+ARM GAS  D:\temp\TMP\ccZ3zKfe.s 			page 3
 
 
  103              		.loc 1 17 5 view .LVU7
@@ -178,7 +178,7 @@ ARM GAS  D:\temp\TMP\ccaLlnUD.s 			page 1
  155              		.thumb
  156              		.thumb_func
  158              	BMI088_read_write_byte:
-ARM GAS  D:\temp\TMP\ccaLlnUD.s 			page 4
+ARM GAS  D:\temp\TMP\ccZ3zKfe.s 			page 4
 
 
  159              	.LVL4:
@@ -208,7 +208,7 @@ ARM GAS  D:\temp\TMP\ccaLlnUD.s 			page 1
  178 000e 0123     		movs	r3, #1
  179 0010 0DF11702 		add	r2, sp, #23
  180 0014 0DF10F01 		add	r1, sp, #15
- 181 0018 0448     		ldr	r0, .L19
+ 181 0018 0348     		ldr	r0, .L19
  182              	.LVL5:
  183              		.loc 1 27 5 is_stmt 0 view .LVU16
  184 001a 0068     		ldr	r0, [r0]
@@ -223,54 +223,53 @@ ARM GAS  D:\temp\TMP\ccaLlnUD.s 			page 1
  191              	.LCFI6:
  192              		.cfi_def_cfa_offset 4
  193              		@ sp needed
- 194 0026 5DF804FB 		ldr	pc, [sp], #4
+ 194 0026 00BD     		pop	{pc}
  195              	.L20:
- 196 002a 00BF     		.align	2
+ 196              		.align	2
  197              	.L19:
- 198 002c 00000000 		.word	.LANCHOR0
+ 198 0028 00000000 		.word	BMI088_SPI
  199              		.cfi_endproc
  200              	.LFE148:
  202              		.global	BMI088_SPI
  203              		.section	.bss.BMI088_SPI,"aw",%nobits
  204              		.align	2
- 205              		.set	.LANCHOR0,. + 0
- 208              	BMI088_SPI:
- 209 0000 00000000 		.space	4
- 210              		.text
- 211              	.Letext0:
-ARM GAS  D:\temp\TMP\ccaLlnUD.s 			page 5
+ 207              	BMI088_SPI:
+ 208 0000 00000000 		.space	4
+ 209              		.text
+ 210              	.Letext0:
+ 211              		.file 2 "D:/VS_STM32/gcc-arm-15.2/arm-none-eabi/include/machine/_default_types.h"
+ARM GAS  D:\temp\TMP\ccZ3zKfe.s 			page 5
 
 
- 212              		.file 2 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\machine\\_default_types.h"
- 213              		.file 3 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
- 214              		.file 4 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h723xx.h"
- 215              		.file 5 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h"
- 216              		.file 6 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_gpio.h"
- 217              		.file 7 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_dma.h"
- 218              		.file 8 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_spi.h"
- 219              		.file 9 "Robot/Devices/BMI088/BMI088Middleware.h"
-ARM GAS  D:\temp\TMP\ccaLlnUD.s 			page 6
+ 212              		.file 3 "D:/VS_STM32/gcc-arm-15.2/arm-none-eabi/include/sys/_stdint.h"
+ 213              		.file 4 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h723xx.h"
+ 214              		.file 5 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h"
+ 215              		.file 6 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_gpio.h"
+ 216              		.file 7 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_dma.h"
+ 217              		.file 8 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_spi.h"
+ 218              		.file 9 "Robot/Devices/BMI088/BMI088Middleware.h"
+ARM GAS  D:\temp\TMP\ccZ3zKfe.s 			page 6
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 BMI088Middleware.c
-D:\temp\TMP\ccaLlnUD.s:19     .text.BMI088_ACCEL_NS_L:00000000 $t
-D:\temp\TMP\ccaLlnUD.s:25     .text.BMI088_ACCEL_NS_L:00000000 BMI088_ACCEL_NS_L
-D:\temp\TMP\ccaLlnUD.s:48     .text.BMI088_ACCEL_NS_L:00000010 $d
-D:\temp\TMP\ccaLlnUD.s:53     .text.BMI088_ACCEL_NS_H:00000000 $t
-D:\temp\TMP\ccaLlnUD.s:59     .text.BMI088_ACCEL_NS_H:00000000 BMI088_ACCEL_NS_H
-D:\temp\TMP\ccaLlnUD.s:81     .text.BMI088_ACCEL_NS_H:00000010 $d
-D:\temp\TMP\ccaLlnUD.s:86     .text.BMI088_GYRO_NS_L:00000000 $t
-D:\temp\TMP\ccaLlnUD.s:92     .text.BMI088_GYRO_NS_L:00000000 BMI088_GYRO_NS_L
-D:\temp\TMP\ccaLlnUD.s:114    .text.BMI088_GYRO_NS_L:00000010 $d
-D:\temp\TMP\ccaLlnUD.s:119    .text.BMI088_GYRO_NS_H:00000000 $t
-D:\temp\TMP\ccaLlnUD.s:125    .text.BMI088_GYRO_NS_H:00000000 BMI088_GYRO_NS_H
-D:\temp\TMP\ccaLlnUD.s:147    .text.BMI088_GYRO_NS_H:00000010 $d
-D:\temp\TMP\ccaLlnUD.s:152    .text.BMI088_read_write_byte:00000000 $t
-D:\temp\TMP\ccaLlnUD.s:158    .text.BMI088_read_write_byte:00000000 BMI088_read_write_byte
-D:\temp\TMP\ccaLlnUD.s:198    .text.BMI088_read_write_byte:0000002c $d
-D:\temp\TMP\ccaLlnUD.s:208    .bss.BMI088_SPI:00000000 BMI088_SPI
-D:\temp\TMP\ccaLlnUD.s:204    .bss.BMI088_SPI:00000000 $d
+D:\temp\TMP\ccZ3zKfe.s:20     .text.BMI088_ACCEL_NS_L:00000000 $t
+D:\temp\TMP\ccZ3zKfe.s:26     .text.BMI088_ACCEL_NS_L:00000000 BMI088_ACCEL_NS_L
+D:\temp\TMP\ccZ3zKfe.s:48     .text.BMI088_ACCEL_NS_L:00000010 $d
+D:\temp\TMP\ccZ3zKfe.s:53     .text.BMI088_ACCEL_NS_H:00000000 $t
+D:\temp\TMP\ccZ3zKfe.s:59     .text.BMI088_ACCEL_NS_H:00000000 BMI088_ACCEL_NS_H
+D:\temp\TMP\ccZ3zKfe.s:81     .text.BMI088_ACCEL_NS_H:00000010 $d
+D:\temp\TMP\ccZ3zKfe.s:86     .text.BMI088_GYRO_NS_L:00000000 $t
+D:\temp\TMP\ccZ3zKfe.s:92     .text.BMI088_GYRO_NS_L:00000000 BMI088_GYRO_NS_L
+D:\temp\TMP\ccZ3zKfe.s:114    .text.BMI088_GYRO_NS_L:00000010 $d
+D:\temp\TMP\ccZ3zKfe.s:119    .text.BMI088_GYRO_NS_H:00000000 $t
+D:\temp\TMP\ccZ3zKfe.s:125    .text.BMI088_GYRO_NS_H:00000000 BMI088_GYRO_NS_H
+D:\temp\TMP\ccZ3zKfe.s:147    .text.BMI088_GYRO_NS_H:00000010 $d
+D:\temp\TMP\ccZ3zKfe.s:152    .text.BMI088_read_write_byte:00000000 $t
+D:\temp\TMP\ccZ3zKfe.s:158    .text.BMI088_read_write_byte:00000000 BMI088_read_write_byte
+D:\temp\TMP\ccZ3zKfe.s:198    .text.BMI088_read_write_byte:00000028 $d
+D:\temp\TMP\ccZ3zKfe.s:207    .bss.BMI088_SPI:00000000 BMI088_SPI
+D:\temp\TMP\ccZ3zKfe.s:204    .bss.BMI088_SPI:00000000 $d
 
 UNDEFINED SYMBOLS
 HAL_GPIO_WritePin

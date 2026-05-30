@@ -181,7 +181,7 @@ static void JumpR_Loop(chassis_t* chassis, Leg_t* leg, PidTypeDef* length_pid)
             leg->rod.F0 = BODY_MASS * GRAVITY / arm_cos_f32(leg->rod.theta) / 2 
                     + PID_Calc(length_pid, leg->rod.L0, MIN_LEG_LENGTH);
             if (leg->rod.L0 < 0.18f) chassis->step.jump_step_time++;
-            if (chassis->step.jump_step_time > 10)
+            if (chassis->step.jump_step_time > 100)
             {
                 chassis->step.jump_step_time = 0;
                 chassis->step.jump_step = JUMP_STEP_SQUST;
@@ -189,9 +189,9 @@ static void JumpR_Loop(chassis_t* chassis, Leg_t* leg, PidTypeDef* length_pid)
         }
         else if (chassis->step.jump_step == JUMP_STEP_SQUST)
         {
-            leg->rod.F0 = 70.0f;
+            leg->rod.F0 = 100.0f;
             if (leg->rod.L0 > 0.22f) chassis->step.jump_step_time++;
-            if (chassis->step.jump_step_time > 20)
+            if (chassis->step.jump_step_time > 100)
             {
                 chassis->step.jump_step_time = 0;
                 chassis->step.jump_step = JUMP_STEP_JUMP;
@@ -200,9 +200,9 @@ static void JumpR_Loop(chassis_t* chassis, Leg_t* leg, PidTypeDef* length_pid)
         else if (chassis->step.jump_step == JUMP_STEP_JUMP)
         {
             leg->rod.F0 = BODY_MASS * GRAVITY / arm_cos_f32(leg->rod.theta) / 2 
-                    + PID_Calc(length_pid, leg->rod.L0, chassis->leg_set);
+                    + PID_Calc(length_pid, leg->rod.L0, MIN_LEG_LENGTH);
             if (leg->rod.L0 < 0.20f) chassis->step.jump_step_time++;
-            if (chassis->step.jump_step_time > 10)
+            if (chassis->step.jump_step_time > 20)
             {
                 chassis->step.jump_step_time = 0;
                 chassis->step.jump_step = JUMP_STEP_RECOVERY;
@@ -220,7 +220,7 @@ static void JumpR_Loop(chassis_t* chassis, Leg_t* leg, PidTypeDef* length_pid)
     }
     else
         leg->rod.F0 = BODY_MASS * GRAVITY / arm_cos_f32(leg->rod.theta) / 2 
-                    + PID_Calc(length_pid, leg->rod.L0, chassis->leg_set);
+                    + PID_Calc(length_pid, leg->rod.L0, chassis->leg_set) + 2.0f;
 }
 
 /**
@@ -265,14 +265,19 @@ static void RiseR_Loop(chassis_t* chassis, Leg_t* leg)
 static void ChasssisR_Control(
     chassis_t* chassis, Leg_t* leg, Excessive_t* excessive, INS_t* ins, PidTypeDef* length_pid, float lqr_k[2][6])
 {
-    // chassis->flag.is_take_off = chassis->flag.right_flag || chassis->flag.left_flag;
+    chassis->flag.is_take_off = chassis->flag.right_flag || chassis->flag.left_flag;
 
     ForwardKinematics(leg, excessive); 
 
     // Calc_LQR_K(lqr_k, leg->rod.L0, chassis->flag.is_take_off);
 
-    chassis->turn_T = Turn_Pid.Kp * (chassis->reference.yaw - chassis->body.yaw_total)
+    if (fabsf(chassis->reference.yaw_dot) > 0.01f) {
+        // 小陀螺：角速度闭环
+        chassis->turn_T = PID_Calc(&Turn_Pid, chassis->body.yaw_dot, chassis->reference.yaw_dot);
+    } else {
+        chassis->turn_T = Turn_Pid.Kp * (chassis->reference.yaw - chassis->body.yaw_total)
                         - Turn_Pid.Kd * chassis->body.yaw_dot;
+    }
     // chassis->turn_T = kp_Yaw*(chassis->reference.yaw - chassis->body.yaw) 
     //                     + PID_Calc(&Turn_Pid, chassis->body.yaw_dot, chassis->reference.wz);
     chassis->roll_T = PID_Calc(&Roll_Pid, chassis->body.roll, chassis->reference.roll);
@@ -288,6 +293,12 @@ static void ChasssisR_Control(
     legR_state.x_dot     = X3_OFFSET + (chassis->state.v_filter - chassis->state.v_set);
     legR_state.phi       = X4_OFFSET + (chassis->myPithR - chassis->phi_set);
     legR_state.phi_dot   = X5_OFFSET + (chassis->myPithGyroR - 0.0f);
+    
+    chassis->state.x_error = chassis->state.x_filter - chassis->state.x_set;
+    chassis->state.x_integral += chassis->state.x_error * ((float)CHASSIS_TIME/1000.0f);
+    SATURATE(&chassis->state.x_integral, -X_INTEGRAL_LIMIT, X_INTEGRAL_LIMIT);
+
+
 
     leg->rod.T = (    
                     + lqr_k[0][0] * legR_state.theta
@@ -296,6 +307,7 @@ static void ChasssisR_Control(
                     + lqr_k[0][3] * legR_state.x_dot
                     + lqr_k[0][4] * legR_state.phi
                     + lqr_k[0][5] * legR_state.phi_dot
+                    + X_INTEGRAL_KI * chassis->state.x_integral
                     );
 
     leg->rod.Tp = (   
@@ -312,48 +324,38 @@ static void ChasssisR_Control(
 
     //输出限幅
     SATURATE(&leg->rod.T, -2.0f, 2.0f);
-    SATURATE(&leg->rod.Tp, -10.0f, 10.0f);
+    if (chassis->flag.jump_flag == 1)
+        SATURATE(&leg->rod.Tp, -15.0f, 15.0f);    // 髋关节力矩
+    else
+        SATURATE(&leg->rod.Tp, -10.0f, 10.0f);
     
-    leg->rod.F0 = BODY_MASS * GRAVITY / arm_cos_f32(leg->rod.theta) / 2 
-                    + PID_Calc(length_pid, leg->rod.L0, chassis->leg_set) + 2.0f;
+    // leg->rod.F0 = BODY_MASS * GRAVITY / arm_cos_f32(leg->rod.theta) / 2 
+    //                 + PID_Calc(length_pid, leg->rod.L0, chassis->leg_set) + 2.0f;
                     // + chassis->roll_T;
 
     JumpR_Loop(chassis, leg, length_pid);
     
     // 离地判断
     // chassis->flag.right_flag = GroundDetect(chassis, leg, &periods);
-    if(chassis->flag.is_take_off == 1)
-    {
-        for (uint8_t i = 0; i < 2; i++)
-        {
-            lqr_k[1][i] = 0.0f;
-        }
-    }
+    GroundDetect(chassis, leg);
+    if(chassis->flag.right_flag && leg->touch_time > TOUCH_GROUND_THRESHOLD)
+        chassis->flag.right_flag = 0;
+    else if(!chassis->flag.right_flag && leg->take_off_time > TAKE_OFF_THRESHOLD)
+        chassis->flag.right_flag = 1;
+    if(chassis->flag.is_take_off == 1 && leg->take_off_time > 500)
+        leg->rod.T = 0.0f;      // 主动抬车时关闭轮毂电机输出
     
     // 倒地自起判断
     // RiseR_Loop(chassis, leg);
 
-    // if (chassis->flag.recover_flag == 0)
-    // {
-    //     /* code */
-    //     if(leg->is_take_off && leg->touch_time > TOUCH_TOGGLE_THRESHOLD)
-    //     {
-    //         leg->is_take_off = false;
-    //     }
-    //     else if (!leg->is_take_off && leg->take_off_time > TOUCH_TOGGLE_THRESHOLD)
-    //     {
-    //         leg->is_take_off = true;
-    //         chassis->state.x_filter = 0.0f;
-    //         chassis->state.x_set = chassis->state.x_filter;
-    //     }
-    // }
     SATURATE(&leg->rod.F0, -500.0f, 500.0f);
 
     JacobianMatrix(leg, excessive);
 
     // 髋关节输出限幅
-    SATURATE(&leg->joint.T1, -MAX_TORQUE, MAX_TORQUE);
-    SATURATE(&leg->joint.T2, -MAX_TORQUE, MAX_TORQUE);
+    float torque_limit = (chassis->flag.jump_flag == 1) ? 16.0f : MAX_TORQUE;
+    SATURATE(&leg->joint.T1, -torque_limit, torque_limit);
+    SATURATE(&leg->joint.T2, -torque_limit, torque_limit);
 }
 #endif
 
@@ -414,9 +416,12 @@ void ChassisR_Task(void)
     
     while (1)
     {
+        legR.duration = xTaskGetTickCount() - legR.last_time;
+        legR.last_time = xTaskGetTickCount();
+
         #ifdef ControlOperation
         // /* code */
-        ChassisR_Feedback_Update(&chassis_move, &legR, &INS, (float)CHASSIS_TIME*3/1000.0f);
+        ChassisR_Feedback_Update(&chassis_move, &legR, &INS, (float)CHASSIS_TIME/1000.0f);
         ChasssisR_Control(&chassis_move, &legR, &excessiveR, &INS, &LegR_pid, LQR_K_R);
         #endif
         #ifdef ControlDebug
@@ -449,9 +454,10 @@ void ChassisR_Task(void)
             Mit_Ctrl(&hfdcan1, chassis_move.joint_motor[0].para.id, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
             Mit_Ctrl(&hfdcan1, chassis_move.joint_motor[1].para.id, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
             // 3508控制
-            DJIMotorStop(chassis_move.wheel_motor[0]);
+            DJIMotorSetRef(chassis_move.wheel_motor[0], 0.0f);
+            chassis_move.state.x_integral = 0.0f;  // 停止时清零积分
+
             osDelay(CHASSIS_TIME);
-            // DJIMotorSetRef(chassis_move.wheel_motor[0], 300.0f);
         }
         
     }

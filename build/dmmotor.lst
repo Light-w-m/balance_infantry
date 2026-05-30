@@ -1,4 +1,4 @@
-ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 1
+ARM GAS  D:\temp\TMP\ccmzOYKV.s 			page 1
 
 
    1              		.cpu cortex-m7
@@ -18,16 +18,16 @@ ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 1
   15              		.text
   16              	.Ltext0:
   17              		.cfi_sections	.debug_frame
-  18              		.section	.text.Hex_To_Float,"ax",%progbits
-  19              		.align	1
-  20              		.global	Hex_To_Float
-  21              		.syntax unified
-  22              		.thumb
-  23              		.thumb_func
-  25              	Hex_To_Float:
-  26              	.LVL0:
-  27              	.LFB144:
-  28              		.file 1 "Robot/Devices/Motor/dmmotor.c"
+  18              		.file 1 "Robot/Devices/Motor/dmmotor.c"
+  19              		.section	.text.Hex_To_Float,"ax",%progbits
+  20              		.align	1
+  21              		.global	Hex_To_Float
+  22              		.syntax unified
+  23              		.thumb
+  24              		.thumb_func
+  26              	Hex_To_Float:
+  27              	.LVL0:
+  28              	.LFB144:
    1:Robot/Devices/Motor/dmmotor.c **** #include "dmmotor.h"
    2:Robot/Devices/Motor/dmmotor.c **** 
    3:Robot/Devices/Motor/dmmotor.c **** float Hex_To_Float(uint32_t *Byte,int num)//十六进制到浮点数
@@ -58,7 +58,7 @@ ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 1
    8:Robot/Devices/Motor/dmmotor.c **** uint32_t FloatTohex(float HEX)//浮点数到十六进制转换
    9:Robot/Devices/Motor/dmmotor.c **** {
   51              		.loc 1 9 1 is_stmt 1 view -0
-ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 2
+ARM GAS  D:\temp\TMP\ccmzOYKV.s 			page 2
 
 
   52              		.cfi_startproc
@@ -72,7 +72,7 @@ ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 1
   60 0002 8DED010A 		vstr.32	s0, [sp, #4]
   10:Robot/Devices/Motor/dmmotor.c **** 	return *( uint32_t *)&HEX;
   61              		.loc 1 10 2 is_stmt 1 view .LVU5
-  62              		.loc 1 10 9 is_stmt 0 view .LVU6
+  62              		.loc 1 10 9 is_stmt 0 discriminator 1 view .LVU6
   63 0006 0198     		ldr	r0, [sp, #4]
   11:Robot/Devices/Motor/dmmotor.c **** }
   64              		.loc 1 11 1 view .LVU7
@@ -118,7 +118,7 @@ ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 1
   90 0000 31EE601A 		vsub.f32	s2, s2, s1
   91              	.LVL3:
   28:Robot/Devices/Motor/dmmotor.c **** 	float offset = x_min;
-ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 3
+ARM GAS  D:\temp\TMP\ccmzOYKV.s 			page 3
 
 
   92              		.loc 1 28 2 is_stmt 1 view .LVU11
@@ -136,12 +136,12 @@ ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 1
  103 000e 07EE903A 		vmov	s15, r3	@ int
  104 0012 F8EEE77A 		vcvt.f32.s32	s15, s15
  105              		.loc 1 29 32 view .LVU17
- 106 0016 60EE277A 		vmul.f32	s15, s0, s15
+ 106 0016 20EE270A 		vmul.f32	s0, s0, s15
  107              		.loc 1 29 55 view .LVU18
- 108 001a 87EE817A 		vdiv.f32	s14, s15, s2
+ 108 001a C0EE017A 		vdiv.f32	s15, s0, s2
   30:Robot/Devices/Motor/dmmotor.c **** }
  109              		.loc 1 30 1 view .LVU19
- 110 001e FDEEC77A 		vcvt.s32.f32	s15, s14
+ 110 001e FDEEE77A 		vcvt.s32.f32	s15, s15
  111 0022 17EE900A 		vmov	r0, s15	@ int
  112              	.LVL5:
  113              		.loc 1 30 1 view .LVU20
@@ -178,7 +178,7 @@ ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 1
  133              		.loc 1 43 1 is_stmt 0 view .LVU22
  134 0000 07EE900A 		vmov	s15, r0	@ int
   44:Robot/Devices/Motor/dmmotor.c **** 	/* converts unsigned int to float, given range and number of bits */
-ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 4
+ARM GAS  D:\temp\TMP\ccmzOYKV.s 			page 4
 
 
   45:Robot/Devices/Motor/dmmotor.c **** 	float span = x_max - x_min;
@@ -193,35 +193,34 @@ ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 1
  141              		.loc 1 47 10 is_stmt 0 view .LVU27
  142 0008 F8EEE77A 		vcvt.f32.s32	s15, s15
  143              		.loc 1 47 23 view .LVU28
- 144 000c 67EEA00A 		vmul.f32	s1, s15, s1
- 145              	.LVL8:
- 146              		.loc 1 47 40 view .LVU29
- 147 0010 0123     		movs	r3, #1
- 148 0012 8B40     		lsls	r3, r3, r1
- 149              		.loc 1 47 47 view .LVU30
- 150 0014 013B     		subs	r3, r3, #1
- 151              		.loc 1 47 30 view .LVU31
- 152 0016 07EE903A 		vmov	s15, r3	@ int
- 153 001a F8EEE77A 		vcvt.f32.s32	s15, s15
- 154              		.loc 1 47 28 view .LVU32
- 155 001e 80EEA77A 		vdiv.f32	s14, s1, s15
+ 144 000c 27EEA07A 		vmul.f32	s14, s15, s1
+ 145              		.loc 1 47 40 view .LVU29
+ 146 0010 0123     		movs	r3, #1
+ 147 0012 8B40     		lsls	r3, r3, r1
+ 148              		.loc 1 47 47 view .LVU30
+ 149 0014 013B     		subs	r3, r3, #1
+ 150              		.loc 1 47 30 view .LVU31
+ 151 0016 07EE903A 		vmov	s15, r3	@ int
+ 152 001a F8EEE77A 		vcvt.f32.s32	s15, s15
+ 153              		.loc 1 47 28 view .LVU32
+ 154 001e C7EE276A 		vdiv.f32	s13, s14, s15
   48:Robot/Devices/Motor/dmmotor.c **** }
- 156              		.loc 1 48 1 view .LVU33
- 157 0022 37EE000A 		vadd.f32	s0, s14, s0
- 158              	.LVL9:
- 159              		.loc 1 48 1 view .LVU34
- 160 0026 7047     		bx	lr
- 161              		.cfi_endproc
- 162              	.LFE147:
- 164              		.section	.text.joint_motor_init,"ax",%progbits
- 165              		.align	1
- 166              		.global	joint_motor_init
- 167              		.syntax unified
- 168              		.thumb
- 169              		.thumb_func
- 171              	joint_motor_init:
- 172              	.LVL10:
- 173              	.LFB148:
+ 155              		.loc 1 48 1 view .LVU33
+ 156 0022 36EE800A 		vadd.f32	s0, s13, s0
+ 157              	.LVL8:
+ 158              		.loc 1 48 1 view .LVU34
+ 159 0026 7047     		bx	lr
+ 160              		.cfi_endproc
+ 161              	.LFE147:
+ 163              		.section	.text.joint_motor_init,"ax",%progbits
+ 164              		.align	1
+ 165              		.global	joint_motor_init
+ 166              		.syntax unified
+ 167              		.thumb
+ 168              		.thumb_func
+ 170              	joint_motor_init:
+ 171              	.LVL9:
+ 172              	.LFB148:
   49:Robot/Devices/Motor/dmmotor.c **** 
   50:Robot/Devices/Motor/dmmotor.c **** /**
   51:Robot/Devices/Motor/dmmotor.c ****  * @brief 关节电机初始化
@@ -232,36 +231,36 @@ ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 1
   56:Robot/Devices/Motor/dmmotor.c ****  */
   57:Robot/Devices/Motor/dmmotor.c **** void joint_motor_init(Joint_Motor_t *motor,uint16_t id,uint16_t mode)
   58:Robot/Devices/Motor/dmmotor.c **** {
- 174              		.loc 1 58 1 is_stmt 1 view -0
- 175              		.cfi_startproc
- 176              		@ args = 0, pretend = 0, frame = 0
- 177              		@ frame_needed = 0, uses_anonymous_args = 0
- 178              		@ link register save eliminated.
+ 173              		.loc 1 58 1 is_stmt 1 view -0
+ 174              		.cfi_startproc
+ 175              		@ args = 0, pretend = 0, frame = 0
+ 176              		@ frame_needed = 0, uses_anonymous_args = 0
+ 177              		@ link register save eliminated.
   59:Robot/Devices/Motor/dmmotor.c ****   motor->mode=mode;
-ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 5
+ 178              		.loc 1 59 3 view .LVU36
+ARM GAS  D:\temp\TMP\ccmzOYKV.s 			page 5
 
 
- 179              		.loc 1 59 3 view .LVU36
- 180              		.loc 1 59 14 is_stmt 0 view .LVU37
- 181 0000 0280     		strh	r2, [r0]	@ movhi
+ 179              		.loc 1 59 14 is_stmt 0 view .LVU37
+ 180 0000 0280     		strh	r2, [r0]	@ movhi
   60:Robot/Devices/Motor/dmmotor.c ****   motor->para.id=id;
- 182              		.loc 1 60 3 is_stmt 1 view .LVU38
- 183              		.loc 1 60 17 is_stmt 0 view .LVU39
- 184 0002 4160     		str	r1, [r0, #4]
+ 181              		.loc 1 60 3 is_stmt 1 view .LVU38
+ 182              		.loc 1 60 17 is_stmt 0 view .LVU39
+ 183 0002 4160     		str	r1, [r0, #4]
   61:Robot/Devices/Motor/dmmotor.c **** }
- 185              		.loc 1 61 1 view .LVU40
- 186 0004 7047     		bx	lr
- 187              		.cfi_endproc
- 188              	.LFE148:
- 190              		.section	.text.Dm8009_Fbdata,"ax",%progbits
- 191              		.align	1
- 192              		.global	Dm8009_Fbdata
- 193              		.syntax unified
- 194              		.thumb
- 195              		.thumb_func
- 197              	Dm8009_Fbdata:
- 198              	.LVL11:
- 199              	.LFB149:
+ 184              		.loc 1 61 1 view .LVU40
+ 185 0004 7047     		bx	lr
+ 186              		.cfi_endproc
+ 187              	.LFE148:
+ 189              		.section	.text.Dm8009_Fbdata,"ax",%progbits
+ 190              		.align	1
+ 191              		.global	Dm8009_Fbdata
+ 192              		.syntax unified
+ 193              		.thumb
+ 194              		.thumb_func
+ 196              	Dm8009_Fbdata:
+ 197              	.LVL10:
+ 198              	.LFB149:
   62:Robot/Devices/Motor/dmmotor.c **** 
   63:Robot/Devices/Motor/dmmotor.c **** /**
   64:Robot/Devices/Motor/dmmotor.c **** ************************************************************************
@@ -276,157 +275,157 @@ ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 1
   73:Robot/Devices/Motor/dmmotor.c **** **/
   74:Robot/Devices/Motor/dmmotor.c **** void Dm8009_Fbdata(Joint_Motor_t *motor, uint8_t *rx_data)
   75:Robot/Devices/Motor/dmmotor.c **** { 
- 200              		.loc 1 75 1 is_stmt 1 view -0
- 201              		.cfi_startproc
- 202              		@ args = 0, pretend = 0, frame = 0
- 203              		@ frame_needed = 0, uses_anonymous_args = 0
- 204              		.loc 1 75 1 is_stmt 0 view .LVU42
- 205 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
- 206              	.LCFI2:
- 207              		.cfi_def_cfa_offset 24
- 208              		.cfi_offset 3, -24
- 209              		.cfi_offset 4, -20
- 210              		.cfi_offset 5, -16
- 211              		.cfi_offset 6, -12
- 212              		.cfi_offset 7, -8
- 213              		.cfi_offset 14, -4
- 214 0002 0446     		mov	r4, r0
- 215 0004 0D46     		mov	r5, r1
+ 199              		.loc 1 75 1 is_stmt 1 view -0
+ 200              		.cfi_startproc
+ 201              		@ args = 0, pretend = 0, frame = 0
+ 202              		@ frame_needed = 0, uses_anonymous_args = 0
+ 203              		.loc 1 75 1 is_stmt 0 view .LVU42
+ 204 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 205              	.LCFI2:
+ 206              		.cfi_def_cfa_offset 24
+ 207              		.cfi_offset 3, -24
+ 208              		.cfi_offset 4, -20
+ 209              		.cfi_offset 5, -16
+ 210              		.cfi_offset 6, -12
+ 211              		.cfi_offset 7, -8
+ 212              		.cfi_offset 14, -4
+ 213 0002 0446     		mov	r4, r0
+ 214 0004 0D46     		mov	r5, r1
   76:Robot/Devices/Motor/dmmotor.c **** 	motor->para.id = (rx_data[0])&0x0F;
- 216              		.loc 1 76 2 is_stmt 1 view .LVU43
- 217              		.loc 1 76 27 is_stmt 0 view .LVU44
- 218 0006 0B78     		ldrb	r3, [r1]	@ zero_extendqisi2
- 219              		.loc 1 76 31 view .LVU45
- 220 0008 03F00F03 		and	r3, r3, #15
-ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 6
+ 215              		.loc 1 76 2 is_stmt 1 view .LVU43
+ 216              		.loc 1 76 27 is_stmt 0 view .LVU44
+ 217 0006 0B78     		ldrb	r3, [r1]	@ zero_extendqisi2
+ 218              		.loc 1 76 31 view .LVU45
+ 219 0008 03F00F03 		and	r3, r3, #15
+ 220              		.loc 1 76 17 view .LVU46
+ARM GAS  D:\temp\TMP\ccmzOYKV.s 			page 6
 
 
- 221              		.loc 1 76 17 view .LVU46
- 222 000c 4360     		str	r3, [r0, #4]
+ 221 000c 4360     		str	r3, [r0, #4]
   77:Robot/Devices/Motor/dmmotor.c **** 	motor->para.state = (rx_data[0])>>4;
- 223              		.loc 1 77 2 is_stmt 1 view .LVU47
- 224              		.loc 1 77 30 is_stmt 0 view .LVU48
- 225 000e 0B78     		ldrb	r3, [r1]	@ zero_extendqisi2
- 226              		.loc 1 77 34 view .LVU49
- 227 0010 1B09     		lsrs	r3, r3, #4
- 228              		.loc 1 77 20 view .LVU50
- 229 0012 8360     		str	r3, [r0, #8]
+ 222              		.loc 1 77 2 is_stmt 1 view .LVU47
+ 223              		.loc 1 77 30 is_stmt 0 view .LVU48
+ 224 000e 0B78     		ldrb	r3, [r1]	@ zero_extendqisi2
+ 225              		.loc 1 77 34 view .LVU49
+ 226 0010 1B09     		lsrs	r3, r3, #4
+ 227              		.loc 1 77 20 view .LVU50
+ 228 0012 8360     		str	r3, [r0, #8]
   78:Robot/Devices/Motor/dmmotor.c **** 	motor->para.p_int=(rx_data[1]<<8)|rx_data[2];
- 230              		.loc 1 78 2 is_stmt 1 view .LVU51
- 231              		.loc 1 78 28 is_stmt 0 view .LVU52
- 232 0014 4B78     		ldrb	r3, [r1, #1]	@ zero_extendqisi2
- 233              		.loc 1 78 43 view .LVU53
- 234 0016 8878     		ldrb	r0, [r1, #2]	@ zero_extendqisi2
- 235              	.LVL12:
- 236              		.loc 1 78 35 view .LVU54
- 237 0018 40EA0320 		orr	r0, r0, r3, lsl #8
- 238              		.loc 1 78 19 view .LVU55
- 239 001c E060     		str	r0, [r4, #12]
+ 229              		.loc 1 78 2 is_stmt 1 view .LVU51
+ 230              		.loc 1 78 28 is_stmt 0 view .LVU52
+ 231 0014 4B78     		ldrb	r3, [r1, #1]	@ zero_extendqisi2
+ 232              		.loc 1 78 43 view .LVU53
+ 233 0016 8878     		ldrb	r0, [r1, #2]	@ zero_extendqisi2
+ 234              	.LVL11:
+ 235              		.loc 1 78 35 view .LVU54
+ 236 0018 40EA0320 		orr	r0, r0, r3, lsl #8
+ 237              		.loc 1 78 19 view .LVU55
+ 238 001c E060     		str	r0, [r4, #12]
   79:Robot/Devices/Motor/dmmotor.c **** 	motor->para.v_int=(rx_data[3]<<4)|(rx_data[4]>>4);
- 240              		.loc 1 79 2 is_stmt 1 view .LVU56
- 241              		.loc 1 79 28 is_stmt 0 view .LVU57
- 242 001e CB78     		ldrb	r3, [r1, #3]	@ zero_extendqisi2
- 243              		.loc 1 79 44 view .LVU58
- 244 0020 0F79     		ldrb	r7, [r1, #4]	@ zero_extendqisi2
- 245              		.loc 1 79 47 view .LVU59
- 246 0022 3F09     		lsrs	r7, r7, #4
- 247              		.loc 1 79 35 view .LVU60
- 248 0024 47EA0317 		orr	r7, r7, r3, lsl #4
- 249              		.loc 1 79 19 view .LVU61
- 250 0028 2761     		str	r7, [r4, #16]
+ 239              		.loc 1 79 2 is_stmt 1 view .LVU56
+ 240              		.loc 1 79 28 is_stmt 0 view .LVU57
+ 241 001e CB78     		ldrb	r3, [r1, #3]	@ zero_extendqisi2
+ 242              		.loc 1 79 44 view .LVU58
+ 243 0020 0F79     		ldrb	r7, [r1, #4]	@ zero_extendqisi2
+ 244              		.loc 1 79 47 view .LVU59
+ 245 0022 3F09     		lsrs	r7, r7, #4
+ 246              		.loc 1 79 35 view .LVU60
+ 247 0024 47EA0317 		orr	r7, r7, r3, lsl #4
+ 248              		.loc 1 79 19 view .LVU61
+ 249 0028 2761     		str	r7, [r4, #16]
   80:Robot/Devices/Motor/dmmotor.c **** 	motor->para.t_int=((rx_data[4]&0xF)<<8)|rx_data[5];
- 251              		.loc 1 80 2 is_stmt 1 view .LVU62
- 252              		.loc 1 80 29 is_stmt 0 view .LVU63
- 253 002a 0E79     		ldrb	r6, [r1, #4]	@ zero_extendqisi2
- 254              		.loc 1 80 37 view .LVU64
- 255 002c 3602     		lsls	r6, r6, #8
- 256 002e 06F47066 		and	r6, r6, #3840
- 257              		.loc 1 80 49 view .LVU65
- 258 0032 4B79     		ldrb	r3, [r1, #5]	@ zero_extendqisi2
- 259              		.loc 1 80 41 view .LVU66
- 260 0034 1E43     		orrs	r6, r6, r3
- 261              		.loc 1 80 19 view .LVU67
- 262 0036 6661     		str	r6, [r4, #20]
+ 250              		.loc 1 80 2 is_stmt 1 view .LVU62
+ 251              		.loc 1 80 29 is_stmt 0 view .LVU63
+ 252 002a 0E79     		ldrb	r6, [r1, #4]	@ zero_extendqisi2
+ 253              		.loc 1 80 37 view .LVU64
+ 254 002c 3602     		lsls	r6, r6, #8
+ 255 002e 06F47066 		and	r6, r6, #3840
+ 256              		.loc 1 80 49 view .LVU65
+ 257 0032 4B79     		ldrb	r3, [r1, #5]	@ zero_extendqisi2
+ 258              		.loc 1 80 41 view .LVU66
+ 259 0034 1E43     		orrs	r6, r6, r3
+ 260              		.loc 1 80 19 view .LVU67
+ 261 0036 6661     		str	r6, [r4, #20]
   81:Robot/Devices/Motor/dmmotor.c **** 	motor->para.pos = uint_to_float(motor->para.p_int, P_MIN, P_MAX, 16); // (-12.5,12.5)
- 263              		.loc 1 81 2 is_stmt 1 view .LVU68
- 264              		.loc 1 81 20 is_stmt 0 view .LVU69
- 265 0038 1021     		movs	r1, #16
- 266              	.LVL13:
- 267              		.loc 1 81 20 view .LVU70
- 268 003a DFED150A 		vldr.32	s1, .L9
- 269 003e 9FED150A 		vldr.32	s0, .L9+4
- 270 0042 FFF7FEFF 		bl	uint_to_float
- 271              	.LVL14:
- 272              		.loc 1 81 18 view .LVU71
-ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 7
+ 262              		.loc 1 81 2 is_stmt 1 view .LVU68
+ 263              		.loc 1 81 20 is_stmt 0 view .LVU69
+ 264 0038 1021     		movs	r1, #16
+ 265              	.LVL12:
+ 266              		.loc 1 81 20 view .LVU70
+ 267 003a DFED150A 		vldr.32	s1, .L9
+ 268 003e 9FED150A 		vldr.32	s0, .L9+4
+ 269 0042 FFF7FEFF 		bl	uint_to_float
+ 270              	.LVL13:
+ 271              		.loc 1 81 18 discriminator 1 view .LVU71
+ 272 0046 84ED080A 		vstr.32	s0, [r4, #32]
+ARM GAS  D:\temp\TMP\ccmzOYKV.s 			page 7
 
 
- 273 0046 84ED080A 		vstr.32	s0, [r4, #32]
   82:Robot/Devices/Motor/dmmotor.c **** 	motor->para.vel = uint_to_float(motor->para.v_int, V_MIN, V_MAX, 12); // (-30.0,30.0)
- 274              		.loc 1 82 2 is_stmt 1 view .LVU72
- 275              		.loc 1 82 20 is_stmt 0 view .LVU73
- 276 004a 0C21     		movs	r1, #12
- 277 004c F3EE0E0A 		vmov.f32	s1, #3.0e+1
- 278 0050 BBEE0E0A 		vmov.f32	s0, #-3.0e+1
- 279 0054 3846     		mov	r0, r7
- 280 0056 FFF7FEFF 		bl	uint_to_float
- 281              	.LVL15:
- 282              		.loc 1 82 18 view .LVU74
- 283 005a 84ED090A 		vstr.32	s0, [r4, #36]
+ 273              		.loc 1 82 2 is_stmt 1 view .LVU72
+ 274              		.loc 1 82 20 is_stmt 0 view .LVU73
+ 275 004a 0C21     		movs	r1, #12
+ 276 004c F3EE0E0A 		vmov.f32	s1, #3.0e+1
+ 277 0050 BBEE0E0A 		vmov.f32	s0, #-3.0e+1
+ 278 0054 3846     		mov	r0, r7
+ 279 0056 FFF7FEFF 		bl	uint_to_float
+ 280              	.LVL14:
+ 281              		.loc 1 82 18 discriminator 1 view .LVU74
+ 282 005a 84ED090A 		vstr.32	s0, [r4, #36]
   83:Robot/Devices/Motor/dmmotor.c **** 	motor->para.tor = uint_to_float(motor->para.t_int, T_MIN, T_MAX, 12);  // (-10.0,10.0)
- 284              		.loc 1 83 2 is_stmt 1 view .LVU75
- 285              		.loc 1 83 20 is_stmt 0 view .LVU76
- 286 005e 0C21     		movs	r1, #12
- 287 0060 F3EE0E0A 		vmov.f32	s1, #3.0e+1
- 288 0064 BBEE0E0A 		vmov.f32	s0, #-3.0e+1
- 289 0068 3046     		mov	r0, r6
- 290 006a FFF7FEFF 		bl	uint_to_float
- 291              	.LVL16:
- 292              		.loc 1 83 18 view .LVU77
- 293 006e 84ED0A0A 		vstr.32	s0, [r4, #40]
+ 283              		.loc 1 83 2 is_stmt 1 view .LVU75
+ 284              		.loc 1 83 20 is_stmt 0 view .LVU76
+ 285 005e 0C21     		movs	r1, #12
+ 286 0060 F3EE0E0A 		vmov.f32	s1, #3.0e+1
+ 287 0064 BBEE0E0A 		vmov.f32	s0, #-3.0e+1
+ 288 0068 3046     		mov	r0, r6
+ 289 006a FFF7FEFF 		bl	uint_to_float
+ 290              	.LVL15:
+ 291              		.loc 1 83 18 discriminator 1 view .LVU77
+ 292 006e 84ED0A0A 		vstr.32	s0, [r4, #40]
   84:Robot/Devices/Motor/dmmotor.c **** 	motor->para.t_mos = (float)(rx_data[6]);
- 294              		.loc 1 84 2 is_stmt 1 view .LVU78
- 295              		.loc 1 84 37 is_stmt 0 view .LVU79
- 296 0072 AB79     		ldrb	r3, [r5, #6]	@ zero_extendqisi2
- 297 0074 07EE903A 		vmov	s15, r3	@ int
- 298              		.loc 1 84 22 view .LVU80
- 299 0078 F8EE677A 		vcvt.f32.u32	s15, s15
- 300              		.loc 1 84 20 view .LVU81
- 301 007c C4ED0D7A 		vstr.32	s15, [r4, #52]
+ 293              		.loc 1 84 2 is_stmt 1 view .LVU78
+ 294              		.loc 1 84 37 is_stmt 0 view .LVU79
+ 295 0072 AB79     		ldrb	r3, [r5, #6]	@ zero_extendqisi2
+ 296 0074 07EE903A 		vmov	s15, r3	@ int
+ 297              		.loc 1 84 22 view .LVU80
+ 298 0078 F8EE677A 		vcvt.f32.u32	s15, s15
+ 299              		.loc 1 84 20 view .LVU81
+ 300 007c C4ED0D7A 		vstr.32	s15, [r4, #52]
   85:Robot/Devices/Motor/dmmotor.c **** 	motor->para.t_rotor = (float)(rx_data[7]);
- 302              		.loc 1 85 2 is_stmt 1 view .LVU82
- 303              		.loc 1 85 39 is_stmt 0 view .LVU83
- 304 0080 EB79     		ldrb	r3, [r5, #7]	@ zero_extendqisi2
- 305 0082 07EE903A 		vmov	s15, r3	@ int
- 306              		.loc 1 85 24 view .LVU84
- 307 0086 F8EE677A 		vcvt.f32.u32	s15, s15
- 308              		.loc 1 85 22 view .LVU85
- 309 008a C4ED0E7A 		vstr.32	s15, [r4, #56]
+ 301              		.loc 1 85 2 is_stmt 1 view .LVU82
+ 302              		.loc 1 85 39 is_stmt 0 view .LVU83
+ 303 0080 EB79     		ldrb	r3, [r5, #7]	@ zero_extendqisi2
+ 304 0082 07EE903A 		vmov	s15, r3	@ int
+ 305              		.loc 1 85 24 view .LVU84
+ 306 0086 F8EE677A 		vcvt.f32.u32	s15, s15
+ 307              		.loc 1 85 22 view .LVU85
+ 308 008a C4ED0E7A 		vstr.32	s15, [r4, #56]
   86:Robot/Devices/Motor/dmmotor.c **** 	
   87:Robot/Devices/Motor/dmmotor.c **** }
- 310              		.loc 1 87 1 view .LVU86
- 311 008e F8BD     		pop	{r3, r4, r5, r6, r7, pc}
- 312              	.LVL17:
- 313              	.L10:
- 314              		.loc 1 87 1 view .LVU87
- 315              		.align	2
- 316              	.L9:
- 317 0090 560EC940 		.word	1086918230
- 318 0094 560EC9C0 		.word	-1060565418
- 319              		.cfi_endproc
- 320              	.LFE149:
- 322              		.section	.text.Clear_Error,"ax",%progbits
- 323              		.align	1
- 324              		.global	Clear_Error
-ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 8
+ 309              		.loc 1 87 1 view .LVU86
+ 310 008e F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 311              	.LVL16:
+ 312              	.L10:
+ 313              		.loc 1 87 1 view .LVU87
+ 314              		.align	2
+ 315              	.L9:
+ 316 0090 560EC940 		.word	1086918230
+ 317 0094 560EC9C0 		.word	-1060565418
+ 318              		.cfi_endproc
+ 319              	.LFE149:
+ 321              		.section	.text.Clear_Error,"ax",%progbits
+ 322              		.align	1
+ 323              		.global	Clear_Error
+ 324              		.syntax unified
+ARM GAS  D:\temp\TMP\ccmzOYKV.s 			page 8
 
 
- 325              		.syntax unified
- 326              		.thumb
- 327              		.thumb_func
- 329              	Clear_Error:
- 330              	.LVL18:
- 331              	.LFB150:
+ 325              		.thumb
+ 326              		.thumb_func
+ 328              	Clear_Error:
+ 329              	.LVL17:
+ 330              	.LFB150:
   88:Robot/Devices/Motor/dmmotor.c **** 
   89:Robot/Devices/Motor/dmmotor.c **** /**
   90:Robot/Devices/Motor/dmmotor.c ****  * @brief 清除电机错误
@@ -438,92 +437,92 @@ ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 1
   96:Robot/Devices/Motor/dmmotor.c ****  */
   97:Robot/Devices/Motor/dmmotor.c **** void Clear_Error(hcan_t* hcan, uint16_t motor_id, uint16_t mode_id)
   98:Robot/Devices/Motor/dmmotor.c **** {
- 332              		.loc 1 98 1 is_stmt 1 view -0
- 333              		.cfi_startproc
- 334              		@ args = 0, pretend = 0, frame = 8
- 335              		@ frame_needed = 0, uses_anonymous_args = 0
- 336              		.loc 1 98 1 is_stmt 0 view .LVU89
- 337 0000 00B5     		push	{lr}
- 338              	.LCFI3:
- 339              		.cfi_def_cfa_offset 4
- 340              		.cfi_offset 14, -4
- 341 0002 83B0     		sub	sp, sp, #12
- 342              	.LCFI4:
- 343              		.cfi_def_cfa_offset 16
+ 331              		.loc 1 98 1 is_stmt 1 view -0
+ 332              		.cfi_startproc
+ 333              		@ args = 0, pretend = 0, frame = 8
+ 334              		@ frame_needed = 0, uses_anonymous_args = 0
+ 335              		.loc 1 98 1 is_stmt 0 view .LVU89
+ 336 0000 00B5     		push	{lr}
+ 337              	.LCFI3:
+ 338              		.cfi_def_cfa_offset 4
+ 339              		.cfi_offset 14, -4
+ 340 0002 83B0     		sub	sp, sp, #12
+ 341              	.LCFI4:
+ 342              		.cfi_def_cfa_offset 16
   99:Robot/Devices/Motor/dmmotor.c **** 	uint8_t data[8];
- 344              		.loc 1 99 2 is_stmt 1 view .LVU90
+ 343              		.loc 1 99 2 is_stmt 1 view .LVU90
  100:Robot/Devices/Motor/dmmotor.c **** 	uint16_t id = motor_id + mode_id;
- 345              		.loc 1 100 2 view .LVU91
- 346              		.loc 1 100 11 is_stmt 0 view .LVU92
- 347 0004 1144     		add	r1, r1, r2
- 348              	.LVL19:
+ 344              		.loc 1 100 2 view .LVU91
+ 345              		.loc 1 100 11 is_stmt 0 view .LVU92
+ 346 0004 1144     		add	r1, r1, r2
+ 347              	.LVL18:
  101:Robot/Devices/Motor/dmmotor.c **** 	
  102:Robot/Devices/Motor/dmmotor.c **** 	data[0] = 0xFF;
- 349              		.loc 1 102 2 is_stmt 1 view .LVU93
- 350              		.loc 1 102 10 is_stmt 0 view .LVU94
- 351 0006 FF23     		movs	r3, #255
- 352 0008 8DF80030 		strb	r3, [sp]
+ 348              		.loc 1 102 2 is_stmt 1 view .LVU93
+ 349              		.loc 1 102 10 is_stmt 0 view .LVU94
+ 350 0006 FF23     		movs	r3, #255
+ 351 0008 8DF80030 		strb	r3, [sp]
  103:Robot/Devices/Motor/dmmotor.c **** 	data[1] = 0xFF;
- 353              		.loc 1 103 2 is_stmt 1 view .LVU95
- 354              		.loc 1 103 10 is_stmt 0 view .LVU96
- 355 000c 8DF80130 		strb	r3, [sp, #1]
+ 352              		.loc 1 103 2 is_stmt 1 view .LVU95
+ 353              		.loc 1 103 10 is_stmt 0 view .LVU96
+ 354 000c 8DF80130 		strb	r3, [sp, #1]
  104:Robot/Devices/Motor/dmmotor.c **** 	data[2] = 0xFF;
- 356              		.loc 1 104 2 is_stmt 1 view .LVU97
- 357              		.loc 1 104 10 is_stmt 0 view .LVU98
- 358 0010 8DF80230 		strb	r3, [sp, #2]
+ 355              		.loc 1 104 2 is_stmt 1 view .LVU97
+ 356              		.loc 1 104 10 is_stmt 0 view .LVU98
+ 357 0010 8DF80230 		strb	r3, [sp, #2]
  105:Robot/Devices/Motor/dmmotor.c **** 	data[3] = 0xFF;
- 359              		.loc 1 105 2 is_stmt 1 view .LVU99
- 360              		.loc 1 105 10 is_stmt 0 view .LVU100
- 361 0014 8DF80330 		strb	r3, [sp, #3]
+ 358              		.loc 1 105 2 is_stmt 1 view .LVU99
+ 359              		.loc 1 105 10 is_stmt 0 view .LVU100
+ 360 0014 8DF80330 		strb	r3, [sp, #3]
  106:Robot/Devices/Motor/dmmotor.c **** 	data[4] = 0xFF;
- 362              		.loc 1 106 2 is_stmt 1 view .LVU101
- 363              		.loc 1 106 10 is_stmt 0 view .LVU102
-ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 9
+ 361              		.loc 1 106 2 is_stmt 1 view .LVU101
+ 362              		.loc 1 106 10 is_stmt 0 view .LVU102
+ 363 0018 8DF80430 		strb	r3, [sp, #4]
+ARM GAS  D:\temp\TMP\ccmzOYKV.s 			page 9
 
 
- 364 0018 8DF80430 		strb	r3, [sp, #4]
  107:Robot/Devices/Motor/dmmotor.c **** 	data[5] = 0xFF;
- 365              		.loc 1 107 2 is_stmt 1 view .LVU103
- 366              		.loc 1 107 10 is_stmt 0 view .LVU104
- 367 001c 8DF80530 		strb	r3, [sp, #5]
+ 364              		.loc 1 107 2 is_stmt 1 view .LVU103
+ 365              		.loc 1 107 10 is_stmt 0 view .LVU104
+ 366 001c 8DF80530 		strb	r3, [sp, #5]
  108:Robot/Devices/Motor/dmmotor.c **** 	data[6] = 0xFF;
- 368              		.loc 1 108 2 is_stmt 1 view .LVU105
- 369              		.loc 1 108 10 is_stmt 0 view .LVU106
- 370 0020 8DF80630 		strb	r3, [sp, #6]
+ 367              		.loc 1 108 2 is_stmt 1 view .LVU105
+ 368              		.loc 1 108 10 is_stmt 0 view .LVU106
+ 369 0020 8DF80630 		strb	r3, [sp, #6]
  109:Robot/Devices/Motor/dmmotor.c **** 	data[7] = 0xFB;
- 371              		.loc 1 109 2 is_stmt 1 view .LVU107
- 372              		.loc 1 109 10 is_stmt 0 view .LVU108
- 373 0024 FB23     		movs	r3, #251
- 374 0026 8DF80730 		strb	r3, [sp, #7]
+ 370              		.loc 1 109 2 is_stmt 1 view .LVU107
+ 371              		.loc 1 109 10 is_stmt 0 view .LVU108
+ 372 0024 FB23     		movs	r3, #251
+ 373 0026 8DF80730 		strb	r3, [sp, #7]
  110:Robot/Devices/Motor/dmmotor.c **** 	
  111:Robot/Devices/Motor/dmmotor.c **** 	canx_send_data(hcan, id, data, 8);
- 375              		.loc 1 111 2 is_stmt 1 view .LVU109
- 376 002a 0823     		movs	r3, #8
- 377 002c 6A46     		mov	r2, sp
- 378              	.LVL20:
- 379              		.loc 1 111 2 is_stmt 0 view .LVU110
- 380 002e 89B2     		uxth	r1, r1
- 381              		.loc 1 111 2 view .LVU111
- 382 0030 FFF7FEFF 		bl	canx_send_data
- 383              	.LVL21:
+ 374              		.loc 1 111 2 is_stmt 1 view .LVU109
+ 375 002a 0823     		movs	r3, #8
+ 376 002c 6A46     		mov	r2, sp
+ 377              	.LVL19:
+ 378              		.loc 1 111 2 is_stmt 0 view .LVU110
+ 379 002e 89B2     		uxth	r1, r1
+ 380              		.loc 1 111 2 view .LVU111
+ 381 0030 FFF7FEFF 		bl	canx_send_data
+ 382              	.LVL20:
  112:Robot/Devices/Motor/dmmotor.c **** }
- 384              		.loc 1 112 1 view .LVU112
- 385 0034 03B0     		add	sp, sp, #12
- 386              	.LCFI5:
- 387              		.cfi_def_cfa_offset 4
- 388              		@ sp needed
- 389 0036 5DF804FB 		ldr	pc, [sp], #4
- 390              		.cfi_endproc
- 391              	.LFE150:
- 393              		.section	.text.Enable_Motor_Mode,"ax",%progbits
- 394              		.align	1
- 395              		.global	Enable_Motor_Mode
- 396              		.syntax unified
- 397              		.thumb
- 398              		.thumb_func
- 400              	Enable_Motor_Mode:
- 401              	.LVL22:
- 402              	.LFB151:
+ 383              		.loc 1 112 1 view .LVU112
+ 384 0034 03B0     		add	sp, sp, #12
+ 385              	.LCFI5:
+ 386              		.cfi_def_cfa_offset 4
+ 387              		@ sp needed
+ 388 0036 00BD     		pop	{pc}
+ 389              		.cfi_endproc
+ 390              	.LFE150:
+ 392              		.section	.text.Enable_Motor_Mode,"ax",%progbits
+ 393              		.align	1
+ 394              		.global	Enable_Motor_Mode
+ 395              		.syntax unified
+ 396              		.thumb
+ 397              		.thumb_func
+ 399              	Enable_Motor_Mode:
+ 400              	.LVL21:
+ 401              	.LFB151:
  113:Robot/Devices/Motor/dmmotor.c **** 
  114:Robot/Devices/Motor/dmmotor.c **** /**
  115:Robot/Devices/Motor/dmmotor.c ****  * @brief 电机使能
@@ -534,95 +533,95 @@ ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 1
  120:Robot/Devices/Motor/dmmotor.c ****  */
  121:Robot/Devices/Motor/dmmotor.c **** void Enable_Motor_Mode(hcan_t* hcan, uint16_t motor_id, uint16_t mode_id)
  122:Robot/Devices/Motor/dmmotor.c **** {
- 403              		.loc 1 122 1 is_stmt 1 view -0
- 404              		.cfi_startproc
- 405              		@ args = 0, pretend = 0, frame = 8
- 406              		@ frame_needed = 0, uses_anonymous_args = 0
-ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 10
+ 402              		.loc 1 122 1 is_stmt 1 view -0
+ 403              		.cfi_startproc
+ 404              		@ args = 0, pretend = 0, frame = 8
+ 405              		@ frame_needed = 0, uses_anonymous_args = 0
+ 406              		.loc 1 122 1 is_stmt 0 view .LVU114
+ARM GAS  D:\temp\TMP\ccmzOYKV.s 			page 10
 
 
- 407              		.loc 1 122 1 is_stmt 0 view .LVU114
- 408 0000 00B5     		push	{lr}
- 409              	.LCFI6:
- 410              		.cfi_def_cfa_offset 4
- 411              		.cfi_offset 14, -4
- 412 0002 83B0     		sub	sp, sp, #12
- 413              	.LCFI7:
- 414              		.cfi_def_cfa_offset 16
+ 407 0000 00B5     		push	{lr}
+ 408              	.LCFI6:
+ 409              		.cfi_def_cfa_offset 4
+ 410              		.cfi_offset 14, -4
+ 411 0002 83B0     		sub	sp, sp, #12
+ 412              	.LCFI7:
+ 413              		.cfi_def_cfa_offset 16
  123:Robot/Devices/Motor/dmmotor.c **** 	uint8_t data[8];
- 415              		.loc 1 123 2 is_stmt 1 view .LVU115
+ 414              		.loc 1 123 2 is_stmt 1 view .LVU115
  124:Robot/Devices/Motor/dmmotor.c **** 	uint16_t id = motor_id + mode_id;
- 416              		.loc 1 124 2 view .LVU116
- 417              		.loc 1 124 11 is_stmt 0 view .LVU117
- 418 0004 1144     		add	r1, r1, r2
- 419              	.LVL23:
+ 415              		.loc 1 124 2 view .LVU116
+ 416              		.loc 1 124 11 is_stmt 0 view .LVU117
+ 417 0004 1144     		add	r1, r1, r2
+ 418              	.LVL22:
  125:Robot/Devices/Motor/dmmotor.c **** 	
  126:Robot/Devices/Motor/dmmotor.c **** 	data[0] = 0xFF;
- 420              		.loc 1 126 2 is_stmt 1 view .LVU118
- 421              		.loc 1 126 10 is_stmt 0 view .LVU119
- 422 0006 FF23     		movs	r3, #255
- 423 0008 8DF80030 		strb	r3, [sp]
+ 419              		.loc 1 126 2 is_stmt 1 view .LVU118
+ 420              		.loc 1 126 10 is_stmt 0 view .LVU119
+ 421 0006 FF23     		movs	r3, #255
+ 422 0008 8DF80030 		strb	r3, [sp]
  127:Robot/Devices/Motor/dmmotor.c **** 	data[1] = 0xFF;
- 424              		.loc 1 127 2 is_stmt 1 view .LVU120
- 425              		.loc 1 127 10 is_stmt 0 view .LVU121
- 426 000c 8DF80130 		strb	r3, [sp, #1]
+ 423              		.loc 1 127 2 is_stmt 1 view .LVU120
+ 424              		.loc 1 127 10 is_stmt 0 view .LVU121
+ 425 000c 8DF80130 		strb	r3, [sp, #1]
  128:Robot/Devices/Motor/dmmotor.c **** 	data[2] = 0xFF;
- 427              		.loc 1 128 2 is_stmt 1 view .LVU122
- 428              		.loc 1 128 10 is_stmt 0 view .LVU123
- 429 0010 8DF80230 		strb	r3, [sp, #2]
+ 426              		.loc 1 128 2 is_stmt 1 view .LVU122
+ 427              		.loc 1 128 10 is_stmt 0 view .LVU123
+ 428 0010 8DF80230 		strb	r3, [sp, #2]
  129:Robot/Devices/Motor/dmmotor.c **** 	data[3] = 0xFF;
- 430              		.loc 1 129 2 is_stmt 1 view .LVU124
- 431              		.loc 1 129 10 is_stmt 0 view .LVU125
- 432 0014 8DF80330 		strb	r3, [sp, #3]
+ 429              		.loc 1 129 2 is_stmt 1 view .LVU124
+ 430              		.loc 1 129 10 is_stmt 0 view .LVU125
+ 431 0014 8DF80330 		strb	r3, [sp, #3]
  130:Robot/Devices/Motor/dmmotor.c **** 	data[4] = 0xFF;
- 433              		.loc 1 130 2 is_stmt 1 view .LVU126
- 434              		.loc 1 130 10 is_stmt 0 view .LVU127
- 435 0018 8DF80430 		strb	r3, [sp, #4]
+ 432              		.loc 1 130 2 is_stmt 1 view .LVU126
+ 433              		.loc 1 130 10 is_stmt 0 view .LVU127
+ 434 0018 8DF80430 		strb	r3, [sp, #4]
  131:Robot/Devices/Motor/dmmotor.c **** 	data[5] = 0xFF;
- 436              		.loc 1 131 2 is_stmt 1 view .LVU128
- 437              		.loc 1 131 10 is_stmt 0 view .LVU129
- 438 001c 8DF80530 		strb	r3, [sp, #5]
+ 435              		.loc 1 131 2 is_stmt 1 view .LVU128
+ 436              		.loc 1 131 10 is_stmt 0 view .LVU129
+ 437 001c 8DF80530 		strb	r3, [sp, #5]
  132:Robot/Devices/Motor/dmmotor.c **** 	data[6] = 0xFF;
- 439              		.loc 1 132 2 is_stmt 1 view .LVU130
- 440              		.loc 1 132 10 is_stmt 0 view .LVU131
- 441 0020 8DF80630 		strb	r3, [sp, #6]
+ 438              		.loc 1 132 2 is_stmt 1 view .LVU130
+ 439              		.loc 1 132 10 is_stmt 0 view .LVU131
+ 440 0020 8DF80630 		strb	r3, [sp, #6]
  133:Robot/Devices/Motor/dmmotor.c **** 	data[7] = 0xFC;
- 442              		.loc 1 133 2 is_stmt 1 view .LVU132
- 443              		.loc 1 133 10 is_stmt 0 view .LVU133
- 444 0024 FC23     		movs	r3, #252
- 445 0026 8DF80730 		strb	r3, [sp, #7]
+ 441              		.loc 1 133 2 is_stmt 1 view .LVU132
+ 442              		.loc 1 133 10 is_stmt 0 view .LVU133
+ 443 0024 FC23     		movs	r3, #252
+ 444 0026 8DF80730 		strb	r3, [sp, #7]
  134:Robot/Devices/Motor/dmmotor.c **** 	
  135:Robot/Devices/Motor/dmmotor.c **** 	canx_send_data(hcan, id, data, 8);
- 446              		.loc 1 135 2 is_stmt 1 view .LVU134
- 447 002a 0823     		movs	r3, #8
- 448 002c 6A46     		mov	r2, sp
- 449              	.LVL24:
- 450              		.loc 1 135 2 is_stmt 0 view .LVU135
-ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 11
+ 445              		.loc 1 135 2 is_stmt 1 view .LVU134
+ 446 002a 0823     		movs	r3, #8
+ 447 002c 6A46     		mov	r2, sp
+ 448              	.LVL23:
+ 449              		.loc 1 135 2 is_stmt 0 view .LVU135
+ 450 002e 89B2     		uxth	r1, r1
+ARM GAS  D:\temp\TMP\ccmzOYKV.s 			page 11
 
 
- 451 002e 89B2     		uxth	r1, r1
- 452              		.loc 1 135 2 view .LVU136
- 453 0030 FFF7FEFF 		bl	canx_send_data
- 454              	.LVL25:
+ 451              		.loc 1 135 2 view .LVU136
+ 452 0030 FFF7FEFF 		bl	canx_send_data
+ 453              	.LVL24:
  136:Robot/Devices/Motor/dmmotor.c **** }
- 455              		.loc 1 136 1 view .LVU137
- 456 0034 03B0     		add	sp, sp, #12
- 457              	.LCFI8:
- 458              		.cfi_def_cfa_offset 4
- 459              		@ sp needed
- 460 0036 5DF804FB 		ldr	pc, [sp], #4
- 461              		.cfi_endproc
- 462              	.LFE151:
- 464              		.section	.text.Disable_Motor_Mode,"ax",%progbits
- 465              		.align	1
- 466              		.global	Disable_Motor_Mode
- 467              		.syntax unified
- 468              		.thumb
- 469              		.thumb_func
- 471              	Disable_Motor_Mode:
- 472              	.LVL26:
- 473              	.LFB152:
+ 454              		.loc 1 136 1 view .LVU137
+ 455 0034 03B0     		add	sp, sp, #12
+ 456              	.LCFI8:
+ 457              		.cfi_def_cfa_offset 4
+ 458              		@ sp needed
+ 459 0036 00BD     		pop	{pc}
+ 460              		.cfi_endproc
+ 461              	.LFE151:
+ 463              		.section	.text.Disable_Motor_Mode,"ax",%progbits
+ 464              		.align	1
+ 465              		.global	Disable_Motor_Mode
+ 466              		.syntax unified
+ 467              		.thumb
+ 468              		.thumb_func
+ 470              	Disable_Motor_Mode:
+ 471              	.LVL25:
+ 472              	.LFB152:
  137:Robot/Devices/Motor/dmmotor.c **** 
  138:Robot/Devices/Motor/dmmotor.c **** /**
  139:Robot/Devices/Motor/dmmotor.c ****  * @brief 电机失能
@@ -633,95 +632,95 @@ ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 1
  144:Robot/Devices/Motor/dmmotor.c ****  */
  145:Robot/Devices/Motor/dmmotor.c **** void Disable_Motor_Mode(hcan_t* hcan, uint16_t motor_id, uint16_t mode_id)
  146:Robot/Devices/Motor/dmmotor.c **** {
- 474              		.loc 1 146 1 is_stmt 1 view -0
- 475              		.cfi_startproc
- 476              		@ args = 0, pretend = 0, frame = 8
- 477              		@ frame_needed = 0, uses_anonymous_args = 0
- 478              		.loc 1 146 1 is_stmt 0 view .LVU139
- 479 0000 00B5     		push	{lr}
- 480              	.LCFI9:
- 481              		.cfi_def_cfa_offset 4
- 482              		.cfi_offset 14, -4
- 483 0002 83B0     		sub	sp, sp, #12
- 484              	.LCFI10:
- 485              		.cfi_def_cfa_offset 16
+ 473              		.loc 1 146 1 is_stmt 1 view -0
+ 474              		.cfi_startproc
+ 475              		@ args = 0, pretend = 0, frame = 8
+ 476              		@ frame_needed = 0, uses_anonymous_args = 0
+ 477              		.loc 1 146 1 is_stmt 0 view .LVU139
+ 478 0000 00B5     		push	{lr}
+ 479              	.LCFI9:
+ 480              		.cfi_def_cfa_offset 4
+ 481              		.cfi_offset 14, -4
+ 482 0002 83B0     		sub	sp, sp, #12
+ 483              	.LCFI10:
+ 484              		.cfi_def_cfa_offset 16
  147:Robot/Devices/Motor/dmmotor.c **** 	uint8_t data[8];
- 486              		.loc 1 147 2 is_stmt 1 view .LVU140
+ 485              		.loc 1 147 2 is_stmt 1 view .LVU140
  148:Robot/Devices/Motor/dmmotor.c **** 	uint16_t id = motor_id + mode_id;
- 487              		.loc 1 148 2 view .LVU141
- 488              		.loc 1 148 11 is_stmt 0 view .LVU142
- 489 0004 1144     		add	r1, r1, r2
- 490              	.LVL27:
+ 486              		.loc 1 148 2 view .LVU141
+ 487              		.loc 1 148 11 is_stmt 0 view .LVU142
+ 488 0004 1144     		add	r1, r1, r2
+ 489              	.LVL26:
  149:Robot/Devices/Motor/dmmotor.c **** 	
  150:Robot/Devices/Motor/dmmotor.c **** 	data[0] = 0xFF;
- 491              		.loc 1 150 2 is_stmt 1 view .LVU143
- 492              		.loc 1 150 10 is_stmt 0 view .LVU144
- 493 0006 FF23     		movs	r3, #255
- 494 0008 8DF80030 		strb	r3, [sp]
-ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 12
-
-
+ 490              		.loc 1 150 2 is_stmt 1 view .LVU143
+ 491              		.loc 1 150 10 is_stmt 0 view .LVU144
+ 492 0006 FF23     		movs	r3, #255
+ 493 0008 8DF80030 		strb	r3, [sp]
  151:Robot/Devices/Motor/dmmotor.c **** 	data[1] = 0xFF;
- 495              		.loc 1 151 2 is_stmt 1 view .LVU145
- 496              		.loc 1 151 10 is_stmt 0 view .LVU146
- 497 000c 8DF80130 		strb	r3, [sp, #1]
+ARM GAS  D:\temp\TMP\ccmzOYKV.s 			page 12
+
+
+ 494              		.loc 1 151 2 is_stmt 1 view .LVU145
+ 495              		.loc 1 151 10 is_stmt 0 view .LVU146
+ 496 000c 8DF80130 		strb	r3, [sp, #1]
  152:Robot/Devices/Motor/dmmotor.c **** 	data[2] = 0xFF;
- 498              		.loc 1 152 2 is_stmt 1 view .LVU147
- 499              		.loc 1 152 10 is_stmt 0 view .LVU148
- 500 0010 8DF80230 		strb	r3, [sp, #2]
+ 497              		.loc 1 152 2 is_stmt 1 view .LVU147
+ 498              		.loc 1 152 10 is_stmt 0 view .LVU148
+ 499 0010 8DF80230 		strb	r3, [sp, #2]
  153:Robot/Devices/Motor/dmmotor.c **** 	data[3] = 0xFF;
- 501              		.loc 1 153 2 is_stmt 1 view .LVU149
- 502              		.loc 1 153 10 is_stmt 0 view .LVU150
- 503 0014 8DF80330 		strb	r3, [sp, #3]
+ 500              		.loc 1 153 2 is_stmt 1 view .LVU149
+ 501              		.loc 1 153 10 is_stmt 0 view .LVU150
+ 502 0014 8DF80330 		strb	r3, [sp, #3]
  154:Robot/Devices/Motor/dmmotor.c **** 	data[4] = 0xFF;
- 504              		.loc 1 154 2 is_stmt 1 view .LVU151
- 505              		.loc 1 154 10 is_stmt 0 view .LVU152
- 506 0018 8DF80430 		strb	r3, [sp, #4]
+ 503              		.loc 1 154 2 is_stmt 1 view .LVU151
+ 504              		.loc 1 154 10 is_stmt 0 view .LVU152
+ 505 0018 8DF80430 		strb	r3, [sp, #4]
  155:Robot/Devices/Motor/dmmotor.c **** 	data[5] = 0xFF;
- 507              		.loc 1 155 2 is_stmt 1 view .LVU153
- 508              		.loc 1 155 10 is_stmt 0 view .LVU154
- 509 001c 8DF80530 		strb	r3, [sp, #5]
+ 506              		.loc 1 155 2 is_stmt 1 view .LVU153
+ 507              		.loc 1 155 10 is_stmt 0 view .LVU154
+ 508 001c 8DF80530 		strb	r3, [sp, #5]
  156:Robot/Devices/Motor/dmmotor.c **** 	data[6] = 0xFF;
- 510              		.loc 1 156 2 is_stmt 1 view .LVU155
- 511              		.loc 1 156 10 is_stmt 0 view .LVU156
- 512 0020 8DF80630 		strb	r3, [sp, #6]
+ 509              		.loc 1 156 2 is_stmt 1 view .LVU155
+ 510              		.loc 1 156 10 is_stmt 0 view .LVU156
+ 511 0020 8DF80630 		strb	r3, [sp, #6]
  157:Robot/Devices/Motor/dmmotor.c **** 	data[7] = 0xFD;
- 513              		.loc 1 157 2 is_stmt 1 view .LVU157
- 514              		.loc 1 157 10 is_stmt 0 view .LVU158
- 515 0024 FD23     		movs	r3, #253
- 516 0026 8DF80730 		strb	r3, [sp, #7]
+ 512              		.loc 1 157 2 is_stmt 1 view .LVU157
+ 513              		.loc 1 157 10 is_stmt 0 view .LVU158
+ 514 0024 FD23     		movs	r3, #253
+ 515 0026 8DF80730 		strb	r3, [sp, #7]
  158:Robot/Devices/Motor/dmmotor.c **** 	
  159:Robot/Devices/Motor/dmmotor.c **** 	canx_send_data(hcan, id, data, 8);
- 517              		.loc 1 159 2 is_stmt 1 view .LVU159
- 518 002a 0823     		movs	r3, #8
- 519 002c 6A46     		mov	r2, sp
- 520              	.LVL28:
- 521              		.loc 1 159 2 is_stmt 0 view .LVU160
- 522 002e 89B2     		uxth	r1, r1
- 523              		.loc 1 159 2 view .LVU161
- 524 0030 FFF7FEFF 		bl	canx_send_data
- 525              	.LVL29:
+ 516              		.loc 1 159 2 is_stmt 1 view .LVU159
+ 517 002a 0823     		movs	r3, #8
+ 518 002c 6A46     		mov	r2, sp
+ 519              	.LVL27:
+ 520              		.loc 1 159 2 is_stmt 0 view .LVU160
+ 521 002e 89B2     		uxth	r1, r1
+ 522              		.loc 1 159 2 view .LVU161
+ 523 0030 FFF7FEFF 		bl	canx_send_data
+ 524              	.LVL28:
  160:Robot/Devices/Motor/dmmotor.c **** }
- 526              		.loc 1 160 1 view .LVU162
- 527 0034 03B0     		add	sp, sp, #12
- 528              	.LCFI11:
- 529              		.cfi_def_cfa_offset 4
- 530              		@ sp needed
- 531 0036 5DF804FB 		ldr	pc, [sp], #4
- 532              		.cfi_endproc
- 533              	.LFE152:
- 535              		.section	.text.Save_Pos_Zero,"ax",%progbits
- 536              		.align	1
- 537              		.global	Save_Pos_Zero
- 538              		.syntax unified
- 539              		.thumb
- 540              		.thumb_func
- 542              	Save_Pos_Zero:
- 543              	.LVL30:
-ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 13
+ 525              		.loc 1 160 1 view .LVU162
+ 526 0034 03B0     		add	sp, sp, #12
+ 527              	.LCFI11:
+ 528              		.cfi_def_cfa_offset 4
+ 529              		@ sp needed
+ 530 0036 00BD     		pop	{pc}
+ 531              		.cfi_endproc
+ 532              	.LFE152:
+ 534              		.section	.text.Save_Pos_Zero,"ax",%progbits
+ 535              		.align	1
+ 536              		.global	Save_Pos_Zero
+ 537              		.syntax unified
+ 538              		.thumb
+ 539              		.thumb_func
+ 541              	Save_Pos_Zero:
+ 542              	.LVL29:
+ 543              	.LFB153:
+ARM GAS  D:\temp\TMP\ccmzOYKV.s 			page 13
 
 
- 544              	.LFB153:
  161:Robot/Devices/Motor/dmmotor.c **** 
  162:Robot/Devices/Motor/dmmotor.c **** /**
  163:Robot/Devices/Motor/dmmotor.c ****  * @brief 电机报错零点
@@ -732,92 +731,92 @@ ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 1
  168:Robot/Devices/Motor/dmmotor.c ****  */
  169:Robot/Devices/Motor/dmmotor.c **** void Save_Pos_Zero(hcan_t* hcan, uint16_t motor_id, uint16_t mode_id)
  170:Robot/Devices/Motor/dmmotor.c **** {
- 545              		.loc 1 170 1 is_stmt 1 view -0
- 546              		.cfi_startproc
- 547              		@ args = 0, pretend = 0, frame = 8
- 548              		@ frame_needed = 0, uses_anonymous_args = 0
- 549              		.loc 1 170 1 is_stmt 0 view .LVU164
- 550 0000 00B5     		push	{lr}
- 551              	.LCFI12:
- 552              		.cfi_def_cfa_offset 4
- 553              		.cfi_offset 14, -4
- 554 0002 83B0     		sub	sp, sp, #12
- 555              	.LCFI13:
- 556              		.cfi_def_cfa_offset 16
+ 544              		.loc 1 170 1 is_stmt 1 view -0
+ 545              		.cfi_startproc
+ 546              		@ args = 0, pretend = 0, frame = 8
+ 547              		@ frame_needed = 0, uses_anonymous_args = 0
+ 548              		.loc 1 170 1 is_stmt 0 view .LVU164
+ 549 0000 00B5     		push	{lr}
+ 550              	.LCFI12:
+ 551              		.cfi_def_cfa_offset 4
+ 552              		.cfi_offset 14, -4
+ 553 0002 83B0     		sub	sp, sp, #12
+ 554              	.LCFI13:
+ 555              		.cfi_def_cfa_offset 16
  171:Robot/Devices/Motor/dmmotor.c **** 	uint8_t data[8];
- 557              		.loc 1 171 2 is_stmt 1 view .LVU165
+ 556              		.loc 1 171 2 is_stmt 1 view .LVU165
  172:Robot/Devices/Motor/dmmotor.c **** 	uint16_t id = motor_id + mode_id;
- 558              		.loc 1 172 2 view .LVU166
- 559              		.loc 1 172 11 is_stmt 0 view .LVU167
- 560 0004 1144     		add	r1, r1, r2
- 561              	.LVL31:
+ 557              		.loc 1 172 2 view .LVU166
+ 558              		.loc 1 172 11 is_stmt 0 view .LVU167
+ 559 0004 1144     		add	r1, r1, r2
+ 560              	.LVL30:
  173:Robot/Devices/Motor/dmmotor.c **** 	
  174:Robot/Devices/Motor/dmmotor.c **** 	data[0] = 0xFF;
- 562              		.loc 1 174 2 is_stmt 1 view .LVU168
- 563              		.loc 1 174 10 is_stmt 0 view .LVU169
- 564 0006 FF23     		movs	r3, #255
- 565 0008 8DF80030 		strb	r3, [sp]
+ 561              		.loc 1 174 2 is_stmt 1 view .LVU168
+ 562              		.loc 1 174 10 is_stmt 0 view .LVU169
+ 563 0006 FF23     		movs	r3, #255
+ 564 0008 8DF80030 		strb	r3, [sp]
  175:Robot/Devices/Motor/dmmotor.c **** 	data[1] = 0xFF;
- 566              		.loc 1 175 2 is_stmt 1 view .LVU170
- 567              		.loc 1 175 10 is_stmt 0 view .LVU171
- 568 000c 8DF80130 		strb	r3, [sp, #1]
+ 565              		.loc 1 175 2 is_stmt 1 view .LVU170
+ 566              		.loc 1 175 10 is_stmt 0 view .LVU171
+ 567 000c 8DF80130 		strb	r3, [sp, #1]
  176:Robot/Devices/Motor/dmmotor.c **** 	data[2] = 0xFF;
- 569              		.loc 1 176 2 is_stmt 1 view .LVU172
- 570              		.loc 1 176 10 is_stmt 0 view .LVU173
- 571 0010 8DF80230 		strb	r3, [sp, #2]
+ 568              		.loc 1 176 2 is_stmt 1 view .LVU172
+ 569              		.loc 1 176 10 is_stmt 0 view .LVU173
+ 570 0010 8DF80230 		strb	r3, [sp, #2]
  177:Robot/Devices/Motor/dmmotor.c **** 	data[3] = 0xFF;
- 572              		.loc 1 177 2 is_stmt 1 view .LVU174
- 573              		.loc 1 177 10 is_stmt 0 view .LVU175
- 574 0014 8DF80330 		strb	r3, [sp, #3]
+ 571              		.loc 1 177 2 is_stmt 1 view .LVU174
+ 572              		.loc 1 177 10 is_stmt 0 view .LVU175
+ 573 0014 8DF80330 		strb	r3, [sp, #3]
  178:Robot/Devices/Motor/dmmotor.c **** 	data[4] = 0xFF;
- 575              		.loc 1 178 2 is_stmt 1 view .LVU176
- 576              		.loc 1 178 10 is_stmt 0 view .LVU177
- 577 0018 8DF80430 		strb	r3, [sp, #4]
+ 574              		.loc 1 178 2 is_stmt 1 view .LVU176
+ 575              		.loc 1 178 10 is_stmt 0 view .LVU177
+ 576 0018 8DF80430 		strb	r3, [sp, #4]
  179:Robot/Devices/Motor/dmmotor.c **** 	data[5] = 0xFF;
- 578              		.loc 1 179 2 is_stmt 1 view .LVU178
- 579              		.loc 1 179 10 is_stmt 0 view .LVU179
- 580 001c 8DF80530 		strb	r3, [sp, #5]
+ 577              		.loc 1 179 2 is_stmt 1 view .LVU178
+ 578              		.loc 1 179 10 is_stmt 0 view .LVU179
+ 579 001c 8DF80530 		strb	r3, [sp, #5]
  180:Robot/Devices/Motor/dmmotor.c **** 	data[6] = 0xFF;
-ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 14
+ 580              		.loc 1 180 2 is_stmt 1 view .LVU180
+ARM GAS  D:\temp\TMP\ccmzOYKV.s 			page 14
 
 
- 581              		.loc 1 180 2 is_stmt 1 view .LVU180
- 582              		.loc 1 180 10 is_stmt 0 view .LVU181
- 583 0020 8DF80630 		strb	r3, [sp, #6]
+ 581              		.loc 1 180 10 is_stmt 0 view .LVU181
+ 582 0020 8DF80630 		strb	r3, [sp, #6]
  181:Robot/Devices/Motor/dmmotor.c **** 	data[7] = 0xFE;
- 584              		.loc 1 181 2 is_stmt 1 view .LVU182
- 585              		.loc 1 181 10 is_stmt 0 view .LVU183
- 586 0024 FE23     		movs	r3, #254
- 587 0026 8DF80730 		strb	r3, [sp, #7]
+ 583              		.loc 1 181 2 is_stmt 1 view .LVU182
+ 584              		.loc 1 181 10 is_stmt 0 view .LVU183
+ 585 0024 FE23     		movs	r3, #254
+ 586 0026 8DF80730 		strb	r3, [sp, #7]
  182:Robot/Devices/Motor/dmmotor.c **** 	
  183:Robot/Devices/Motor/dmmotor.c **** 	canx_send_data(hcan, id, data, 8);
- 588              		.loc 1 183 2 is_stmt 1 view .LVU184
- 589 002a 0823     		movs	r3, #8
- 590 002c 6A46     		mov	r2, sp
- 591              	.LVL32:
- 592              		.loc 1 183 2 is_stmt 0 view .LVU185
- 593 002e 89B2     		uxth	r1, r1
- 594              		.loc 1 183 2 view .LVU186
- 595 0030 FFF7FEFF 		bl	canx_send_data
- 596              	.LVL33:
+ 587              		.loc 1 183 2 is_stmt 1 view .LVU184
+ 588 002a 0823     		movs	r3, #8
+ 589 002c 6A46     		mov	r2, sp
+ 590              	.LVL31:
+ 591              		.loc 1 183 2 is_stmt 0 view .LVU185
+ 592 002e 89B2     		uxth	r1, r1
+ 593              		.loc 1 183 2 view .LVU186
+ 594 0030 FFF7FEFF 		bl	canx_send_data
+ 595              	.LVL32:
  184:Robot/Devices/Motor/dmmotor.c **** }
- 597              		.loc 1 184 1 view .LVU187
- 598 0034 03B0     		add	sp, sp, #12
- 599              	.LCFI14:
- 600              		.cfi_def_cfa_offset 4
- 601              		@ sp needed
- 602 0036 5DF804FB 		ldr	pc, [sp], #4
- 603              		.cfi_endproc
- 604              	.LFE153:
- 606              		.section	.text.Mit_Ctrl,"ax",%progbits
- 607              		.align	1
- 608              		.global	Mit_Ctrl
- 609              		.syntax unified
- 610              		.thumb
- 611              		.thumb_func
- 613              	Mit_Ctrl:
- 614              	.LVL34:
- 615              	.LFB154:
+ 596              		.loc 1 184 1 view .LVU187
+ 597 0034 03B0     		add	sp, sp, #12
+ 598              	.LCFI14:
+ 599              		.cfi_def_cfa_offset 4
+ 600              		@ sp needed
+ 601 0036 00BD     		pop	{pc}
+ 602              		.cfi_endproc
+ 603              	.LFE153:
+ 605              		.section	.text.Mit_Ctrl,"ax",%progbits
+ 606              		.align	1
+ 607              		.global	Mit_Ctrl
+ 608              		.syntax unified
+ 609              		.thumb
+ 610              		.thumb_func
+ 612              	Mit_Ctrl:
+ 613              	.LVL33:
+ 614              	.LFB154:
  185:Robot/Devices/Motor/dmmotor.c **** 
  186:Robot/Devices/Motor/dmmotor.c **** /**
  187:Robot/Devices/Motor/dmmotor.c **** ************************************************************************
@@ -835,221 +834,228 @@ ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 1
  199:Robot/Devices/Motor/dmmotor.c **** **/
  200:Robot/Devices/Motor/dmmotor.c **** void Mit_Ctrl(hcan_t* hcan, uint16_t motor_id, float pos, float vel,float kp, float kd, float torq)
  201:Robot/Devices/Motor/dmmotor.c **** {
- 616              		.loc 1 201 1 is_stmt 1 view -0
- 617              		.cfi_startproc
- 618              		@ args = 0, pretend = 0, frame = 8
-ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 15
+ 615              		.loc 1 201 1 is_stmt 1 view -0
+ 616              		.cfi_startproc
+ 617              		@ args = 0, pretend = 0, frame = 16
+ 618              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  D:\temp\TMP\ccmzOYKV.s 			page 15
 
 
- 619              		@ frame_needed = 0, uses_anonymous_args = 0
- 620              		.loc 1 201 1 is_stmt 0 view .LVU189
- 621 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
- 622              	.LCFI15:
- 623              		.cfi_def_cfa_offset 36
- 624              		.cfi_offset 4, -36
- 625              		.cfi_offset 5, -32
- 626              		.cfi_offset 6, -28
- 627              		.cfi_offset 7, -24
- 628              		.cfi_offset 8, -20
- 629              		.cfi_offset 9, -16
- 630              		.cfi_offset 10, -12
- 631              		.cfi_offset 11, -8
- 632              		.cfi_offset 14, -4
- 633 0004 2DED048B 		vpush.64	{d8, d9}
- 634              	.LCFI16:
- 635              		.cfi_def_cfa_offset 52
- 636              		.cfi_offset 80, -52
- 637              		.cfi_offset 81, -48
- 638              		.cfi_offset 82, -44
- 639              		.cfi_offset 83, -40
- 640 0008 83B0     		sub	sp, sp, #12
- 641              	.LCFI17:
- 642              		.cfi_def_cfa_offset 64
- 643 000a 8046     		mov	r8, r0
- 644 000c 8946     		mov	r9, r1
- 645 000e F0EE609A 		vmov.f32	s19, s1
- 646 0012 B0EE419A 		vmov.f32	s18, s2
- 647 0016 F0EE618A 		vmov.f32	s17, s3
- 648 001a B0EE428A 		vmov.f32	s16, s4
+ 619              		.loc 1 201 1 is_stmt 0 view .LVU189
+ 620 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 621              	.LCFI15:
+ 622              		.cfi_def_cfa_offset 36
+ 623              		.cfi_offset 4, -36
+ 624              		.cfi_offset 5, -32
+ 625              		.cfi_offset 6, -28
+ 626              		.cfi_offset 7, -24
+ 627              		.cfi_offset 8, -20
+ 628              		.cfi_offset 9, -16
+ 629              		.cfi_offset 10, -12
+ 630              		.cfi_offset 11, -8
+ 631              		.cfi_offset 14, -4
+ 632 0004 2DED048B 		vpush.64	{d8, d9}
+ 633              	.LCFI16:
+ 634              		.cfi_def_cfa_offset 52
+ 635              		.cfi_offset 80, -52
+ 636              		.cfi_offset 81, -48
+ 637              		.cfi_offset 82, -44
+ 638              		.cfi_offset 83, -40
+ 639 0008 85B0     		sub	sp, sp, #20
+ 640              	.LCFI17:
+ 641              		.cfi_def_cfa_offset 72
+ 642 000a 0090     		str	r0, [sp]
+ 643 000c 0191     		str	r1, [sp, #4]
+ 644 000e B0EE608A 		vmov.f32	s16, s1
+ 645 0012 F0EE419A 		vmov.f32	s19, s2
+ 646 0016 B0EE619A 		vmov.f32	s18, s3
+ 647 001a F0EE428A 		vmov.f32	s17, s4
  202:Robot/Devices/Motor/dmmotor.c **** 	uint8_t data[8];
- 649              		.loc 1 202 2 is_stmt 1 view .LVU190
+ 648              		.loc 1 202 2 is_stmt 1 view .LVU190
  203:Robot/Devices/Motor/dmmotor.c **** 	uint16_t pos_tmp,vel_tmp,kp_tmp,kd_tmp,tor_tmp;
- 650              		.loc 1 203 2 view .LVU191
+ 649              		.loc 1 203 2 view .LVU191
  204:Robot/Devices/Motor/dmmotor.c **** 	uint16_t id = motor_id + MIT_MODE;
- 651              		.loc 1 204 2 view .LVU192
- 652              	.LVL35:
+ 650              		.loc 1 204 2 view .LVU192
+ 651              	.LVL34:
  205:Robot/Devices/Motor/dmmotor.c **** 
  206:Robot/Devices/Motor/dmmotor.c **** 	pos_tmp = float_to_uint(pos,  P_MIN,  P_MAX,  16);
- 653              		.loc 1 206 2 view .LVU193
- 654              		.loc 1 206 12 is_stmt 0 view .LVU194
- 655 001e 1020     		movs	r0, #16
- 656              	.LVL36:
- 657              		.loc 1 206 12 view .LVU195
- 658 0020 9FED2C1A 		vldr.32	s2, .L21
- 659              	.LVL37:
- 660              		.loc 1 206 12 view .LVU196
- 661 0024 DFED2C0A 		vldr.32	s1, .L21+4
- 662              	.LVL38:
- 663              		.loc 1 206 12 view .LVU197
- 664 0028 FFF7FEFF 		bl	float_to_uint
- 665              	.LVL39:
- 666              		.loc 1 206 12 view .LVU198
- 667 002c 8246     		mov	r10, r0
- 668              		.loc 1 206 10 view .LVU199
- 669 002e 1FFA80FB 		uxth	fp, r0
- 670              	.LVL40:
-ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 16
-
-
+ 652              		.loc 1 206 2 view .LVU193
+ 653              		.loc 1 206 12 is_stmt 0 view .LVU194
+ 654 001e 1020     		movs	r0, #16
+ 655              	.LVL35:
+ 656              		.loc 1 206 12 view .LVU195
+ 657 0020 9FED2C1A 		vldr.32	s2, .L21
+ 658              	.LVL36:
+ 659              		.loc 1 206 12 view .LVU196
+ 660 0024 DFED2C0A 		vldr.32	s1, .L21+4
+ 661              	.LVL37:
+ 662              		.loc 1 206 12 view .LVU197
+ 663 0028 FFF7FEFF 		bl	float_to_uint
+ 664              	.LVL38:
+ 665              		.loc 1 206 12 view .LVU198
+ 666 002c 8346     		mov	fp, r0
+ 667              		.loc 1 206 10 discriminator 1 view .LVU199
+ 668 002e 87B2     		uxth	r7, r0
+ 669              	.LVL39:
  207:Robot/Devices/Motor/dmmotor.c **** 	vel_tmp = float_to_uint(vel,  V_MIN,  V_MAX,  12);
- 671              		.loc 1 207 2 is_stmt 1 view .LVU200
- 672              		.loc 1 207 12 is_stmt 0 view .LVU201
- 673 0032 0C20     		movs	r0, #12
- 674 0034 B3EE0E1A 		vmov.f32	s2, #3.0e+1
- 675 0038 FBEE0E0A 		vmov.f32	s1, #-3.0e+1
- 676 003c B0EE690A 		vmov.f32	s0, s19
- 677 0040 FFF7FEFF 		bl	float_to_uint
- 678              	.LVL41:
- 679              		.loc 1 207 10 view .LVU202
- 680 0044 87B2     		uxth	r7, r0
- 681              	.LVL42:
+ARM GAS  D:\temp\TMP\ccmzOYKV.s 			page 16
+
+
+ 670              		.loc 1 207 2 is_stmt 1 view .LVU200
+ 671              		.loc 1 207 12 is_stmt 0 view .LVU201
+ 672 0030 0C20     		movs	r0, #12
+ 673 0032 B3EE0E1A 		vmov.f32	s2, #3.0e+1
+ 674 0036 FBEE0E0A 		vmov.f32	s1, #-3.0e+1
+ 675 003a B0EE480A 		vmov.f32	s0, s16
+ 676 003e FFF7FEFF 		bl	float_to_uint
+ 677              	.LVL40:
+ 678 0042 8246     		mov	r10, r0
+ 679              		.loc 1 207 10 discriminator 1 view .LVU202
+ 680 0044 86B2     		uxth	r6, r0
+ 681              	.LVL41:
  208:Robot/Devices/Motor/dmmotor.c **** 	kp_tmp  = float_to_uint(kp,   KP_MIN, KP_MAX, 12);
  682              		.loc 1 208 2 is_stmt 1 view .LVU203
  683              		.loc 1 208 12 is_stmt 0 view .LVU204
- 684 0046 DFED259A 		vldr.32	s19, .L21+8
- 685              	.LVL43:
+ 684 0046 9FED258A 		vldr.32	s16, .L21+8
+ 685              	.LVL42:
  686              		.loc 1 208 12 view .LVU205
  687 004a 0C20     		movs	r0, #12
  688 004c 9FED241A 		vldr.32	s2, .L21+12
- 689 0050 F0EE690A 		vmov.f32	s1, s19
- 690 0054 B0EE490A 		vmov.f32	s0, s18
+ 689 0050 F0EE480A 		vmov.f32	s1, s16
+ 690 0054 B0EE690A 		vmov.f32	s0, s19
  691 0058 FFF7FEFF 		bl	float_to_uint
- 692              	.LVL44:
- 693 005c 0646     		mov	r6, r0
- 694              		.loc 1 208 10 view .LVU206
+ 692              	.LVL43:
+ 693 005c 8146     		mov	r9, r0
+ 694              		.loc 1 208 10 discriminator 1 view .LVU206
  695 005e 84B2     		uxth	r4, r0
- 696              	.LVL45:
+ 696              	.LVL44:
  209:Robot/Devices/Motor/dmmotor.c **** 	kd_tmp  = float_to_uint(kd,   KD_MIN, KD_MAX, 12);
  697              		.loc 1 209 2 is_stmt 1 view .LVU207
  698              		.loc 1 209 12 is_stmt 0 view .LVU208
  699 0060 0C20     		movs	r0, #12
  700 0062 B1EE041A 		vmov.f32	s2, #5.0e+0
- 701 0066 F0EE690A 		vmov.f32	s1, s19
- 702 006a B0EE680A 		vmov.f32	s0, s17
+ 701 0066 F0EE480A 		vmov.f32	s1, s16
+ 702 006a B0EE490A 		vmov.f32	s0, s18
  703 006e FFF7FEFF 		bl	float_to_uint
- 704              	.LVL46:
- 705              		.loc 1 209 10 view .LVU209
- 706 0072 85B2     		uxth	r5, r0
- 707              	.LVL47:
+ 704              	.LVL45:
+ 705 0072 8046     		mov	r8, r0
+ 706              		.loc 1 209 10 discriminator 1 view .LVU209
+ 707 0074 85B2     		uxth	r5, r0
+ 708              	.LVL46:
  210:Robot/Devices/Motor/dmmotor.c **** 	tor_tmp = float_to_uint(torq, T_MIN,  T_MAX,  12);
- 708              		.loc 1 210 2 is_stmt 1 view .LVU210
- 709              		.loc 1 210 12 is_stmt 0 view .LVU211
- 710 0074 0C20     		movs	r0, #12
- 711 0076 B3EE0E1A 		vmov.f32	s2, #3.0e+1
- 712 007a FBEE0E0A 		vmov.f32	s1, #-3.0e+1
- 713 007e B0EE480A 		vmov.f32	s0, s16
- 714 0082 FFF7FEFF 		bl	float_to_uint
- 715              	.LVL48:
+ 709              		.loc 1 210 2 is_stmt 1 view .LVU210
+ 710              		.loc 1 210 12 is_stmt 0 view .LVU211
+ 711 0076 0C20     		movs	r0, #12
+ 712 0078 B3EE0E1A 		vmov.f32	s2, #3.0e+1
+ 713 007c FBEE0E0A 		vmov.f32	s1, #-3.0e+1
+ 714 0080 B0EE680A 		vmov.f32	s0, s17
+ 715 0084 FFF7FEFF 		bl	float_to_uint
+ 716              	.LVL47:
  211:Robot/Devices/Motor/dmmotor.c **** 
  212:Robot/Devices/Motor/dmmotor.c **** 	data[0] = (pos_tmp >> 8);
- 716              		.loc 1 212 2 is_stmt 1 view .LVU212
- 717              		.loc 1 212 10 is_stmt 0 view .LVU213
- 718 0086 4FEA1B2B 		lsr	fp, fp, #8
- 719              	.LVL49:
- 720              		.loc 1 212 10 view .LVU214
- 721 008a 8DF800B0 		strb	fp, [sp]
-ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 17
+ 717              		.loc 1 212 2 is_stmt 1 view .LVU212
+ 718              		.loc 1 212 10 is_stmt 0 view .LVU213
+ 719 0088 3F0A     		lsrs	r7, r7, #8
+ 720              	.LVL48:
+ 721              		.loc 1 212 10 view .LVU214
+ARM GAS  D:\temp\TMP\ccmzOYKV.s 			page 17
 
 
+ 722 008a 8DF80870 		strb	r7, [sp, #8]
  213:Robot/Devices/Motor/dmmotor.c **** 	data[1] = pos_tmp;
- 722              		.loc 1 213 2 is_stmt 1 view .LVU215
- 723              		.loc 1 213 10 is_stmt 0 view .LVU216
- 724 008e 8DF801A0 		strb	r10, [sp, #1]
+ 723              		.loc 1 213 2 is_stmt 1 view .LVU215
+ 724              		.loc 1 213 10 is_stmt 0 view .LVU216
+ 725 008e 8DF809B0 		strb	fp, [sp, #9]
  214:Robot/Devices/Motor/dmmotor.c **** 	data[2] = (vel_tmp >> 4);
- 725              		.loc 1 214 2 is_stmt 1 view .LVU217
- 726              		.loc 1 214 10 is_stmt 0 view .LVU218
- 727 0092 3B09     		lsrs	r3, r7, #4
- 728 0094 8DF80230 		strb	r3, [sp, #2]
+ 726              		.loc 1 214 2 is_stmt 1 view .LVU217
+ 727              		.loc 1 214 10 is_stmt 0 view .LVU218
+ 728 0092 3609     		lsrs	r6, r6, #4
+ 729              	.LVL49:
+ 730              		.loc 1 214 10 view .LVU219
+ 731 0094 8DF80A60 		strb	r6, [sp, #10]
  215:Robot/Devices/Motor/dmmotor.c **** 	data[3] = ((vel_tmp&0xF)<<4)|(kp_tmp>>8);
- 729              		.loc 1 215 2 is_stmt 1 view .LVU219
- 730              		.loc 1 215 30 is_stmt 0 view .LVU220
- 731 0098 240A     		lsrs	r4, r4, #8
- 732              	.LVL50:
- 733              		.loc 1 215 30 view .LVU221
- 734 009a 44EA0714 		orr	r4, r4, r7, lsl #4
- 735              		.loc 1 215 10 view .LVU222
- 736 009e 8DF80340 		strb	r4, [sp, #3]
+ 732              		.loc 1 215 2 is_stmt 1 view .LVU220
+ 733              		.loc 1 215 30 is_stmt 0 view .LVU221
+ 734 0098 240A     		lsrs	r4, r4, #8
+ 735              	.LVL50:
+ 736              		.loc 1 215 30 view .LVU222
+ 737 009a 44EA0A14 		orr	r4, r4, r10, lsl #4
+ 738              		.loc 1 215 10 view .LVU223
+ 739 009e 8DF80B40 		strb	r4, [sp, #11]
  216:Robot/Devices/Motor/dmmotor.c **** 	data[4] = kp_tmp;
- 737              		.loc 1 216 2 is_stmt 1 view .LVU223
- 738              		.loc 1 216 10 is_stmt 0 view .LVU224
- 739 00a2 8DF80460 		strb	r6, [sp, #4]
+ 740              		.loc 1 216 2 is_stmt 1 view .LVU224
+ 741              		.loc 1 216 10 is_stmt 0 view .LVU225
+ 742 00a2 8DF80C90 		strb	r9, [sp, #12]
  217:Robot/Devices/Motor/dmmotor.c **** 	data[5] = (kd_tmp >> 4);
- 740              		.loc 1 217 2 is_stmt 1 view .LVU225
- 741              		.loc 1 217 10 is_stmt 0 view .LVU226
- 742 00a6 2B09     		lsrs	r3, r5, #4
- 743 00a8 8DF80530 		strb	r3, [sp, #5]
+ 743              		.loc 1 217 2 is_stmt 1 view .LVU226
+ 744              		.loc 1 217 10 is_stmt 0 view .LVU227
+ 745 00a6 2D09     		lsrs	r5, r5, #4
+ 746              	.LVL51:
+ 747              		.loc 1 217 10 view .LVU228
+ 748 00a8 8DF80D50 		strb	r5, [sp, #13]
  218:Robot/Devices/Motor/dmmotor.c **** 	data[6] = ((kd_tmp&0xF)<<4)|(tor_tmp>>8);
- 744              		.loc 1 218 2 is_stmt 1 view .LVU227
- 745              		.loc 1 218 29 is_stmt 0 view .LVU228
- 746 00ac C0F30723 		ubfx	r3, r0, #8, #8
- 747 00b0 43EA0515 		orr	r5, r3, r5, lsl #4
- 748              	.LVL51:
- 749              		.loc 1 218 10 view .LVU229
- 750 00b4 8DF80650 		strb	r5, [sp, #6]
+ 749              		.loc 1 218 2 is_stmt 1 view .LVU229
+ 750              		.loc 1 218 29 is_stmt 0 view .LVU230
+ 751 00ac C0F30723 		ubfx	r3, r0, #8, #8
+ 752 00b0 43EA0813 		orr	r3, r3, r8, lsl #4
+ 753              		.loc 1 218 10 view .LVU231
+ 754 00b4 8DF80E30 		strb	r3, [sp, #14]
  219:Robot/Devices/Motor/dmmotor.c **** 	data[7] = tor_tmp;
- 751              		.loc 1 219 2 is_stmt 1 view .LVU230
- 752              		.loc 1 219 10 is_stmt 0 view .LVU231
- 753 00b8 8DF80700 		strb	r0, [sp, #7]
+ 755              		.loc 1 219 2 is_stmt 1 view .LVU232
+ 756              		.loc 1 219 10 is_stmt 0 view .LVU233
+ 757 00b8 8DF80F00 		strb	r0, [sp, #15]
  220:Robot/Devices/Motor/dmmotor.c **** 	
  221:Robot/Devices/Motor/dmmotor.c **** 	canx_send_data(hcan, id, data, 8);
- 754              		.loc 1 221 2 is_stmt 1 view .LVU232
- 755 00bc 0823     		movs	r3, #8
- 756 00be 6A46     		mov	r2, sp
- 757 00c0 4946     		mov	r1, r9
- 758 00c2 4046     		mov	r0, r8
- 759              	.LVL52:
- 760              		.loc 1 221 2 is_stmt 0 view .LVU233
- 761 00c4 FFF7FEFF 		bl	canx_send_data
- 762              	.LVL53:
+ 758              		.loc 1 221 2 is_stmt 1 view .LVU234
+ 759 00bc 0823     		movs	r3, #8
+ 760 00be 0DEB0302 		add	r2, sp, r3
+ 761 00c2 0199     		ldr	r1, [sp, #4]
+ 762 00c4 0098     		ldr	r0, [sp]
+ 763              	.LVL52:
+ 764              		.loc 1 221 2 is_stmt 0 view .LVU235
+ 765 00c6 FFF7FEFF 		bl	canx_send_data
+ 766              	.LVL53:
  222:Robot/Devices/Motor/dmmotor.c **** }
- 763              		.loc 1 222 1 view .LVU234
- 764 00c8 03B0     		add	sp, sp, #12
- 765              	.LCFI18:
- 766              		.cfi_def_cfa_offset 52
- 767              		@ sp needed
- 768 00ca BDEC048B 		vldm	sp!, {d8-d9}
-ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 18
+ 767              		.loc 1 222 1 view .LVU236
+ 768 00ca 05B0     		add	sp, sp, #20
+ARM GAS  D:\temp\TMP\ccmzOYKV.s 			page 18
 
 
- 769              	.LCFI19:
- 770              		.cfi_restore 82
- 771              		.cfi_restore 83
- 772              		.cfi_restore 80
- 773              		.cfi_restore 81
- 774              		.cfi_def_cfa_offset 36
- 775              	.LVL54:
- 776              		.loc 1 222 1 view .LVU235
- 777 00ce BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
- 778              	.LVL55:
- 779              	.L22:
- 780              		.loc 1 222 1 view .LVU236
- 781 00d2 00BF     		.align	2
- 782              	.L21:
- 783 00d4 560EC940 		.word	1086918230
- 784 00d8 560EC9C0 		.word	-1060565418
- 785 00dc 00000000 		.word	0
- 786 00e0 0000FA43 		.word	1140457472
- 787              		.cfi_endproc
- 788              	.LFE154:
- 790              		.section	.text.Pos_Speed_Ctrl,"ax",%progbits
- 791              		.align	1
- 792              		.global	Pos_Speed_Ctrl
- 793              		.syntax unified
- 794              		.thumb
- 795              		.thumb_func
- 797              	Pos_Speed_Ctrl:
- 798              	.LVL56:
- 799              	.LFB155:
+ 769              	.LCFI18:
+ 770              		.cfi_def_cfa_offset 52
+ 771              	.LVL54:
+ 772              		.loc 1 222 1 view .LVU237
+ 773              		@ sp needed
+ 774 00cc BDEC048B 		vldm	sp!, {d8-d9}
+ 775              	.LCFI19:
+ 776              		.cfi_restore 82
+ 777              		.cfi_restore 83
+ 778              		.cfi_restore 80
+ 779              		.cfi_restore 81
+ 780              		.cfi_def_cfa_offset 36
+ 781              	.LVL55:
+ 782              		.loc 1 222 1 view .LVU238
+ 783 00d0 BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 784              	.LVL56:
+ 785              	.L22:
+ 786              		.loc 1 222 1 view .LVU239
+ 787              		.align	2
+ 788              	.L21:
+ 789 00d4 560EC940 		.word	1086918230
+ 790 00d8 560EC9C0 		.word	-1060565418
+ 791 00dc 00000000 		.word	0
+ 792 00e0 0000FA43 		.word	1140457472
+ 793              		.cfi_endproc
+ 794              	.LFE154:
+ 796              		.section	.text.Pos_Speed_Ctrl,"ax",%progbits
+ 797              		.align	1
+ 798              		.global	Pos_Speed_Ctrl
+ 799              		.syntax unified
+ 800              		.thumb
+ 801              		.thumb_func
+ 803              	Pos_Speed_Ctrl:
+ 804              	.LVL57:
+ 805              	.LFB155:
  223:Robot/Devices/Motor/dmmotor.c **** 
  224:Robot/Devices/Motor/dmmotor.c **** /**
  225:Robot/Devices/Motor/dmmotor.c **** ************************************************************************
@@ -1063,116 +1069,117 @@ ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 1
  233:Robot/Devices/Motor/dmmotor.c **** **/
  234:Robot/Devices/Motor/dmmotor.c **** void Pos_Speed_Ctrl(hcan_t* hcan,uint16_t motor_id, float pos, float vel)
  235:Robot/Devices/Motor/dmmotor.c **** {
- 800              		.loc 1 235 1 is_stmt 1 view -0
- 801              		.cfi_startproc
- 802              		@ args = 0, pretend = 0, frame = 16
- 803              		@ frame_needed = 0, uses_anonymous_args = 0
- 804              		.loc 1 235 1 is_stmt 0 view .LVU238
- 805 0000 00B5     		push	{lr}
- 806              	.LCFI20:
- 807              		.cfi_def_cfa_offset 4
- 808              		.cfi_offset 14, -4
- 809 0002 85B0     		sub	sp, sp, #20
- 810              	.LCFI21:
- 811              		.cfi_def_cfa_offset 24
- 812 0004 8DED000A 		vstr.32	s0, [sp]
- 813 0008 CDED010A 		vstr.32	s1, [sp, #4]
+ 806              		.loc 1 235 1 is_stmt 1 view -0
+ 807              		.cfi_startproc
+ 808              		@ args = 0, pretend = 0, frame = 16
+ 809              		@ frame_needed = 0, uses_anonymous_args = 0
+ 810              		.loc 1 235 1 is_stmt 0 view .LVU241
+ 811 0000 00B5     		push	{lr}
+ 812              	.LCFI20:
+ 813              		.cfi_def_cfa_offset 4
+ 814              		.cfi_offset 14, -4
+ARM GAS  D:\temp\TMP\ccmzOYKV.s 			page 19
+
+
+ 815 0002 85B0     		sub	sp, sp, #20
+ 816              	.LCFI21:
+ 817              		.cfi_def_cfa_offset 24
+ 818 0004 8DED000A 		vstr.32	s0, [sp]
+ 819 0008 CDED010A 		vstr.32	s1, [sp, #4]
  236:Robot/Devices/Motor/dmmotor.c **** 	uint16_t id;
-ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 19
-
-
- 814              		.loc 1 236 2 is_stmt 1 view .LVU239
+ 820              		.loc 1 236 2 is_stmt 1 view .LVU242
  237:Robot/Devices/Motor/dmmotor.c **** 	uint8_t *pbuf, *vbuf;
- 815              		.loc 1 237 2 view .LVU240
+ 821              		.loc 1 237 2 view .LVU243
  238:Robot/Devices/Motor/dmmotor.c **** 	uint8_t data[8];
- 816              		.loc 1 238 2 view .LVU241
+ 822              		.loc 1 238 2 view .LVU244
  239:Robot/Devices/Motor/dmmotor.c **** 	
  240:Robot/Devices/Motor/dmmotor.c **** 	id = motor_id + POS_MODE;
- 817              		.loc 1 240 2 view .LVU242
- 818              		.loc 1 240 5 is_stmt 0 view .LVU243
- 819 000c 01F58071 		add	r1, r1, #256
- 820              	.LVL57:
+ 823              		.loc 1 240 2 view .LVU245
+ 824              		.loc 1 240 5 is_stmt 0 view .LVU246
+ 825 000c 01F58071 		add	r1, r1, #256
+ 826              	.LVL58:
  241:Robot/Devices/Motor/dmmotor.c **** 	pbuf=(uint8_t*)&pos;
- 821              		.loc 1 241 2 is_stmt 1 view .LVU244
+ 827              		.loc 1 241 2 is_stmt 1 view .LVU247
  242:Robot/Devices/Motor/dmmotor.c **** 	vbuf=(uint8_t*)&vel;
- 822              		.loc 1 242 2 view .LVU245
+ 828              		.loc 1 242 2 view .LVU248
  243:Robot/Devices/Motor/dmmotor.c **** 	
  244:Robot/Devices/Motor/dmmotor.c **** 	data[0] = *pbuf;
- 823              		.loc 1 244 2 view .LVU246
- 824              		.loc 1 244 12 is_stmt 0 view .LVU247
- 825 0010 009B     		ldr	r3, [sp]
- 826              		.loc 1 244 10 view .LVU248
- 827 0012 8DF80830 		strb	r3, [sp, #8]
+ 829              		.loc 1 244 2 view .LVU249
+ 830              		.loc 1 244 12 is_stmt 0 view .LVU250
+ 831 0010 009B     		ldr	r3, [sp]
+ 832              		.loc 1 244 10 view .LVU251
+ 833 0012 8DF80830 		strb	r3, [sp, #8]
  245:Robot/Devices/Motor/dmmotor.c **** 	data[1] = *(pbuf+1);
- 828              		.loc 1 245 2 is_stmt 1 view .LVU249
- 829              		.loc 1 245 10 is_stmt 0 view .LVU250
- 830 0016 C3F30722 		ubfx	r2, r3, #8, #8
- 831 001a 8DF80920 		strb	r2, [sp, #9]
+ 834              		.loc 1 245 2 is_stmt 1 view .LVU252
+ 835              		.loc 1 245 10 is_stmt 0 view .LVU253
+ 836 0016 C3F30722 		ubfx	r2, r3, #8, #8
+ 837 001a 8DF80920 		strb	r2, [sp, #9]
  246:Robot/Devices/Motor/dmmotor.c **** 	data[2] = *(pbuf+2);
- 832              		.loc 1 246 2 is_stmt 1 view .LVU251
- 833              		.loc 1 246 10 is_stmt 0 view .LVU252
- 834 001e C3F30742 		ubfx	r2, r3, #16, #8
- 835 0022 8DF80A20 		strb	r2, [sp, #10]
+ 838              		.loc 1 246 2 is_stmt 1 view .LVU254
+ 839              		.loc 1 246 10 is_stmt 0 view .LVU255
+ 840 001e C3F30742 		ubfx	r2, r3, #16, #8
+ 841 0022 8DF80A20 		strb	r2, [sp, #10]
  247:Robot/Devices/Motor/dmmotor.c **** 	data[3] = *(pbuf+3);
- 836              		.loc 1 247 2 is_stmt 1 view .LVU253
- 837              		.loc 1 247 10 is_stmt 0 view .LVU254
- 838 0026 C3F30763 		ubfx	r3, r3, #24, #8
- 839 002a 8DF80B30 		strb	r3, [sp, #11]
+ 842              		.loc 1 247 2 is_stmt 1 view .LVU256
+ 843              		.loc 1 247 10 is_stmt 0 view .LVU257
+ 844 0026 C3F30763 		ubfx	r3, r3, #24, #8
+ 845 002a 8DF80B30 		strb	r3, [sp, #11]
  248:Robot/Devices/Motor/dmmotor.c **** 
  249:Robot/Devices/Motor/dmmotor.c **** 	data[4] = *vbuf;
- 840              		.loc 1 249 2 is_stmt 1 view .LVU255
- 841              		.loc 1 249 12 is_stmt 0 view .LVU256
- 842 002e 019B     		ldr	r3, [sp, #4]
- 843              		.loc 1 249 10 view .LVU257
- 844 0030 8DF80C30 		strb	r3, [sp, #12]
+ 846              		.loc 1 249 2 is_stmt 1 view .LVU258
+ 847              		.loc 1 249 12 is_stmt 0 view .LVU259
+ 848 002e 019B     		ldr	r3, [sp, #4]
+ 849              		.loc 1 249 10 view .LVU260
+ 850 0030 8DF80C30 		strb	r3, [sp, #12]
  250:Robot/Devices/Motor/dmmotor.c **** 	data[5] = *(vbuf+1);
- 845              		.loc 1 250 2 is_stmt 1 view .LVU258
- 846              		.loc 1 250 10 is_stmt 0 view .LVU259
- 847 0034 C3F30722 		ubfx	r2, r3, #8, #8
- 848 0038 8DF80D20 		strb	r2, [sp, #13]
+ 851              		.loc 1 250 2 is_stmt 1 view .LVU261
+ 852              		.loc 1 250 10 is_stmt 0 view .LVU262
+ 853 0034 C3F30722 		ubfx	r2, r3, #8, #8
+ 854 0038 8DF80D20 		strb	r2, [sp, #13]
  251:Robot/Devices/Motor/dmmotor.c **** 	data[6] = *(vbuf+2);
- 849              		.loc 1 251 2 is_stmt 1 view .LVU260
- 850              		.loc 1 251 10 is_stmt 0 view .LVU261
- 851 003c C3F30742 		ubfx	r2, r3, #16, #8
- 852 0040 8DF80E20 		strb	r2, [sp, #14]
+ 855              		.loc 1 251 2 is_stmt 1 view .LVU263
+ARM GAS  D:\temp\TMP\ccmzOYKV.s 			page 20
+
+
+ 856              		.loc 1 251 10 is_stmt 0 view .LVU264
+ 857 003c C3F30742 		ubfx	r2, r3, #16, #8
+ 858 0040 8DF80E20 		strb	r2, [sp, #14]
  252:Robot/Devices/Motor/dmmotor.c **** 	data[7] = *(vbuf+3);
- 853              		.loc 1 252 2 is_stmt 1 view .LVU262
- 854              		.loc 1 252 10 is_stmt 0 view .LVU263
-ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 20
-
-
- 855 0044 C3F30763 		ubfx	r3, r3, #24, #8
- 856 0048 8DF80F30 		strb	r3, [sp, #15]
+ 859              		.loc 1 252 2 is_stmt 1 view .LVU265
+ 860              		.loc 1 252 10 is_stmt 0 view .LVU266
+ 861 0044 C3F30763 		ubfx	r3, r3, #24, #8
+ 862 0048 8DF80F30 		strb	r3, [sp, #15]
  253:Robot/Devices/Motor/dmmotor.c **** 	
  254:Robot/Devices/Motor/dmmotor.c **** 	canx_send_data(hcan, id, data, 8);
- 857              		.loc 1 254 2 is_stmt 1 view .LVU264
- 858 004c 0823     		movs	r3, #8
- 859 004e 0DEB0302 		add	r2, sp, r3
- 860 0052 89B2     		uxth	r1, r1
- 861              		.loc 1 254 2 is_stmt 0 view .LVU265
- 862 0054 FFF7FEFF 		bl	canx_send_data
- 863              	.LVL58:
+ 863              		.loc 1 254 2 is_stmt 1 view .LVU267
+ 864 004c 0823     		movs	r3, #8
+ 865 004e 0DEB0302 		add	r2, sp, r3
+ 866 0052 89B2     		uxth	r1, r1
+ 867              	.LVL59:
+ 868              		.loc 1 254 2 is_stmt 0 view .LVU268
+ 869 0054 FFF7FEFF 		bl	canx_send_data
+ 870              	.LVL60:
  255:Robot/Devices/Motor/dmmotor.c **** }
- 864              		.loc 1 255 1 view .LVU266
- 865 0058 05B0     		add	sp, sp, #20
- 866              	.LCFI22:
- 867              		.cfi_def_cfa_offset 4
- 868              	.LVL59:
- 869              		.loc 1 255 1 view .LVU267
- 870              		@ sp needed
- 871 005a 5DF804FB 		ldr	pc, [sp], #4
- 872              		.loc 1 255 1 view .LVU268
- 873              		.cfi_endproc
- 874              	.LFE155:
- 876              		.section	.text.Speed_Ctrl,"ax",%progbits
- 877              		.align	1
- 878              		.global	Speed_Ctrl
- 879              		.syntax unified
- 880              		.thumb
- 881              		.thumb_func
- 883              	Speed_Ctrl:
- 884              	.LVL60:
- 885              	.LFB156:
+ 871              		.loc 1 255 1 view .LVU269
+ 872 0058 05B0     		add	sp, sp, #20
+ 873              	.LCFI22:
+ 874              		.cfi_def_cfa_offset 4
+ 875              	.LVL61:
+ 876              		.loc 1 255 1 view .LVU270
+ 877              		@ sp needed
+ 878 005a 00BD     		pop	{pc}
+ 879              		.loc 1 255 1 view .LVU271
+ 880              		.cfi_endproc
+ 881              	.LFE155:
+ 883              		.section	.text.Speed_Ctrl,"ax",%progbits
+ 884              		.align	1
+ 885              		.global	Speed_Ctrl
+ 886              		.syntax unified
+ 887              		.thumb
+ 888              		.thumb_func
+ 890              	Speed_Ctrl:
+ 891              	.LVL62:
+ 892              	.LFB156:
  256:Robot/Devices/Motor/dmmotor.c **** 
  257:Robot/Devices/Motor/dmmotor.c **** /**
  258:Robot/Devices/Motor/dmmotor.c **** ************************************************************************
@@ -1186,123 +1193,124 @@ ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 1
  266:Robot/Devices/Motor/dmmotor.c **** **/
  267:Robot/Devices/Motor/dmmotor.c **** void Speed_Ctrl(hcan_t* hcan,uint16_t motor_id, float vel)
  268:Robot/Devices/Motor/dmmotor.c **** {
- 886              		.loc 1 268 1 is_stmt 1 view -0
- 887              		.cfi_startproc
- 888              		@ args = 0, pretend = 0, frame = 16
- 889              		@ frame_needed = 0, uses_anonymous_args = 0
- 890              		.loc 1 268 1 is_stmt 0 view .LVU270
- 891 0000 00B5     		push	{lr}
- 892              	.LCFI23:
- 893              		.cfi_def_cfa_offset 4
- 894              		.cfi_offset 14, -4
- 895 0002 85B0     		sub	sp, sp, #20
- 896              	.LCFI24:
- 897              		.cfi_def_cfa_offset 24
-ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 21
+ 893              		.loc 1 268 1 is_stmt 1 view -0
+ 894              		.cfi_startproc
+ 895              		@ args = 0, pretend = 0, frame = 16
+ 896              		@ frame_needed = 0, uses_anonymous_args = 0
+ 897              		.loc 1 268 1 is_stmt 0 view .LVU273
+ARM GAS  D:\temp\TMP\ccmzOYKV.s 			page 21
 
 
- 898 0004 8DED010A 		vstr.32	s0, [sp, #4]
+ 898 0000 00B5     		push	{lr}
+ 899              	.LCFI23:
+ 900              		.cfi_def_cfa_offset 4
+ 901              		.cfi_offset 14, -4
+ 902 0002 85B0     		sub	sp, sp, #20
+ 903              	.LCFI24:
+ 904              		.cfi_def_cfa_offset 24
+ 905 0004 8DED010A 		vstr.32	s0, [sp, #4]
  269:Robot/Devices/Motor/dmmotor.c **** 	uint16_t id;
- 899              		.loc 1 269 2 is_stmt 1 view .LVU271
+ 906              		.loc 1 269 2 is_stmt 1 view .LVU274
  270:Robot/Devices/Motor/dmmotor.c **** 	uint8_t *vbuf;
- 900              		.loc 1 270 2 view .LVU272
+ 907              		.loc 1 270 2 view .LVU275
  271:Robot/Devices/Motor/dmmotor.c **** 	uint8_t data[4];
- 901              		.loc 1 271 2 view .LVU273
+ 908              		.loc 1 271 2 view .LVU276
  272:Robot/Devices/Motor/dmmotor.c **** 	
  273:Robot/Devices/Motor/dmmotor.c **** 	id = motor_id + SPEED_MODE;
- 902              		.loc 1 273 2 view .LVU274
- 903              		.loc 1 273 5 is_stmt 0 view .LVU275
- 904 0008 01F50071 		add	r1, r1, #512
- 905              	.LVL61:
+ 909              		.loc 1 273 2 view .LVU277
+ 910              		.loc 1 273 5 is_stmt 0 view .LVU278
+ 911 0008 01F50071 		add	r1, r1, #512
+ 912              	.LVL63:
  274:Robot/Devices/Motor/dmmotor.c **** 	vbuf=(uint8_t*)&vel;
- 906              		.loc 1 274 2 is_stmt 1 view .LVU276
+ 913              		.loc 1 274 2 is_stmt 1 view .LVU279
  275:Robot/Devices/Motor/dmmotor.c **** 	
  276:Robot/Devices/Motor/dmmotor.c **** 	data[0] = *vbuf;
- 907              		.loc 1 276 2 view .LVU277
- 908              		.loc 1 276 12 is_stmt 0 view .LVU278
- 909 000c 019B     		ldr	r3, [sp, #4]
- 910              		.loc 1 276 10 view .LVU279
- 911 000e 8DF80C30 		strb	r3, [sp, #12]
+ 914              		.loc 1 276 2 view .LVU280
+ 915              		.loc 1 276 12 is_stmt 0 view .LVU281
+ 916 000c 019B     		ldr	r3, [sp, #4]
+ 917              		.loc 1 276 10 view .LVU282
+ 918 000e 8DF80C30 		strb	r3, [sp, #12]
  277:Robot/Devices/Motor/dmmotor.c **** 	data[1] = *(vbuf+1);
- 912              		.loc 1 277 2 is_stmt 1 view .LVU280
- 913              		.loc 1 277 10 is_stmt 0 view .LVU281
- 914 0012 C3F30722 		ubfx	r2, r3, #8, #8
- 915 0016 8DF80D20 		strb	r2, [sp, #13]
+ 919              		.loc 1 277 2 is_stmt 1 view .LVU283
+ 920              		.loc 1 277 10 is_stmt 0 view .LVU284
+ 921 0012 C3F30722 		ubfx	r2, r3, #8, #8
+ 922 0016 8DF80D20 		strb	r2, [sp, #13]
  278:Robot/Devices/Motor/dmmotor.c **** 	data[2] = *(vbuf+2);
- 916              		.loc 1 278 2 is_stmt 1 view .LVU282
- 917              		.loc 1 278 10 is_stmt 0 view .LVU283
- 918 001a C3F30742 		ubfx	r2, r3, #16, #8
- 919 001e 8DF80E20 		strb	r2, [sp, #14]
+ 923              		.loc 1 278 2 is_stmt 1 view .LVU285
+ 924              		.loc 1 278 10 is_stmt 0 view .LVU286
+ 925 001a C3F30742 		ubfx	r2, r3, #16, #8
+ 926 001e 8DF80E20 		strb	r2, [sp, #14]
  279:Robot/Devices/Motor/dmmotor.c **** 	data[3] = *(vbuf+3);
- 920              		.loc 1 279 2 is_stmt 1 view .LVU284
- 921              		.loc 1 279 10 is_stmt 0 view .LVU285
- 922 0022 C3F30763 		ubfx	r3, r3, #24, #8
- 923 0026 8DF80F30 		strb	r3, [sp, #15]
+ 927              		.loc 1 279 2 is_stmt 1 view .LVU287
+ 928              		.loc 1 279 10 is_stmt 0 view .LVU288
+ 929 0022 C3F30763 		ubfx	r3, r3, #24, #8
+ 930 0026 8DF80F30 		strb	r3, [sp, #15]
  280:Robot/Devices/Motor/dmmotor.c **** 	
  281:Robot/Devices/Motor/dmmotor.c **** 	canx_send_data(hcan, id, data, 4);
- 924              		.loc 1 281 2 is_stmt 1 view .LVU286
- 925 002a 0423     		movs	r3, #4
- 926 002c 03AA     		add	r2, sp, #12
- 927 002e 89B2     		uxth	r1, r1
- 928              		.loc 1 281 2 is_stmt 0 view .LVU287
- 929 0030 FFF7FEFF 		bl	canx_send_data
- 930              	.LVL62:
+ 931              		.loc 1 281 2 is_stmt 1 view .LVU289
+ 932 002a 0423     		movs	r3, #4
+ 933 002c 03AA     		add	r2, sp, #12
+ 934 002e 89B2     		uxth	r1, r1
+ 935              	.LVL64:
+ 936              		.loc 1 281 2 is_stmt 0 view .LVU290
+ 937 0030 FFF7FEFF 		bl	canx_send_data
+ 938              	.LVL65:
  282:Robot/Devices/Motor/dmmotor.c **** }...
- 931              		.loc 1 282 1 view .LVU288
- 932 0034 05B0     		add	sp, sp, #20
- 933              	.LCFI25:
- 934              		.cfi_def_cfa_offset 4
- 935              		@ sp needed
- 936 0036 5DF804FB 		ldr	pc, [sp], #4
- 937              		.loc 1 282 1 view .LVU289
- 938              		.cfi_endproc
- 939              	.LFE156:
- 941              		.text
-ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 22
+ 939              		.loc 1 282 1 view .LVU291
+ 940 0034 05B0     		add	sp, sp, #20
+ARM GAS  D:\temp\TMP\ccmzOYKV.s 			page 22
 
 
- 942              	.Letext0:
- 943              		.file 2 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\machine\\_default_types.h"
- 944              		.file 3 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
- 945              		.file 4 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h723xx.h"
- 946              		.file 5 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h"
- 947              		.file 6 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h"
- 948              		.file 7 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_fdcan.h"
- 949              		.file 8 "Bsp/bsp_can.h"
- 950              		.file 9 "Robot/Devices/Motor/dmmotor.h"
-ARM GAS  D:\temp\TMP\ccxc8uKi.s 			page 23
+ 941              	.LCFI25:
+ 942              		.cfi_def_cfa_offset 4
+ 943              		@ sp needed
+ 944 0036 00BD     		pop	{pc}
+ 945              		.loc 1 282 1 view .LVU292
+ 946              		.cfi_endproc
+ 947              	.LFE156:
+ 949              		.text
+ 950              	.Letext0:
+ 951              		.file 2 "D:/VS_STM32/gcc-arm-15.2/arm-none-eabi/include/machine/_default_types.h"
+ 952              		.file 3 "D:/VS_STM32/gcc-arm-15.2/arm-none-eabi/include/sys/_stdint.h"
+ 953              		.file 4 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h723xx.h"
+ 954              		.file 5 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h"
+ 955              		.file 6 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h"
+ 956              		.file 7 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_fdcan.h"
+ 957              		.file 8 "Bsp/bsp_can.h"
+ 958              		.file 9 "Robot/Devices/Motor/dmmotor.h"
+ARM GAS  D:\temp\TMP\ccmzOYKV.s 			page 23
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 dmmotor.c
-D:\temp\TMP\ccxc8uKi.s:19     .text.Hex_To_Float:00000000 $t
-D:\temp\TMP\ccxc8uKi.s:25     .text.Hex_To_Float:00000000 Hex_To_Float
-D:\temp\TMP\ccxc8uKi.s:42     .text.FloatTohex:00000000 $t
-D:\temp\TMP\ccxc8uKi.s:48     .text.FloatTohex:00000000 FloatTohex
-D:\temp\TMP\ccxc8uKi.s:74     .text.float_to_uint:00000000 $t
-D:\temp\TMP\ccxc8uKi.s:80     .text.float_to_uint:00000000 float_to_uint
-D:\temp\TMP\ccxc8uKi.s:119    .text.uint_to_float:00000000 $t
-D:\temp\TMP\ccxc8uKi.s:125    .text.uint_to_float:00000000 uint_to_float
-D:\temp\TMP\ccxc8uKi.s:165    .text.joint_motor_init:00000000 $t
-D:\temp\TMP\ccxc8uKi.s:171    .text.joint_motor_init:00000000 joint_motor_init
-D:\temp\TMP\ccxc8uKi.s:191    .text.Dm8009_Fbdata:00000000 $t
-D:\temp\TMP\ccxc8uKi.s:197    .text.Dm8009_Fbdata:00000000 Dm8009_Fbdata
-D:\temp\TMP\ccxc8uKi.s:317    .text.Dm8009_Fbdata:00000090 $d
-D:\temp\TMP\ccxc8uKi.s:323    .text.Clear_Error:00000000 $t
-D:\temp\TMP\ccxc8uKi.s:329    .text.Clear_Error:00000000 Clear_Error
-D:\temp\TMP\ccxc8uKi.s:394    .text.Enable_Motor_Mode:00000000 $t
-D:\temp\TMP\ccxc8uKi.s:400    .text.Enable_Motor_Mode:00000000 Enable_Motor_Mode
-D:\temp\TMP\ccxc8uKi.s:465    .text.Disable_Motor_Mode:00000000 $t
-D:\temp\TMP\ccxc8uKi.s:471    .text.Disable_Motor_Mode:00000000 Disable_Motor_Mode
-D:\temp\TMP\ccxc8uKi.s:536    .text.Save_Pos_Zero:00000000 $t
-D:\temp\TMP\ccxc8uKi.s:542    .text.Save_Pos_Zero:00000000 Save_Pos_Zero
-D:\temp\TMP\ccxc8uKi.s:607    .text.Mit_Ctrl:00000000 $t
-D:\temp\TMP\ccxc8uKi.s:613    .text.Mit_Ctrl:00000000 Mit_Ctrl
-D:\temp\TMP\ccxc8uKi.s:783    .text.Mit_Ctrl:000000d4 $d
-D:\temp\TMP\ccxc8uKi.s:791    .text.Pos_Speed_Ctrl:00000000 $t
-D:\temp\TMP\ccxc8uKi.s:797    .text.Pos_Speed_Ctrl:00000000 Pos_Speed_Ctrl
-D:\temp\TMP\ccxc8uKi.s:877    .text.Speed_Ctrl:00000000 $t
-D:\temp\TMP\ccxc8uKi.s:883    .text.Speed_Ctrl:00000000 Speed_Ctrl
+D:\temp\TMP\ccmzOYKV.s:20     .text.Hex_To_Float:00000000 $t
+D:\temp\TMP\ccmzOYKV.s:26     .text.Hex_To_Float:00000000 Hex_To_Float
+D:\temp\TMP\ccmzOYKV.s:42     .text.FloatTohex:00000000 $t
+D:\temp\TMP\ccmzOYKV.s:48     .text.FloatTohex:00000000 FloatTohex
+D:\temp\TMP\ccmzOYKV.s:74     .text.float_to_uint:00000000 $t
+D:\temp\TMP\ccmzOYKV.s:80     .text.float_to_uint:00000000 float_to_uint
+D:\temp\TMP\ccmzOYKV.s:119    .text.uint_to_float:00000000 $t
+D:\temp\TMP\ccmzOYKV.s:125    .text.uint_to_float:00000000 uint_to_float
+D:\temp\TMP\ccmzOYKV.s:164    .text.joint_motor_init:00000000 $t
+D:\temp\TMP\ccmzOYKV.s:170    .text.joint_motor_init:00000000 joint_motor_init
+D:\temp\TMP\ccmzOYKV.s:190    .text.Dm8009_Fbdata:00000000 $t
+D:\temp\TMP\ccmzOYKV.s:196    .text.Dm8009_Fbdata:00000000 Dm8009_Fbdata
+D:\temp\TMP\ccmzOYKV.s:316    .text.Dm8009_Fbdata:00000090 $d
+D:\temp\TMP\ccmzOYKV.s:322    .text.Clear_Error:00000000 $t
+D:\temp\TMP\ccmzOYKV.s:328    .text.Clear_Error:00000000 Clear_Error
+D:\temp\TMP\ccmzOYKV.s:393    .text.Enable_Motor_Mode:00000000 $t
+D:\temp\TMP\ccmzOYKV.s:399    .text.Enable_Motor_Mode:00000000 Enable_Motor_Mode
+D:\temp\TMP\ccmzOYKV.s:464    .text.Disable_Motor_Mode:00000000 $t
+D:\temp\TMP\ccmzOYKV.s:470    .text.Disable_Motor_Mode:00000000 Disable_Motor_Mode
+D:\temp\TMP\ccmzOYKV.s:535    .text.Save_Pos_Zero:00000000 $t
+D:\temp\TMP\ccmzOYKV.s:541    .text.Save_Pos_Zero:00000000 Save_Pos_Zero
+D:\temp\TMP\ccmzOYKV.s:606    .text.Mit_Ctrl:00000000 $t
+D:\temp\TMP\ccmzOYKV.s:612    .text.Mit_Ctrl:00000000 Mit_Ctrl
+D:\temp\TMP\ccmzOYKV.s:789    .text.Mit_Ctrl:000000d4 $d
+D:\temp\TMP\ccmzOYKV.s:797    .text.Pos_Speed_Ctrl:00000000 $t
+D:\temp\TMP\ccmzOYKV.s:803    .text.Pos_Speed_Ctrl:00000000 Pos_Speed_Ctrl
+D:\temp\TMP\ccmzOYKV.s:884    .text.Speed_Ctrl:00000000 $t
+D:\temp\TMP\ccmzOYKV.s:890    .text.Speed_Ctrl:00000000 Speed_Ctrl
 
 UNDEFINED SYMBOLS
 canx_send_data

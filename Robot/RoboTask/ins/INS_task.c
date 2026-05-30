@@ -352,6 +352,8 @@ void HIPNUC_Init(void)
 
 void INS_task(void)
 {
+    osDelay(3000); // 等待串口服务启动
+    
     while (1)
     {
         if (hipnuc_rx_flag)

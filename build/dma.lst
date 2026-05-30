@@ -1,4 +1,4 @@
-ARM GAS  D:\temp\TMP\ccPKWUNp.s 			page 1
+ARM GAS  D:\temp\TMP\ccypsUJ9.s 			page 1
 
 
    1              		.cpu cortex-m7
@@ -18,15 +18,15 @@ ARM GAS  D:\temp\TMP\ccPKWUNp.s 			page 1
   15              		.text
   16              	.Ltext0:
   17              		.cfi_sections	.debug_frame
-  18              		.section	.text.MX_DMA_Init,"ax",%progbits
-  19              		.align	1
-  20              		.global	MX_DMA_Init
-  21              		.syntax unified
-  22              		.thumb
-  23              		.thumb_func
-  25              	MX_DMA_Init:
-  26              	.LFB144:
-  27              		.file 1 "Core/Src/dma.c"
+  18              		.file 1 "Core/Src/dma.c"
+  19              		.section	.text.MX_DMA_Init,"ax",%progbits
+  20              		.align	1
+  21              		.global	MX_DMA_Init
+  22              		.syntax unified
+  23              		.thumb
+  24              		.thumb_func
+  26              	MX_DMA_Init:
+  27              	.LFB144:
    1:Core/Src/dma.c **** /* USER CODE BEGIN Header */
    2:Core/Src/dma.c **** /**
    3:Core/Src/dma.c ****   ******************************************************************************
@@ -58,7 +58,7 @@ ARM GAS  D:\temp\TMP\ccPKWUNp.s 			page 1
   29:Core/Src/dma.c **** /* Configure DMA                                                              */
   30:Core/Src/dma.c **** /*----------------------------------------------------------------------------*/
   31:Core/Src/dma.c **** 
-ARM GAS  D:\temp\TMP\ccPKWUNp.s 			page 2
+ARM GAS  D:\temp\TMP\ccypsUJ9.s 			page 2
 
 
   32:Core/Src/dma.c **** /* USER CODE BEGIN 1 */
@@ -118,7 +118,7 @@ ARM GAS  D:\temp\TMP\ccPKWUNp.s 			page 1
   49:Core/Src/dma.c ****   /* DMA1_Stream1_IRQn interrupt configuration */
   50:Core/Src/dma.c ****   HAL_NVIC_SetPriority(DMA1_Stream1_IRQn, 5, 0);
   65              		.loc 1 50 3 view .LVU9
-ARM GAS  D:\temp\TMP\ccPKWUNp.s 			page 3
+ARM GAS  D:\temp\TMP\ccypsUJ9.s 			page 3
 
 
   66 002e 0022     		movs	r2, #0
@@ -177,30 +177,30 @@ ARM GAS  D:\temp\TMP\ccPKWUNp.s 			page 1
  107              	.LCFI2:
  108              		.cfi_def_cfa_offset 4
  109              		@ sp needed
- 110 0070 5DF804FB 		ldr	pc, [sp], #4
-ARM GAS  D:\temp\TMP\ccPKWUNp.s 			page 4
+ 110 0070 00BD     		pop	{pc}
+ARM GAS  D:\temp\TMP\ccypsUJ9.s 			page 4
 
 
  111              	.L4:
- 112              		.align	2
+ 112 0072 00BF     		.align	2
  113              	.L3:
  114 0074 00440258 		.word	1476543488
  115              		.cfi_endproc
  116              	.LFE144:
  118              		.text
  119              	.Letext0:
- 120              		.file 2 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\machine\\_default_types.h"
- 121              		.file 3 "d:\\vs_stm32\\gcc-arm-2021\\2021.10\\arm-none-eabi\\include\\sys\\_stdint.h"
- 122              		.file 4 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h723xx.h"
+ 120              		.file 2 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h723xx.h"
+ 121              		.file 3 "D:/VS_STM32/gcc-arm-15.2/arm-none-eabi/include/machine/_default_types.h"
+ 122              		.file 4 "D:/VS_STM32/gcc-arm-15.2/arm-none-eabi/include/sys/_stdint.h"
  123              		.file 5 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_cortex.h"
-ARM GAS  D:\temp\TMP\ccPKWUNp.s 			page 5
+ARM GAS  D:\temp\TMP\ccypsUJ9.s 			page 5
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 dma.c
-D:\temp\TMP\ccPKWUNp.s:19     .text.MX_DMA_Init:00000000 $t
-D:\temp\TMP\ccPKWUNp.s:25     .text.MX_DMA_Init:00000000 MX_DMA_Init
-D:\temp\TMP\ccPKWUNp.s:114    .text.MX_DMA_Init:00000074 $d
+D:\temp\TMP\ccypsUJ9.s:20     .text.MX_DMA_Init:00000000 $t
+D:\temp\TMP\ccypsUJ9.s:26     .text.MX_DMA_Init:00000000 MX_DMA_Init
+D:\temp\TMP\ccypsUJ9.s:114    .text.MX_DMA_Init:00000074 $d
 
 UNDEFINED SYMBOLS
 HAL_NVIC_SetPriority

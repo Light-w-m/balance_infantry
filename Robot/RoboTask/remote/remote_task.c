@@ -2,6 +2,7 @@
 #include "remote_control.h"
 #include "chassis_def.h"
 #include "ins_task.h"
+#include "daemon.h"
 #include "kinematics.h"
 #include "user_lib.h"
 
@@ -41,6 +42,7 @@ static void RemoteControlSet(chassis_t* chassis)
     if (abs(rc_data[TEMP].rc.rocker_l_) < 20) rc_data[TEMP].rc.rocker_l_ = 0;
     if (abs(rc_data[TEMP].rc.rocker_r1) < 20) rc_data[TEMP].rc.rocker_r1 = 0;
     if (abs(rc_data[TEMP].rc.rocker_l1) < 20) rc_data[TEMP].rc.rocker_l1 = 0;
+
     float leg_vel = MAX_LEG_VEL * (float)(rc_data[TEMP].rc.rocker_l1) / 660.0f;               // 遥控器最大值660
     float target_vel = MAX_CHASSIS_VEL * (float)(rc_data[TEMP].rc.rocker_r1) / 660.0f;
 
@@ -56,19 +58,35 @@ static void RemoteControlSet(chassis_t* chassis)
         SATURATE(&chassis->leg_set, MIN_LEG_LENGTH, MAX_LEG_LENGTH);
 
         slope_following(&target_vel, &chassis->state.v_set, 0.005f);
-        // chassis->state.x_set += chassis->state.v_set * ((float)CHASSIS_TIME) / 500.0f;
-
-        // yaw轴
-        chassis->reference.yaw += -(float)(rc_data[TEMP].rc.rocker_l_) / 660.0f * 0.002f; // 0.005f为yaw轴灵敏度,待调试
-
-        if(rc_data[TEMP].rc.switch_left == 1)
-            chassis->flag.recover_flag = 1; // 倒地自起标志
+        if(fabs(chassis->state.v_set) > 0.01f)
+            chassis->state.x_set = 0.0f;    // 只要有前进速度输入,位置就不再更新,保持不变,避免位置积分误差过大
         else
-            chassis->flag.recover_flag = 0; // 倒地自起完成
+            chassis->state.x_set += chassis->state.v_set * ((float)CHASSIS_TIME) / 1000.0f;
+
+        // yaw轴+小陀螺
+        if (rc_data[TEMP].rc.switch_right == 1){
+            chassis->reference.yaw_dot = 6.0f; 
+            chassis->reference.yaw = INS.YawTotal; // 切换到陀螺控制时,将yaw参考值切换到当前航向角,避免陀螺控制突变
+        }
+        else{
+            chassis->reference.yaw_dot = 0.0f;
+            chassis->reference.yaw += -(float)(rc_data[TEMP].rc.rocker_l_) / 660.0f * 0.003f; 
+        }
+        
+        // if(rc_data[TEMP].rc.switch_left == 1)
+        //     chassis->flag.recover_flag = 1; // 倒地自起标志
+        // else
+        //     chassis->flag.recover_flag = 0; // 倒地自起完成
         
         // 仅在拨杆切到2的瞬间触发一次跳跃,后续清零由底盘任务负责
-        if (rc_data[TEMP].rc.switch_left == 2 && last_switch_left != 2)
+        if (rc_data[TEMP].rc.switch_left == 2 
+            && last_switch_left != 2
+            && chassis->flag.jump_flag == 0)   // 避免重复触发跳跃
+        {
             chassis->flag.jump_flag = 1;
+            chassis->reference.yaw = INS.YawTotal; // 跳跃时将yaw参考值切换到当前航向角,避免跳跃控制突变
+            chassis->reference.yaw_dot = 0.0f; 
+        }
         last_switch_left = rc_data[TEMP].rc.switch_left;
     }
     #endif
@@ -90,14 +108,35 @@ static void RemoteControlSet(chassis_t* chassis)
  */
 static void EmergencyHandler()
 {
-    
+    static uint8_t daemon_div = 0;
+    if (++daemon_div >= 10u)   // 1ms任务分频到10ms
+    {
+        daemon_div = 0;
+        DaemonTask();
+    }
 }
 
 void Remote_Task(void)
 {
+    EmergencyHandler();
+
+    static uint8_t lost_cnt = 0;
+    const uint8_t LOST_CONFIRM_TICKS = 3;   // 连续3次离线才真丢控
+
     if(RemoteControlIsOnline())
-        chassis_move.flag.start_flag = 1;
-    else chassis_move.flag.start_flag = 0;
+    {
+        lost_cnt = 0;
+        chassis_move.flag.start_flag = 1;   // 在线立即恢复
+    }
+    else
+    {
+        if (lost_cnt < 255) lost_cnt++;
+        if (lost_cnt >= LOST_CONFIRM_TICKS)
+            chassis_move.flag.start_flag = 0;
+    }
+
+    if(rc_data[TEMP].rc.switch_right == 2)  
+        chassis_move.flag.start_flag = 0;
 
     RemoteControlSet(&chassis_move);
 }

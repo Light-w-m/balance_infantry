@@ -59,7 +59,8 @@
 // 支持力阈值，当支持力小于这个值时认为离地
 #define TAKE_OFF_FN_THRESHOLD (3.0f)
 // 触地状态切换时间阈值，当时间接触或离地时间超过这个值时切换触地状态
-#define TOUCH_TOGGLE_THRESHOLD (100)
+#define TAKE_OFF_THRESHOLD (20)    // 离地判断时间阈值 (ms)
+#define TOUCH_GROUND_THRESHOLD (30) // 触地恢复时间阈值 (ms)
 
 #define CHASSIS_TIME 1         //延迟时间
 
@@ -140,11 +141,15 @@
 #define X1_OFFSET (0.0f)    // 目标theta_dot偏移量
 // #define X2_OFFSET(x) (-0.36f + ((x) - 0.15f) * 0.882352941f)    // 目标x偏移量
 // 0.15 -0.38       0.32 -0.23
-#define X2_OFFSET (-0.48f)    // 目标x偏移量
+#define X2_OFFSET (-0.45f)    // 目标x偏移量
 // #define X2_OFFSET (-0.0f)    // 目标x偏移量
 #define X3_OFFSET (0.0f)    // 目标x_dot偏移量
 #define X4_OFFSET (0.0f)    // 目标phi偏移量
 #define X5_OFFSET (0.0f)    // 目标phi_dot偏移量
+
+/**********************X_integral parameters*******************/
+#define X_INTEGRAL_KI   0.03f    // 位移积分增益
+#define X_INTEGRAL_LIMIT 0.15f   // 积分限幅
   
 /**********************Step definitions*******************/
 #define NORMAL_STEP        0  // 正常状态
@@ -191,10 +196,11 @@ typedef struct
     struct state
     {   // x 和 v的参数
         float v_set;    //期望速度
-        // float x_set;    //期望位置
+        float x_set;    //期望位置
         float v_filter; //滤波后的车体速度，单位是m/s
         float x_filter; //滤波后的车体位置，单位是m
-
+        float x_integral; // 位移积分，消除稳态误差
+        float x_error;  // 位移误差
     } state;
 
     struct body
