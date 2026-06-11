@@ -20,39 +20,36 @@
 
 KalmanFilter_t vaEstimateKF;	   // 卡尔曼滤波器结构体
 
+float vaEstimateKF_K[4];
+
 float vaEstimateKF_F[4] = {1.0f, 0.001f, 
                            0.0f, 1.0f};	   // 状态转移矩阵，控制周期为0.001s
 
 float vaEstimateKF_P[4] = {1.0f, 0.0f,
                            0.0f, 1.0f};    // 后验估计协方差初始值
-
-float vaEstimateKF_Q[4] = {0.02f, 0.0f, 
-                           0.0f, 0.05f};    // Q矩阵初始值
-
-float vaEstimateKF_R[4] = {1000.0f, 0.0f, 
-                            0.0f,  40.0f}; 	
-														
-float vaEstimateKF_K[4];
 													 
 const float vaEstimateKF_H[4] = {1.0f, 0.0f,
                                  0.0f, 1.0f};	// 设置矩阵H为常量
 
+float vaEstimateKF_Q[4] = {0.10f, 0.0f, 
+                           0.0f, 0.10f};    // Q矩阵初始值
+
+float vaEstimateKF_R[4] = {100.0f, 0.0f, 
+                            0.0f,  300.0f}; 	
+														
 extern INS_t INS;
 extern chassis_t chassis_move;
 extern Leg_t legR;
 extern Leg_t legL;
 
 Observe_Data_t observe_data;
-PidTypeDef Wheel_PID;    //轮速环pid
 float vel_acc[2]; 
 uint32_t OBSERVE_TIME = 1;//任务周期
 
-const static float wheel_pid[3] = {WHEEL_PID_KD, WHEEL_PID_KI, WHEEL_PID_KD};
-
 static float V_filter = 0.0f; // 滤波后的速度
-float alpha = 1.0f; // 低通滤波系数，范围为0-1，值越小滤波效果越明显
-float v_int;
+float alpha = 0.5f; // 低通滤波系数，范围为0-1，值越小滤波效果越明显
 
+#define OBSERVE_V_SCALE 0.1f
 
 void xvEstimateKF_Init(KalmanFilter_t *EstimateKF)
 {
@@ -93,28 +90,24 @@ void Observe_Task(void)
   }
     
   xvEstimateKF_Init(&vaEstimateKF);
-  PID_init(&Wheel_PID, PID_POSITION, wheel_pid, WHEEL_PID_MAX_OUT, WHEEL_PID_MAX_IOUT);
 
   while (1)
   {
+
+
+    
     Acceleration_Updata(&chassis_move, &INS);
     /* code */
     observe_data.wr = chassis_move.wheel_motor[0]->measure.speed_aps / REDUCTION_RATIO-INS.Gyro[Y_AXIS]-legR.rod.d_phi0;
     observe_data.wl = -chassis_move.wheel_motor[1]->measure.speed_aps / REDUCTION_RATIO+INS.Gyro[Y_AXIS]-legL.rod.d_phi0;
 
-    // observe_data.wr = chassis_move.wheel_motor[0]->measure.speed_aps / REDUCTION_RATIO;
-    // observe_data.wl = -chassis_move.wheel_motor[1]->measure.speed_aps / REDUCTION_RATIO;
-    
-    // 公式意义：角速度 x 半径 + 角速度 x 长度 x cos(角度) + 长度变化量 x sin(角度)
-    observe_data.vrb = observe_data.wr*WHEEL_RADIUS 
-                      + chassis_move.leg_set*legR.rod.d_theta*arm_cos_f32(legR.rod.theta) 
+    // 公式意义：角速度 x 半径 + 角速度 x 实际腿长 x cos(角度) + 长度变化量 x sin(角度)
+    observe_data.vrb = observe_data.wr*WHEEL_RADIUS
+                      + legR.rod.L0*legR.rod.d_theta*arm_cos_f32(legR.rod.theta)
                       + legR.rod.d_L0*arm_sin_f32(legR.rod.theta);
-    observe_data.vlb = observe_data.wl*WHEEL_RADIUS 
-                      + chassis_move.leg_set*legL.rod.d_theta*arm_cos_f32(legL.rod.theta) 
+    observe_data.vlb = observe_data.wl*WHEEL_RADIUS
+                      + legL.rod.L0*legL.rod.d_theta*arm_cos_f32(legL.rod.theta)
                       + legL.rod.d_L0*arm_sin_f32(legL.rod.theta);
-
-    // observe_data.vrb = observe_data.wr*WHEEL_RADIUS; // 600 3
-    // observe_data.vlb = observe_data.wl*WHEEL_RADIUS; //     3.9
 
     // 因规定顺时针为正，所以右轮为正，左轮为负，因此前进速度为差值，角速度为和值
     observe_data.forward_v = (observe_data.vrb + observe_data.vlb) / 2.0f;
@@ -125,14 +118,12 @@ void Observe_Task(void)
 
     // 原地自转时，v_filter和x_filter应该都为0
     V_filter = (1 - alpha) * V_filter + alpha * vel_acc[0];
-    chassis_move.state.v_filter = V_filter * 0.1f;
+    chassis_move.state.v_filter = V_filter * OBSERVE_V_SCALE;
 
-    v_int = chassis_move.state.v_filter;
-    SATURATE(&v_int, -0.5f, 0.5f);
-    if(fabsf(v_int) < 0.02f)  v_int = 0.0f;
-
-    chassis_move.state.x_filter = 0.999f * chassis_move.state.x_filter + v_int * ((float)OBSERVE_TIME) / 1000.0f;
-    SATURATE(&chassis_move.state.x_filter, -0.1f, 0.1f);
+    if(fabsf(chassis_move.state.v_filter) <= 0.1f)
+      chassis_move.state.x_filter += chassis_move.state.v_filter * ((float)OBSERVE_TIME) / 1000.0f;
+    else
+      chassis_move.state.x_filter = 0.0f;
 
     osDelay(OBSERVE_TIME);
   }

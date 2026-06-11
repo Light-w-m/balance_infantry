@@ -1,4 +1,4 @@
-ARM GAS  D:\temp\TMP\ccNjYEj8.s 			page 1
+ARM GAS  D:\temp\TMP\ccewBXqh.s 			page 1
 
 
    1              		.cpu cortex-m7
@@ -18,15 +18,15 @@ ARM GAS  D:\temp\TMP\ccNjYEj8.s 			page 1
   15              		.text
   16              	.Ltext0:
   17              		.cfi_sections	.debug_frame
-  18              		.section	.text.RobotInit,"ax",%progbits
-  19              		.align	1
-  20              		.global	RobotInit
-  21              		.syntax unified
-  22              		.thumb
-  23              		.thumb_func
-  25              	RobotInit:
-  26              	.LFB192:
-  27              		.file 1 "Robot/RoboTask/Robot.c"
+  18              		.file 1 "Robot/RoboTask/Robot.c"
+  19              		.section	.text.RobotInit,"ax",%progbits
+  20              		.align	1
+  21              		.global	RobotInit
+  22              		.syntax unified
+  23              		.thumb
+  24              		.thumb_func
+  26              	RobotInit:
+  27              	.LFB188:
    1:Robot/RoboTask/Robot.c **** /**
    2:Robot/RoboTask/Robot.c ****  * @file Robot.c
    3:Robot/RoboTask/Robot.c ****  * @brief 用于整个底盘初始化
@@ -58,7 +58,7 @@ ARM GAS  D:\temp\TMP\ccNjYEj8.s 			page 1
   35              		.cfi_offset 3, -8
   36              		.cfi_offset 14, -4
   22:Robot/RoboTask/Robot.c ****     
-ARM GAS  D:\temp\TMP\ccNjYEj8.s 			page 2
+ARM GAS  D:\temp\TMP\ccewBXqh.s 			page 2
 
 
   23:Robot/RoboTask/Robot.c ****     DWT_Init(480); 
@@ -85,7 +85,7 @@ ARM GAS  D:\temp\TMP\ccNjYEj8.s 			page 1
   50              		.loc 1 30 1 is_stmt 0 view .LVU5
   51 0016 08BD     		pop	{r3, pc}
   52              		.cfi_endproc
-  53              	.LFE192:
+  53              	.LFE188:
   55              		.section	.text.MotorTask,"ax",%progbits
   56              		.align	1
   57              		.global	MotorTask
@@ -93,7 +93,7 @@ ARM GAS  D:\temp\TMP\ccNjYEj8.s 			page 1
   59              		.thumb
   60              		.thumb_func
   62              	MotorTask:
-  63              	.LFB193:
+  63              	.LFB189:
   31:Robot/RoboTask/Robot.c **** 
   32:Robot/RoboTask/Robot.c **** /**
   33:Robot/RoboTask/Robot.c ****  * @brief 以1khz的频率运行
@@ -118,26 +118,28 @@ ARM GAS  D:\temp\TMP\ccNjYEj8.s 			page 1
   76              		.loc 1 39 1 is_stmt 0 view .LVU8
   77 0006 08BD     		pop	{r3, pc}
   78              		.cfi_endproc
-ARM GAS  D:\temp\TMP\ccNjYEj8.s 			page 3
+ARM GAS  D:\temp\TMP\ccewBXqh.s 			page 3
 
 
-  79              	.LFE193:
+  79              	.LFE189:
   81              		.text
   82              	.Letext0:
-  83              		.file 2 "Robot/Devices/Motor/djimotor.h"
-  84              		.file 3 "Bsp/bsp_dwt.h"
-  85              		.file 4 "Robot/RoboTask/ins/INS_task.h"
-  86              		.file 5 "Robot/RoboTask/remote/remote_task.h"
-  87              		.file 6 "Bsp/bsp_can.h"
-ARM GAS  D:\temp\TMP\ccNjYEj8.s 			page 4
+  83              		.file 2 "D:/VS_STM32/gcc-arm-15.2/arm-none-eabi/include/machine/_default_types.h"
+  84              		.file 3 "D:/VS_STM32/gcc-arm-15.2/arm-none-eabi/include/sys/_stdint.h"
+  85              		.file 4 "Robot/Devices/Motor/djimotor.h"
+  86              		.file 5 "Bsp/bsp_can.h"
+  87              		.file 6 "Robot/RoboTask/remote/remote_task.h"
+  88              		.file 7 "Robot/RoboTask/ins/INS_task.h"
+  89              		.file 8 "Bsp/bsp_dwt.h"
+ARM GAS  D:\temp\TMP\ccewBXqh.s 			page 4
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 Robot.c
-D:\temp\TMP\ccNjYEj8.s:19     .text.RobotInit:00000000 $t
-D:\temp\TMP\ccNjYEj8.s:25     .text.RobotInit:00000000 RobotInit
-D:\temp\TMP\ccNjYEj8.s:56     .text.MotorTask:00000000 $t
-D:\temp\TMP\ccNjYEj8.s:62     .text.MotorTask:00000000 MotorTask
+D:\temp\TMP\ccewBXqh.s:20     .text.RobotInit:00000000 $t
+D:\temp\TMP\ccewBXqh.s:26     .text.RobotInit:00000000 RobotInit
+D:\temp\TMP\ccewBXqh.s:56     .text.MotorTask:00000000 $t
+D:\temp\TMP\ccewBXqh.s:62     .text.MotorTask:00000000 MotorTask
 
 UNDEFINED SYMBOLS
 DWT_Init

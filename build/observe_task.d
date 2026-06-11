@@ -37,12 +37,8 @@ build/observe_task.o: Robot/RoboTask/observe/observe_task.c \
  Robot/Algorithm/kalman/kalman_filter.h \
  Middlewares/ST/ARM/DSP/Inc/arm_math.h \
  Drivers/CMSIS/Include/cmsis_compiler.h Robot/Controller/kinematics.h \
- Robot/RoboTask/ins/ins_task.h Robot/RoboTask/chassis/chassis_def.h \
- Robot/Devices/Motor/djimotor.h Bsp/bsp_can.h Core/Inc/fdcan.h \
- Core/Inc/main.h Robot/Controller/controller.h Bsp/bsp_dwt.h \
- Robot/Devices/motor_def.h Robot/daemon/daemon.h \
- Robot/Devices/Motor/dmmotor.h Robot/Controller/pid.h \
- Robot/RoboTask/chassis/chassisR_task.h \
+ Robot/RoboTask/ins/ins_task.h Robot/Controller/pid.h \
+ Robot/Lib/user_lib.h \
  Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h \
  Core/Inc/FreeRTOSConfig.h \
@@ -60,7 +56,11 @@ build/observe_task.o: Robot/RoboTask/observe/observe_task.c \
  Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
- Robot/Lib/user_lib.h
+ Robot/RoboTask/chassis/chassis_def.h Robot/Devices/Motor/djimotor.h \
+ Bsp/bsp_can.h Core/Inc/fdcan.h Core/Inc/main.h \
+ Robot/Controller/controller.h Bsp/bsp_dwt.h Robot/Devices/motor_def.h \
+ Robot/daemon/daemon.h Robot/Devices/Motor/dmmotor.h \
+ Robot/Controller/pid.h Robot/RoboTask/chassis/chassisR_task.h
 Robot/RoboTask/observe/observe_task.h:
 Robot/RoboTask/ins/INS_task.h:
 Robot/Devices/BMI088/BMI088driver.h:
@@ -105,18 +105,8 @@ Middlewares/ST/ARM/DSP/Inc/arm_math.h:
 Drivers/CMSIS/Include/cmsis_compiler.h:
 Robot/Controller/kinematics.h:
 Robot/RoboTask/ins/ins_task.h:
-Robot/RoboTask/chassis/chassis_def.h:
-Robot/Devices/Motor/djimotor.h:
-Bsp/bsp_can.h:
-Core/Inc/fdcan.h:
-Core/Inc/main.h:
-Robot/Controller/controller.h:
-Bsp/bsp_dwt.h:
-Robot/Devices/motor_def.h:
-Robot/daemon/daemon.h:
-Robot/Devices/Motor/dmmotor.h:
 Robot/Controller/pid.h:
-Robot/RoboTask/chassis/chassisR_task.h:
+Robot/Lib/user_lib.h:
 Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h:
 Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
 Core/Inc/FreeRTOSConfig.h:
@@ -134,4 +124,15 @@ Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h:
 Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:
 Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h:
 Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
-Robot/Lib/user_lib.h:
+Robot/RoboTask/chassis/chassis_def.h:
+Robot/Devices/Motor/djimotor.h:
+Bsp/bsp_can.h:
+Core/Inc/fdcan.h:
+Core/Inc/main.h:
+Robot/Controller/controller.h:
+Bsp/bsp_dwt.h:
+Robot/Devices/motor_def.h:
+Robot/daemon/daemon.h:
+Robot/Devices/Motor/dmmotor.h:
+Robot/Controller/pid.h:
+Robot/RoboTask/chassis/chassisR_task.h:

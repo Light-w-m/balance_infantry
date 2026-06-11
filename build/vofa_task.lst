@@ -1,4 +1,4 @@
-ARM GAS  D:\temp\TMP\ccsixlMF.s 			page 1
+ARM GAS  D:\temp\TMP\ccoyUA3j.s 			page 1
 
 
    1              		.cpu cortex-m7
@@ -22,14 +22,16 @@ ARM GAS  D:\temp\TMP\ccsixlMF.s 			page 1
   19              		.section	.rodata.VofaDebug_Task.str1.4,"aMS",%progbits,1
   20              		.align	2
   21              	.LC0:
-  22 0000 252E3466 		.ascii	"%.4f, %.4f, %.4f, %.4f,%.4f, %.4f, %.4f, %.4f, %.4f"
+  22 0000 252E3466 		.ascii	"%.4f, %.4f, %.4f, %.4f,%.4f, %.4f, %.4f, %.4f,%.4f,"
   22      2C20252E 
   22      34662C20 
   22      252E3466 
   22      2C20252E 
-  23 0033 2C20252E 		.ascii	", %.4f\015\012\000"
-  23      34660D0A 
-  23      00
+  23 0033 20252E34 		.ascii	" %.4f, %.4f, %.4f\015\012\000"
+  23      662C2025 
+  23      2E34662C 
+  23      20252E34 
+  23      660D0A00 
   24              		.section	.text.VofaDebug_Task,"ax",%progbits
   25              		.align	1
   26              		.global	VofaDebug_Task
@@ -37,7 +39,7 @@ ARM GAS  D:\temp\TMP\ccsixlMF.s 			page 1
   28              		.thumb
   29              		.thumb_func
   31              	VofaDebug_Task:
-  32              	.LFB203:
+  32              	.LFB199:
    1:Robot/RoboTask/emulator/vofa_task.c **** #include "vofa_task.h"
    2:Robot/RoboTask/emulator/vofa_task.c **** #include "ins_task.h"
    3:Robot/RoboTask/emulator/vofa_task.c **** #include "cmsis_os.h"
@@ -50,175 +52,208 @@ ARM GAS  D:\temp\TMP\ccsixlMF.s 			page 1
   10:Robot/RoboTask/emulator/vofa_task.c **** extern chassis_t chassis_move;
   11:Robot/RoboTask/emulator/vofa_task.c **** extern Leg_t legR;
   12:Robot/RoboTask/emulator/vofa_task.c **** extern Leg_t legL;
-  13:Robot/RoboTask/emulator/vofa_task.c **** extern Observe_Data_t observe_data;
-  14:Robot/RoboTask/emulator/vofa_task.c **** 
-  15:Robot/RoboTask/emulator/vofa_task.c **** void VofaDebug_Task(void)
-  16:Robot/RoboTask/emulator/vofa_task.c **** {
-  33              		.loc 1 16 1 view -0
+  13:Robot/RoboTask/emulator/vofa_task.c **** extern LegState_t legR_state;
+  14:Robot/RoboTask/emulator/vofa_task.c **** extern LegState_t legL_state;
+  15:Robot/RoboTask/emulator/vofa_task.c **** extern Observe_Data_t observe_data;
+  16:Robot/RoboTask/emulator/vofa_task.c **** 
+  17:Robot/RoboTask/emulator/vofa_task.c **** void VofaDebug_Task(void)
+  18:Robot/RoboTask/emulator/vofa_task.c **** {
+ARM GAS  D:\temp\TMP\ccoyUA3j.s 			page 2
+
+
+  33              		.loc 1 18 1 view -0
   34              		.cfi_startproc
   35              		@ args = 0, pretend = 0, frame = 128
   36              		@ frame_needed = 0, uses_anonymous_args = 0
-ARM GAS  D:\temp\TMP\ccsixlMF.s 			page 2
-
-
   37 0000 10B5     		push	{r4, lr}
   38              	.LCFI0:
   39              		.cfi_def_cfa_offset 8
   40              		.cfi_offset 4, -8
   41              		.cfi_offset 14, -4
-  42 0002 B4B0     		sub	sp, sp, #208
+  42 0002 2DED088B 		vpush.64	{d8, d9, d10, d11}
   43              	.LCFI1:
-  44              		.cfi_def_cfa_offset 216
-  45              	.L2:
-  17:Robot/RoboTask/emulator/vofa_task.c ****     char tx_buff[128];
-  46              		.loc 1 17 5 view .LVU1
-  18:Robot/RoboTask/emulator/vofa_task.c ****     uint16_t len;
-  47              		.loc 1 18 5 view .LVU2
-  19:Robot/RoboTask/emulator/vofa_task.c **** 
-  20:Robot/RoboTask/emulator/vofa_task.c ****     while (1)
-  48              		.loc 1 20 5 view .LVU3
-  21:Robot/RoboTask/emulator/vofa_task.c ****     {
-  22:Robot/RoboTask/emulator/vofa_task.c ****         /* code */
-  23:Robot/RoboTask/emulator/vofa_task.c ****         // len = snprintf(tx_buff,sizeof(tx_buff), "%.4f, %.4f\r\n",
-  24:Robot/RoboTask/emulator/vofa_task.c ****         //          observe_data.forward_v, chassis_move.state.v_filter*10);
-  25:Robot/RoboTask/emulator/vofa_task.c ****         // len = snprintf(tx_buff,sizeof(tx_buff), "%.4f, %.4f, %.4f, %.4f\r\n",
-  26:Robot/RoboTask/emulator/vofa_task.c ****         //          INS.Pitch, INS.Roll, INS.Gyro[X_AXIS], INS.Gyro[Y_AXIS]);
-  27:Robot/RoboTask/emulator/vofa_task.c ****         len = snprintf(tx_buff,sizeof(tx_buff), 
-  49              		.loc 1 27 9 view .LVU4
-  28:Robot/RoboTask/emulator/vofa_task.c ****                 "%.4f, %.4f, %.4f, %.4f,%.4f, %.4f, %.4f, %.4f, %.4f, %.4f\r\n",
-  29:Robot/RoboTask/emulator/vofa_task.c ****                 legL.rod.T, legR.rod.T, legL.rod.Tp, legR.rod.Tp,
-  50              		.loc 1 29 25 is_stmt 0 view .LVU5
-  51 0004 294A     		ldr	r2, .L4
-  52 0006 D2ED106A 		vldr.32	s13, [r2, #64]
-  53              		.loc 1 29 37 view .LVU6
-  54 000a 294B     		ldr	r3, .L4+4
-  55 000c 93ED106A 		vldr.32	s12, [r3, #64]
-  56              		.loc 1 29 49 view .LVU7
-  57 0010 D2ED0F5A 		vldr.32	s11, [r2, #60]
-  58              		.loc 1 29 62 view .LVU8
-  59 0014 93ED0F5A 		vldr.32	s10, [r3, #60]
-  30:Robot/RoboTask/emulator/vofa_task.c ****                 legL.joint.T1, legL.joint.T2, legR.joint.T1, legR.joint.T2,
-  60              		.loc 1 30 27 view .LVU9
-  61 0018 D2ED124A 		vldr.32	s9, [r2, #72]
-  62              		.loc 1 30 42 view .LVU10
-  63 001c 92ED134A 		vldr.32	s8, [r2, #76]
-  64              		.loc 1 30 57 view .LVU11
-  65 0020 D3ED123A 		vldr.32	s7, [r3, #72]
-  66              		.loc 1 30 72 view .LVU12
-  67 0024 93ED133A 		vldr.32	s6, [r3, #76]
-  31:Robot/RoboTask/emulator/vofa_task.c ****                 observe_data.forward_v, chassis_move.state.v_filter*10);
-  68              		.loc 1 31 29 view .LVU13
-  69 0028 224B     		ldr	r3, .L4+8
-  70 002a D3ED042A 		vldr.32	s5, [r3, #16]
-  71              		.loc 1 31 59 view .LVU14
-  72 002e 224B     		ldr	r3, .L4+12
-  73 0030 93ED457A 		vldr.32	s14, [r3, #276]
-  74              		.loc 1 31 68 view .LVU15
-  75 0034 F2EE047A 		vmov.f32	s15, #1.0e+1
-  76 0038 27EE277A 		vmul.f32	s14, s14, s15
-  27:Robot/RoboTask/emulator/vofa_task.c ****                 "%.4f, %.4f, %.4f, %.4f,%.4f, %.4f, %.4f, %.4f, %.4f, %.4f\r\n",
-  77              		.loc 1 27 15 view .LVU16
-ARM GAS  D:\temp\TMP\ccsixlMF.s 			page 3
+  44              		.cfi_def_cfa_offset 40
+  45              		.cfi_offset 80, -40
+  46              		.cfi_offset 81, -36
+  47              		.cfi_offset 82, -32
+  48              		.cfi_offset 83, -28
+  49              		.cfi_offset 84, -24
+  50              		.cfi_offset 85, -20
+  51              		.cfi_offset 86, -16
+  52              		.cfi_offset 87, -12
+  53 0006 B8B0     		sub	sp, sp, #224
+  54              	.LCFI2:
+  55              		.cfi_def_cfa_offset 264
+  56              	.L2:
+  19:Robot/RoboTask/emulator/vofa_task.c ****     char tx_buff[128];
+  57              		.loc 1 19 5 view .LVU1
+  20:Robot/RoboTask/emulator/vofa_task.c ****     uint16_t len;
+  58              		.loc 1 20 5 view .LVU2
+  21:Robot/RoboTask/emulator/vofa_task.c **** 
+  22:Robot/RoboTask/emulator/vofa_task.c ****     while (1)
+  59              		.loc 1 22 5 view .LVU3
+  23:Robot/RoboTask/emulator/vofa_task.c ****     {
+  24:Robot/RoboTask/emulator/vofa_task.c ****         /* code */
+  25:Robot/RoboTask/emulator/vofa_task.c ****         // len = snprintf(tx_buff,sizeof(tx_buff), "%.4f, %.4f\r\n",
+  26:Robot/RoboTask/emulator/vofa_task.c ****         //          observe_data.forward_v, chassis_move.state.v_filter*10);
+  27:Robot/RoboTask/emulator/vofa_task.c ****         // len = snprintf(tx_buff,sizeof(tx_buff), "%.4f, %.4f, %.4f, %.4f\r\n",
+  28:Robot/RoboTask/emulator/vofa_task.c ****         //          INS.Pitch, INS.Roll, INS.Gyro[X_AXIS], INS.Gyro[Y_AXIS]);
+  29:Robot/RoboTask/emulator/vofa_task.c ****         len = snprintf(tx_buff,sizeof(tx_buff), 
+  60              		.loc 1 29 9 view .LVU4
+  30:Robot/RoboTask/emulator/vofa_task.c ****                 "%.4f, %.4f, %.4f, %.4f,%.4f, %.4f, %.4f, %.4f,%.4f, %.4f, %.4f, %.4f\r\n",
+  31:Robot/RoboTask/emulator/vofa_task.c ****                 // legL.rod.T, legR.rod.T, legL.rod.Tp, legR.rod.Tp,
+  32:Robot/RoboTask/emulator/vofa_task.c ****                 // legL.joint.T1, legL.joint.T2, legR.joint.T1, legR.joint.T2,
+  33:Robot/RoboTask/emulator/vofa_task.c ****                 // observe_data.forward_v, chassis_move.state.v_filter*10,
+  34:Robot/RoboTask/emulator/vofa_task.c ****                 // chassis_move.leg_set, legL.rod.L0, legR.rod.L0,
+  35:Robot/RoboTask/emulator/vofa_task.c ****                 // INS.Roll, legL.rod.F0, legR.rod.F0
+  36:Robot/RoboTask/emulator/vofa_task.c ****                 legR_state.theta, legR_state.phi, legR_state.x_dot, 
+  61              		.loc 1 36 27 is_stmt 0 view .LVU5
+  62 0008 2E4B     		ldr	r3, .L4
+  63 000a 93ED007A 		vldr.32	s14, [r3]
+  64              		.loc 1 36 45 view .LVU6
+  65 000e 93ED046A 		vldr.32	s12, [r3, #16]
+  66              		.loc 1 36 61 view .LVU7
+  67 0012 93ED035A 		vldr.32	s10, [r3, #12]
+  37:Robot/RoboTask/emulator/vofa_task.c ****                 legL_state.theta, legL_state.phi, legL_state.x_dot,
+  68              		.loc 1 37 27 view .LVU8
+  69 0016 2C4B     		ldr	r3, .L4+4
+  70 0018 93ED004A 		vldr.32	s8, [r3]
+ARM GAS  D:\temp\TMP\ccoyUA3j.s 			page 3
 
 
-  78 003c 14AC     		add	r4, sp, #80
-  79 003e B7EEC77A 		vcvt.f64.f32	d7, s14
-  80 0042 8DED127B 		vstr.64	d7, [sp, #72]
-  81 0046 B7EEE27A 		vcvt.f64.f32	d7, s5
-  82 004a 8DED107B 		vstr.64	d7, [sp, #64]
-  83 004e B7EEC37A 		vcvt.f64.f32	d7, s6
-  84 0052 8DED0E7B 		vstr.64	d7, [sp, #56]
-  85 0056 B7EEE37A 		vcvt.f64.f32	d7, s7
-  86 005a 8DED0C7B 		vstr.64	d7, [sp, #48]
-  87 005e B7EEC47A 		vcvt.f64.f32	d7, s8
-  88 0062 8DED0A7B 		vstr.64	d7, [sp, #40]
-  89 0066 B7EEE47A 		vcvt.f64.f32	d7, s9
-  90 006a 8DED087B 		vstr.64	d7, [sp, #32]
-  91 006e B7EEC57A 		vcvt.f64.f32	d7, s10
-  92 0072 8DED067B 		vstr.64	d7, [sp, #24]
-  93 0076 B7EEE57A 		vcvt.f64.f32	d7, s11
-  94 007a 8DED047B 		vstr.64	d7, [sp, #16]
-  95 007e B7EEC67A 		vcvt.f64.f32	d7, s12
-  96 0082 8DED027B 		vstr.64	d7, [sp, #8]
-  97 0086 B7EEE67A 		vcvt.f64.f32	d7, s13
-  98 008a 8DED007B 		vstr.64	d7, [sp]
-  99 008e 0B4A     		ldr	r2, .L4+16
- 100 0090 8021     		movs	r1, #128
- 101 0092 2046     		mov	r0, r4
- 102 0094 FFF7FEFF 		bl	snprintf
- 103              	.LVL0:
-  32:Robot/RoboTask/emulator/vofa_task.c ****                  
-  33:Robot/RoboTask/emulator/vofa_task.c ****         HAL_UART_Transmit(&huart7, (uint8_t *)tx_buff, len, 10);
- 104              		.loc 1 33 9 is_stmt 1 view .LVU17
- 105 0098 0A23     		movs	r3, #10
- 106 009a 82B2     		uxth	r2, r0
- 107 009c 2146     		mov	r1, r4
- 108 009e 0848     		ldr	r0, .L4+20
- 109              	.LVL1:
- 110              		.loc 1 33 9 is_stmt 0 view .LVU18
- 111 00a0 FFF7FEFF 		bl	HAL_UART_Transmit
- 112              	.LVL2:
-  34:Robot/RoboTask/emulator/vofa_task.c **** 
-  35:Robot/RoboTask/emulator/vofa_task.c ****         osDelay(10);
- 113              		.loc 1 35 9 is_stmt 1 discriminator 2 view .LVU19
- 114 00a4 0A20     		movs	r0, #10
- 115 00a6 FFF7FEFF 		bl	osDelay
- 116              	.LVL3:
-  20:Robot/RoboTask/emulator/vofa_task.c ****     {
- 117              		.loc 1 20 11 view .LVU20
- 118 00aa ABE7     		b	.L2
- 119              	.L5:
- 120              		.align	2
- 121              	.L4:
- 122 00ac 00000000 		.word	legL
- 123 00b0 00000000 		.word	legR
- 124 00b4 00000000 		.word	observe_data
- 125 00b8 00000000 		.word	chassis_move
- 126 00bc 00000000 		.word	.LC0
- 127 00c0 00000000 		.word	huart7
- 128              		.cfi_endproc
- 129              	.LFE203:
-ARM GAS  D:\temp\TMP\ccsixlMF.s 			page 4
+  71              		.loc 1 37 45 view .LVU9
+  72 001c 93ED043A 		vldr.32	s6, [r3, #16]
+  73              		.loc 1 37 61 view .LVU10
+  74 0020 93ED032A 		vldr.32	s4, [r3, #12]
+  38:Robot/RoboTask/emulator/vofa_task.c ****                 INS.Roll,
+  75              		.loc 1 38 20 view .LVU11
+  76 0024 294B     		ldr	r3, .L4+8
+  77 0026 93ED111A 		vldr.32	s2, [r3, #68]
+  39:Robot/RoboTask/emulator/vofa_task.c ****                 legR.rod.L0, legR.rod.F0, legL.rod.L0, legL.rod.F0,
+  78              		.loc 1 39 25 view .LVU12
+  79 002a 294B     		ldr	r3, .L4+12
+  80 002c 93ED020A 		vldr.32	s0, [r3, #8]
+  81              		.loc 1 39 38 view .LVU13
+  82 0030 93ED108A 		vldr.32	s16, [r3, #64]
+  83              		.loc 1 39 51 view .LVU14
+  84 0034 274B     		ldr	r3, .L4+16
+  85 0036 93ED029A 		vldr.32	s18, [r3, #8]
+  86              		.loc 1 39 64 view .LVU15
+  87 003a 93ED10AA 		vldr.32	s20, [r3, #64]
+  40:Robot/RoboTask/emulator/vofa_task.c ****                 chassis_move.roll_T
+  88              		.loc 1 40 29 view .LVU16
+  89 003e 264B     		ldr	r3, .L4+20
+  90 0040 93ED6FBA 		vldr.32	s22, [r3, #444]
+  29:Robot/RoboTask/emulator/vofa_task.c ****                 "%.4f, %.4f, %.4f, %.4f,%.4f, %.4f, %.4f, %.4f,%.4f, %.4f, %.4f, %.4f\r\n",
+  91              		.loc 1 29 15 view .LVU17
+  92 0044 18AC     		add	r4, sp, #96
+  93 0046 B7EECBBA 		vcvt.f64.f32	d11, s22
+  94 004a 8DED16BB 		vstr.64	d11, [sp, #88]
+  95 004e B7EECAAA 		vcvt.f64.f32	d10, s20
+  96 0052 8DED14AB 		vstr.64	d10, [sp, #80]
+  97 0056 B7EEC99A 		vcvt.f64.f32	d9, s18
+  98 005a 8DED129B 		vstr.64	d9, [sp, #72]
+  99 005e B7EEC88A 		vcvt.f64.f32	d8, s16
+ 100 0062 8DED108B 		vstr.64	d8, [sp, #64]
+ 101 0066 B7EEC00A 		vcvt.f64.f32	d0, s0
+ 102 006a 8DED0E0B 		vstr.64	d0, [sp, #56]
+ 103 006e B7EEC11A 		vcvt.f64.f32	d1, s2
+ 104 0072 8DED0C1B 		vstr.64	d1, [sp, #48]
+ 105 0076 B7EEC22A 		vcvt.f64.f32	d2, s4
+ 106 007a 8DED0A2B 		vstr.64	d2, [sp, #40]
+ 107 007e B7EEC33A 		vcvt.f64.f32	d3, s6
+ 108 0082 8DED083B 		vstr.64	d3, [sp, #32]
+ 109 0086 B7EEC44A 		vcvt.f64.f32	d4, s8
+ 110 008a 8DED064B 		vstr.64	d4, [sp, #24]
+ 111 008e B7EEC55A 		vcvt.f64.f32	d5, s10
+ 112 0092 8DED045B 		vstr.64	d5, [sp, #16]
+ 113 0096 B7EEC66A 		vcvt.f64.f32	d6, s12
+ 114 009a 8DED026B 		vstr.64	d6, [sp, #8]
+ 115 009e B7EEC77A 		vcvt.f64.f32	d7, s14
+ 116 00a2 8DED007B 		vstr.64	d7, [sp]
+ 117 00a6 0D4A     		ldr	r2, .L4+24
+ 118 00a8 8021     		movs	r1, #128
+ 119 00aa 2046     		mov	r0, r4
+ 120 00ac FFF7FEFF 		bl	snprintf
+ 121              	.LVL0:
+  41:Robot/RoboTask/emulator/vofa_task.c ****                 );
+  42:Robot/RoboTask/emulator/vofa_task.c ****                  
+ARM GAS  D:\temp\TMP\ccoyUA3j.s 			page 4
 
 
- 131              		.text
- 132              	.Letext0:
- 133              		.file 2 "D:/VS_STM32/gcc-arm-15.2/arm-none-eabi/include/machine/_default_types.h"
- 134              		.file 3 "D:/VS_STM32/gcc-arm-15.2/arm-none-eabi/include/sys/_stdint.h"
- 135              		.file 4 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h723xx.h"
- 136              		.file 5 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h"
- 137              		.file 6 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h"
- 138              		.file 7 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_dma.h"
- 139              		.file 8 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_fdcan.h"
- 140              		.file 9 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h"
- 141              		.file 10 "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h"
- 142              		.file 11 "Bsp/bsp_can.h"
- 143              		.file 12 "Robot/Controller/controller.h"
- 144              		.file 13 "Robot/Devices/motor_def.h"
- 145              		.file 14 "Robot/daemon/daemon.h"
- 146              		.file 15 "Robot/Devices/Motor/djimotor.h"
- 147              		.file 16 "Robot/Devices/Motor/dmmotor.h"
- 148              		.file 17 "Robot/RoboTask/chassis/chassis_def.h"
- 149              		.file 18 "Robot/Controller/kinematics.h"
- 150              		.file 19 "Robot/RoboTask/observe/observe_task.h"
- 151              		.file 20 "Core/Inc/usart.h"
- 152              		.file 21 "D:/VS_STM32/gcc-arm-15.2/arm-none-eabi/include/stdio.h"
-ARM GAS  D:\temp\TMP\ccsixlMF.s 			page 5
+  43:Robot/RoboTask/emulator/vofa_task.c ****         HAL_UART_Transmit(&huart7, (uint8_t *)tx_buff, len, 10);
+ 122              		.loc 1 43 9 is_stmt 1 view .LVU18
+ 123 00b0 0A23     		movs	r3, #10
+ 124 00b2 82B2     		uxth	r2, r0
+ 125 00b4 2146     		mov	r1, r4
+ 126 00b6 0A48     		ldr	r0, .L4+28
+ 127              	.LVL1:
+ 128              		.loc 1 43 9 is_stmt 0 view .LVU19
+ 129 00b8 FFF7FEFF 		bl	HAL_UART_Transmit
+ 130              	.LVL2:
+  44:Robot/RoboTask/emulator/vofa_task.c **** 
+  45:Robot/RoboTask/emulator/vofa_task.c ****         osDelay(10);
+ 131              		.loc 1 45 9 is_stmt 1 discriminator 2 view .LVU20
+ 132 00bc 0A20     		movs	r0, #10
+ 133 00be FFF7FEFF 		bl	osDelay
+ 134              	.LVL3:
+  22:Robot/RoboTask/emulator/vofa_task.c ****     {
+ 135              		.loc 1 22 11 view .LVU21
+ 136 00c2 A1E7     		b	.L2
+ 137              	.L5:
+ 138              		.align	2
+ 139              	.L4:
+ 140 00c4 00000000 		.word	legR_state
+ 141 00c8 00000000 		.word	legL_state
+ 142 00cc 00000000 		.word	INS
+ 143 00d0 00000000 		.word	legR
+ 144 00d4 00000000 		.word	legL
+ 145 00d8 00000000 		.word	chassis_move
+ 146 00dc 00000000 		.word	.LC0
+ 147 00e0 00000000 		.word	huart7
+ 148              		.cfi_endproc
+ 149              	.LFE199:
+ 151              		.text
+ 152              	.Letext0:
+ 153              		.file 2 "D:/VS_STM32/gcc-arm-15.2/arm-none-eabi/include/machine/_default_types.h"
+ 154              		.file 3 "D:/VS_STM32/gcc-arm-15.2/arm-none-eabi/include/sys/_stdint.h"
+ 155              		.file 4 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h723xx.h"
+ 156              		.file 5 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h"
+ 157              		.file 6 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h"
+ 158              		.file 7 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_dma.h"
+ 159              		.file 8 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_fdcan.h"
+ 160              		.file 9 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h"
+ 161              		.file 10 "Robot/RoboTask/ins/ins_task.h"
+ 162              		.file 11 "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h"
+ 163              		.file 12 "Bsp/bsp_can.h"
+ 164              		.file 13 "Robot/Controller/controller.h"
+ 165              		.file 14 "Robot/Devices/motor_def.h"
+ 166              		.file 15 "Robot/daemon/daemon.h"
+ 167              		.file 16 "Robot/Devices/Motor/djimotor.h"
+ 168              		.file 17 "Robot/Devices/Motor/dmmotor.h"
+ 169              		.file 18 "Robot/RoboTask/chassis/chassis_def.h"
+ 170              		.file 19 "Robot/Controller/pid.h"
+ 171              		.file 20 "Robot/Controller/kinematics.h"
+ 172              		.file 21 "Core/Inc/usart.h"
+ 173              		.file 22 "D:/VS_STM32/gcc-arm-15.2/arm-none-eabi/include/stdio.h"
+ARM GAS  D:\temp\TMP\ccoyUA3j.s 			page 5
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 vofa_task.c
-D:\temp\TMP\ccsixlMF.s:20     .rodata.VofaDebug_Task.str1.4:00000000 $d
-D:\temp\TMP\ccsixlMF.s:25     .text.VofaDebug_Task:00000000 $t
-D:\temp\TMP\ccsixlMF.s:31     .text.VofaDebug_Task:00000000 VofaDebug_Task
-D:\temp\TMP\ccsixlMF.s:122    .text.VofaDebug_Task:000000ac $d
+D:\temp\TMP\ccoyUA3j.s:20     .rodata.VofaDebug_Task.str1.4:00000000 $d
+D:\temp\TMP\ccoyUA3j.s:25     .text.VofaDebug_Task:00000000 $t
+D:\temp\TMP\ccoyUA3j.s:31     .text.VofaDebug_Task:00000000 VofaDebug_Task
+D:\temp\TMP\ccoyUA3j.s:140    .text.VofaDebug_Task:000000c4 $d
 
 UNDEFINED SYMBOLS
 snprintf
 HAL_UART_Transmit
 osDelay
-legL
+legR_state
+legL_state
+INS
 legR
-observe_data
+legL
 chassis_move
 huart7

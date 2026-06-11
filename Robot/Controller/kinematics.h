@@ -3,6 +3,7 @@
 
 #include "arm_math.h"
 #include "ins_task.h"
+#include "pid.h"
 #include "stdint.h"
 #include "stdbool.h"
 #include "chassis_def.h"
@@ -23,10 +24,12 @@ typedef struct
         float dd_L0;
         float last_L0;
         float last_d_L0;
+        float L0_set;
 
         float phi0;             //摆杆与机体水平方向夹角--phi0
         float d_phi0;
         float last_phi0;        //上一次C点角度，用于计算角度phi0的变换率d_phi0
+        float phi0_set;
 
         float theta;            //摆杆与垂直方向夹角--theta
         float d_theta;
@@ -43,14 +46,18 @@ typedef struct
 
     struct joint
     {
-        float T1, T2;           //髋关节输出扭矩
+        float T1, T2;           //髋关节输出扭矩--T1为phi1关节，T2为phi4关节
         float Phi1, Phi4;
+        float Phi1_set, Phi4_set;
         float d_Phi1, d_Phi4;
 
-        #ifdef ControlDebug
-        // 位控调试时使用
-        float Phi1_set, Phi4_set;
-        #endif   
+        FeedforwardPidTypeDef jointAngle[2];   // 外环角度控制--0为phi1，1为phi4
+        FeedforwardPidTypeDef jointSpeed[2];          // 内环速度控制
+
+        // #ifdef ControlDebug
+        // // 位控调试时使用
+        // float Phi1_set, Phi4_set;
+        // #endif   
     } joint;    //关节参数
 
     struct wheel
@@ -60,6 +67,7 @@ typedef struct
 
     float j11, j12, j21, j22;   //雅可比矩阵
     float FN;                   //支持力
+    float Fn_fa;                //高速转向支持力
     uint32_t last_time;  // (ms)上一次更新时间
     uint32_t duration;   // (ms)任务周期
     uint32_t take_off_time;     // 离地计时
@@ -86,10 +94,11 @@ typedef struct
 
 void Calc_LQR_K(float k[2][6], float length, bool flag);
 void ForwardKinematics(Leg_t* leg,Excessive_t* excessive);
-void InverseKinematics(chassis_t* chassis, Leg_t* leg);
+void InverseKinematics(Leg_t* leg);
 void JacobianMatrix(Leg_t* leg,Excessive_t* excessive);
 // uint8_t GroundDetect(chassis_t* chassis, Leg_t* leg, Period_t* period);
 void GroundDetect(chassis_t* chassis, Leg_t* leg);
+void HighSpeedTurn(chassis_t* chassis, float rightL0, float leftL0, float* rightFn, float* leftFn);
 void Acceleration_Updata(chassis_t* chassis, INS_t* ins);
 void CoordinateLength(float *LengthL, float *LengthR, float diff, float add);
 float DeviationCalc(float diff, float real, float target);

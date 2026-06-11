@@ -1,4 +1,4 @@
-ARM GAS  D:\temp\TMP\cc3tBb1x.s 			page 1
+ARM GAS  D:\temp\TMP\ccgMWbhy.s 			page 1
 
 
    1              		.cpu cortex-m7
@@ -25,7 +25,7 @@ ARM GAS  D:\temp\TMP\cc3tBb1x.s 			page 1
   22              		.thumb
   23              		.thumb_func
   25              	EmergencyHandler:
-  26              	.LFB202:
+  26              	.LFB198:
    1:Robot/RoboTask/remote/remote_task.c **** #include "remote_task.h"
    2:Robot/RoboTask/remote/remote_task.c **** #include "remote_control.h"
    3:Robot/RoboTask/remote/remote_task.c **** #include "chassis_def.h"
@@ -40,7 +40,7 @@ ARM GAS  D:\temp\TMP\cc3tBb1x.s 			page 1
   12:Robot/RoboTask/remote/remote_task.c **** extern Leg_t legL;
   13:Robot/RoboTask/remote/remote_task.c **** 
   14:Robot/RoboTask/remote/remote_task.c **** static RC_ctrl_t *rc_data;                  // 遥控器数据,初始化时返回
-  15:Robot/RoboTask/remote/remote_task.c **** static ramp_function_source_t leg_ramp;     // 腿长斜波
+  15:Robot/RoboTask/remote/remote_task.c **** // static ramp_function_source_t leg_ramp;     // 腿长斜波
   16:Robot/RoboTask/remote/remote_task.c **** static uint8_t last_switch_left;            // 记录上一次拨杆状态,用于沿触发
   17:Robot/RoboTask/remote/remote_task.c **** 
   18:Robot/RoboTask/remote/remote_task.c **** void RobotCMDInit(void)
@@ -58,7 +58,7 @@ ARM GAS  D:\temp\TMP\cc3tBb1x.s 			page 1
   30:Robot/RoboTask/remote/remote_task.c ****  */
   31:Robot/RoboTask/remote/remote_task.c **** static void RemoteControlSet(chassis_t* chassis)
   32:Robot/RoboTask/remote/remote_task.c **** {
-ARM GAS  D:\temp\TMP\cc3tBb1x.s 			page 2
+ARM GAS  D:\temp\TMP\ccgMWbhy.s 			page 2
 
 
   33:Robot/RoboTask/remote/remote_task.c ****     #ifdef ControlOperation 
@@ -67,82 +67,90 @@ ARM GAS  D:\temp\TMP\cc3tBb1x.s 			page 1
   36:Robot/RoboTask/remote/remote_task.c ****         /* code */
   37:Robot/RoboTask/remote/remote_task.c ****         osDelay(1);
   38:Robot/RoboTask/remote/remote_task.c ****     }
-  39:Robot/RoboTask/remote/remote_task.c ****     
-  40:Robot/RoboTask/remote/remote_task.c ****     // int16_t rc = rc_data[TEMP].rc.rocker_r_;
-  41:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_r_) < 20) rc_data[TEMP].rc.rocker_r_ = 0;
-  42:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_l_) < 20) rc_data[TEMP].rc.rocker_l_ = 0;
-  43:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_r1) < 20) rc_data[TEMP].rc.rocker_r1 = 0;
-  44:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_l1) < 20) rc_data[TEMP].rc.rocker_l1 = 0;
-  45:Robot/RoboTask/remote/remote_task.c **** 
-  46:Robot/RoboTask/remote/remote_task.c ****     float leg_vel = MAX_LEG_VEL * (float)(rc_data[TEMP].rc.rocker_l1) / 660.0f;               // �
-  47:Robot/RoboTask/remote/remote_task.c ****     float target_vel = MAX_CHASSIS_VEL * (float)(rc_data[TEMP].rc.rocker_r1) / 660.0f;
+  39:Robot/RoboTask/remote/remote_task.c **** 
+  40:Robot/RoboTask/remote/remote_task.c ****     chassis->phi_set = 0.014f;
+  41:Robot/RoboTask/remote/remote_task.c ****     chassis->reference.roll = 0.0f;
+  42:Robot/RoboTask/remote/remote_task.c ****     
+  43:Robot/RoboTask/remote/remote_task.c ****     // int16_t rc = rc_data[TEMP].rc.rocker_r_;
+  44:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_r_) < 20) rc_data[TEMP].rc.rocker_r_ = 0;
+  45:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_l_) < 20) rc_data[TEMP].rc.rocker_l_ = 0;
+  46:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_r1) < 20) rc_data[TEMP].rc.rocker_r1 = 0;
+  47:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_l1) < 20) rc_data[TEMP].rc.rocker_l1 = 0;
   48:Robot/RoboTask/remote/remote_task.c **** 
-  49:Robot/RoboTask/remote/remote_task.c ****     if (chassis->flag.start_flag == 1)
-  50:Robot/RoboTask/remote/remote_task.c ****     {
-  51:Robot/RoboTask/remote/remote_task.c ****         /* code */
-  52:Robot/RoboTask/remote/remote_task.c **** 
-  53:Robot/RoboTask/remote/remote_task.c ****         // 斜波控制腿长
-  54:Robot/RoboTask/remote/remote_task.c ****         // float leg_vel = ramp_calc(&leg_ramp, vel);
-  55:Robot/RoboTask/remote/remote_task.c ****         // chassis->leg_set += leg_vel * ((float)CHASSIS_TIME) / 1000.0f; 
-  56:Robot/RoboTask/remote/remote_task.c ****         //   积分控制腿长
-  57:Robot/RoboTask/remote/remote_task.c ****         chassis->leg_set += leg_vel * ((float)CHASSIS_TIME) / 1000.0f;   // 控制周期单位ms
-  58:Robot/RoboTask/remote/remote_task.c ****         SATURATE(&chassis->leg_set, MIN_LEG_LENGTH, MAX_LEG_LENGTH);
-  59:Robot/RoboTask/remote/remote_task.c **** 
-  60:Robot/RoboTask/remote/remote_task.c ****         slope_following(&target_vel, &chassis->state.v_set, 0.005f);
-  61:Robot/RoboTask/remote/remote_task.c ****         if(fabs(chassis->state.v_set) > 0.01f)
-  62:Robot/RoboTask/remote/remote_task.c ****             chassis->state.x_set = 0.0f;    // 只要有前进速度输入,位置就不再更新,�
-  63:Robot/RoboTask/remote/remote_task.c ****         else
-  64:Robot/RoboTask/remote/remote_task.c ****             chassis->state.x_set += chassis->state.v_set * ((float)CHASSIS_TIME) / 1000.0f;
-  65:Robot/RoboTask/remote/remote_task.c **** 
-  66:Robot/RoboTask/remote/remote_task.c ****         // yaw轴+小陀螺
-  67:Robot/RoboTask/remote/remote_task.c ****         if (rc_data[TEMP].rc.switch_right == 1){
-  68:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw_dot = 6.0f; 
-  69:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw = INS.YawTotal; // 切换到陀螺控制时,将yaw参考值切�
-  70:Robot/RoboTask/remote/remote_task.c ****         }
-  71:Robot/RoboTask/remote/remote_task.c ****         else{
-  72:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw_dot = 0.0f;
-  73:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw += -(float)(rc_data[TEMP].rc.rocker_l_) / 660.0f * 0.003f; 
-  74:Robot/RoboTask/remote/remote_task.c ****         }
-  75:Robot/RoboTask/remote/remote_task.c ****         
-  76:Robot/RoboTask/remote/remote_task.c ****         // if(rc_data[TEMP].rc.switch_left == 1)
-  77:Robot/RoboTask/remote/remote_task.c ****         //     chassis->flag.recover_flag = 1; // 倒地自起标志
-  78:Robot/RoboTask/remote/remote_task.c ****         // else
-  79:Robot/RoboTask/remote/remote_task.c ****         //     chassis->flag.recover_flag = 0; // 倒地自起完成
-  80:Robot/RoboTask/remote/remote_task.c ****         
-  81:Robot/RoboTask/remote/remote_task.c ****         // 仅在拨杆切到2的瞬间触发一次跳跃,后续清零由底盘任务负责
-  82:Robot/RoboTask/remote/remote_task.c ****         if (rc_data[TEMP].rc.switch_left == 2 
-  83:Robot/RoboTask/remote/remote_task.c ****             && last_switch_left != 2
-  84:Robot/RoboTask/remote/remote_task.c ****             && chassis->flag.jump_flag == 0)   // 避免重复触发跳跃
-  85:Robot/RoboTask/remote/remote_task.c ****         {
-  86:Robot/RoboTask/remote/remote_task.c ****             chassis->flag.jump_flag = 1;
-  87:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw = INS.YawTotal; // 跳跃时将yaw参考值切换到当前航向
-  88:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw_dot = 0.0f; 
-  89:Robot/RoboTask/remote/remote_task.c ****         }
-ARM GAS  D:\temp\TMP\cc3tBb1x.s 			page 3
+  49:Robot/RoboTask/remote/remote_task.c ****     float leg_vel = MAX_LEG_VEL * (float)(rc_data[TEMP].rc.rocker_l1) / 660.0f;               // �
+  50:Robot/RoboTask/remote/remote_task.c ****     float target_vel = MAX_CHASSIS_VEL * (float)(rc_data[TEMP].rc.rocker_r1) / 660.0f;
+  51:Robot/RoboTask/remote/remote_task.c **** 
+  52:Robot/RoboTask/remote/remote_task.c ****     if (chassis->flag.start_flag == 1)
+  53:Robot/RoboTask/remote/remote_task.c ****     {
+  54:Robot/RoboTask/remote/remote_task.c ****         /* code */
+  55:Robot/RoboTask/remote/remote_task.c **** 
+  56:Robot/RoboTask/remote/remote_task.c ****         // 斜波控制腿长
+  57:Robot/RoboTask/remote/remote_task.c ****         // float leg_vel = ramp_calc(&leg_ramp, vel);
+  58:Robot/RoboTask/remote/remote_task.c ****         // chassis->leg_set += leg_vel * ((float)CHASSIS_TIME) / 1000.0f; 
+  59:Robot/RoboTask/remote/remote_task.c ****         //   积分控制腿长
+  60:Robot/RoboTask/remote/remote_task.c ****         chassis->leg_set += leg_vel * ((float)CHASSIS_TIME) / 1000.0f;   // 控制周期单位ms
+  61:Robot/RoboTask/remote/remote_task.c ****         SATURATE(&chassis->leg_set, MIN_LEG_LENGTH, MAX_LEG_LENGTH);
+  62:Robot/RoboTask/remote/remote_task.c **** 
+  63:Robot/RoboTask/remote/remote_task.c ****         slope_following(&target_vel, &chassis->state.v_set, 0.005f);
+  64:Robot/RoboTask/remote/remote_task.c ****         // chassis->state.x_set += chassis->state.v_set * ((float)CHASSIS_TIME) / 1000.0f;
+  65:Robot/RoboTask/remote/remote_task.c ****         if(fabsf(chassis_move.state.v_set) > 0.02f)
+  66:Robot/RoboTask/remote/remote_task.c ****             chassis_move.state.x_set = chassis_move.state.x_filter;
+  67:Robot/RoboTask/remote/remote_task.c **** 
+  68:Robot/RoboTask/remote/remote_task.c ****         // yaw轴+小陀螺
+  69:Robot/RoboTask/remote/remote_task.c ****         if (rc_data[TEMP].rc.switch_right == 1){
+  70:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw_dot = 6.0f; 
+  71:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw = INS.YawTotal; // 切换到陀螺控制时,将yaw参考值切�
+  72:Robot/RoboTask/remote/remote_task.c ****         }
+  73:Robot/RoboTask/remote/remote_task.c ****         else{
+  74:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw_dot = 0.0f;
+  75:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw += -(float)(rc_data[TEMP].rc.rocker_l_) / 660.0f * 0.003f; 
+  76:Robot/RoboTask/remote/remote_task.c ****         }
+  77:Robot/RoboTask/remote/remote_task.c ****         
+  78:Robot/RoboTask/remote/remote_task.c ****         // if(rc_data[TEMP].rc.switch_left == 1)
+  79:Robot/RoboTask/remote/remote_task.c ****         //     chassis->flag.recover_flag = 1; // 倒地自起标志
+  80:Robot/RoboTask/remote/remote_task.c ****         // else
+  81:Robot/RoboTask/remote/remote_task.c ****         //     chassis->flag.recover_flag = 0; // 倒地自起完成
+  82:Robot/RoboTask/remote/remote_task.c ****         
+  83:Robot/RoboTask/remote/remote_task.c ****         // 仅在拨杆切到2的瞬间触发一次跳跃,后续清零由底盘任务负责
+  84:Robot/RoboTask/remote/remote_task.c ****         if (rc_data[TEMP].rc.switch_left == 2 
+  85:Robot/RoboTask/remote/remote_task.c ****             && last_switch_left != 2
+  86:Robot/RoboTask/remote/remote_task.c ****             && chassis->flag.jump_flag == 0)   // 避免重复触发跳跃
+  87:Robot/RoboTask/remote/remote_task.c ****         {
+  88:Robot/RoboTask/remote/remote_task.c ****             chassis->flag.jump_flag = 1;
+  89:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw = INS.YawTotal; // 跳跃时将yaw参考值切换到当前航向
+ARM GAS  D:\temp\TMP\ccgMWbhy.s 			page 3
 
 
-  90:Robot/RoboTask/remote/remote_task.c ****         last_switch_left = rc_data[TEMP].rc.switch_left;
-  91:Robot/RoboTask/remote/remote_task.c ****     }
-  92:Robot/RoboTask/remote/remote_task.c ****     #endif
-  93:Robot/RoboTask/remote/remote_task.c ****     
-  94:Robot/RoboTask/remote/remote_task.c ****     #ifdef ControlDebug
-  95:Robot/RoboTask/remote/remote_task.c ****     LengthControl(&chassis_move);
-  96:Robot/RoboTask/remote/remote_task.c ****     
-  97:Robot/RoboTask/remote/remote_task.c ****     // legL.rod.phi0 = PI/2.0f + 0.05 * (float)rc_data[TEMP].rc.rocker_r_ * PI/180.0f;
-  98:Robot/RoboTask/remote/remote_task.c ****     legL.rod.phi0 = PI/2.0f;
-  99:Robot/RoboTask/remote/remote_task.c ****     #endif
- 100:Robot/RoboTask/remote/remote_task.c **** }
- 101:Robot/RoboTask/remote/remote_task.c **** 
- 102:Robot/RoboTask/remote/remote_task.c **** /**
- 103:Robot/RoboTask/remote/remote_task.c ****  * @brief  紧急停止,包括遥控器左上侧拨轮打满/重要模块离线/双板通信失效�
- 104:Robot/RoboTask/remote/remote_task.c ****  *         停止的阈值'300'待修改成合适的值,或改为开关控制.
- 105:Robot/RoboTask/remote/remote_task.c ****  *
- 106:Robot/RoboTask/remote/remote_task.c ****  * @todo   后续修改为遥控器离线则电机停止(关闭遥控器急停),通过给遥控器�
- 107:Robot/RoboTask/remote/remote_task.c ****  *
- 108:Robot/RoboTask/remote/remote_task.c ****  */
- 109:Robot/RoboTask/remote/remote_task.c **** static void EmergencyHandler()
- 110:Robot/RoboTask/remote/remote_task.c **** {
-  27              		.loc 1 110 1 view -0
+  90:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw_dot = 0.0f; 
+  91:Robot/RoboTask/remote/remote_task.c ****         }
+  92:Robot/RoboTask/remote/remote_task.c ****         last_switch_left = rc_data[TEMP].rc.switch_left;
+  93:Robot/RoboTask/remote/remote_task.c ****     }
+  94:Robot/RoboTask/remote/remote_task.c ****     else if (chassis->flag.start_flag == 0)
+  95:Robot/RoboTask/remote/remote_task.c ****     {
+  96:Robot/RoboTask/remote/remote_task.c ****         chassis->state.x_set = chassis->state.x_filter;   // 离线时将位置参考切换到当�
+  97:Robot/RoboTask/remote/remote_task.c ****         chassis->state.x_integral = 0.0f;  // 停止时清零积分
+  98:Robot/RoboTask/remote/remote_task.c ****         chassis->reference.yaw = INS.YawTotal; // 离线时将yaw
+  99:Robot/RoboTask/remote/remote_task.c ****     }
+ 100:Robot/RoboTask/remote/remote_task.c ****     #endif
+ 101:Robot/RoboTask/remote/remote_task.c ****     
+ 102:Robot/RoboTask/remote/remote_task.c ****     #ifdef ControlDebug
+ 103:Robot/RoboTask/remote/remote_task.c ****     LengthControl(&chassis_move);
+ 104:Robot/RoboTask/remote/remote_task.c ****     
+ 105:Robot/RoboTask/remote/remote_task.c ****     // legL.rod.phi0 = PI/2.0f + 0.05 * (float)rc_data[TEMP].rc.rocker_r_ * PI/180.0f;
+ 106:Robot/RoboTask/remote/remote_task.c ****     legL.rod.phi0 = PI/2.0f;
+ 107:Robot/RoboTask/remote/remote_task.c ****     #endif
+ 108:Robot/RoboTask/remote/remote_task.c **** }
+ 109:Robot/RoboTask/remote/remote_task.c **** 
+ 110:Robot/RoboTask/remote/remote_task.c **** /**
+ 111:Robot/RoboTask/remote/remote_task.c ****  * @brief  紧急停止,包括遥控器左上侧拨轮打满/重要模块离线/双板通信失效�
+ 112:Robot/RoboTask/remote/remote_task.c ****  *         停止的阈值'300'待修改成合适的值,或改为开关控制.
+ 113:Robot/RoboTask/remote/remote_task.c ****  *
+ 114:Robot/RoboTask/remote/remote_task.c ****  * @todo   后续修改为遥控器离线则电机停止(关闭遥控器急停),通过给遥控器�
+ 115:Robot/RoboTask/remote/remote_task.c ****  *
+ 116:Robot/RoboTask/remote/remote_task.c ****  */
+ 117:Robot/RoboTask/remote/remote_task.c **** static void EmergencyHandler()
+ 118:Robot/RoboTask/remote/remote_task.c **** {
+  27              		.loc 1 118 1 view -0
   28              		.cfi_startproc
   29              		@ args = 0, pretend = 0, frame = 0
   30              		@ frame_needed = 0, uses_anonymous_args = 0
@@ -151,50 +159,50 @@ ARM GAS  D:\temp\TMP\cc3tBb1x.s 			page 1
   33              		.cfi_def_cfa_offset 8
   34              		.cfi_offset 3, -8
   35              		.cfi_offset 14, -4
- 111:Robot/RoboTask/remote/remote_task.c ****     static uint8_t daemon_div = 0;
-  36              		.loc 1 111 5 view .LVU1
- 112:Robot/RoboTask/remote/remote_task.c ****     if (++daemon_div >= 10u)   // 1ms任务分频到10ms
-  37              		.loc 1 112 5 view .LVU2
-  38              		.loc 1 112 9 is_stmt 0 view .LVU3
+ 119:Robot/RoboTask/remote/remote_task.c ****     static uint8_t daemon_div = 0;
+  36              		.loc 1 119 5 view .LVU1
+ 120:Robot/RoboTask/remote/remote_task.c ****     if (++daemon_div >= 10u)   // 1ms任务分频到10ms
+  37              		.loc 1 120 5 view .LVU2
+  38              		.loc 1 120 9 is_stmt 0 view .LVU3
   39 0002 074A     		ldr	r2, .L5
   40 0004 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
   41 0006 0133     		adds	r3, r3, #1
   42 0008 DBB2     		uxtb	r3, r3
-  43              		.loc 1 112 8 view .LVU4
+  43              		.loc 1 120 8 view .LVU4
   44 000a 1370     		strb	r3, [r2]
   45 000c 092B     		cmp	r3, #9
   46 000e 00D8     		bhi	.L4
   47              	.L1:
- 113:Robot/RoboTask/remote/remote_task.c ****     {
- 114:Robot/RoboTask/remote/remote_task.c ****         daemon_div = 0;
- 115:Robot/RoboTask/remote/remote_task.c ****         DaemonTask();
- 116:Robot/RoboTask/remote/remote_task.c ****     }
- 117:Robot/RoboTask/remote/remote_task.c **** }
-  48              		.loc 1 117 1 view .LVU5
+ 121:Robot/RoboTask/remote/remote_task.c ****     {
+ 122:Robot/RoboTask/remote/remote_task.c ****         daemon_div = 0;
+ 123:Robot/RoboTask/remote/remote_task.c ****         DaemonTask();
+ 124:Robot/RoboTask/remote/remote_task.c ****     }
+ 125:Robot/RoboTask/remote/remote_task.c **** }
+ARM GAS  D:\temp\TMP\ccgMWbhy.s 			page 4
+
+
+  48              		.loc 1 125 1 view .LVU5
   49 0010 08BD     		pop	{r3, pc}
   50              	.L4:
- 114:Robot/RoboTask/remote/remote_task.c ****         DaemonTask();
-  51              		.loc 1 114 9 is_stmt 1 view .LVU6
- 114:Robot/RoboTask/remote/remote_task.c ****         DaemonTask();
-  52              		.loc 1 114 20 is_stmt 0 view .LVU7
+ 122:Robot/RoboTask/remote/remote_task.c ****         DaemonTask();
+  51              		.loc 1 122 9 is_stmt 1 view .LVU6
+ 122:Robot/RoboTask/remote/remote_task.c ****         DaemonTask();
+  52              		.loc 1 122 20 is_stmt 0 view .LVU7
   53 0012 1346     		mov	r3, r2
-ARM GAS  D:\temp\TMP\cc3tBb1x.s 			page 4
-
-
   54 0014 0022     		movs	r2, #0
   55 0016 1A70     		strb	r2, [r3]
- 115:Robot/RoboTask/remote/remote_task.c ****     }
-  56              		.loc 1 115 9 is_stmt 1 view .LVU8
+ 123:Robot/RoboTask/remote/remote_task.c ****     }
+  56              		.loc 1 123 9 is_stmt 1 view .LVU8
   57 0018 FFF7FEFF 		bl	DaemonTask
   58              	.LVL0:
-  59              		.loc 1 117 1 is_stmt 0 view .LVU9
+  59              		.loc 1 125 1 is_stmt 0 view .LVU9
   60 001c F8E7     		b	.L1
   61              	.L6:
   62 001e 00BF     		.align	2
   63              	.L5:
   64 0020 00000000 		.word	daemon_div.0
   65              		.cfi_endproc
-  66              	.LFE202:
+  66              	.LFE198:
   68              		.section	.text.RemoteControlSet,"ax",%progbits
   69              		.align	1
   70              		.syntax unified
@@ -202,7 +210,7 @@ ARM GAS  D:\temp\TMP\cc3tBb1x.s 			page 1
   72              		.thumb_func
   74              	RemoteControlSet:
   75              	.LVL1:
-  76              	.LFB201:
+  76              	.LFB197:
   32:Robot/RoboTask/remote/remote_task.c ****     #ifdef ControlOperation 
   77              		.loc 1 32 1 is_stmt 1 view -0
   78              		.cfi_startproc
@@ -230,677 +238,709 @@ ARM GAS  D:\temp\TMP\cc3tBb1x.s 			page 1
   96              		.loc 1 37 9 is_stmt 1 view .LVU14
   97 0008 0120     		movs	r0, #1
   98 000a FFF7FEFF 		bl	osDelay
+ARM GAS  D:\temp\TMP\ccgMWbhy.s 			page 5
+
+
   99              	.LVL3:
  100              	.L8:
   34:Robot/RoboTask/remote/remote_task.c ****     {
  101              		.loc 1 34 25 view .LVU15
   34:Robot/RoboTask/remote/remote_task.c ****     {
  102              		.loc 1 34 15 is_stmt 0 view .LVU16
- 103 000e 674B     		ldr	r3, .L34
+ 103 000e 6C4B     		ldr	r3, .L33
  104 0010 93F85430 		ldrb	r3, [r3, #84]	@ zero_extendqisi2
-ARM GAS  D:\temp\TMP\cc3tBb1x.s 			page 5
-
-
   34:Robot/RoboTask/remote/remote_task.c ****     {
  105              		.loc 1 34 25 view .LVU17
  106 0014 002B     		cmp	r3, #0
  107 0016 F7D0     		beq	.L9
-  41:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_l_) < 20) rc_data[TEMP].rc.rocker_l_ = 0;
- 108              		.loc 1 41 5 is_stmt 1 view .LVU18
-  41:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_l_) < 20) rc_data[TEMP].rc.rocker_l_ = 0;
- 109              		.loc 1 41 9 is_stmt 0 view .LVU19
- 110 0018 654B     		ldr	r3, .L34+4
- 111 001a 1B68     		ldr	r3, [r3]
- 112 001c B3F90420 		ldrsh	r2, [r3, #4]
- 113 0020 002A     		cmp	r2, #0
- 114 0022 B8BF     		it	lt
- 115 0024 5242     		rsblt	r2, r2, #0
- 116 0026 92B2     		uxth	r2, r2
-  41:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_l_) < 20) rc_data[TEMP].rc.rocker_l_ = 0;
- 117              		.loc 1 41 8 view .LVU20
- 118 0028 132A     		cmp	r2, #19
- 119 002a 01D8     		bhi	.L10
-  41:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_l_) < 20) rc_data[TEMP].rc.rocker_l_ = 0;
- 120              		.loc 1 41 47 is_stmt 1 discriminator 1 view .LVU21
-  41:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_l_) < 20) rc_data[TEMP].rc.rocker_l_ = 0;
- 121              		.loc 1 41 74 is_stmt 0 discriminator 1 view .LVU22
- 122 002c 0022     		movs	r2, #0
- 123 002e 9A80     		strh	r2, [r3, #4]	@ movhi
- 124              	.L10:
-  42:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_r1) < 20) rc_data[TEMP].rc.rocker_r1 = 0;
- 125              		.loc 1 42 5 is_stmt 1 view .LVU23
-  42:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_r1) < 20) rc_data[TEMP].rc.rocker_r1 = 0;
- 126              		.loc 1 42 9 is_stmt 0 view .LVU24
- 127 0030 B3F90020 		ldrsh	r2, [r3]
- 128 0034 002A     		cmp	r2, #0
- 129 0036 B8BF     		it	lt
- 130 0038 5242     		rsblt	r2, r2, #0
- 131 003a 92B2     		uxth	r2, r2
-  42:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_r1) < 20) rc_data[TEMP].rc.rocker_r1 = 0;
- 132              		.loc 1 42 8 view .LVU25
- 133 003c 132A     		cmp	r2, #19
- 134 003e 01D8     		bhi	.L11
-  42:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_r1) < 20) rc_data[TEMP].rc.rocker_r1 = 0;
- 135              		.loc 1 42 47 is_stmt 1 discriminator 1 view .LVU26
-  42:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_r1) < 20) rc_data[TEMP].rc.rocker_r1 = 0;
- 136              		.loc 1 42 74 is_stmt 0 discriminator 1 view .LVU27
- 137 0040 0022     		movs	r2, #0
- 138 0042 1A80     		strh	r2, [r3]	@ movhi
- 139              	.L11:
-  43:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_l1) < 20) rc_data[TEMP].rc.rocker_l1 = 0;
- 140              		.loc 1 43 5 is_stmt 1 view .LVU28
-  43:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_l1) < 20) rc_data[TEMP].rc.rocker_l1 = 0;
- 141              		.loc 1 43 9 is_stmt 0 view .LVU29
- 142 0044 B3F90620 		ldrsh	r2, [r3, #6]
- 143 0048 002A     		cmp	r2, #0
- 144 004a B8BF     		it	lt
- 145 004c 5242     		rsblt	r2, r2, #0
- 146 004e 92B2     		uxth	r2, r2
-  43:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_l1) < 20) rc_data[TEMP].rc.rocker_l1 = 0;
- 147              		.loc 1 43 8 view .LVU30
-ARM GAS  D:\temp\TMP\cc3tBb1x.s 			page 6
+  40:Robot/RoboTask/remote/remote_task.c ****     chassis->reference.roll = 0.0f;
+ 108              		.loc 1 40 5 is_stmt 1 view .LVU18
+  40:Robot/RoboTask/remote/remote_task.c ****     chassis->reference.roll = 0.0f;
+ 109              		.loc 1 40 22 is_stmt 0 view .LVU19
+ 110 0018 6A4B     		ldr	r3, .L33+4
+ 111 001a C4F89C31 		str	r3, [r4, #412]	@ float
+  41:Robot/RoboTask/remote/remote_task.c ****     
+ 112              		.loc 1 41 5 is_stmt 1 view .LVU20
+  41:Robot/RoboTask/remote/remote_task.c ****     
+ 113              		.loc 1 41 29 is_stmt 0 view .LVU21
+ 114 001e 0023     		movs	r3, #0
+ 115 0020 C4F86C31 		str	r3, [r4, #364]	@ float
+  44:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_l_) < 20) rc_data[TEMP].rc.rocker_l_ = 0;
+ 116              		.loc 1 44 5 is_stmt 1 view .LVU22
+  44:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_l_) < 20) rc_data[TEMP].rc.rocker_l_ = 0;
+ 117              		.loc 1 44 9 is_stmt 0 view .LVU23
+ 118 0024 684B     		ldr	r3, .L33+8
+ 119 0026 1B68     		ldr	r3, [r3]
+ 120 0028 B3F90420 		ldrsh	r2, [r3, #4]
+ 121 002c 002A     		cmp	r2, #0
+ 122 002e B8BF     		it	lt
+ 123 0030 5242     		rsblt	r2, r2, #0
+ 124 0032 92B2     		uxth	r2, r2
+  44:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_l_) < 20) rc_data[TEMP].rc.rocker_l_ = 0;
+ 125              		.loc 1 44 8 view .LVU24
+ 126 0034 132A     		cmp	r2, #19
+ 127 0036 01D8     		bhi	.L10
+  44:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_l_) < 20) rc_data[TEMP].rc.rocker_l_ = 0;
+ 128              		.loc 1 44 47 is_stmt 1 discriminator 1 view .LVU25
+  44:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_l_) < 20) rc_data[TEMP].rc.rocker_l_ = 0;
+ 129              		.loc 1 44 74 is_stmt 0 discriminator 1 view .LVU26
+ 130 0038 0022     		movs	r2, #0
+ 131 003a 9A80     		strh	r2, [r3, #4]	@ movhi
+ 132              	.L10:
+  45:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_r1) < 20) rc_data[TEMP].rc.rocker_r1 = 0;
+ 133              		.loc 1 45 5 is_stmt 1 view .LVU27
+  45:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_r1) < 20) rc_data[TEMP].rc.rocker_r1 = 0;
+ 134              		.loc 1 45 9 is_stmt 0 view .LVU28
+ 135 003c B3F90020 		ldrsh	r2, [r3]
+ 136 0040 002A     		cmp	r2, #0
+ 137 0042 B8BF     		it	lt
+ 138 0044 5242     		rsblt	r2, r2, #0
+ 139 0046 92B2     		uxth	r2, r2
+  45:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_r1) < 20) rc_data[TEMP].rc.rocker_r1 = 0;
+ 140              		.loc 1 45 8 view .LVU29
+ARM GAS  D:\temp\TMP\ccgMWbhy.s 			page 6
 
 
- 148 0050 132A     		cmp	r2, #19
- 149 0052 01D8     		bhi	.L12
-  43:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_l1) < 20) rc_data[TEMP].rc.rocker_l1 = 0;
- 150              		.loc 1 43 47 is_stmt 1 discriminator 1 view .LVU31
-  43:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_l1) < 20) rc_data[TEMP].rc.rocker_l1 = 0;
- 151              		.loc 1 43 74 is_stmt 0 discriminator 1 view .LVU32
- 152 0054 0022     		movs	r2, #0
- 153 0056 DA80     		strh	r2, [r3, #6]	@ movhi
- 154              	.L12:
-  44:Robot/RoboTask/remote/remote_task.c **** 
- 155              		.loc 1 44 5 is_stmt 1 view .LVU33
-  44:Robot/RoboTask/remote/remote_task.c **** 
- 156              		.loc 1 44 9 is_stmt 0 view .LVU34
- 157 0058 B3F90220 		ldrsh	r2, [r3, #2]
- 158 005c 002A     		cmp	r2, #0
- 159 005e B8BF     		it	lt
- 160 0060 5242     		rsblt	r2, r2, #0
- 161 0062 92B2     		uxth	r2, r2
-  44:Robot/RoboTask/remote/remote_task.c **** 
- 162              		.loc 1 44 8 view .LVU35
- 163 0064 132A     		cmp	r2, #19
- 164 0066 01D8     		bhi	.L13
-  44:Robot/RoboTask/remote/remote_task.c **** 
- 165              		.loc 1 44 47 is_stmt 1 discriminator 1 view .LVU36
-  44:Robot/RoboTask/remote/remote_task.c **** 
- 166              		.loc 1 44 74 is_stmt 0 discriminator 1 view .LVU37
- 167 0068 0022     		movs	r2, #0
- 168 006a 5A80     		strh	r2, [r3, #2]	@ movhi
- 169              	.L13:
-  46:Robot/RoboTask/remote/remote_task.c ****     float target_vel = MAX_CHASSIS_VEL * (float)(rc_data[TEMP].rc.rocker_r1) / 660.0f;
- 170              		.loc 1 46 5 is_stmt 1 view .LVU38
-  46:Robot/RoboTask/remote/remote_task.c ****     float target_vel = MAX_CHASSIS_VEL * (float)(rc_data[TEMP].rc.rocker_r1) / 660.0f;
- 171              		.loc 1 46 59 is_stmt 0 view .LVU39
- 172 006c B3F90220 		ldrsh	r2, [r3, #2]
- 173 0070 07EE902A 		vmov	s15, r2	@ int
-  46:Robot/RoboTask/remote/remote_task.c ****     float target_vel = MAX_CHASSIS_VEL * (float)(rc_data[TEMP].rc.rocker_r1) / 660.0f;
- 174              		.loc 1 46 35 view .LVU40
- 175 0074 F8EEE77A 		vcvt.f32.s32	s15, s15
-  46:Robot/RoboTask/remote/remote_task.c ****     float target_vel = MAX_CHASSIS_VEL * (float)(rc_data[TEMP].rc.rocker_r1) / 660.0f;
- 176              		.loc 1 46 33 view .LVU41
- 177 0078 9FED4E7A 		vldr.32	s14, .L34+8
- 178 007c 67EE877A 		vmul.f32	s15, s15, s14
-  46:Robot/RoboTask/remote/remote_task.c ****     float target_vel = MAX_CHASSIS_VEL * (float)(rc_data[TEMP].rc.rocker_r1) / 660.0f;
- 179              		.loc 1 46 11 view .LVU42
- 180 0080 9FED4D7A 		vldr.32	s14, .L34+12
- 181 0084 87EE876A 		vdiv.f32	s12, s15, s14
- 182              	.LVL4:
+ 141 0048 132A     		cmp	r2, #19
+ 142 004a 01D8     		bhi	.L11
+  45:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_r1) < 20) rc_data[TEMP].rc.rocker_r1 = 0;
+ 143              		.loc 1 45 47 is_stmt 1 discriminator 1 view .LVU30
+  45:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_r1) < 20) rc_data[TEMP].rc.rocker_r1 = 0;
+ 144              		.loc 1 45 74 is_stmt 0 discriminator 1 view .LVU31
+ 145 004c 0022     		movs	r2, #0
+ 146 004e 1A80     		strh	r2, [r3]	@ movhi
+ 147              	.L11:
+  46:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_l1) < 20) rc_data[TEMP].rc.rocker_l1 = 0;
+ 148              		.loc 1 46 5 is_stmt 1 view .LVU32
+  46:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_l1) < 20) rc_data[TEMP].rc.rocker_l1 = 0;
+ 149              		.loc 1 46 9 is_stmt 0 view .LVU33
+ 150 0050 B3F90620 		ldrsh	r2, [r3, #6]
+ 151 0054 002A     		cmp	r2, #0
+ 152 0056 B8BF     		it	lt
+ 153 0058 5242     		rsblt	r2, r2, #0
+ 154 005a 92B2     		uxth	r2, r2
+  46:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_l1) < 20) rc_data[TEMP].rc.rocker_l1 = 0;
+ 155              		.loc 1 46 8 view .LVU34
+ 156 005c 132A     		cmp	r2, #19
+ 157 005e 01D8     		bhi	.L12
+  46:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_l1) < 20) rc_data[TEMP].rc.rocker_l1 = 0;
+ 158              		.loc 1 46 47 is_stmt 1 discriminator 1 view .LVU35
+  46:Robot/RoboTask/remote/remote_task.c ****     if (abs(rc_data[TEMP].rc.rocker_l1) < 20) rc_data[TEMP].rc.rocker_l1 = 0;
+ 159              		.loc 1 46 74 is_stmt 0 discriminator 1 view .LVU36
+ 160 0060 0022     		movs	r2, #0
+ 161 0062 DA80     		strh	r2, [r3, #6]	@ movhi
+ 162              	.L12:
   47:Robot/RoboTask/remote/remote_task.c **** 
- 183              		.loc 1 47 5 is_stmt 1 view .LVU43
+ 163              		.loc 1 47 5 is_stmt 1 view .LVU37
   47:Robot/RoboTask/remote/remote_task.c **** 
- 184              		.loc 1 47 66 is_stmt 0 view .LVU44
- 185 0088 B3F90630 		ldrsh	r3, [r3, #6]
- 186 008c 07EE903A 		vmov	s15, r3	@ int
+ 164              		.loc 1 47 9 is_stmt 0 view .LVU38
+ 165 0064 B3F90220 		ldrsh	r2, [r3, #2]
+ 166 0068 002A     		cmp	r2, #0
+ 167 006a B8BF     		it	lt
+ 168 006c 5242     		rsblt	r2, r2, #0
+ 169 006e 92B2     		uxth	r2, r2
   47:Robot/RoboTask/remote/remote_task.c **** 
- 187              		.loc 1 47 42 view .LVU45
- 188 0090 F8EEE77A 		vcvt.f32.s32	s15, s15
+ 170              		.loc 1 47 8 view .LVU39
+ 171 0070 132A     		cmp	r2, #19
+ 172 0072 01D8     		bhi	.L13
   47:Robot/RoboTask/remote/remote_task.c **** 
-ARM GAS  D:\temp\TMP\cc3tBb1x.s 			page 7
-
-
- 189              		.loc 1 47 40 view .LVU46
- 190 0094 DFED496A 		vldr.32	s13, .L34+16
- 191 0098 67EEA67A 		vmul.f32	s15, s15, s13
+ 173              		.loc 1 47 47 is_stmt 1 discriminator 1 view .LVU40
   47:Robot/RoboTask/remote/remote_task.c **** 
- 192              		.loc 1 47 78 view .LVU47
- 193 009c C7EE876A 		vdiv.f32	s13, s15, s14
-  47:Robot/RoboTask/remote/remote_task.c **** 
- 194              		.loc 1 47 11 view .LVU48
- 195 00a0 CDED016A 		vstr.32	s13, [sp, #4]
-  49:Robot/RoboTask/remote/remote_task.c ****     {
- 196              		.loc 1 49 5 is_stmt 1 view .LVU49
-  49:Robot/RoboTask/remote/remote_task.c ****     {
- 197              		.loc 1 49 22 is_stmt 0 view .LVU50
- 198 00a4 94F8CC31 		ldrb	r3, [r4, #460]	@ zero_extendqisi2
-  49:Robot/RoboTask/remote/remote_task.c ****     {
- 199              		.loc 1 49 8 view .LVU51
- 200 00a8 012B     		cmp	r3, #1
- 201 00aa 01D0     		beq	.L31
- 202              	.LVL5:
- 203              	.L7:
- 100:Robot/RoboTask/remote/remote_task.c **** 
- 204              		.loc 1 100 1 view .LVU52
- 205 00ac 02B0     		add	sp, sp, #8
- 206              	.LCFI3:
- 207              		.cfi_remember_state
- 208              		.cfi_def_cfa_offset 8
- 209              		@ sp needed
- 210 00ae 10BD     		pop	{r4, pc}
- 211              	.LVL6:
- 212              	.L31:
- 213              	.LCFI4:
- 214              		.cfi_restore_state
-  57:Robot/RoboTask/remote/remote_task.c ****         SATURATE(&chassis->leg_set, MIN_LEG_LENGTH, MAX_LEG_LENGTH);
- 215              		.loc 1 57 9 is_stmt 1 view .LVU53
-  57:Robot/RoboTask/remote/remote_task.c ****         SATURATE(&chassis->leg_set, MIN_LEG_LENGTH, MAX_LEG_LENGTH);
- 216              		.loc 1 57 16 is_stmt 0 view .LVU54
- 217 00b0 D4ED687A 		vldr.32	s15, [r4, #416]
-  57:Robot/RoboTask/remote/remote_task.c ****         SATURATE(&chassis->leg_set, MIN_LEG_LENGTH, MAX_LEG_LENGTH);
- 218              		.loc 1 57 61 view .LVU55
- 219 00b4 DFED426A 		vldr.32	s13, .L34+20
- 220 00b8 86EE267A 		vdiv.f32	s14, s12, s13
-  57:Robot/RoboTask/remote/remote_task.c ****         SATURATE(&chassis->leg_set, MIN_LEG_LENGTH, MAX_LEG_LENGTH);
- 221              		.loc 1 57 26 view .LVU56
- 222 00bc 77EE877A 		vadd.f32	s15, s15, s14
- 223 00c0 C4ED687A 		vstr.32	s15, [r4, #416]
-  58:Robot/RoboTask/remote/remote_task.c **** 
- 224              		.loc 1 58 9 is_stmt 1 view .LVU57
-  58:Robot/RoboTask/remote/remote_task.c **** 
- 225              		.loc 1 58 9 view .LVU58
- 226 00c4 9FED3F7A 		vldr.32	s14, .L34+24
- 227 00c8 F4EEC77A 		vcmpe.f32	s15, s14
- 228 00cc F1EE10FA 		vmrs	APSR_nzcv, FPSCR
- 229 00d0 3BD5     		bpl	.L28
-  58:Robot/RoboTask/remote/remote_task.c **** 
- 230              		.loc 1 58 9 discriminator 1 view .LVU59
- 231 00d2 84ED687A 		vstr.32	s14, [r4, #416]
- 232              	.L17:
-ARM GAS  D:\temp\TMP\cc3tBb1x.s 			page 8
+ 174              		.loc 1 47 74 is_stmt 0 discriminator 1 view .LVU41
+ 175 0074 0022     		movs	r2, #0
+ 176 0076 5A80     		strh	r2, [r3, #2]	@ movhi
+ 177              	.L13:
+  49:Robot/RoboTask/remote/remote_task.c ****     float target_vel = MAX_CHASSIS_VEL * (float)(rc_data[TEMP].rc.rocker_r1) / 660.0f;
+ 178              		.loc 1 49 5 is_stmt 1 view .LVU42
+  49:Robot/RoboTask/remote/remote_task.c ****     float target_vel = MAX_CHASSIS_VEL * (float)(rc_data[TEMP].rc.rocker_r1) / 660.0f;
+ 179              		.loc 1 49 59 is_stmt 0 view .LVU43
+ 180 0078 B3F90220 		ldrsh	r2, [r3, #2]
+ 181 007c 07EE902A 		vmov	s15, r2	@ int
+  49:Robot/RoboTask/remote/remote_task.c ****     float target_vel = MAX_CHASSIS_VEL * (float)(rc_data[TEMP].rc.rocker_r1) / 660.0f;
+ 182              		.loc 1 49 35 view .LVU44
+ARM GAS  D:\temp\TMP\ccgMWbhy.s 			page 7
 
 
-  58:Robot/RoboTask/remote/remote_task.c **** 
- 233              		.loc 1 58 9 view .LVU60
-  60:Robot/RoboTask/remote/remote_task.c ****         if(fabs(chassis->state.v_set) > 0.01f)
- 234              		.loc 1 60 9 view .LVU61
- 235 00d6 9FED3C0A 		vldr.32	s0, .L34+28
- 236 00da 04F58671 		add	r1, r4, #268
- 237 00de 01A8     		add	r0, sp, #4
- 238 00e0 FFF7FEFF 		bl	slope_following
- 239              	.LVL7:
-  61:Robot/RoboTask/remote/remote_task.c ****             chassis->state.x_set = 0.0f;    // 只要有前进速度输入,位置就不再更新,�
- 240              		.loc 1 61 9 view .LVU62
-  61:Robot/RoboTask/remote/remote_task.c ****             chassis->state.x_set = 0.0f;    // 只要有前进速度输入,位置就不再更新,�
- 241              		.loc 1 61 31 is_stmt 0 view .LVU63
- 242 00e4 D4ED437A 		vldr.32	s15, [r4, #268]
-  61:Robot/RoboTask/remote/remote_task.c ****             chassis->state.x_set = 0.0f;    // 只要有前进速度输入,位置就不再更新,�
- 243              		.loc 1 61 12 view .LVU64
- 244 00e8 F0EEE76A 		vabs.f32	s13, s15
-  61:Robot/RoboTask/remote/remote_task.c ****             chassis->state.x_set = 0.0f;    // 只要有前进速度输入,位置就不再更新,�
- 245              		.loc 1 61 11 view .LVU65
- 246 00ec 9FED377A 		vldr.32	s14, .L34+32
- 247 00f0 F4EEC76A 		vcmpe.f32	s13, s14
- 248 00f4 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
- 249 00f8 31DD     		ble	.L29
-  62:Robot/RoboTask/remote/remote_task.c ****         else
- 250              		.loc 1 62 13 is_stmt 1 view .LVU66
-  62:Robot/RoboTask/remote/remote_task.c ****         else
- 251              		.loc 1 62 34 is_stmt 0 view .LVU67
- 252 00fa 0023     		movs	r3, #0
- 253 00fc C4F81031 		str	r3, [r4, #272]	@ float
- 254              	.L21:
-  67:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw_dot = 6.0f; 
- 255              		.loc 1 67 9 is_stmt 1 view .LVU68
-  67:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw_dot = 6.0f; 
- 256              		.loc 1 67 20 is_stmt 0 view .LVU69
- 257 0100 2B4B     		ldr	r3, .L34+4
- 258 0102 1B68     		ldr	r3, [r3]
-  67:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw_dot = 6.0f; 
- 259              		.loc 1 67 29 view .LVU70
- 260 0104 DA7A     		ldrb	r2, [r3, #11]	@ zero_extendqisi2
-  67:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw_dot = 6.0f; 
- 261              		.loc 1 67 12 view .LVU71
- 262 0106 012A     		cmp	r2, #1
- 263 0108 34D0     		beq	.L32
-  72:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw += -(float)(rc_data[TEMP].rc.rocker_l_) / 660.0f * 0.003f; 
- 264              		.loc 1 72 13 is_stmt 1 view .LVU72
-  72:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw += -(float)(rc_data[TEMP].rc.rocker_l_) / 660.0f * 0.003f; 
- 265              		.loc 1 72 40 is_stmt 0 view .LVU73
- 266 010a 0022     		movs	r2, #0
- 267 010c C4F87821 		str	r2, [r4, #376]	@ float
-  73:Robot/RoboTask/remote/remote_task.c ****         }
- 268              		.loc 1 73 13 is_stmt 1 view .LVU74
-  73:Robot/RoboTask/remote/remote_task.c ****         }
- 269              		.loc 1 73 31 is_stmt 0 view .LVU75
- 270 0110 94ED5D7A 		vldr.32	s14, [r4, #372]
-  73:Robot/RoboTask/remote/remote_task.c ****         }
- 271              		.loc 1 73 64 view .LVU76
- 272 0114 B3F90020 		ldrsh	r2, [r3]
-ARM GAS  D:\temp\TMP\cc3tBb1x.s 			page 9
+ 183 0080 F8EEE77A 		vcvt.f32.s32	s15, s15
+  49:Robot/RoboTask/remote/remote_task.c ****     float target_vel = MAX_CHASSIS_VEL * (float)(rc_data[TEMP].rc.rocker_r1) / 660.0f;
+ 184              		.loc 1 49 33 view .LVU45
+ 185 0084 9FED517A 		vldr.32	s14, .L33+12
+ 186 0088 67EE877A 		vmul.f32	s15, s15, s14
+  49:Robot/RoboTask/remote/remote_task.c ****     float target_vel = MAX_CHASSIS_VEL * (float)(rc_data[TEMP].rc.rocker_r1) / 660.0f;
+ 187              		.loc 1 49 11 view .LVU46
+ 188 008c 9FED507A 		vldr.32	s14, .L33+16
+ 189 0090 87EE876A 		vdiv.f32	s12, s15, s14
+ 190              	.LVL4:
+  50:Robot/RoboTask/remote/remote_task.c **** 
+ 191              		.loc 1 50 5 is_stmt 1 view .LVU47
+  50:Robot/RoboTask/remote/remote_task.c **** 
+ 192              		.loc 1 50 66 is_stmt 0 view .LVU48
+ 193 0094 B3F90630 		ldrsh	r3, [r3, #6]
+ 194 0098 07EE903A 		vmov	s15, r3	@ int
+  50:Robot/RoboTask/remote/remote_task.c **** 
+ 195              		.loc 1 50 42 view .LVU49
+ 196 009c F8EEE77A 		vcvt.f32.s32	s15, s15
+  50:Robot/RoboTask/remote/remote_task.c **** 
+ 197              		.loc 1 50 40 view .LVU50
+ 198 00a0 DFED4C6A 		vldr.32	s13, .L33+20
+ 199 00a4 67EEA67A 		vmul.f32	s15, s15, s13
+  50:Robot/RoboTask/remote/remote_task.c **** 
+ 200              		.loc 1 50 78 view .LVU51
+ 201 00a8 C7EE876A 		vdiv.f32	s13, s15, s14
+  50:Robot/RoboTask/remote/remote_task.c **** 
+ 202              		.loc 1 50 11 view .LVU52
+ 203 00ac CDED016A 		vstr.32	s13, [sp, #4]
+  52:Robot/RoboTask/remote/remote_task.c ****     {
+ 204              		.loc 1 52 5 is_stmt 1 view .LVU53
+  52:Robot/RoboTask/remote/remote_task.c ****     {
+ 205              		.loc 1 52 22 is_stmt 0 view .LVU54
+ 206 00b0 94F8CC31 		ldrb	r3, [r4, #460]	@ zero_extendqisi2
+  52:Robot/RoboTask/remote/remote_task.c ****     {
+ 207              		.loc 1 52 8 view .LVU55
+ 208 00b4 012B     		cmp	r3, #1
+ 209 00b6 0DD0     		beq	.L30
+  94:Robot/RoboTask/remote/remote_task.c ****     {
+ 210              		.loc 1 94 10 is_stmt 1 view .LVU56
+  94:Robot/RoboTask/remote/remote_task.c ****     {
+ 211              		.loc 1 94 13 is_stmt 0 view .LVU57
+ 212 00b8 002B     		cmp	r3, #0
+ 213 00ba 59D1     		bne	.L7
+  96:Robot/RoboTask/remote/remote_task.c ****         chassis->state.x_integral = 0.0f;  // 停止时清零积分
+ 214              		.loc 1 96 9 is_stmt 1 view .LVU58
+  96:Robot/RoboTask/remote/remote_task.c ****         chassis->state.x_integral = 0.0f;  // 停止时清零积分
+ 215              		.loc 1 96 46 is_stmt 0 view .LVU59
+ 216 00bc D4F81831 		ldr	r3, [r4, #280]	@ float
+  96:Robot/RoboTask/remote/remote_task.c ****         chassis->state.x_integral = 0.0f;  // 停止时清零积分
+ 217              		.loc 1 96 30 view .LVU60
+ 218 00c0 C4F81031 		str	r3, [r4, #272]	@ float
+  97:Robot/RoboTask/remote/remote_task.c ****         chassis->reference.yaw = INS.YawTotal; // 离线时将yaw
+ 219              		.loc 1 97 9 is_stmt 1 view .LVU61
+  97:Robot/RoboTask/remote/remote_task.c ****         chassis->reference.yaw = INS.YawTotal; // 离线时将yaw
+ 220              		.loc 1 97 35 is_stmt 0 view .LVU62
+ 221 00c4 0023     		movs	r3, #0
+ARM GAS  D:\temp\TMP\ccgMWbhy.s 			page 8
 
 
- 273 0118 07EE902A 		vmov	s15, r2	@ int
-  73:Robot/RoboTask/remote/remote_task.c ****         }
- 274              		.loc 1 73 40 view .LVU77
- 275 011c F8EEE77A 		vcvt.f32.s32	s15, s15
-  73:Robot/RoboTask/remote/remote_task.c ****         }
- 276              		.loc 1 73 39 view .LVU78
- 277 0120 F1EE677A 		vneg.f32	s15, s15
-  73:Robot/RoboTask/remote/remote_task.c ****         }
- 278              		.loc 1 73 76 view .LVU79
- 279 0124 9FED246A 		vldr.32	s12, .L34+12
- 280 0128 C7EE866A 		vdiv.f32	s13, s15, s12
-  73:Robot/RoboTask/remote/remote_task.c ****         }
- 281              		.loc 1 73 85 view .LVU80
- 282 012c DFED287A 		vldr.32	s15, .L34+36
- 283 0130 66EEA77A 		vmul.f32	s15, s13, s15
-  73:Robot/RoboTask/remote/remote_task.c ****         }
- 284              		.loc 1 73 36 view .LVU81
- 285 0134 77EE277A 		vadd.f32	s15, s14, s15
- 286 0138 C4ED5D7A 		vstr.32	s15, [r4, #372]
- 287              	.L23:
-  82:Robot/RoboTask/remote/remote_task.c ****             && last_switch_left != 2
- 288              		.loc 1 82 9 is_stmt 1 view .LVU82
-  82:Robot/RoboTask/remote/remote_task.c ****             && last_switch_left != 2
- 289              		.loc 1 82 29 is_stmt 0 view .LVU83
- 290 013c 9A7A     		ldrb	r2, [r3, #10]	@ zero_extendqisi2
-  82:Robot/RoboTask/remote/remote_task.c ****             && last_switch_left != 2
- 291              		.loc 1 82 12 view .LVU84
- 292 013e 022A     		cmp	r2, #2
- 293 0140 20D0     		beq	.L33
- 294              	.L24:
-  90:Robot/RoboTask/remote/remote_task.c ****     }
- 295              		.loc 1 90 9 is_stmt 1 view .LVU85
-  90:Robot/RoboTask/remote/remote_task.c ****     }
- 296              		.loc 1 90 44 is_stmt 0 view .LVU86
- 297 0142 9A7A     		ldrb	r2, [r3, #10]	@ zero_extendqisi2
-  90:Robot/RoboTask/remote/remote_task.c ****     }
- 298              		.loc 1 90 26 view .LVU87
- 299 0144 234B     		ldr	r3, .L34+40
- 300 0146 1A70     		strb	r2, [r3]
- 100:Robot/RoboTask/remote/remote_task.c **** 
- 301              		.loc 1 100 1 view .LVU88
- 302 0148 B0E7     		b	.L7
- 303              	.LVL8:
- 304              	.L28:
-  58:Robot/RoboTask/remote/remote_task.c **** 
- 305              		.loc 1 58 9 is_stmt 1 discriminator 2 view .LVU89
- 306 014a 9FED237A 		vldr.32	s14, .L34+44
- 307 014e F4EEC77A 		vcmpe.f32	s15, s14
- 308 0152 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
- 309 0156 BEDD     		ble	.L17
-  58:Robot/RoboTask/remote/remote_task.c **** 
- 310              		.loc 1 58 9 discriminator 3 view .LVU90
- 311 0158 84ED687A 		vstr.32	s14, [r4, #416]
- 312 015c BBE7     		b	.L17
- 313              	.LVL9:
- 314              	.L29:
-  64:Robot/RoboTask/remote/remote_task.c **** 
-ARM GAS  D:\temp\TMP\cc3tBb1x.s 			page 10
+ 222 00c6 C4F81C31 		str	r3, [r4, #284]	@ float
+  98:Robot/RoboTask/remote/remote_task.c ****     }
+ 223              		.loc 1 98 9 is_stmt 1 view .LVU63
+  98:Robot/RoboTask/remote/remote_task.c ****     }
+ 224              		.loc 1 98 37 is_stmt 0 view .LVU64
+ 225 00ca 3D4B     		ldr	r3, .L33
+ 226 00cc 1B6D     		ldr	r3, [r3, #80]	@ float
+  98:Robot/RoboTask/remote/remote_task.c ****     }
+ 227              		.loc 1 98 32 view .LVU65
+ 228 00ce C4F87431 		str	r3, [r4, #372]	@ float
+ 108:Robot/RoboTask/remote/remote_task.c **** 
+ 229              		.loc 1 108 1 view .LVU66
+ 230 00d2 4DE0     		b	.L7
+ 231              	.L30:
+  60:Robot/RoboTask/remote/remote_task.c ****         SATURATE(&chassis->leg_set, MIN_LEG_LENGTH, MAX_LEG_LENGTH);
+ 232              		.loc 1 60 9 is_stmt 1 view .LVU67
+  60:Robot/RoboTask/remote/remote_task.c ****         SATURATE(&chassis->leg_set, MIN_LEG_LENGTH, MAX_LEG_LENGTH);
+ 233              		.loc 1 60 16 is_stmt 0 view .LVU68
+ 234 00d4 D4ED687A 		vldr.32	s15, [r4, #416]
+  60:Robot/RoboTask/remote/remote_task.c ****         SATURATE(&chassis->leg_set, MIN_LEG_LENGTH, MAX_LEG_LENGTH);
+ 235              		.loc 1 60 61 view .LVU69
+ 236 00d8 DFED3F6A 		vldr.32	s13, .L33+24
+ 237 00dc 86EE267A 		vdiv.f32	s14, s12, s13
+  60:Robot/RoboTask/remote/remote_task.c ****         SATURATE(&chassis->leg_set, MIN_LEG_LENGTH, MAX_LEG_LENGTH);
+ 238              		.loc 1 60 26 view .LVU70
+ 239 00e0 77EE877A 		vadd.f32	s15, s15, s14
+ 240 00e4 C4ED687A 		vstr.32	s15, [r4, #416]
+  61:Robot/RoboTask/remote/remote_task.c **** 
+ 241              		.loc 1 61 9 is_stmt 1 view .LVU71
+  61:Robot/RoboTask/remote/remote_task.c **** 
+ 242              		.loc 1 61 9 view .LVU72
+ 243 00e8 9FED3C7A 		vldr.32	s14, .L33+28
+ 244 00ec F4EEC77A 		vcmpe.f32	s15, s14
+ 245 00f0 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 246 00f4 3ED5     		bpl	.L28
+  61:Robot/RoboTask/remote/remote_task.c **** 
+ 247              		.loc 1 61 9 discriminator 1 view .LVU73
+ 248 00f6 84ED687A 		vstr.32	s14, [r4, #416]
+ 249              	.L17:
+  61:Robot/RoboTask/remote/remote_task.c **** 
+ 250              		.loc 1 61 9 view .LVU74
+  63:Robot/RoboTask/remote/remote_task.c ****         // chassis->state.x_set += chassis->state.v_set * ((float)CHASSIS_TIME) / 1000.0f;
+ 251              		.loc 1 63 9 view .LVU75
+ 252 00fa 9FED390A 		vldr.32	s0, .L33+32
+ 253 00fe 04F58671 		add	r1, r4, #268
+ 254 0102 01A8     		add	r0, sp, #4
+ 255 0104 FFF7FEFF 		bl	slope_following
+ 256              	.LVL5:
+  65:Robot/RoboTask/remote/remote_task.c ****             chassis_move.state.x_set = chassis_move.state.x_filter;
+ 257              		.loc 1 65 9 view .LVU76
+  65:Robot/RoboTask/remote/remote_task.c ****             chassis_move.state.x_set = chassis_move.state.x_filter;
+ 258              		.loc 1 65 36 is_stmt 0 view .LVU77
+ 259 0108 364B     		ldr	r3, .L33+36
+ 260 010a D3ED437A 		vldr.32	s15, [r3, #268]
+  65:Robot/RoboTask/remote/remote_task.c ****             chassis_move.state.x_set = chassis_move.state.x_filter;
+ 261              		.loc 1 65 12 view .LVU78
+ 262 010e F0EEE77A 		vabs.f32	s15, s15
+ARM GAS  D:\temp\TMP\ccgMWbhy.s 			page 9
 
 
- 315              		.loc 1 64 13 view .LVU91
-  64:Robot/RoboTask/remote/remote_task.c **** 
- 316              		.loc 1 64 27 is_stmt 0 view .LVU92
- 317 015e 94ED447A 		vldr.32	s14, [r4, #272]
-  64:Robot/RoboTask/remote/remote_task.c **** 
- 318              		.loc 1 64 82 view .LVU93
- 319 0162 9FED176A 		vldr.32	s12, .L34+20
- 320 0166 C7EE866A 		vdiv.f32	s13, s15, s12
-  64:Robot/RoboTask/remote/remote_task.c **** 
- 321              		.loc 1 64 34 view .LVU94
- 322 016a 77EE267A 		vadd.f32	s15, s14, s13
- 323 016e C4ED447A 		vstr.32	s15, [r4, #272]
- 324 0172 C5E7     		b	.L21
- 325              	.L32:
-  68:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw = INS.YawTotal; // 切换到陀螺控制时,将yaw参考值切�
- 326              		.loc 1 68 13 is_stmt 1 view .LVU95
-  68:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw = INS.YawTotal; // 切换到陀螺控制时,将yaw参考值切�
- 327              		.loc 1 68 40 is_stmt 0 view .LVU96
- 328 0174 194A     		ldr	r2, .L34+48
- 329 0176 C4F87821 		str	r2, [r4, #376]	@ float
-  69:Robot/RoboTask/remote/remote_task.c ****         }
- 330              		.loc 1 69 13 is_stmt 1 view .LVU97
-  69:Robot/RoboTask/remote/remote_task.c ****         }
- 331              		.loc 1 69 41 is_stmt 0 view .LVU98
- 332 017a 0C4A     		ldr	r2, .L34
- 333 017c 126D     		ldr	r2, [r2, #80]	@ float
-  69:Robot/RoboTask/remote/remote_task.c ****         }
- 334              		.loc 1 69 36 view .LVU99
- 335 017e C4F87421 		str	r2, [r4, #372]	@ float
- 336 0182 DBE7     		b	.L23
- 337              	.L33:
-  83:Robot/RoboTask/remote/remote_task.c ****             && chassis->flag.jump_flag == 0)   // 避免重复触发跳跃
- 338              		.loc 1 83 33 view .LVU100
- 339 0184 134A     		ldr	r2, .L34+40
- 340 0186 1278     		ldrb	r2, [r2]	@ zero_extendqisi2
-  83:Robot/RoboTask/remote/remote_task.c ****             && chassis->flag.jump_flag == 0)   // 避免重复触发跳跃
- 341              		.loc 1 83 13 view .LVU101
- 342 0188 022A     		cmp	r2, #2
- 343 018a DAD0     		beq	.L24
-  84:Robot/RoboTask/remote/remote_task.c ****         {
- 344              		.loc 1 84 29 view .LVU102
- 345 018c 94F8D121 		ldrb	r2, [r4, #465]	@ zero_extendqisi2
-  84:Robot/RoboTask/remote/remote_task.c ****         {
- 346              		.loc 1 84 13 view .LVU103
- 347 0190 002A     		cmp	r2, #0
- 348 0192 D6D1     		bne	.L24
-  86:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw = INS.YawTotal; // 跳跃时将yaw参考值切换到当前航向
- 349              		.loc 1 86 13 is_stmt 1 view .LVU104
-  86:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw = INS.YawTotal; // 跳跃时将yaw参考值切换到当前航向
- 350              		.loc 1 86 37 is_stmt 0 view .LVU105
- 351 0194 0122     		movs	r2, #1
- 352 0196 84F8D121 		strb	r2, [r4, #465]
-  87:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw_dot = 0.0f; 
- 353              		.loc 1 87 13 is_stmt 1 view .LVU106
-  87:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw_dot = 0.0f; 
- 354              		.loc 1 87 41 is_stmt 0 view .LVU107
- 355 019a 044A     		ldr	r2, .L34
-ARM GAS  D:\temp\TMP\cc3tBb1x.s 			page 11
+  65:Robot/RoboTask/remote/remote_task.c ****             chassis_move.state.x_set = chassis_move.state.x_filter;
+ 263              		.loc 1 65 11 view .LVU79
+ 264 0112 9FED357A 		vldr.32	s14, .L33+40
+ 265 0116 F4EEC77A 		vcmpe.f32	s15, s14
+ 266 011a F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 267 011e 03DD     		ble	.L19
+  66:Robot/RoboTask/remote/remote_task.c **** 
+ 268              		.loc 1 66 13 is_stmt 1 view .LVU80
+  66:Robot/RoboTask/remote/remote_task.c **** 
+ 269              		.loc 1 66 58 is_stmt 0 view .LVU81
+ 270 0120 D3F81821 		ldr	r2, [r3, #280]	@ float
+  66:Robot/RoboTask/remote/remote_task.c **** 
+ 271              		.loc 1 66 38 view .LVU82
+ 272 0124 C3F81021 		str	r2, [r3, #272]	@ float
+ 273              	.L19:
+  69:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw_dot = 6.0f; 
+ 274              		.loc 1 69 9 is_stmt 1 view .LVU83
+  69:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw_dot = 6.0f; 
+ 275              		.loc 1 69 20 is_stmt 0 view .LVU84
+ 276 0128 274B     		ldr	r3, .L33+8
+ 277 012a 1B68     		ldr	r3, [r3]
+  69:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw_dot = 6.0f; 
+ 278              		.loc 1 69 29 view .LVU85
+ 279 012c DA7A     		ldrb	r2, [r3, #11]	@ zero_extendqisi2
+  69:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw_dot = 6.0f; 
+ 280              		.loc 1 69 12 view .LVU86
+ 281 012e 012A     		cmp	r2, #1
+ 282 0130 2AD0     		beq	.L31
+  74:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw += -(float)(rc_data[TEMP].rc.rocker_l_) / 660.0f * 0.003f; 
+ 283              		.loc 1 74 13 is_stmt 1 view .LVU87
+  74:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw += -(float)(rc_data[TEMP].rc.rocker_l_) / 660.0f * 0.003f; 
+ 284              		.loc 1 74 40 is_stmt 0 view .LVU88
+ 285 0132 0022     		movs	r2, #0
+ 286 0134 C4F87821 		str	r2, [r4, #376]	@ float
+  75:Robot/RoboTask/remote/remote_task.c ****         }
+ 287              		.loc 1 75 13 is_stmt 1 view .LVU89
+  75:Robot/RoboTask/remote/remote_task.c ****         }
+ 288              		.loc 1 75 31 is_stmt 0 view .LVU90
+ 289 0138 94ED5D7A 		vldr.32	s14, [r4, #372]
+  75:Robot/RoboTask/remote/remote_task.c ****         }
+ 290              		.loc 1 75 64 view .LVU91
+ 291 013c B3F90020 		ldrsh	r2, [r3]
+ 292 0140 07EE902A 		vmov	s15, r2	@ int
+  75:Robot/RoboTask/remote/remote_task.c ****         }
+ 293              		.loc 1 75 40 view .LVU92
+ 294 0144 F8EEE77A 		vcvt.f32.s32	s15, s15
+  75:Robot/RoboTask/remote/remote_task.c ****         }
+ 295              		.loc 1 75 39 view .LVU93
+ 296 0148 F1EE677A 		vneg.f32	s15, s15
+  75:Robot/RoboTask/remote/remote_task.c ****         }
+ 297              		.loc 1 75 76 view .LVU94
+ 298 014c 9FED206A 		vldr.32	s12, .L33+16
+ 299 0150 C7EE866A 		vdiv.f32	s13, s15, s12
+  75:Robot/RoboTask/remote/remote_task.c ****         }
+ 300              		.loc 1 75 85 view .LVU95
+ 301 0154 DFED257A 		vldr.32	s15, .L33+44
+ 302 0158 66EEA77A 		vmul.f32	s15, s13, s15
+ARM GAS  D:\temp\TMP\ccgMWbhy.s 			page 10
 
 
- 356 019c 126D     		ldr	r2, [r2, #80]	@ float
-  87:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw_dot = 0.0f; 
- 357              		.loc 1 87 36 view .LVU108
- 358 019e C4F87421 		str	r2, [r4, #372]	@ float
-  88:Robot/RoboTask/remote/remote_task.c ****         }
- 359              		.loc 1 88 13 is_stmt 1 view .LVU109
-  88:Robot/RoboTask/remote/remote_task.c ****         }
- 360              		.loc 1 88 40 is_stmt 0 view .LVU110
- 361 01a2 0022     		movs	r2, #0
- 362 01a4 C4F87821 		str	r2, [r4, #376]	@ float
- 363 01a8 CBE7     		b	.L24
- 364              	.L35:
- 365 01aa 00BF     		.align	2
- 366              	.L34:
- 367 01ac 00000000 		.word	INS
- 368 01b0 00000000 		.word	rc_data
- 369 01b4 CDCC4C3E 		.word	1045220557
- 370 01b8 00002544 		.word	1143275520
- 371 01bc 3333B33E 		.word	1051931443
- 372 01c0 00007A44 		.word	1148846080
- 373 01c4 9A99193E 		.word	1041865114
- 374 01c8 0AD7A33B 		.word	1000593162
- 375 01cc 0AD7233C 		.word	1008981770
- 376 01d0 A69B443B 		.word	994352038
- 377 01d4 00000000 		.word	last_switch_left
- 378 01d8 0AD7A33E 		.word	1050924810
- 379 01dc 0000C040 		.word	1086324736
- 380              		.cfi_endproc
- 381              	.LFE201:
- 383              		.section	.text.RobotCMDInit,"ax",%progbits
- 384              		.align	1
- 385              		.global	RobotCMDInit
- 386              		.syntax unified
- 387              		.thumb
- 388              		.thumb_func
- 390              	RobotCMDInit:
- 391              	.LFB200:
+  75:Robot/RoboTask/remote/remote_task.c ****         }
+ 303              		.loc 1 75 36 view .LVU96
+ 304 015c 77EE277A 		vadd.f32	s15, s14, s15
+ 305 0160 C4ED5D7A 		vstr.32	s15, [r4, #372]
+ 306              	.L22:
+  84:Robot/RoboTask/remote/remote_task.c ****             && last_switch_left != 2
+ 307              		.loc 1 84 9 is_stmt 1 view .LVU97
+  84:Robot/RoboTask/remote/remote_task.c ****             && last_switch_left != 2
+ 308              		.loc 1 84 29 is_stmt 0 view .LVU98
+ 309 0164 9A7A     		ldrb	r2, [r3, #10]	@ zero_extendqisi2
+  84:Robot/RoboTask/remote/remote_task.c ****             && last_switch_left != 2
+ 310              		.loc 1 84 12 view .LVU99
+ 311 0166 022A     		cmp	r2, #2
+ 312 0168 16D0     		beq	.L32
+ 313              	.L23:
+  92:Robot/RoboTask/remote/remote_task.c ****     }
+ 314              		.loc 1 92 9 is_stmt 1 view .LVU100
+  92:Robot/RoboTask/remote/remote_task.c ****     }
+ 315              		.loc 1 92 44 is_stmt 0 view .LVU101
+ 316 016a 9A7A     		ldrb	r2, [r3, #10]	@ zero_extendqisi2
+  92:Robot/RoboTask/remote/remote_task.c ****     }
+ 317              		.loc 1 92 26 view .LVU102
+ 318 016c 204B     		ldr	r3, .L33+48
+ 319 016e 1A70     		strb	r2, [r3]
+ 320              	.L7:
+ 108:Robot/RoboTask/remote/remote_task.c **** 
+ 321              		.loc 1 108 1 view .LVU103
+ 322 0170 02B0     		add	sp, sp, #8
+ 323              	.LCFI3:
+ 324              		.cfi_remember_state
+ 325              		.cfi_def_cfa_offset 8
+ 326              		@ sp needed
+ 327 0172 10BD     		pop	{r4, pc}
+ 328              	.LVL6:
+ 329              	.L28:
+ 330              	.LCFI4:
+ 331              		.cfi_restore_state
+  61:Robot/RoboTask/remote/remote_task.c **** 
+ 332              		.loc 1 61 9 is_stmt 1 discriminator 2 view .LVU104
+ 333 0174 9FED1F7A 		vldr.32	s14, .L33+52
+ 334 0178 F4EEC77A 		vcmpe.f32	s15, s14
+ 335 017c F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 336 0180 BBDD     		ble	.L17
+  61:Robot/RoboTask/remote/remote_task.c **** 
+ 337              		.loc 1 61 9 discriminator 3 view .LVU105
+ 338 0182 84ED687A 		vstr.32	s14, [r4, #416]
+ 339 0186 B8E7     		b	.L17
+ 340              	.LVL7:
+ 341              	.L31:
+  70:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw = INS.YawTotal; // 切换到陀螺控制时,将yaw参考值切�
+ 342              		.loc 1 70 13 view .LVU106
+  70:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw = INS.YawTotal; // 切换到陀螺控制时,将yaw参考值切�
+ 343              		.loc 1 70 40 is_stmt 0 view .LVU107
+ 344 0188 1B4A     		ldr	r2, .L33+56
+ 345 018a C4F87821 		str	r2, [r4, #376]	@ float
+  71:Robot/RoboTask/remote/remote_task.c ****         }
+ 346              		.loc 1 71 13 is_stmt 1 view .LVU108
+ARM GAS  D:\temp\TMP\ccgMWbhy.s 			page 11
+
+
+  71:Robot/RoboTask/remote/remote_task.c ****         }
+ 347              		.loc 1 71 41 is_stmt 0 view .LVU109
+ 348 018e 0C4A     		ldr	r2, .L33
+ 349 0190 126D     		ldr	r2, [r2, #80]	@ float
+  71:Robot/RoboTask/remote/remote_task.c ****         }
+ 350              		.loc 1 71 36 view .LVU110
+ 351 0192 C4F87421 		str	r2, [r4, #372]	@ float
+ 352 0196 E5E7     		b	.L22
+ 353              	.L32:
+  85:Robot/RoboTask/remote/remote_task.c ****             && chassis->flag.jump_flag == 0)   // 避免重复触发跳跃
+ 354              		.loc 1 85 33 view .LVU111
+ 355 0198 154A     		ldr	r2, .L33+48
+ 356 019a 1278     		ldrb	r2, [r2]	@ zero_extendqisi2
+  85:Robot/RoboTask/remote/remote_task.c ****             && chassis->flag.jump_flag == 0)   // 避免重复触发跳跃
+ 357              		.loc 1 85 13 view .LVU112
+ 358 019c 022A     		cmp	r2, #2
+ 359 019e E4D0     		beq	.L23
+  86:Robot/RoboTask/remote/remote_task.c ****         {
+ 360              		.loc 1 86 29 view .LVU113
+ 361 01a0 94F8D121 		ldrb	r2, [r4, #465]	@ zero_extendqisi2
+  86:Robot/RoboTask/remote/remote_task.c ****         {
+ 362              		.loc 1 86 13 view .LVU114
+ 363 01a4 002A     		cmp	r2, #0
+ 364 01a6 E0D1     		bne	.L23
+  88:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw = INS.YawTotal; // 跳跃时将yaw参考值切换到当前航向
+ 365              		.loc 1 88 13 is_stmt 1 view .LVU115
+  88:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw = INS.YawTotal; // 跳跃时将yaw参考值切换到当前航向
+ 366              		.loc 1 88 37 is_stmt 0 view .LVU116
+ 367 01a8 0122     		movs	r2, #1
+ 368 01aa 84F8D121 		strb	r2, [r4, #465]
+  89:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw_dot = 0.0f; 
+ 369              		.loc 1 89 13 is_stmt 1 view .LVU117
+  89:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw_dot = 0.0f; 
+ 370              		.loc 1 89 41 is_stmt 0 view .LVU118
+ 371 01ae 044A     		ldr	r2, .L33
+ 372 01b0 126D     		ldr	r2, [r2, #80]	@ float
+  89:Robot/RoboTask/remote/remote_task.c ****             chassis->reference.yaw_dot = 0.0f; 
+ 373              		.loc 1 89 36 view .LVU119
+ 374 01b2 C4F87421 		str	r2, [r4, #372]	@ float
+  90:Robot/RoboTask/remote/remote_task.c ****         }
+ 375              		.loc 1 90 13 is_stmt 1 view .LVU120
+  90:Robot/RoboTask/remote/remote_task.c ****         }
+ 376              		.loc 1 90 40 is_stmt 0 view .LVU121
+ 377 01b6 0022     		movs	r2, #0
+ 378 01b8 C4F87821 		str	r2, [r4, #376]	@ float
+ 379 01bc D5E7     		b	.L23
+ 380              	.L34:
+ 381 01be 00BF     		.align	2
+ 382              	.L33:
+ 383 01c0 00000000 		.word	INS
+ 384 01c4 4260653C 		.word	1013276738
+ 385 01c8 00000000 		.word	rc_data
+ 386 01cc CDCC4C3E 		.word	1045220557
+ 387 01d0 00002544 		.word	1143275520
+ 388 01d4 3333B33E 		.word	1051931443
+ 389 01d8 00007A44 		.word	1148846080
+ 390 01dc 9A99193E 		.word	1041865114
+ARM GAS  D:\temp\TMP\ccgMWbhy.s 			page 12
+
+
+ 391 01e0 0AD7A33B 		.word	1000593162
+ 392 01e4 00000000 		.word	chassis_move
+ 393 01e8 0AD7A33C 		.word	1017370378
+ 394 01ec A69B443B 		.word	994352038
+ 395 01f0 00000000 		.word	last_switch_left
+ 396 01f4 0AD7A33E 		.word	1050924810
+ 397 01f8 0000C040 		.word	1086324736
+ 398              		.cfi_endproc
+ 399              	.LFE197:
+ 401              		.section	.text.RobotCMDInit,"ax",%progbits
+ 402              		.align	1
+ 403              		.global	RobotCMDInit
+ 404              		.syntax unified
+ 405              		.thumb
+ 406              		.thumb_func
+ 408              	RobotCMDInit:
+ 409              	.LFB196:
   19:Robot/RoboTask/remote/remote_task.c ****     rc_data = RemoteControlInit(&huart5);   // 修改为对应串口,注意如果是自研板dbus�
- 392              		.loc 1 19 1 is_stmt 1 view -0
- 393              		.cfi_startproc
- 394              		@ args = 0, pretend = 0, frame = 0
- 395              		@ frame_needed = 0, uses_anonymous_args = 0
- 396 0000 08B5     		push	{r3, lr}
- 397              	.LCFI5:
- 398              		.cfi_def_cfa_offset 8
- 399              		.cfi_offset 3, -8
- 400              		.cfi_offset 14, -4
+ 410              		.loc 1 19 1 is_stmt 1 view -0
+ 411              		.cfi_startproc
+ 412              		@ args = 0, pretend = 0, frame = 0
+ 413              		@ frame_needed = 0, uses_anonymous_args = 0
+ 414 0000 08B5     		push	{r3, lr}
+ 415              	.LCFI5:
+ 416              		.cfi_def_cfa_offset 8
+ 417              		.cfi_offset 3, -8
+ 418              		.cfi_offset 14, -4
   20:Robot/RoboTask/remote/remote_task.c ****     last_switch_left = rc_data[TEMP].rc.switch_left;
- 401              		.loc 1 20 5 view .LVU112
+ 419              		.loc 1 20 5 view .LVU123
   20:Robot/RoboTask/remote/remote_task.c ****     last_switch_left = rc_data[TEMP].rc.switch_left;
- 402              		.loc 1 20 15 is_stmt 0 view .LVU113
- 403 0002 0648     		ldr	r0, .L38
- 404 0004 FFF7FEFF 		bl	RemoteControlInit
- 405              	.LVL10:
+ 420              		.loc 1 20 15 is_stmt 0 view .LVU124
+ 421 0002 0648     		ldr	r0, .L37
+ 422 0004 FFF7FEFF 		bl	RemoteControlInit
+ 423              	.LVL8:
   20:Robot/RoboTask/remote/remote_task.c ****     last_switch_left = rc_data[TEMP].rc.switch_left;
- 406              		.loc 1 20 13 discriminator 1 view .LVU114
- 407 0008 054B     		ldr	r3, .L38+4
-ARM GAS  D:\temp\TMP\cc3tBb1x.s 			page 12
-
-
- 408 000a 1860     		str	r0, [r3]
+ 424              		.loc 1 20 13 discriminator 1 view .LVU125
+ 425 0008 054B     		ldr	r3, .L37+4
+ 426 000a 1860     		str	r0, [r3]
   21:Robot/RoboTask/remote/remote_task.c ****     
- 409              		.loc 1 21 5 is_stmt 1 view .LVU115
+ 427              		.loc 1 21 5 is_stmt 1 view .LVU126
   21:Robot/RoboTask/remote/remote_task.c ****     
- 410              		.loc 1 21 40 is_stmt 0 view .LVU116
- 411 000c 827A     		ldrb	r2, [r0, #10]	@ zero_extendqisi2
+ 428              		.loc 1 21 40 is_stmt 0 view .LVU127
+ 429 000c 827A     		ldrb	r2, [r0, #10]	@ zero_extendqisi2
   21:Robot/RoboTask/remote/remote_task.c ****     
- 412              		.loc 1 21 22 view .LVU117
- 413 000e 054B     		ldr	r3, .L38+8
- 414 0010 1A70     		strb	r2, [r3]
+ 430              		.loc 1 21 22 view .LVU128
+ 431 000e 054B     		ldr	r3, .L37+8
+ 432 0010 1A70     		strb	r2, [r3]
   23:Robot/RoboTask/remote/remote_task.c ****     // ramp_init(&leg_ramp, 0.005f, MAX_LEG_VEL, -MAX_LEG_VEL);
- 415              		.loc 1 23 5 is_stmt 1 view .LVU118
+ 433              		.loc 1 23 5 is_stmt 1 view .LVU129
   23:Robot/RoboTask/remote/remote_task.c ****     // ramp_init(&leg_ramp, 0.005f, MAX_LEG_VEL, -MAX_LEG_VEL);
- 416              		.loc 1 23 26 is_stmt 0 view .LVU119
- 417 0012 054B     		ldr	r3, .L38+12
- 418 0014 054A     		ldr	r2, .L38+16
- 419 0016 C3F8A021 		str	r2, [r3, #416]	@ float
+ 434              		.loc 1 23 26 is_stmt 0 view .LVU130
+ 435 0012 054B     		ldr	r3, .L37+12
+ 436 0014 054A     		ldr	r2, .L37+16
+ 437 0016 C3F8A021 		str	r2, [r3, #416]	@ float
   25:Robot/RoboTask/remote/remote_task.c **** 
- 420              		.loc 1 25 1 view .LVU120
- 421 001a 08BD     		pop	{r3, pc}
- 422              	.L39:
- 423              		.align	2
- 424              	.L38:
- 425 001c 00000000 		.word	huart5
- 426 0020 00000000 		.word	rc_data
- 427 0024 00000000 		.word	last_switch_left
- 428 0028 00000000 		.word	chassis_move
- 429 002c 9A99193E 		.word	1041865114
- 430              		.cfi_endproc
- 431              	.LFE200:
- 433              		.section	.text.Remote_Task,"ax",%progbits
- 434              		.align	1
- 435              		.global	Remote_Task
- 436              		.syntax unified
- 437              		.thumb
- 438              		.thumb_func
- 440              	Remote_Task:
- 441              	.LFB203:
- 118:Robot/RoboTask/remote/remote_task.c **** 
- 119:Robot/RoboTask/remote/remote_task.c **** void Remote_Task(void)
- 120:Robot/RoboTask/remote/remote_task.c **** {
- 442              		.loc 1 120 1 is_stmt 1 view -0
- 443              		.cfi_startproc
- 444              		@ args = 0, pretend = 0, frame = 0
- 445              		@ frame_needed = 0, uses_anonymous_args = 0
- 446 0000 08B5     		push	{r3, lr}
- 447              	.LCFI6:
- 448              		.cfi_def_cfa_offset 8
- 449              		.cfi_offset 3, -8
- 450              		.cfi_offset 14, -4
- 121:Robot/RoboTask/remote/remote_task.c ****     EmergencyHandler();
- 451              		.loc 1 121 5 view .LVU122
- 452 0002 FFF7FEFF 		bl	EmergencyHandler
- 453              	.LVL11:
- 122:Robot/RoboTask/remote/remote_task.c **** 
- 123:Robot/RoboTask/remote/remote_task.c ****     static uint8_t lost_cnt = 0;
- 454              		.loc 1 123 5 view .LVU123
-ARM GAS  D:\temp\TMP\cc3tBb1x.s 			page 13
+ 438              		.loc 1 25 1 view .LVU131
+ 439 001a 08BD     		pop	{r3, pc}
+ARM GAS  D:\temp\TMP\ccgMWbhy.s 			page 13
 
 
- 124:Robot/RoboTask/remote/remote_task.c ****     const uint8_t LOST_CONFIRM_TICKS = 3;   // 连续3次离线才真丢控
- 455              		.loc 1 124 5 view .LVU124
- 125:Robot/RoboTask/remote/remote_task.c **** 
- 126:Robot/RoboTask/remote/remote_task.c ****     if(RemoteControlIsOnline())
- 456              		.loc 1 126 5 view .LVU125
- 457              		.loc 1 126 8 is_stmt 0 view .LVU126
- 458 0006 FFF7FEFF 		bl	RemoteControlIsOnline
- 459              	.LVL12:
- 460              		.loc 1 126 7 discriminator 1 view .LVU127
- 461 000a 78B1     		cbz	r0, .L41
- 127:Robot/RoboTask/remote/remote_task.c ****     {
- 128:Robot/RoboTask/remote/remote_task.c ****         lost_cnt = 0;
- 462              		.loc 1 128 9 is_stmt 1 view .LVU128
- 463              		.loc 1 128 18 is_stmt 0 view .LVU129
- 464 000c 124B     		ldr	r3, .L47
- 465 000e 0022     		movs	r2, #0
- 466 0010 1A70     		strb	r2, [r3]
- 129:Robot/RoboTask/remote/remote_task.c ****         chassis_move.flag.start_flag = 1;   // 在线立即恢复
- 467              		.loc 1 129 9 is_stmt 1 view .LVU130
- 468              		.loc 1 129 38 is_stmt 0 view .LVU131
- 469 0012 124B     		ldr	r3, .L47+4
- 470 0014 0122     		movs	r2, #1
- 471 0016 83F8CC21 		strb	r2, [r3, #460]
- 472              	.L42:
- 130:Robot/RoboTask/remote/remote_task.c ****     }
- 131:Robot/RoboTask/remote/remote_task.c ****     else
- 132:Robot/RoboTask/remote/remote_task.c ****     {
- 133:Robot/RoboTask/remote/remote_task.c ****         if (lost_cnt < 255) lost_cnt++;
- 134:Robot/RoboTask/remote/remote_task.c ****         if (lost_cnt >= LOST_CONFIRM_TICKS)
- 135:Robot/RoboTask/remote/remote_task.c ****             chassis_move.flag.start_flag = 0;
- 136:Robot/RoboTask/remote/remote_task.c ****     }
- 137:Robot/RoboTask/remote/remote_task.c **** 
- 138:Robot/RoboTask/remote/remote_task.c ****     if(rc_data[TEMP].rc.switch_right == 2)  
- 473              		.loc 1 138 5 is_stmt 1 view .LVU132
- 474              		.loc 1 138 15 is_stmt 0 view .LVU133
- 475 001a 114B     		ldr	r3, .L47+8
- 476 001c 1B68     		ldr	r3, [r3]
- 477              		.loc 1 138 24 view .LVU134
- 478 001e DB7A     		ldrb	r3, [r3, #11]	@ zero_extendqisi2
- 479              		.loc 1 138 7 view .LVU135
- 480 0020 022B     		cmp	r3, #2
- 481 0022 13D0     		beq	.L46
- 482              	.L44:
- 139:Robot/RoboTask/remote/remote_task.c ****         chassis_move.flag.start_flag = 0;
- 140:Robot/RoboTask/remote/remote_task.c **** 
- 141:Robot/RoboTask/remote/remote_task.c ****     RemoteControlSet(&chassis_move);
- 483              		.loc 1 141 5 is_stmt 1 view .LVU136
- 484 0024 0D48     		ldr	r0, .L47+4
- 485 0026 FFF7FEFF 		bl	RemoteControlSet
- 486              	.LVL13:
- 142:Robot/RoboTask/remote/remote_task.c **** }...
- 487              		.loc 1 142 1 is_stmt 0 view .LVU137
- 488 002a 08BD     		pop	{r3, pc}
- 489              	.L41:
- 133:Robot/RoboTask/remote/remote_task.c ****         if (lost_cnt < 255) lost_cnt++;
- 490              		.loc 1 133 9 is_stmt 1 view .LVU138
- 133:Robot/RoboTask/remote/remote_task.c ****         if (lost_cnt < 255) lost_cnt++;
-ARM GAS  D:\temp\TMP\cc3tBb1x.s 			page 14
+ 440              	.L38:
+ 441              		.align	2
+ 442              	.L37:
+ 443 001c 00000000 		.word	huart5
+ 444 0020 00000000 		.word	rc_data
+ 445 0024 00000000 		.word	last_switch_left
+ 446 0028 00000000 		.word	chassis_move
+ 447 002c 9A99193E 		.word	1041865114
+ 448              		.cfi_endproc
+ 449              	.LFE196:
+ 451              		.section	.text.Remote_Task,"ax",%progbits
+ 452              		.align	1
+ 453              		.global	Remote_Task
+ 454              		.syntax unified
+ 455              		.thumb
+ 456              		.thumb_func
+ 458              	Remote_Task:
+ 459              	.LFB199:
+ 126:Robot/RoboTask/remote/remote_task.c **** 
+ 127:Robot/RoboTask/remote/remote_task.c **** void Remote_Task(void)
+ 128:Robot/RoboTask/remote/remote_task.c **** {
+ 460              		.loc 1 128 1 is_stmt 1 view -0
+ 461              		.cfi_startproc
+ 462              		@ args = 0, pretend = 0, frame = 0
+ 463              		@ frame_needed = 0, uses_anonymous_args = 0
+ 464 0000 08B5     		push	{r3, lr}
+ 465              	.LCFI6:
+ 466              		.cfi_def_cfa_offset 8
+ 467              		.cfi_offset 3, -8
+ 468              		.cfi_offset 14, -4
+ 129:Robot/RoboTask/remote/remote_task.c ****     EmergencyHandler();
+ 469              		.loc 1 129 5 view .LVU133
+ 470 0002 FFF7FEFF 		bl	EmergencyHandler
+ 471              	.LVL9:
+ 130:Robot/RoboTask/remote/remote_task.c **** 
+ 131:Robot/RoboTask/remote/remote_task.c ****     static uint8_t lost_cnt = 0;
+ 472              		.loc 1 131 5 view .LVU134
+ 132:Robot/RoboTask/remote/remote_task.c ****     const uint8_t LOST_CONFIRM_TICKS = 3;   // 连续3次离线才真丢控
+ 473              		.loc 1 132 5 view .LVU135
+ 133:Robot/RoboTask/remote/remote_task.c **** 
+ 134:Robot/RoboTask/remote/remote_task.c ****     if(RemoteControlIsOnline())
+ 474              		.loc 1 134 5 view .LVU136
+ 475              		.loc 1 134 8 is_stmt 0 view .LVU137
+ 476 0006 FFF7FEFF 		bl	RemoteControlIsOnline
+ 477              	.LVL10:
+ 478              		.loc 1 134 7 discriminator 1 view .LVU138
+ 479 000a 78B1     		cbz	r0, .L40
+ 135:Robot/RoboTask/remote/remote_task.c ****     {
+ 136:Robot/RoboTask/remote/remote_task.c ****         lost_cnt = 0;
+ 480              		.loc 1 136 9 is_stmt 1 view .LVU139
+ 481              		.loc 1 136 18 is_stmt 0 view .LVU140
+ 482 000c 124B     		ldr	r3, .L46
+ 483 000e 0022     		movs	r2, #0
+ 484 0010 1A70     		strb	r2, [r3]
+ 137:Robot/RoboTask/remote/remote_task.c ****         chassis_move.flag.start_flag = 1;   // 在线立即恢复
+ 485              		.loc 1 137 9 is_stmt 1 view .LVU141
+ 486              		.loc 1 137 38 is_stmt 0 view .LVU142
+ARM GAS  D:\temp\TMP\ccgMWbhy.s 			page 14
 
 
- 491              		.loc 1 133 22 is_stmt 0 view .LVU139
- 492 002c 0A4B     		ldr	r3, .L47
- 493 002e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
- 133:Robot/RoboTask/remote/remote_task.c ****         if (lost_cnt < 255) lost_cnt++;
- 494              		.loc 1 133 12 view .LVU140
- 495 0030 FF2B     		cmp	r3, #255
- 496 0032 02D0     		beq	.L43
- 133:Robot/RoboTask/remote/remote_task.c ****         if (lost_cnt < 255) lost_cnt++;
- 497              		.loc 1 133 29 is_stmt 1 discriminator 1 view .LVU141
- 133:Robot/RoboTask/remote/remote_task.c ****         if (lost_cnt < 255) lost_cnt++;
- 498              		.loc 1 133 37 is_stmt 0 discriminator 1 view .LVU142
- 499 0034 0133     		adds	r3, r3, #1
- 500 0036 084A     		ldr	r2, .L47
- 501 0038 1370     		strb	r3, [r2]
- 502              	.L43:
- 134:Robot/RoboTask/remote/remote_task.c ****         if (lost_cnt >= LOST_CONFIRM_TICKS)
- 503              		.loc 1 134 9 is_stmt 1 view .LVU143
- 134:Robot/RoboTask/remote/remote_task.c ****         if (lost_cnt >= LOST_CONFIRM_TICKS)
- 504              		.loc 1 134 22 is_stmt 0 view .LVU144
- 505 003a 074B     		ldr	r3, .L47
- 506 003c 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
- 134:Robot/RoboTask/remote/remote_task.c ****         if (lost_cnt >= LOST_CONFIRM_TICKS)
- 507              		.loc 1 134 12 view .LVU145
- 508 003e 022B     		cmp	r3, #2
- 509 0040 EBD9     		bls	.L42
- 135:Robot/RoboTask/remote/remote_task.c ****             chassis_move.flag.start_flag = 0;
- 510              		.loc 1 135 13 is_stmt 1 view .LVU146
- 135:Robot/RoboTask/remote/remote_task.c ****             chassis_move.flag.start_flag = 0;
- 511              		.loc 1 135 42 is_stmt 0 view .LVU147
- 512 0042 064B     		ldr	r3, .L47+4
- 513 0044 0022     		movs	r2, #0
- 514 0046 83F8CC21 		strb	r2, [r3, #460]
- 515 004a E6E7     		b	.L42
- 516              	.L46:
- 139:Robot/RoboTask/remote/remote_task.c ****         chassis_move.flag.start_flag = 0;
- 517              		.loc 1 139 9 is_stmt 1 view .LVU148
- 139:Robot/RoboTask/remote/remote_task.c ****         chassis_move.flag.start_flag = 0;
- 518              		.loc 1 139 38 is_stmt 0 view .LVU149
- 519 004c 034B     		ldr	r3, .L47+4
- 520 004e 0022     		movs	r2, #0
- 521 0050 83F8CC21 		strb	r2, [r3, #460]
- 522 0054 E6E7     		b	.L44
- 523              	.L48:
- 524 0056 00BF     		.align	2
- 525              	.L47:
- 526 0058 00000000 		.word	lost_cnt.1
- 527 005c 00000000 		.word	chassis_move
- 528 0060 00000000 		.word	rc_data
- 529              		.cfi_endproc
- 530              	.LFE203:
- 532              		.section	.bss.daemon_div.0,"aw",%nobits
- 535              	daemon_div.0:
- 536 0000 00       		.space	1
- 537              		.section	.bss.lost_cnt.1,"aw",%nobits
- 540              	lost_cnt.1:
- 541 0000 00       		.space	1
- 542              		.section	.bss.last_switch_left,"aw",%nobits
-ARM GAS  D:\temp\TMP\cc3tBb1x.s 			page 15
+ 487 0012 124B     		ldr	r3, .L46+4
+ 488 0014 0122     		movs	r2, #1
+ 489 0016 83F8CC21 		strb	r2, [r3, #460]
+ 490              	.L41:
+ 138:Robot/RoboTask/remote/remote_task.c ****     }
+ 139:Robot/RoboTask/remote/remote_task.c ****     else
+ 140:Robot/RoboTask/remote/remote_task.c ****     {
+ 141:Robot/RoboTask/remote/remote_task.c ****         if (lost_cnt < 255) lost_cnt++;
+ 142:Robot/RoboTask/remote/remote_task.c ****         if (lost_cnt >= LOST_CONFIRM_TICKS)
+ 143:Robot/RoboTask/remote/remote_task.c ****             chassis_move.flag.start_flag = 0;
+ 144:Robot/RoboTask/remote/remote_task.c ****     }
+ 145:Robot/RoboTask/remote/remote_task.c **** 
+ 146:Robot/RoboTask/remote/remote_task.c ****     if(rc_data[TEMP].rc.switch_right == 2)  
+ 491              		.loc 1 146 5 is_stmt 1 view .LVU143
+ 492              		.loc 1 146 15 is_stmt 0 view .LVU144
+ 493 001a 114B     		ldr	r3, .L46+8
+ 494 001c 1B68     		ldr	r3, [r3]
+ 495              		.loc 1 146 24 view .LVU145
+ 496 001e DB7A     		ldrb	r3, [r3, #11]	@ zero_extendqisi2
+ 497              		.loc 1 146 7 view .LVU146
+ 498 0020 022B     		cmp	r3, #2
+ 499 0022 13D0     		beq	.L45
+ 500              	.L43:
+ 147:Robot/RoboTask/remote/remote_task.c ****         chassis_move.flag.start_flag = 0;
+ 148:Robot/RoboTask/remote/remote_task.c **** 
+ 149:Robot/RoboTask/remote/remote_task.c ****     RemoteControlSet(&chassis_move);
+ 501              		.loc 1 149 5 is_stmt 1 view .LVU147
+ 502 0024 0D48     		ldr	r0, .L46+4
+ 503 0026 FFF7FEFF 		bl	RemoteControlSet
+ 504              	.LVL11:
+ 150:Robot/RoboTask/remote/remote_task.c **** }...
+ 505              		.loc 1 150 1 is_stmt 0 view .LVU148
+ 506 002a 08BD     		pop	{r3, pc}
+ 507              	.L40:
+ 141:Robot/RoboTask/remote/remote_task.c ****         if (lost_cnt < 255) lost_cnt++;
+ 508              		.loc 1 141 9 is_stmt 1 view .LVU149
+ 141:Robot/RoboTask/remote/remote_task.c ****         if (lost_cnt < 255) lost_cnt++;
+ 509              		.loc 1 141 22 is_stmt 0 view .LVU150
+ 510 002c 0A4B     		ldr	r3, .L46
+ 511 002e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 141:Robot/RoboTask/remote/remote_task.c ****         if (lost_cnt < 255) lost_cnt++;
+ 512              		.loc 1 141 12 view .LVU151
+ 513 0030 FF2B     		cmp	r3, #255
+ 514 0032 02D0     		beq	.L42
+ 141:Robot/RoboTask/remote/remote_task.c ****         if (lost_cnt < 255) lost_cnt++;
+ 515              		.loc 1 141 29 is_stmt 1 discriminator 1 view .LVU152
+ 141:Robot/RoboTask/remote/remote_task.c ****         if (lost_cnt < 255) lost_cnt++;
+ 516              		.loc 1 141 37 is_stmt 0 discriminator 1 view .LVU153
+ 517 0034 0133     		adds	r3, r3, #1
+ 518 0036 084A     		ldr	r2, .L46
+ 519 0038 1370     		strb	r3, [r2]
+ 520              	.L42:
+ 142:Robot/RoboTask/remote/remote_task.c ****         if (lost_cnt >= LOST_CONFIRM_TICKS)
+ 521              		.loc 1 142 9 is_stmt 1 view .LVU154
+ 142:Robot/RoboTask/remote/remote_task.c ****         if (lost_cnt >= LOST_CONFIRM_TICKS)
+ 522              		.loc 1 142 22 is_stmt 0 view .LVU155
+ 523 003a 074B     		ldr	r3, .L46
+ARM GAS  D:\temp\TMP\ccgMWbhy.s 			page 15
 
 
- 545              	last_switch_left:
- 546 0000 00       		.space	1
- 547              		.section	.bss.rc_data,"aw",%nobits
- 548              		.align	2
- 551              	rc_data:
- 552 0000 00000000 		.space	4
- 553              		.text
- 554              	.Letext0:
- 555              		.file 2 "D:/VS_STM32/gcc-arm-15.2/arm-none-eabi/include/machine/_default_types.h"
- 556              		.file 3 "D:/VS_STM32/gcc-arm-15.2/arm-none-eabi/include/sys/_stdint.h"
- 557              		.file 4 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h723xx.h"
- 558              		.file 5 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h"
- 559              		.file 6 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h"
- 560              		.file 7 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_dma.h"
- 561              		.file 8 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_fdcan.h"
- 562              		.file 9 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h"
- 563              		.file 10 "Robot/Remote/remote_control.h"
- 564              		.file 11 "Bsp/bsp_can.h"
- 565              		.file 12 "Robot/Controller/controller.h"
- 566              		.file 13 "Robot/Devices/motor_def.h"
- 567              		.file 14 "Robot/daemon/daemon.h"
- 568              		.file 15 "Robot/Devices/Motor/djimotor.h"
- 569              		.file 16 "Robot/Devices/Motor/dmmotor.h"
- 570              		.file 17 "Robot/RoboTask/chassis/chassis_def.h"
- 571              		.file 18 "Robot/RoboTask/ins/ins_task.h"
- 572              		.file 19 "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h"
- 573              		.file 20 "Robot/Lib/user_lib.h"
- 574              		.file 21 "Core/Inc/usart.h"
-ARM GAS  D:\temp\TMP\cc3tBb1x.s 			page 16
+ 524 003c 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 142:Robot/RoboTask/remote/remote_task.c ****         if (lost_cnt >= LOST_CONFIRM_TICKS)
+ 525              		.loc 1 142 12 view .LVU156
+ 526 003e 022B     		cmp	r3, #2
+ 527 0040 EBD9     		bls	.L41
+ 143:Robot/RoboTask/remote/remote_task.c ****             chassis_move.flag.start_flag = 0;
+ 528              		.loc 1 143 13 is_stmt 1 view .LVU157
+ 143:Robot/RoboTask/remote/remote_task.c ****             chassis_move.flag.start_flag = 0;
+ 529              		.loc 1 143 42 is_stmt 0 view .LVU158
+ 530 0042 064B     		ldr	r3, .L46+4
+ 531 0044 0022     		movs	r2, #0
+ 532 0046 83F8CC21 		strb	r2, [r3, #460]
+ 533 004a E6E7     		b	.L41
+ 534              	.L45:
+ 147:Robot/RoboTask/remote/remote_task.c ****         chassis_move.flag.start_flag = 0;
+ 535              		.loc 1 147 9 is_stmt 1 view .LVU159
+ 147:Robot/RoboTask/remote/remote_task.c ****         chassis_move.flag.start_flag = 0;
+ 536              		.loc 1 147 38 is_stmt 0 view .LVU160
+ 537 004c 034B     		ldr	r3, .L46+4
+ 538 004e 0022     		movs	r2, #0
+ 539 0050 83F8CC21 		strb	r2, [r3, #460]
+ 540 0054 E6E7     		b	.L43
+ 541              	.L47:
+ 542 0056 00BF     		.align	2
+ 543              	.L46:
+ 544 0058 00000000 		.word	lost_cnt.1
+ 545 005c 00000000 		.word	chassis_move
+ 546 0060 00000000 		.word	rc_data
+ 547              		.cfi_endproc
+ 548              	.LFE199:
+ 550              		.section	.bss.daemon_div.0,"aw",%nobits
+ 553              	daemon_div.0:
+ 554 0000 00       		.space	1
+ 555              		.section	.bss.lost_cnt.1,"aw",%nobits
+ 558              	lost_cnt.1:
+ 559 0000 00       		.space	1
+ 560              		.section	.bss.last_switch_left,"aw",%nobits
+ 563              	last_switch_left:
+ 564 0000 00       		.space	1
+ 565              		.section	.bss.rc_data,"aw",%nobits
+ 566              		.align	2
+ 569              	rc_data:
+ 570 0000 00000000 		.space	4
+ 571              		.text
+ 572              	.Letext0:
+ 573              		.file 2 "D:/VS_STM32/gcc-arm-15.2/arm-none-eabi/include/machine/_default_types.h"
+ 574              		.file 3 "D:/VS_STM32/gcc-arm-15.2/arm-none-eabi/include/sys/_stdint.h"
+ 575              		.file 4 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h723xx.h"
+ 576              		.file 5 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h"
+ 577              		.file 6 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h"
+ 578              		.file 7 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_dma.h"
+ 579              		.file 8 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_fdcan.h"
+ 580              		.file 9 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h"
+ 581              		.file 10 "Robot/Remote/remote_control.h"
+ 582              		.file 11 "Bsp/bsp_can.h"
+ 583              		.file 12 "Robot/Controller/controller.h"
+ 584              		.file 13 "Robot/Devices/motor_def.h"
+ARM GAS  D:\temp\TMP\ccgMWbhy.s 			page 16
+
+
+ 585              		.file 14 "Robot/daemon/daemon.h"
+ 586              		.file 15 "Robot/Devices/Motor/djimotor.h"
+ 587              		.file 16 "Robot/Devices/Motor/dmmotor.h"
+ 588              		.file 17 "Robot/RoboTask/chassis/chassis_def.h"
+ 589              		.file 18 "Robot/RoboTask/ins/ins_task.h"
+ 590              		.file 19 "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h"
+ 591              		.file 20 "Core/Inc/usart.h"
+ 592              		.file 21 "Robot/Lib/user_lib.h"
+ARM GAS  D:\temp\TMP\ccgMWbhy.s 			page 17
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 remote_task.c
-D:\temp\TMP\cc3tBb1x.s:20     .text.EmergencyHandler:00000000 $t
-D:\temp\TMP\cc3tBb1x.s:25     .text.EmergencyHandler:00000000 EmergencyHandler
-D:\temp\TMP\cc3tBb1x.s:64     .text.EmergencyHandler:00000020 $d
-D:\temp\TMP\cc3tBb1x.s:535    .bss.daemon_div.0:00000000 daemon_div.0
-D:\temp\TMP\cc3tBb1x.s:69     .text.RemoteControlSet:00000000 $t
-D:\temp\TMP\cc3tBb1x.s:74     .text.RemoteControlSet:00000000 RemoteControlSet
-D:\temp\TMP\cc3tBb1x.s:367    .text.RemoteControlSet:000001ac $d
-D:\temp\TMP\cc3tBb1x.s:551    .bss.rc_data:00000000 rc_data
-D:\temp\TMP\cc3tBb1x.s:545    .bss.last_switch_left:00000000 last_switch_left
-D:\temp\TMP\cc3tBb1x.s:384    .text.RobotCMDInit:00000000 $t
-D:\temp\TMP\cc3tBb1x.s:390    .text.RobotCMDInit:00000000 RobotCMDInit
-D:\temp\TMP\cc3tBb1x.s:425    .text.RobotCMDInit:0000001c $d
-D:\temp\TMP\cc3tBb1x.s:434    .text.Remote_Task:00000000 $t
-D:\temp\TMP\cc3tBb1x.s:440    .text.Remote_Task:00000000 Remote_Task
-D:\temp\TMP\cc3tBb1x.s:526    .text.Remote_Task:00000058 $d
-D:\temp\TMP\cc3tBb1x.s:540    .bss.lost_cnt.1:00000000 lost_cnt.1
-D:\temp\TMP\cc3tBb1x.s:536    .bss.daemon_div.0:00000000 $d
-D:\temp\TMP\cc3tBb1x.s:541    .bss.lost_cnt.1:00000000 $d
-D:\temp\TMP\cc3tBb1x.s:546    .bss.last_switch_left:00000000 $d
-D:\temp\TMP\cc3tBb1x.s:548    .bss.rc_data:00000000 $d
+D:\temp\TMP\ccgMWbhy.s:20     .text.EmergencyHandler:00000000 $t
+D:\temp\TMP\ccgMWbhy.s:25     .text.EmergencyHandler:00000000 EmergencyHandler
+D:\temp\TMP\ccgMWbhy.s:64     .text.EmergencyHandler:00000020 $d
+D:\temp\TMP\ccgMWbhy.s:553    .bss.daemon_div.0:00000000 daemon_div.0
+D:\temp\TMP\ccgMWbhy.s:69     .text.RemoteControlSet:00000000 $t
+D:\temp\TMP\ccgMWbhy.s:74     .text.RemoteControlSet:00000000 RemoteControlSet
+D:\temp\TMP\ccgMWbhy.s:383    .text.RemoteControlSet:000001c0 $d
+D:\temp\TMP\ccgMWbhy.s:569    .bss.rc_data:00000000 rc_data
+D:\temp\TMP\ccgMWbhy.s:563    .bss.last_switch_left:00000000 last_switch_left
+D:\temp\TMP\ccgMWbhy.s:402    .text.RobotCMDInit:00000000 $t
+D:\temp\TMP\ccgMWbhy.s:408    .text.RobotCMDInit:00000000 RobotCMDInit
+D:\temp\TMP\ccgMWbhy.s:443    .text.RobotCMDInit:0000001c $d
+D:\temp\TMP\ccgMWbhy.s:452    .text.Remote_Task:00000000 $t
+D:\temp\TMP\ccgMWbhy.s:458    .text.Remote_Task:00000000 Remote_Task
+D:\temp\TMP\ccgMWbhy.s:544    .text.Remote_Task:00000058 $d
+D:\temp\TMP\ccgMWbhy.s:558    .bss.lost_cnt.1:00000000 lost_cnt.1
+D:\temp\TMP\ccgMWbhy.s:554    .bss.daemon_div.0:00000000 $d
+D:\temp\TMP\ccgMWbhy.s:559    .bss.lost_cnt.1:00000000 $d
+D:\temp\TMP\ccgMWbhy.s:564    .bss.last_switch_left:00000000 $d
+D:\temp\TMP\ccgMWbhy.s:566    .bss.rc_data:00000000 $d
 
 UNDEFINED SYMBOLS
 DaemonTask
 osDelay
 slope_following
 INS
+chassis_move
 RemoteControlInit
 huart5
-chassis_move
 RemoteControlIsOnline

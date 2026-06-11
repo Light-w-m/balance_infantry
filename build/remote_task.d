@@ -40,7 +40,8 @@ build/remote_task.o: Robot/RoboTask/remote/remote_task.c \
  Drivers/CMSIS/Include/cmsis_compiler.h Robot/Devices/motor_def.h \
  Robot/daemon/daemon.h Robot/Devices/Motor/dmmotor.h \
  Robot/RoboTask/ins/ins_task.h Robot/Devices/BMI088/BMI088driver.h \
- Robot/Controller/kinematics.h Robot/Lib/user_lib.h \
+ Robot/Controller/kinematics.h Robot/Controller/pid.h \
+ Robot/Lib/user_lib.h \
  Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h \
  Core/Inc/FreeRTOSConfig.h \
@@ -112,6 +113,7 @@ Robot/Devices/Motor/dmmotor.h:
 Robot/RoboTask/ins/ins_task.h:
 Robot/Devices/BMI088/BMI088driver.h:
 Robot/Controller/kinematics.h:
+Robot/Controller/pid.h:
 Robot/Lib/user_lib.h:
 Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h:
 Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:

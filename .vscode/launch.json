@@ -25,7 +25,11 @@
             "liveWatch": {
                 "enabled": true,
                 "samplesPerSecond": 20
-            }
+            },
+            "preLaunchCommands": [
+                "set remotetimeout 10"
+            ]
+
             // dap若要使用log,请使用Jlink调试任务启动,之后再打开log任务
             // 若想要在调试前编译并且打开log,可只使用log的prelaunch task并为log任务添加depends on依赖
         },

@@ -297,6 +297,11 @@ static uint8_t hipnuc_frame_buf[HIPNUC_MIN_LENGTH];
 static volatile uint8_t hipnuc_rx_flag = 0;
 static volatile uint16_t hipnuc_frame_len = 0;
 
+static uint16_t U2(uint8_t *p) {uint16_t u; memcpy(&u,p,2); return u;}
+static uint32_t U4(uint8_t *p) {uint32_t u; memcpy(&u,p,4); return u;}
+static int32_t  I4(uint8_t *p) {int32_t  u; memcpy(&u,p,4); return u;}
+static float    R4(uint8_t *p) {float    r; memcpy(&r,p,4); return r;}
+
 static void HIPNUC_ParseFrame(const uint8_t *buf, uint16_t len)
 {
     if (len < HIPNUC_MIN_LENGTH) return;

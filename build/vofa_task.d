@@ -58,6 +58,7 @@ build/vofa_task.o: Robot/RoboTask/emulator/vofa_task.c \
  Bsp/bsp_can.h Core/Inc/fdcan.h Robot/Controller/controller.h \
  Bsp/bsp_dwt.h Robot/Devices/motor_def.h Robot/daemon/daemon.h \
  Robot/Devices/Motor/dmmotor.h Robot/Controller/kinematics.h \
+ Robot/Controller/pid.h Robot/Lib/user_lib.h \
  Robot/RoboTask/observe/observe_task.h Robot/RoboTask/ins/INS_task.h
 Robot/RoboTask/emulator/vofa_task.h:
 Core/Inc/usart.h:
@@ -129,5 +130,7 @@ Robot/Devices/motor_def.h:
 Robot/daemon/daemon.h:
 Robot/Devices/Motor/dmmotor.h:
 Robot/Controller/kinematics.h:
+Robot/Controller/pid.h:
+Robot/Lib/user_lib.h:
 Robot/RoboTask/observe/observe_task.h:
 Robot/RoboTask/ins/INS_task.h:

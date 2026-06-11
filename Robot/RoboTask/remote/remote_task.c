@@ -12,7 +12,7 @@ extern Leg_t legR;
 extern Leg_t legL;
 
 static RC_ctrl_t *rc_data;                  // 遥控器数据,初始化时返回
-static ramp_function_source_t leg_ramp;     // 腿长斜波
+// static ramp_function_source_t leg_ramp;     // 腿长斜波
 static uint8_t last_switch_left;            // 记录上一次拨杆状态,用于沿触发
 
 void RobotCMDInit(void)
@@ -36,6 +36,9 @@ static void RemoteControlSet(chassis_t* chassis)
         /* code */
         osDelay(1);
     }
+
+    chassis->phi_set = 0.014f;
+    chassis->reference.roll = 0.0f;
     
     // int16_t rc = rc_data[TEMP].rc.rocker_r_;
     if (abs(rc_data[TEMP].rc.rocker_r_) < 20) rc_data[TEMP].rc.rocker_r_ = 0;
@@ -58,10 +61,9 @@ static void RemoteControlSet(chassis_t* chassis)
         SATURATE(&chassis->leg_set, MIN_LEG_LENGTH, MAX_LEG_LENGTH);
 
         slope_following(&target_vel, &chassis->state.v_set, 0.005f);
-        if(fabs(chassis->state.v_set) > 0.01f)
-            chassis->state.x_set = 0.0f;    // 只要有前进速度输入,位置就不再更新,保持不变,避免位置积分误差过大
-        else
-            chassis->state.x_set += chassis->state.v_set * ((float)CHASSIS_TIME) / 1000.0f;
+        // chassis->state.x_set += chassis->state.v_set * ((float)CHASSIS_TIME) / 1000.0f;
+        if(fabsf(chassis_move.state.v_set) > 0.02f)
+            chassis_move.state.x_set = chassis_move.state.x_filter;
 
         // yaw轴+小陀螺
         if (rc_data[TEMP].rc.switch_right == 1){
@@ -88,6 +90,12 @@ static void RemoteControlSet(chassis_t* chassis)
             chassis->reference.yaw_dot = 0.0f; 
         }
         last_switch_left = rc_data[TEMP].rc.switch_left;
+    }
+    else if (chassis->flag.start_flag == 0)
+    {
+        chassis->state.x_set = chassis->state.x_filter;   // 离线时将位置参考切换到当前位置,避免重启时位置控制突变
+        chassis->state.x_integral = 0.0f;  // 停止时清零积分
+        chassis->reference.yaw = INS.YawTotal; // 离线时将yaw
     }
     #endif
     

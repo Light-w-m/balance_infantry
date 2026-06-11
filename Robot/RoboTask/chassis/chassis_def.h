@@ -89,7 +89,7 @@
 
 /***********************pid parameters*******************/
 #define LEG_PID_KP  800.0f
-#define LEG_PID_KI  0.0f
+#define LEG_PID_KI  5.0f
 #define LEG_PID_KD  16000.0f
 #define LEG_PID_MAX_OUT  100.0f //90ţ
 #define LEG_PID_MAX_IOUT 0.0f
@@ -108,31 +108,41 @@
 #define PITCH_PID_MAX_OUT  5.0f
 #define PITCH_PID_MAX_IOUT 0.0f
 
-#define ROLL_PID_KP 150.0f
-#define ROLL_PID_KI 0.0f 
-#define ROLL_PID_KD 10.0f
-#define ROLL_PID_MAX_OUT  100.0f
+#define ROLL_PID_KP 50.0f
+#define ROLL_PID_KI 1.0f 
+#define ROLL_PID_KD 8.0f
+#define ROLL_PID_MAX_OUT  50.0f
 #define ROLL_PID_MAX_IOUT 0.0f
 
-#define TP_PID_KP 40.0f
+#define TP_PID_KP 60.0f
 #define TP_PID_KI 0.0f 
-#define TP_PID_KD 1.5f
+#define TP_PID_KD 3.0f
 #define TP_PID_MAX_OUT  2.0f
 #define TP_PID_MAX_IOUT 0.0f
-
-#define kp_Yaw 0.0f
 
 #define TURN_PID_KP 5.0f
 #define TURN_PID_KI 0.0f 
 #define TURN_PID_KD 1.2f
-#define TURN_PID_MAX_OUT  3.0f//轮毂电机的额定扭矩
+#define TURN_PID_MAX_OUT  0.8f//轮毂电机的额定扭矩
 #define TURN_PID_MAX_IOUT 0.0f
 
-#define WHEEL_PID_KP 0.1f
-#define WHEEL_PID_KI 0.0f
-#define WHEEL_PID_KD 0.05f
-#define WHEEL_PID_MAX_OUT  2.0f//电机最大允许电流
-#define WHEEL_PID_MAX_IOUT 0.0f
+#define JOINT_Angle_KP 10.0f
+#define JOINT_Angle_KI 0.0f
+#define JOINT_Angle_KD 0.0f
+#define JOINT_Angle_KF 0.0f
+#define JOINT_Angle_I_BAND 0.0f
+#define JOINT_Angle_DT 0.001f
+#define JOINT_Angle_MAX_OUT 10.0f
+#define JOINT_Angle_MAX_IOUT 0.0f
+
+#define JOINT_Speed_KP 8.0f
+#define JOINT_Speed_KI 0.0f
+#define JOINT_Speed_KD 0.0f
+#define JOINT_Speed_KF 0.0f
+#define JOINT_Speed_I_BAND 0.0f
+#define JOINT_Speed_DT 0.001f
+#define JOINT_Speed_MAX_OUT 30.0f
+#define JOINT_Speed_MAX_IOUT 0.0f
 
 /**********************offset parameters*******************/
 #define THETA_OFFSET (-0.0f)    //腿角偏移量
@@ -141,7 +151,7 @@
 #define X1_OFFSET (0.0f)    // 目标theta_dot偏移量
 // #define X2_OFFSET(x) (-0.36f + ((x) - 0.15f) * 0.882352941f)    // 目标x偏移量
 // 0.15 -0.38       0.32 -0.23
-#define X2_OFFSET (-0.45f)    // 目标x偏移量
+#define X2_OFFSET (-0.40f)    // 目标x偏移量
 // #define X2_OFFSET (-0.0f)    // 目标x偏移量
 #define X3_OFFSET (0.0f)    // 目标x_dot偏移量
 #define X4_OFFSET (0.0f)    // 目标phi偏移量

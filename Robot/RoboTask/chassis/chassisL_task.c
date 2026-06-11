@@ -30,7 +30,7 @@ static float current_prtL = 0;
  * @param chassis 
  * @param pid 
  */
-static void ChassisL_Init(chassis_t* chassis, PidTypeDef* pid)
+static void ChassisL_Init(chassis_t* chassis, Leg_t* leg, PidTypeDef* pid)
 {
     // 两个轮电机的参数一样,改tx_id和反转标志位即可
     Motor_Init_Config_s chassis_motor_configL = {
@@ -61,6 +61,11 @@ static void ChassisL_Init(chassis_t* chassis, PidTypeDef* pid)
 
     //腿长PID初始化
     PID_init(pid, PID_POSITION, leg_pid_L, LEG_PID_MAX_OUT, LEG_PID_MAX_IOUT);
+    for(uint8_t i = 0; i < 2; i++)
+    {
+        Engineer_PID_Init(&leg->joint.jointAngle[i], Feedforward_PID, JOINT_Angle_KP,JOINT_Angle_KI,JOINT_Angle_KD,JOINT_Angle_KF,JOINT_Angle_I_BAND,JOINT_Angle_DT,JOINT_Angle_MAX_OUT,JOINT_Angle_MAX_IOUT);
+        Engineer_PID_Init(&leg->joint.jointSpeed[i], Normal_PID, JOINT_Speed_KP,JOINT_Speed_KI,JOINT_Speed_KD,JOINT_Speed_KF,JOINT_Speed_I_BAND,JOINT_Speed_DT,JOINT_Speed_MAX_OUT,JOINT_Speed_MAX_IOUT);
+    }
 
     //电机使能
     for (uint8_t i = 0; i < 3; i++)
@@ -80,7 +85,7 @@ static void ChassisL_Init(chassis_t* chassis, PidTypeDef* pid)
  * @param ins 
  * @param  
  */
-static float theta_biasL = -0.043f;
+static float theta_biasL = -0.0f;
 static void ChassisL_Feedback_Update(chassis_t* chassis,Leg_t* leg, INS_t* ins, float dt)
 {
     leg->joint.Phi4 = PI/2.0f + chassis->joint_motor[3].para.pos;
@@ -147,7 +152,7 @@ static void JumpL_Loop(chassis_t* chassis, Leg_t* leg, PidTypeDef* length_pid)
         }
         else if (chassis->step.jump_step == JUMP_STEP_SQUST)
         {
-            leg->rod.F0 = 100.0f;
+            leg->rod.F0 = 60.0f;
         }
         else if (chassis->step.jump_step == JUMP_STEP_JUMP)
         {
@@ -169,27 +174,16 @@ static void JumpL_Loop(chassis_t* chassis, Leg_t* leg, PidTypeDef* length_pid)
  */
 static void RiseL_Loop(chassis_t* chassis, Leg_t* leg)
 {
-    // 用关节电机角度判断是否完成自起
-    // if ((chassis->joint_motor[2].para.pos > 0.9f && chassis->joint_motor[2].para.pos < 2.4f) && 
-    //     (chassis->joint_motor[3].para.pos > -2.2f && chassis->joint_motor[3].para.pos < 0.7f))
-    //     leg->rod.recovery_flag = 0; // 倒地自起完成标志
-    // else 
-    //     leg->rod.recovery_flag = 1; // 倒地自起进行中标志
+    leg->rod.L0_set = 0.30f;
+    leg->rod.phi0_set = 1.57f;
+    InverseKinematics(leg);
 
-    float target2 = 2.1f;
-    float target3 = 0.63f;
-
-    float diff2 = 0.0f; float diff3 = 0.0f;
-
-    // diff2 = ShortestAngle(target2, &diff2);
-    // diff3 = ShortestAngle(target3, &diff3);
-    
-    if (chassis->flag.recover_flag == 1 && leg->rod.recovery_flag == 1)
-    {
-        /* code */
-        Mit_Ctrl(&hcan1, chassis->joint_motor[2].para.id, target2, 0.0f, 15.0f, 5.0f, 0.0f);
-        Mit_Ctrl(&hcan1, chassis->joint_motor[3].para.id, target3, 0.0f, 15.0f, 5.0f, 0.0f);
-    }
+    Engineer_PID_Calc(&leg->joint.jointAngle[0], leg->joint.Phi1, leg->joint.Phi1_set);
+    Engineer_PID_Calc(&leg->joint.jointSpeed[0], leg->joint.d_Phi1, leg->joint.jointAngle[0].out);
+    leg->joint.T1 = leg->joint.jointSpeed[0].out;
+    Engineer_PID_Calc(&leg->joint.jointAngle[1], leg->joint.Phi4, leg->joint.Phi4_set);
+    Engineer_PID_Calc(&leg->joint.jointSpeed[1], leg->joint.d_Phi4, leg->joint.jointAngle[1].out);
+    leg->joint.T2 = leg->joint.jointSpeed[1].out;
 }
 
 /**
@@ -211,12 +205,12 @@ static void ChasssisL_Control(
 
     // 状态向量更新--方便调试查看
     legL_state.theta     = -X0_OFFSET + (leg->rod.theta - 0.0f);
-    legL_state.theta_dot = X1_OFFSET + (leg->rod.d_theta - 0.0f);
+    legL_state.theta_dot =  X1_OFFSET + (leg->rod.d_theta - 0.0f);
     // legL_state.x         = -X2_OFFSET(chassis->leg_set) - chassis->state.x_filter;
-    legL_state.x         = -X2_OFFSET - chassis->state.x_filter;
-    legL_state.x_dot     = X3_OFFSET - (chassis->state.v_filter - chassis->state.v_set);
+    legL_state.x         = -X2_OFFSET - (chassis->state.x_filter - chassis->state.x_set);
+    legL_state.x_dot     =  X3_OFFSET - (chassis->state.v_filter - chassis->state.v_set);
     legL_state.phi       = -X4_OFFSET + (chassis->myPithL - chassis->phi_set);
-    legL_state.phi_dot   = X5_OFFSET + (chassis->myPithGyroL - 0.0f);
+    legL_state.phi_dot   =  X5_OFFSET + (chassis->myPithGyroL - 0.0f);
 
     leg->rod.T = (    
                     + lqr_k[0][0] * legL_state.theta
@@ -252,6 +246,8 @@ static void ChasssisL_Control(
                     // + chassis->roll_T;
                     
     JumpL_Loop(chassis, leg, length_pid);
+    if (chassis->flag.jump_flag == 0)
+        leg->rod.F0 = leg->rod.F0 - chassis->roll_T + leg->Fn_fa;
 
     // 离地判断
     // chassis->flag.left_flag = GroundDetect(chassis, leg, &periods);
@@ -262,15 +258,26 @@ static void ChasssisL_Control(
         chassis->flag.left_flag = 1;
     if(chassis->flag.is_take_off == 1 && leg->take_off_time > 500)
         leg->rod.T = 0.0f;      // 主动抬车时关闭轮毂电机输出
+    // if (!chassis->flag.is_take_off && leg->touch_time < 80)
+    // {
+    //     chassis->state.x_integral = 0.0f;
 
-    // RiseL_Loop(chassis, leg);    
+    //     chassis->state.x_filter *= 0.95f;
+    //     chassis->state.v_filter *= 0.8f;
+
+    //     SATURATE(&leg->rod.T, -0.5f, 0.5f);
+    // }
+
+
+    if(chassis->flag.recover_flag == 1);
+        // RiseL_Loop(chassis, leg);  
                     
     SATURATE(&leg->rod.F0, -500.0f, 500.0f);
 
     JacobianMatrix(leg, excessive);
     
     // 髋关节输出限幅
-    float torque_limit = (chassis->flag.jump_flag == 1) ? 16.0f : MAX_TORQUE;
+    float torque_limit = (chassis->flag.jump_flag == 1) ? 10.0f : MAX_TORQUE;
     SATURATE(&leg->joint.T1, -torque_limit, torque_limit);
     SATURATE(&leg->joint.T2, -torque_limit, torque_limit);
 }
@@ -328,7 +335,7 @@ void ChassisL_Task(void)
     }
     #endif
 
-    ChassisL_Init(&chassis_move, &LegL_pid);
+    ChassisL_Init(&chassis_move, &legL, &LegL_pid);
 
     while (1)
     {
