@@ -86,6 +86,7 @@ BSP/bsp_usart.c \
 Robot/Algorithm/EKF/QuaternionEKF.c \
 Robot/Algorithm/kalman/kalman_filter.c \
 Robot/Algorithm/mahony/mahony_filter.c \
+Robot/Controller/adrc.c \
 Robot/Controller/controller.c \
 Robot/Controller/pid.c \
 Robot/Controller/kinematics.c \
@@ -100,7 +101,6 @@ Robot/Remote/remote_control.c \
 Robot/RoboTask/ins/ins_task.c \
 Robot/RoboTask/chassis/chassisR_task.c \
 Robot/RoboTask/chassis/chassisL_task.c \
-Robot/RoboTask/chassis/chassis.c \
 Robot/RoboTask/observe/observe_task.c \
 Robot/RoboTask/emulator/vofa_task.c \
 Robot/RoboTask/remote/remote_task.c \

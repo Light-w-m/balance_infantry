@@ -336,11 +336,11 @@ static inline float FixedDirAngle(float target, float *last, float dir)
 {
     float delta = target - *last;
 
-    // 去掉 ±π 跳变影响（关键）
+    // 去掉 ±π 跳变影响
     if (delta >  PI) delta -= 2.0f * PI;
     if (delta < -PI) delta += 2.0f * PI;
 
-    // 强制方向（核心）
+    // 强制方向
     if (delta * dir < 0)
         delta += dir * 2.0f * PI;
 

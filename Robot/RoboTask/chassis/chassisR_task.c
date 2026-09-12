@@ -23,7 +23,7 @@ Leg_t legR;
 extern Leg_t legL;
 LegState_t legR_state;
 Excessive_t excessiveR;
-extern chassis_t chassis_move;
+chassis_t chassis_move;
 Period_t periods;
 
 extern INS_t INS;
@@ -321,7 +321,7 @@ static void ChasssisR_Control(
 
     JumpR_Loop(chassis, leg, length_pid);
     HighSpeedTurn(chassis,leg->rod.L0, legL.rod.L0, &leg->Fn_fa, &legL.Fn_fa);
-    if (chassis->flag.jump_flag == 0)
+    if ((chassis->flag.jump_flag == 0) || (chassis->flag.right_flag == 0))
         leg->rod.F0 = leg->rod.F0 + chassis->roll_T + leg->Fn_fa;
     
     // 离地判断

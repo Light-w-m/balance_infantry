@@ -54,10 +54,6 @@ typedef struct
         FeedforwardPidTypeDef jointAngle[2];   // 外环角度控制--0为phi1，1为phi4
         FeedforwardPidTypeDef jointSpeed[2];          // 内环速度控制
 
-        // #ifdef ControlDebug
-        // // 位控调试时使用
-        // float Phi1_set, Phi4_set;
-        // #endif   
     } joint;    //关节参数
 
     struct wheel
@@ -72,6 +68,8 @@ typedef struct
     uint32_t duration;   // (ms)任务周期
     uint32_t take_off_time;     // 离地计时
     uint32_t touch_time;        // 触地计时
+
+    PidTypeDef leg_pid;    //腿长PID
 
 }Leg_t;
 

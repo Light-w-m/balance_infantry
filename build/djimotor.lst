@@ -1,4 +1,4 @@
-ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 1
+ARM GAS  D:\temp\TMP\ccW9BzWS.s 			page 1
 
 
    1              		.cpu cortex-m7
@@ -58,7 +58,7 @@ ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 1
   29:Robot/Devices/Motor/djimotor.c **** #endif
   30:Robot/Devices/Motor/djimotor.c **** 
   31:Robot/Devices/Motor/djimotor.c **** /**
-ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 2
+ARM GAS  D:\temp\TMP\ccW9BzWS.s 			page 2
 
 
   32:Robot/Devices/Motor/djimotor.c ****  * @brief 6个用于确认是否有电机注册到sender_assignment中的标志位,防止发送空�
@@ -118,7 +118,7 @@ ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 1
   50              		.loc 1 42 1 view .LVU12
   51 0012 00B5     		push	{lr}
   52              	.LCFI0:
-ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 3
+ARM GAS  D:\temp\TMP\ccW9BzWS.s 			page 3
 
 
   53              		.cfi_def_cfa_offset 4
@@ -178,7 +178,7 @@ ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 1
   89              	.LVL6:
   90              		.loc 1 80 44 view .LVU26
   91 003e 03F80C10 		strb	r1, [r3, ip]
-ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 4
+ARM GAS  D:\temp\TMP\ccW9BzWS.s 			page 4
 
 
   81:Robot/Devices/Motor/djimotor.c ****         motor->message_num = motor_send_num;
@@ -238,7 +238,7 @@ ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 1
  127:Robot/Devices/Motor/djimotor.c ****         while (1);
  128:Robot/Devices/Motor/djimotor.c ****             // LOGERROR("[dji_motor]You must not register other motors using the API of DJI motor."
  129:Robot/Devices/Motor/djimotor.c ****     }
-ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 5
+ARM GAS  D:\temp\TMP\ccW9BzWS.s 			page 5
 
 
  130:Robot/Devices/Motor/djimotor.c **** }
@@ -298,7 +298,7 @@ ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 1
  139              	.LVL13:
  110:Robot/Devices/Motor/djimotor.c ****         motor->message_num = motor_send_num;
  140              		.loc 1 110 44 view .LVU47
-ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 6
+ARM GAS  D:\temp\TMP\ccW9BzWS.s 			page 6
 
 
  141 006c 03F80C10 		strb	r1, [r3, ip]
@@ -358,7 +358,7 @@ ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 1
  138:Robot/Devices/Motor/djimotor.c **** static void DecodeDJIMotor(CANInstance *_instance)
  139:Robot/Devices/Motor/djimotor.c **** {
  140:Robot/Devices/Motor/djimotor.c ****     // 这里对can instance的id进行了强制转换,从而获得电机的instance实例地址
-ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 7
+ARM GAS  D:\temp\TMP\ccW9BzWS.s 			page 7
 
 
  141:Robot/Devices/Motor/djimotor.c ****     // _instance指针指向的id是对应电机instance的地址,通过强制转换为电机instan
@@ -418,7 +418,7 @@ ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 1
  204              		@ args = 0, pretend = 0, frame = 0
  205              		@ frame_needed = 0, uses_anonymous_args = 0
  139:Robot/Devices/Motor/djimotor.c ****     // 这里对can instance的id进行了强制转换,从而获得电机的instance实例地址
-ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 8
+ARM GAS  D:\temp\TMP\ccW9BzWS.s 			page 8
 
 
  206              		.loc 1 139 1 is_stmt 0 view .LVU62
@@ -478,7 +478,7 @@ ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 1
  151:Robot/Devices/Motor/djimotor.c ****     measure->angle_single_round = ECD_ANGLE_COEF_DJI * (float)measure->ecd;
  245              		.loc 1 151 47 view .LVU78
  246 0028 42EA0322 		orr	r2, r2, r3, lsl #8
-ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 9
+ARM GAS  D:\temp\TMP\ccW9BzWS.s 			page 9
 
 
  151:Robot/Devices/Motor/djimotor.c ****     measure->angle_single_round = ECD_ANGLE_COEF_DJI * (float)measure->ecd;
@@ -538,7 +538,7 @@ ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 1
  284 0078 07EE903A 		vmov	s15, r3	@ int
  155:Robot/Devices/Motor/djimotor.c ****                             CURRENT_SMOOTH_COEF * (float)((int16_t)(rxbuff[4] << 8 | rxbuff[5]));
  285              		.loc 1 155 58 view .LVU96
-ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 10
+ARM GAS  D:\temp\TMP\ccW9BzWS.s 			page 10
 
 
  286 007c F8EEE77A 		vcvt.f32.s32	s15, s15
@@ -598,7 +598,7 @@ ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 1
  164:Robot/Devices/Motor/djimotor.c **** }
  325              		.loc 1 164 5 is_stmt 1 view .LVU112
  164:Robot/Devices/Motor/djimotor.c **** }
-ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 11
+ARM GAS  D:\temp\TMP\ccW9BzWS.s 			page 11
 
 
  326              		.loc 1 164 35 is_stmt 0 view .LVU113
@@ -658,7 +658,7 @@ ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 1
  173:Robot/Devices/Motor/djimotor.c **** 
  174:Robot/Devices/Motor/djimotor.c **** // 电机初始化,返回一个电机实例
  175:Robot/Devices/Motor/djimotor.c **** DJIMotorInstance *DJIMotorInit(Motor_Init_Config_s *config)
-ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 12
+ARM GAS  D:\temp\TMP\ccW9BzWS.s 			page 12
 
 
  176:Robot/Devices/Motor/djimotor.c **** {
@@ -718,7 +718,7 @@ ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 1
  382              		.loc 1 220 10 is_stmt 1 view .LVU126
  383              		.loc 1 220 13 is_stmt 0 view .LVU127
  384 0004 0229     		cmp	r1, #2
-ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 13
+ARM GAS  D:\temp\TMP\ccW9BzWS.s 			page 13
 
 
  385 0006 02D0     		beq	.L26
@@ -778,7 +778,7 @@ ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 1
  429              		.global	DJIMotorEnable
  430              		.syntax unified
  431              		.thumb
-ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 14
+ARM GAS  D:\temp\TMP\ccW9BzWS.s 			page 14
 
 
  432              		.thumb_func
@@ -838,7 +838,7 @@ ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 1
  480              	.LVL28:
  177:Robot/Devices/Motor/djimotor.c ****     memset(instance, 0, sizeof(DJIMotorInstance));
  481              		.loc 1 177 54 view .LVU146
-ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 15
+ARM GAS  D:\temp\TMP\ccW9BzWS.s 			page 15
 
 
  482 000a FFF7FEFF 		bl	malloc
@@ -898,7 +898,7 @@ ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 1
  189:Robot/Devices/Motor/djimotor.c ****     instance->motor_controller.current_feedforward_ptr = config->controller_param_init_config.curre
  524              		.loc 1 189 5 is_stmt 1 view .LVU159
  189:Robot/Devices/Motor/djimotor.c ****     instance->motor_controller.current_feedforward_ptr = config->controller_param_init_config.curre
-ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 16
+ARM GAS  D:\temp\TMP\ccW9BzWS.s 			page 16
 
 
  525              		.loc 1 189 95 is_stmt 0 view .LVU160
@@ -958,7 +958,7 @@ ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 1
  562 0088 0023     		movs	r3, #0
  563 008a 0193     		str	r3, [sp, #4]
  564 008c 4360     		str	r3, [r0, #4]
-ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 17
+ARM GAS  D:\temp\TMP\ccW9BzWS.s 			page 17
 
 
  565 008e 8360     		str	r3, [r0, #8]
@@ -1018,7 +1018,7 @@ ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 1
  610              		.section	.text.DJIMotorOuterLoop,"ax",%progbits
  611              		.align	1
  612              		.global	DJIMotorOuterLoop
-ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 18
+ARM GAS  D:\temp\TMP\ccW9BzWS.s 			page 18
 
 
  613              		.syntax unified
@@ -1078,7 +1078,7 @@ ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 1
  659              		.syntax unified
  660              		.thumb
  661              		.thumb_func
-ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 19
+ARM GAS  D:\temp\TMP\ccW9BzWS.s 			page 19
 
 
  663              	DJIMotorControl:
@@ -1138,7 +1138,7 @@ ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 1
  694              		.loc 1 269 21 is_stmt 0 view .LVU209
  695 0006 F1EE600A 		vneg.f32	s1, s1
  696              	.LVL44:
-ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 20
+ARM GAS  D:\temp\TMP\ccW9BzWS.s 			page 20
 
 
  697              		.loc 1 269 21 view .LVU210
@@ -1198,7 +1198,7 @@ ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 1
  285:Robot/Devices/Motor/djimotor.c ****         {
  286:Robot/Devices/Motor/djimotor.c ****             if (motor_setting->feedforward_flag & SPEED_FEEDFORWARD)
  287:Robot/Devices/Motor/djimotor.c ****                 pid_ref += *motor_controller->speed_feedforward_ptr;
-ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 21
+ARM GAS  D:\temp\TMP\ccW9BzWS.s 			page 21
 
 
  288:Robot/Devices/Motor/djimotor.c **** 
@@ -1258,7 +1258,7 @@ ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 1
  773              	.LVL55:
  774              	.L46:
  301:Robot/Devices/Motor/djimotor.c ****         {
-ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 22
+ARM GAS  D:\temp\TMP\ccW9BzWS.s 			page 22
 
 
  302:Robot/Devices/Motor/djimotor.c ****             pid_ref = PIDCalculate(&motor_controller->current_PID, measure->real_current, pid_ref);
@@ -1318,7 +1318,7 @@ ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 1
  318:Robot/Devices/Motor/djimotor.c ****         if (motor->stop_flag == MOTOR_STOP)
  813              		.loc 1 318 9 is_stmt 1 view .LVU257
  814              		.loc 1 318 18 is_stmt 0 view .LVU258
-ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 23
+ARM GAS  D:\temp\TMP\ccW9BzWS.s 			page 23
 
 
  815 0094 94F8A731 		ldrb	r3, [r4, #423]	@ zero_extendqisi2
@@ -1378,7 +1378,7 @@ ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 1
  854              		.loc 1 273 12 view .LVU274
  855 00b8 13F0040F 		tst	r3, #4
  856 00bc 02D0     		beq	.L38
-ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 24
+ARM GAS  D:\temp\TMP\ccW9BzWS.s 			page 24
 
 
  273:Robot/Devices/Motor/djimotor.c ****         {
@@ -1438,7 +1438,7 @@ ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 1
  894              		.loc 1 290 48 is_stmt 0 view .LVU291
  895 00e8 636A     		ldr	r3, [r4, #36]
  290:Robot/Devices/Motor/djimotor.c ****             else // MOTOR_FEED
-ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 25
+ARM GAS  D:\temp\TMP\ccW9BzWS.s 			page 25
 
 
  896              		.loc 1 290 29 view .LVU292
@@ -1498,7 +1498,7 @@ ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 1
  941              	.LBE2:
  942              	.LBB3:
  320:Robot/Devices/Motor/djimotor.c ****     }
-ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 26
+ARM GAS  D:\temp\TMP\ccW9BzWS.s 			page 26
 
 
  321:Robot/Devices/Motor/djimotor.c **** 
@@ -1558,7 +1558,7 @@ ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 1
  983              		.cfi_endproc
  984              	.LFE197:
  986              		.section	.bss.sender_enable_flag,"aw",%nobits
-ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 27
+ARM GAS  D:\temp\TMP\ccW9BzWS.s 			page 27
 
 
  987              		.align	2
@@ -1618,7 +1618,7 @@ ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 1
  1031 00ba 00000000 		.space	8
  1031      00000000 
  1032 00c2 00000000 		.space	8
-ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 28
+ARM GAS  D:\temp\TMP\ccW9BzWS.s 			page 28
 
 
  1032      00000000 
@@ -1660,43 +1660,43 @@ ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 1
  1063              		.file 16 "D:/VS_STM32/gcc-arm-15.2/arm-none-eabi/include/string.h"
  1064              		.file 17 "D:/VS_STM32/gcc-arm-15.2/arm-none-eabi/include/stdlib.h"
  1065              		.file 18 "<built-in>"
-ARM GAS  D:\temp\TMP\cc0XCqWG.s 			page 29
+ARM GAS  D:\temp\TMP\ccW9BzWS.s 			page 29
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 djimotor.c
-D:\temp\TMP\cc0XCqWG.s:20     .text.MotorSenderGrouping:00000000 $t
-D:\temp\TMP\cc0XCqWG.s:25     .text.MotorSenderGrouping:00000000 MotorSenderGrouping
-D:\temp\TMP\cc0XCqWG.s:168    .text.MotorSenderGrouping:00000084 $d
-D:\temp\TMP\cc0XCqWG.s:990    .bss.sender_enable_flag:00000000 sender_enable_flag
-D:\temp\TMP\cc0XCqWG.s:173    .text.DJIMotorLostCallback:00000000 $t
-D:\temp\TMP\cc0XCqWG.s:178    .text.DJIMotorLostCallback:00000000 DJIMotorLostCallback
-D:\temp\TMP\cc0XCqWG.s:194    .text.DecodeDJIMotor:00000000 $t
-D:\temp\TMP\cc0XCqWG.s:199    .text.DecodeDJIMotor:00000000 DecodeDJIMotor
-D:\temp\TMP\cc0XCqWG.s:355    .text.DecodeDJIMotor:000000f4 $d
-D:\temp\TMP\cc0XCqWG.s:364    .text.DJIMotorChangeFeed:00000000 $t
-D:\temp\TMP\cc0XCqWG.s:370    .text.DJIMotorChangeFeed:00000000 DJIMotorChangeFeed
-D:\temp\TMP\cc0XCqWG.s:404    .text.DJIMotorStop:00000000 $t
-D:\temp\TMP\cc0XCqWG.s:410    .text.DJIMotorStop:00000000 DJIMotorStop
-D:\temp\TMP\cc0XCqWG.s:428    .text.DJIMotorEnable:00000000 $t
-D:\temp\TMP\cc0XCqWG.s:434    .text.DJIMotorEnable:00000000 DJIMotorEnable
-D:\temp\TMP\cc0XCqWG.s:452    .text.DJIMotorInit:00000000 $t
-D:\temp\TMP\cc0XCqWG.s:458    .text.DJIMotorInit:00000000 DJIMotorInit
-D:\temp\TMP\cc0XCqWG.s:603    .text.DJIMotorInit:000000c0 $d
-D:\temp\TMP\cc0XCqWG.s:1045   .bss.idx:00000000 idx
-D:\temp\TMP\cc0XCqWG.s:1040   .bss.dji_motor_instance:00000000 dji_motor_instance
-D:\temp\TMP\cc0XCqWG.s:611    .text.DJIMotorOuterLoop:00000000 $t
-D:\temp\TMP\cc0XCqWG.s:617    .text.DJIMotorOuterLoop:00000000 DJIMotorOuterLoop
-D:\temp\TMP\cc0XCqWG.s:634    .text.DJIMotorSetRef:00000000 $t
-D:\temp\TMP\cc0XCqWG.s:640    .text.DJIMotorSetRef:00000000 DJIMotorSetRef
-D:\temp\TMP\cc0XCqWG.s:657    .text.DJIMotorControl:00000000 $t
-D:\temp\TMP\cc0XCqWG.s:663    .text.DJIMotorControl:00000000 DJIMotorControl
-D:\temp\TMP\cc0XCqWG.s:979    .text.DJIMotorControl:0000014c $d
-D:\temp\TMP\cc0XCqWG.s:996    .data.sender_assignment:00000000 sender_assignment
-D:\temp\TMP\cc0XCqWG.s:987    .bss.sender_enable_flag:00000000 $d
-D:\temp\TMP\cc0XCqWG.s:993    .data.sender_assignment:00000000 $d
-D:\temp\TMP\cc0XCqWG.s:1037   .bss.dji_motor_instance:00000000 $d
-D:\temp\TMP\cc0XCqWG.s:1046   .bss.idx:00000000 $d
+D:\temp\TMP\ccW9BzWS.s:20     .text.MotorSenderGrouping:00000000 $t
+D:\temp\TMP\ccW9BzWS.s:25     .text.MotorSenderGrouping:00000000 MotorSenderGrouping
+D:\temp\TMP\ccW9BzWS.s:168    .text.MotorSenderGrouping:00000084 $d
+D:\temp\TMP\ccW9BzWS.s:990    .bss.sender_enable_flag:00000000 sender_enable_flag
+D:\temp\TMP\ccW9BzWS.s:173    .text.DJIMotorLostCallback:00000000 $t
+D:\temp\TMP\ccW9BzWS.s:178    .text.DJIMotorLostCallback:00000000 DJIMotorLostCallback
+D:\temp\TMP\ccW9BzWS.s:194    .text.DecodeDJIMotor:00000000 $t
+D:\temp\TMP\ccW9BzWS.s:199    .text.DecodeDJIMotor:00000000 DecodeDJIMotor
+D:\temp\TMP\ccW9BzWS.s:355    .text.DecodeDJIMotor:000000f4 $d
+D:\temp\TMP\ccW9BzWS.s:364    .text.DJIMotorChangeFeed:00000000 $t
+D:\temp\TMP\ccW9BzWS.s:370    .text.DJIMotorChangeFeed:00000000 DJIMotorChangeFeed
+D:\temp\TMP\ccW9BzWS.s:404    .text.DJIMotorStop:00000000 $t
+D:\temp\TMP\ccW9BzWS.s:410    .text.DJIMotorStop:00000000 DJIMotorStop
+D:\temp\TMP\ccW9BzWS.s:428    .text.DJIMotorEnable:00000000 $t
+D:\temp\TMP\ccW9BzWS.s:434    .text.DJIMotorEnable:00000000 DJIMotorEnable
+D:\temp\TMP\ccW9BzWS.s:452    .text.DJIMotorInit:00000000 $t
+D:\temp\TMP\ccW9BzWS.s:458    .text.DJIMotorInit:00000000 DJIMotorInit
+D:\temp\TMP\ccW9BzWS.s:603    .text.DJIMotorInit:000000c0 $d
+D:\temp\TMP\ccW9BzWS.s:1045   .bss.idx:00000000 idx
+D:\temp\TMP\ccW9BzWS.s:1040   .bss.dji_motor_instance:00000000 dji_motor_instance
+D:\temp\TMP\ccW9BzWS.s:611    .text.DJIMotorOuterLoop:00000000 $t
+D:\temp\TMP\ccW9BzWS.s:617    .text.DJIMotorOuterLoop:00000000 DJIMotorOuterLoop
+D:\temp\TMP\ccW9BzWS.s:634    .text.DJIMotorSetRef:00000000 $t
+D:\temp\TMP\ccW9BzWS.s:640    .text.DJIMotorSetRef:00000000 DJIMotorSetRef
+D:\temp\TMP\ccW9BzWS.s:657    .text.DJIMotorControl:00000000 $t
+D:\temp\TMP\ccW9BzWS.s:663    .text.DJIMotorControl:00000000 DJIMotorControl
+D:\temp\TMP\ccW9BzWS.s:979    .text.DJIMotorControl:0000014c $d
+D:\temp\TMP\ccW9BzWS.s:996    .data.sender_assignment:00000000 sender_assignment
+D:\temp\TMP\ccW9BzWS.s:987    .bss.sender_enable_flag:00000000 $d
+D:\temp\TMP\ccW9BzWS.s:993    .data.sender_assignment:00000000 $d
+D:\temp\TMP\ccW9BzWS.s:1037   .bss.dji_motor_instance:00000000 $d
+D:\temp\TMP\ccW9BzWS.s:1046   .bss.idx:00000000 $d
 
 UNDEFINED SYMBOLS
 DaemonReload

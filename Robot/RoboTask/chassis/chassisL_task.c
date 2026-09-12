@@ -240,13 +240,9 @@ static void ChasssisL_Control(
         SATURATE(&leg->rod.Tp, -15.0f, 15.0f);    // 髋关节力矩
     else
         SATURATE(&leg->rod.Tp, -10.0f, 10.0f);
-
-    // leg->rod.F0 = BODY_MASS * GRAVITY / arm_cos_f32(leg->rod.theta) / 2 
-    //                 + PID_Calc(length_pid, leg->rod.L0, chassis->leg_set) + 0.0f;
-                    // + chassis->roll_T;
                     
     JumpL_Loop(chassis, leg, length_pid);
-    if (chassis->flag.jump_flag == 0)
+    if ((chassis->flag.jump_flag == 0) || (chassis->flag.left_flag == 0))
         leg->rod.F0 = leg->rod.F0 - chassis->roll_T + leg->Fn_fa;
 
     // 离地判断
@@ -258,15 +254,6 @@ static void ChasssisL_Control(
         chassis->flag.left_flag = 1;
     if(chassis->flag.is_take_off == 1 && leg->take_off_time > 500)
         leg->rod.T = 0.0f;      // 主动抬车时关闭轮毂电机输出
-    // if (!chassis->flag.is_take_off && leg->touch_time < 80)
-    // {
-    //     chassis->state.x_integral = 0.0f;
-
-    //     chassis->state.x_filter *= 0.95f;
-    //     chassis->state.v_filter *= 0.8f;
-
-    //     SATURATE(&leg->rod.T, -0.5f, 0.5f);
-    // }
 
 
     if(chassis->flag.recover_flag == 1);

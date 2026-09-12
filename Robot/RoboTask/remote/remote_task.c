@@ -15,12 +15,30 @@ static RC_ctrl_t *rc_data;                  // 遥控器数据,初始化时返�
 // static ramp_function_source_t leg_ramp;     // 腿长斜波
 static uint8_t last_switch_left;            // 记录上一次拨杆状态,用于沿触发
 
+static uint8_t RCSwitchIsValid(uint8_t sw)
+{
+    return sw == RC_SW_UP || sw == RC_SW_MID || sw == RC_SW_DOWN;
+}
+
+static uint8_t RemoteControlDataIsValid(const RC_ctrl_t *rc)
+{
+    return rc != NULL &&
+           RCSwitchIsValid(rc->rc.switch_left) &&
+           RCSwitchIsValid(rc->rc.switch_right) &&
+           abs(rc->rc.rocker_l_) <= 660 &&
+           abs(rc->rc.rocker_l1) <= 660 &&
+           abs(rc->rc.rocker_r_) <= 660 &&
+           abs(rc->rc.rocker_r1) <= 660 &&
+           abs(rc->rc.dial) <= 660;
+}
+
 void RobotCMDInit(void)
 {
     rc_data = RemoteControlInit(&huart5);   // 修改为对应串口,注意如果是自研板dbus协议串口需选用添加了反相器的那个
     last_switch_left = rc_data[TEMP].rc.switch_left;
     
     chassis_move.leg_set = LEG_DEFAULT;   // 初始腿长
+    chassis_move.flag.start_flag = 0;
     // ramp_init(&leg_ramp, 0.005f, MAX_LEG_VEL, -MAX_LEG_VEL);
 }
 
@@ -129,22 +147,33 @@ void Remote_Task(void)
     EmergencyHandler();
 
     static uint8_t lost_cnt = 0;
+    static uint8_t rc_ready = 0;
     const uint8_t LOST_CONFIRM_TICKS = 3;   // 连续3次离线才真丢控
+    uint8_t rc_online = RemoteControlIsOnline() && RemoteControlDataIsValid(&rc_data[TEMP]);
 
-    if(RemoteControlIsOnline())
+    if(rc_online)
     {
         lost_cnt = 0;
+        if (rc_ready == 0)
+        {
+            last_switch_left = rc_data[TEMP].rc.switch_left;
+            rc_ready = 1;
+        }
         chassis_move.flag.start_flag = 1;   // 在线立即恢复
     }
     else
     {
+        rc_ready = 0;
         if (lost_cnt < 255) lost_cnt++;
         if (lost_cnt >= LOST_CONFIRM_TICKS)
             chassis_move.flag.start_flag = 0;
     }
 
-    if(rc_data[TEMP].rc.switch_right == 2)  
+    if(rc_data[TEMP].rc.switch_right == 2)
+    {
         chassis_move.flag.start_flag = 0;
+        rc_ready = 0;
+    }
 
     RemoteControlSet(&chassis_move);
 }
